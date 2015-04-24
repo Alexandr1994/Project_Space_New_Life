@@ -1,0 +1,8 @@
+*.pidb
+*.userprefs
+*.DotSettings.user
+*.suo
+obj
+bin
+*ReSharper*
+[Pp]ackages
