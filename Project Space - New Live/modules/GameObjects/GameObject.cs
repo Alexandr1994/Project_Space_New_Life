@@ -10,16 +10,16 @@ namespace Project_Space___New_Live
 {
     abstract class GameObject
     {
-        private int mass;//масса объекта
-        private Vector2i coords;//координаты объекта
-        Shape view;//отображение объекта
+        protected int mass;//масса объекта
+        protected Vector2f coords;//координаты объекта
+        protected Shape view;//отображение объекта
 
 
         /// <summary>
         /// Получить координаты объекта
         /// </summary>
         /// <returns></returns>
-        public Vector2i getCoords()
+        public Vector2f getCoords()
         {
             return this.coords;
         }
@@ -33,14 +33,24 @@ namespace Project_Space___New_Live
         /// <summary>
         /// Функция движения объекта
         /// </summary>
-        public abstract void move();
+        public abstract void move(Vector2f globalCoords);
 
 
         /// <summary>
         /// Построить отображение объекта (Х)
         /// </summary>
-        /// <param name="skin"></param>
+        /// <param name="skin">Текстура</param>
         /// <returns></returns>
-        protected abstract Shape coonstructView(Texture skin);
+        protected abstract void constructView(Texture skin);
+
+
+        /// <summary>
+        /// Получить отображение объекта
+        /// </summary>
+        /// <returns></returns>
+        public Shape getView()
+        {
+            return view;
+        }
     }
 }

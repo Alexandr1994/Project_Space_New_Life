@@ -61,7 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="modules\GameObjects\GameObject.cs" />
-    <Compile Include="modules\GameObjects\Star.cs" />
+    <Compile Include="modules\GameObjects\Planet.cs" />
+    <Compile Include="modules\GameObjects\StarSystem.cs" />
+    <Compile Include="modules\GameObjects\UnhabitatePlanet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
