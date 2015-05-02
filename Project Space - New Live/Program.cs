@@ -33,7 +33,7 @@ namespace Project_Space___New_Live
         Texture planetText = new Texture("D:/testPlanetText.jpg");//загруженная текстура планет 
         Texture backText = new Texture("D:/testBackground.png");//загруженная текстура планет 
 
-        static VideoMode testMode = new VideoMode(640, 480);//переменные окна: видеорежим
+        static VideoMode testMode = new VideoMode(800, 600);//переменные окна: видеорежим
         RenderWindow testWindow = new RenderWindow(testMode, "Test");//окно
         //CircleShape star = new CircleShape();
         StarSystem system;
@@ -41,7 +41,7 @@ namespace Project_Space___New_Live
         //Random rand = new Random();
 
         //CircleShape[] planets = new CircleShape[5];//переменные планет: образы
-        int[] orbits = { 150, 200, 250, 300 };//орибиты планет 
+        int[] orbits = { 220, 280, 600, 400 };//орибиты планет 
         double[] angle = new double[5];//орбитальные углы планет
         
         bool left = false;//флаги контроля перемещения играока
@@ -191,17 +191,18 @@ namespace Project_Space___New_Live
             //    planets[i].FillColor = colors[i];
             //}
 
-            Star[] stars = new Star[1];
-            for (int i = 0; i < stars.Length; i++)
+            Star[] stars = new Star[3];
+            for (int i = 0; i < stars.Length - 1; i++)
             {
-                stars[i] = new Star(1000, 100, 0, 0, 0, starText);
+              stars[i] = new Star(1000, 80, 110, 180 * (i+1) * (Math.PI/180), 0.002, starText);
             }
+            stars[2] = new Star(1000, 80, 400, new Random().Next(), 0.0005, starText);
             Planet[] planets = new Planet[3];
             for(int i = 0; i < planets.Length; i++)
             {
                 planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), planetText);
             }
-            system = new StarSystem(new Vector2f(320, 240), stars, planets, backText);
+            system = new StarSystem(new Vector2f(400, 300), stars, planets, backText);
 
         }
 
