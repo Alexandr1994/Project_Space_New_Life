@@ -3,53 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SFML.Graphics;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
 {
-    abstract class Planet : GameObject
+    public class Planet : SphereObject
     {
-
-        protected int radius;//радиус планеты
-        protected int ordit;//орбита(расстояние от центра звезды до центра планеты)
-        protected double orbitalAngle;//орбитальный угол планеты
-        protected double orbitalSpeed;//орбитальная скорость планеты (рад./ед.вр.)
-
         /// <summary>
-        /// Сконструировать отображение планеты
+        /// Сконструировать новую необитаемую планету
         /// </summary>
-        /// <param name="skin">Текстура</param>
-        /// <returns></returns>
-        protected override void constructView(Texture skin)
+        /// <param name="mass">Масса</param>
+        /// <param name="radius">Радиус</param>
+        /// <param name="orbit">Орбита</param>
+        /// <param name="orbitalSpeed">Орбитальная скорость</param>
+        /// <param name="Skin">Текструа</param>
+        public Planet(int mass, int radius, int orbit, double orbitalSpeed, SFML.Graphics.Texture Skin)
         {
-            CircleShape locView = new CircleShape((float)radius);
-            locView.Position = coords;
-            locView.Texture = skin;
-            this.view = locView;
+            Random random = new Random();
+            this.mass = mass;//инициализировать основные характеристики планеты
+            this.radius = radius;
+            this.orbit = orbit;
+            this.orbitalSpeed = orbitalSpeed;
+            this.orbitalAngle = random.Next();//задать случайный пворот планеты
+            this.move();//сформировать координаты планеты
+            this.constructView(Skin);//сконструировать отображение планеты
+
         }
-
-        /// <summary>
-        /// Жизнь планеты
-        /// </summary>
-        protected abstract void planetProcess(Vector2f globalCoords);
-
-        /// <summary>
-        /// Движение планеты по орбите
-        /// </summary>
-        public override void move(Vector2f globalCoords)
-        {
-            orbitalAngle += orbitalSpeed;//Изменение орбитального угла планеты
-            this.coords.X = (float)((globalCoords.X - this.radius) + ordit * Math.Cos(orbitalAngle));//вычисление новой кординаты X
-            this.coords.Y = (float)((globalCoords.Y - this.radius) + ordit * Math.Sin(orbitalAngle));//вычисление новой координаты У
-        }
-
-        /// <summary>
-        /// Получить сингнатуру планеты
-        /// </summary>
-        /// <returns></returns>
-        public abstract override object getSignature();
-
-
+        
     }
 }

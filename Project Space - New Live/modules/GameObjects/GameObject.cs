@@ -8,7 +8,7 @@ using SFML.Graphics;
 
 namespace Project_Space___New_Live
 {
-    abstract class GameObject
+    public abstract class GameObject
     {
         protected int mass;//масса объекта
         protected Vector2f coords;//координаты объекта
@@ -33,7 +33,7 @@ namespace Project_Space___New_Live
         /// <summary>
         /// Функция движения объекта
         /// </summary>
-        public abstract void move(Vector2f globalCoords);
+        public abstract void move();
 
 
         /// <summary>
@@ -43,6 +43,16 @@ namespace Project_Space___New_Live
         /// <returns></returns>
         protected abstract void constructView(Texture skin);
 
+
+        /// <summary>
+        /// Скорректировать координаты объекта отностиельно
+        /// </summary>
+        /// <param name="correction">Коррекция</param>
+        public void correctObjectPoint(Vector2f correction)
+        {
+            coords.X += correction.X;
+            coords.Y += correction.Y;
+        }
 
         /// <summary>
         /// Получить отображение объекта
