@@ -28,10 +28,10 @@ namespace Project_Space___New_Live
     class Test
     {
 
-
-        Texture starText = new Texture("D:/testStarText.jpg");//загруженная текстура звезды
-        Texture planetText = new Texture("D:/testPlanetText.jpg");//загруженная текстура планет 
-        Texture backText = new Texture("D:/testBackground.png");//загруженная текстура планет 
+        Texture img = new Texture("testBackground.png");//загруженная текстура планет 
+        Texture starText = new Texture("testStarText.jpg");//загруженная текстура звезды
+        Texture planetText = new Texture("testPlanetText.jpg");//загруженная текстура планет 
+        Texture backText = new Texture("testBackground.png");//загруженная текстура планет 
 
         static VideoMode testMode = new VideoMode(1600, 900);//переменные окна: видеорежим
         RenderWindow testWindow = new RenderWindow(testMode, "Test");//окно
