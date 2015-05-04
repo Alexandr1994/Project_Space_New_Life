@@ -56,9 +56,12 @@ namespace Project_Space___New_Live.modules.GameObjects
             //    starComponent[i].process(this);//движение звезд звездной системы
             //}
             massCenter.process(this);//работа со звездной состовляющей
-            for (int i = 0; i < planetComponent.Length; i++)
-            {//работа с планетарным компонентом
-                planetComponent[i].process(this);//жизнь планеты
+            if (planetComponent != null)
+            {
+                for (int i = 0; i < planetComponent.Length; i++)
+                {//работа с планетарным компонентом
+                    planetComponent[i].process(this);//жизнь планеты
+                }
             }
             renderSystem(Target);//отрисовка
         }
@@ -75,23 +78,34 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 Target.Draw(view);
             }
-            for (int i = 0; i < planetComponent.Length; i++)
-            {//отрисовать планеты
-                Target.Draw(planetComponent[i].getView());//движение звезд звездной системы
+            if (planetComponent != null)
+            {
+                for (int i = 0; i < planetComponent.Length; i++)
+                {//отрисовать планеты
+                    Target.Draw(planetComponent[i].getView());//движение звезд звездной системы
+                }
             }
-
 
         }
 
         /// <summary>
-        /// Движение звездной системы (БЫДЛОКОД К ИСПРАВЛЕНЮ)
+        /// Движение звездной системы (НОРМАЛЬНОЕ - СКОРО) 
+        /// </summary>
+        /// <param name="speed"></param>
+        protected override void move(double speed)
+        {
+            throw new NotImplementedException();
+        } 
+
+        /// <summary>
+        /// Движение звездной системы (БЫДЛОКОД К ИСПРАВЛЕНЮ - ОТЛАДОЧНАЯ ФУНКЦИЯ)
         /// </summary>
         /// <param name="deltaX"></param>
         /// <param name="deltaY"></param>
-        protected override void move(double speed)
+        public void move(float deltaX, float deltaY)
         {
-           // this.coords.X -= deltaX;
-          //  this.coords.Y -= deltaY;
+            this.coords.X -= deltaX;
+            this.coords.Y -= deltaY;
             background.Position = new Vector2f(-1000 + coords.X, -1000 + coords.Y);
         }
 

@@ -33,7 +33,7 @@ namespace Project_Space___New_Live
         Texture planetText = new Texture("D:/testPlanetText.jpg");//загруженная текстура планет 
         Texture backText = new Texture("D:/testBackground.png");//загруженная текстура планет 
 
-        static VideoMode testMode = new VideoMode(800, 600);//переменные окна: видеорежим
+        static VideoMode testMode = new VideoMode(1600, 900);//переменные окна: видеорежим
         RenderWindow testWindow = new RenderWindow(testMode, "Test");//окно
         //CircleShape star = new CircleShape();
         StarSystem system;
@@ -41,7 +41,7 @@ namespace Project_Space___New_Live
         //Random rand = new Random();
 
         //CircleShape[] planets = new CircleShape[5];//переменные планет: образы
-        int[] orbits = { 110, 140, 300, 200 };//орибиты планет 
+        int[] orbits = { 600, 140, 300, 200 };//орибиты планет 
         double[] angle = new double[5];//орбитальные углы планет
         
         bool left = false;//флаги контроля перемещения играока
@@ -131,19 +131,19 @@ namespace Project_Space___New_Live
         {
             if (left)//перемещение
             {
-                //system.move(-3, 0);
+                system.move(-3, 0);
             }
             if (right)
             {
-                //system.move(3, 0);
+                system.move(3, 0);
             }
             if (up)
             {
-                //system.move(0, -3);
+                system.move(0, -3);
             }
             if (down)
             {
-               // system.move(0, 3);
+               system.move(0, 3);
             }
         }
 
@@ -202,27 +202,31 @@ namespace Project_Space___New_Live
             //{
             //    planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), planetText);
             //}
-
-            Star[] starsDouble = new Star[2];
-            for (int i = 0; i < starsDouble.Length - 1; i++)
+            LocalMassCenter[] locCenters = new LocalMassCenter[3];
+            for (int i = 0; i < locCenters.Length - 1; i++)
             {
-                starsDouble[i] = new Star(1000, 40, 55, 180 * (i + 1) * (Math.PI / 180), 0.002, starText);
+                Star[] starsDouble = new Star[2];
+                for (int j = 0; j < starsDouble.Length; j++)
+                {
+                    starsDouble[j] = new Star(1000, 40, 55, 180 * (j + 1) * (Math.PI / 180), 0.008, starText);
+                }
+                locCenters[i] = new LocalMassCenter(150, (i + 1)  * (Math.PI), 0.004, starsDouble);
             }
-
-
             Star[] stars = new Star[3];
             for (int i = 0; i < stars.Length - 1; i++)
             {
-                stars[i] = new Star(1000, 40, 55, 180 * (i + 1) * (Math.PI / 180), 0.002, starText);
+                stars[i] = new Star(1000, 40, 55, 180 * (i + 1) * (Math.PI / 180), 0.008, starText);
             }
-            stars[2] = new Star(1000, 40, 200, new Random().Next(), 0.0005, starText);
-            Planet[] planets = new Planet[3];
-            for (int i = 0; i < planets.Length; i++)
-            {
-                planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), planetText);
-            }
-            LocalMassCenter center = new LocalMassCenter(0, 0, 0, stars);
-            system = new StarSystem(new Vector2f(400, 300), center, planets, backText);
+            stars[2] = new Star(1000, 40, 200, new Random().Next(), 0.006, starText);
+            locCenters[2] = new LocalMassCenter(500, new Random().Next(), 0.002, stars);
+
+            //Planet[] planets = new Planet[1];
+            //for (int i = 0; i < planets.Length; i++)
+            //{
+            //    planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), planetText);
+            //}
+            LocalMassCenter center = new LocalMassCenter(0, 0, 0, locCenters);
+            system = new StarSystem(new Vector2f(800, 450), center, null, backText);
 
         }
 
