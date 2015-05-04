@@ -8,31 +8,29 @@ using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
 {
-    public class StarSystem
+    public class StarSystem : GameEntity
     {
 
 
-
-        Star[] starComponent;//звездная составляющая 
+        //Star[] starComponent;//звездная составляющая 
         Planet[] planetComponent;//планетарная система
-        
-        Vector2f globalCoords;//глобальнек координаты звездной системы, относительно игрока
         RectangleShape background;//фон звездной системы
+        LocalMassCenter massCenter;//центр масс
+
 
         /// <summary>
         /// Построить звездную систему
         /// </summary>
         /// <param name="Coords"></param>
-        /// <param name="starComponent"></param>
+        /// <param name="massCenter"></param>
         /// <param name="planetComponent"></param>
         /// <param name="background"></param>
-        public StarSystem(Vector2f Coords,Star[] starComponent ,Planet[] planetComponent, Texture background)
+        public StarSystem(Vector2f Coords, LocalMassCenter massCenter ,Planet[] planetComponent, Texture background)
         {
-            this.starComponent = starComponent;//Инициализация компонетов звездной системы
+            this.massCenter = massCenter;//Инициализация компонетов звездной системы
             this.planetComponent = planetComponent;
-            this.globalCoords = Coords;
+            this.coords = Coords;
             initBackgroung(background);//Построение фона звездной системы
-  
         }
 
 
@@ -45,32 +43,24 @@ namespace Project_Space___New_Live.modules.GameObjects
             background = new RectangleShape();
             background.Texture = skin;
             background.Size = new Vector2f(2000, 2000);
-            background.Position = new Vector2f(-1000 + globalCoords.X, -1000 + globalCoords.Y);
+            background.Position = new Vector2f(-1000 + coords.X, -1000 + coords.Y);
         }
 
         /// <summary>
         /// Процесс жизни звездной системы  (БЫДЛОКОД К ИСПРАВЛЕНЮ)
         /// </summary>
-        public void systemProcess(RenderTarget Target)
+        public void process(RenderTarget Target)
         {
-            for (int i = 0; i < starComponent.Length; i++)
-            {//работа со звездным компонентом
-                starComponent[i].process(this);//движение звезд звездной системы
-            }
+            //for (int i = 0; i < starComponent.Length; i++)
+            //{//работа со звездным компонентом
+            //    starComponent[i].process(this);//движение звезд звездной системы
+            //}
+            massCenter.process(this);//работа со звездной состовляющей
             for (int i = 0; i < planetComponent.Length; i++)
             {//работа с планетарным компонентом
                 planetComponent[i].process(this);//жизнь планеты
             }
             renderSystem(Target);//отрисовка
-        }
-
-        /// <summary>
-        /// Получить клобадьные координаты
-        /// </summary>
-        /// <returns></returns>
-        public Vector2f getGlobalCoords()
-        {
-            return this.globalCoords;
         }
 
         /// <summary>
@@ -80,9 +70,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         private void renderSystem(RenderTarget Target)
         {
             Target.Draw(background);//отрисовать фон
-            for (int i = 0; i < starComponent.Length; i++)
-            {//отрисовать звезды
-                Target.Draw(starComponent[i].getView());//движение звезд звездной системы
+            List<Shape> starComponent = massCenter.getStarsViews();
+            foreach (Shape view in starComponent)
+            {
+                Target.Draw(view);
             }
             for (int i = 0; i < planetComponent.Length; i++)
             {//отрисовать планеты
@@ -92,17 +83,16 @@ namespace Project_Space___New_Live.modules.GameObjects
 
         }
 
-
         /// <summary>
         /// Движение звездной системы (БЫДЛОКОД К ИСПРАВЛЕНЮ)
         /// </summary>
         /// <param name="deltaX"></param>
         /// <param name="deltaY"></param>
-        public void move(float deltaX, float deltaY)
+        protected override void move(double speed)
         {
-            this.globalCoords.X -= deltaX;
-            this.globalCoords.Y -= deltaY;
-            background.Position = new Vector2f(-1000 + globalCoords.X, -1000 + globalCoords.Y);
+           // this.coords.X -= deltaX;
+          //  this.coords.Y -= deltaY;
+            background.Position = new Vector2f(-1000 + coords.X, -1000 + coords.Y);
         }
 
 
