@@ -28,7 +28,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.orbit = orbit;
             this.orbitalAngle = startOrbitalAngle;
             this.orbitalSpeed = orbitalSpeed;
-            this.move(0);//сформировать координаты звезды
+            this.move();//сформировать координаты звезды
             this.constructView(Skin);//построить отображение звезды
 
         }

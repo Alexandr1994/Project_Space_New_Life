@@ -33,6 +33,11 @@ namespace Project_Space___New_Live
         Texture planetText = new Texture("testPlanetText.jpg");//загруженная текстура планет 
         Texture backText = new Texture("testBackground.png");//загруженная текстура планет 
 
+
+        double speed = 3;
+        double angleS = 0;
+        double angSpeed = 3 * Math.PI / 180;
+
         static VideoMode testMode = new VideoMode(800, 450);//переменные окна: видеорежим
         RenderWindow testWindow = new RenderWindow(testMode, "Test");//окно
         //CircleShape star = new CircleShape();
@@ -131,19 +136,19 @@ namespace Project_Space___New_Live
         {
             if (left)//перемещение
             {
-                system.move(-3, 0);
+                angleS += angSpeed;
             }
             if (right)
             {
-                system.move(3, 0);
+                angleS -= angSpeed;
             }
             if (up)
             {
-                system.move(0, -3);
+                system.move(speed, angleS);
             }
             if (down)
             {
-               system.move(0, 3);
+                system.move(-speed, angleS);
             }
         }
 

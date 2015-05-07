@@ -86,24 +86,18 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Движение звездной системы (НОРМАЛЬНОЕ - СКОРО) 
+        /// Движение звездной системы, относительно игрока
         /// </summary>
         /// <param name="speed"></param>
-        protected override void move(double speed)
+        /// <param name="angle"></param>
+        public void move(double speed, double angle)
         {
-            throw new NotImplementedException();
-        } 
-
-        /// <summary>
-        /// Движение звездной системы (БЫДЛОКОД К ИСПРАВЛЕНЮ - ОТЛАДОЧНАЯ ФУНКЦИЯ)
-        /// </summary>
-        /// <param name="deltaX"></param>
-        /// <param name="deltaY"></param>
-        public void move(float deltaX, float deltaY)
-        {
-            this.coords.X -= deltaX;
-            this.coords.Y -= deltaY;
-            background.Position = new Vector2f(-1000 + coords.X, -1000 + coords.Y);
+            this.coords.X -= (float)(speed * Math.Cos(angle));
+            this.coords.Y -= (float)(speed * Math.Sin(angle));
+            Vector2f newPos = new Vector2f();
+            newPos.X = (float)(this.background.Position.X - (speed * Math.Cos(angle) / 100));//вычисление новой координаты фона X
+            newPos.Y = (float)(this.background.Position.Y - (speed * Math.Sin(angle) / 100));//вычисление новой координаты фона Y
+            background.Position = newPos;
         }
 
 

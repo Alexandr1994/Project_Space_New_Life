@@ -20,12 +20,6 @@ namespace Project_Space___New_Live
         {
             return this.coords;
         }
-   
-        /// <summary>
-        /// Функция движения объекта
-        /// </summary>
-        /// <param name="speed">Скорость движениея</param>
-        protected abstract void move(double speed);
 
         /// <summary>
         /// Процесс жизни сущности

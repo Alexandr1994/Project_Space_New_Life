@@ -30,7 +30,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.orbitalAngle = startOrbitalAngle;
             this.orbitalSpeed = orbitalSpeed;
             this.stars = stars;
-            this.move(0);
+            this.move();
         }
 
         /// <summary>
@@ -46,16 +46,16 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.orbitalAngle = startOrbitalAngle;
             this.orbitalSpeed = orbitalSpeed;
             this.massCenters = locMasCenters;
-            this.move(0);
+            this.move();
         }
 
         /// <summary>
         /// Движение локального центра масс
         /// </summary>
         /// <param name="speed">Скорость</param>
-        protected override void move(double speed)
+        private void move()
         {
-            orbitalAngle += speed;//Изменение орбитального угла планеты
+            orbitalAngle += orbitalSpeed;//Изменение орбитального угла планеты
             this.coords.X = (float)((orbit * Math.Cos(orbitalAngle)));//вычисление новой кординаты X
             this.coords.Y = (float)((orbit * Math.Sin(orbitalAngle)));//вычисление новой координаты У
         }
@@ -95,7 +95,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             processCompanent(massCenters);//управление подчиненными центрами масс
             processCompanent(stars);//управление подчиненными звездами
-            this.move(orbitalSpeed);//вычислить идеальные координтаы
+            this.move();//вычислить идеальные координтаы
             this.correctObjectPoint(home.getCoords());//выполнить коррекцию относительно глобальных координт
         }
 

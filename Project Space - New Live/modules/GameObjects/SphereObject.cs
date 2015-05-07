@@ -32,9 +32,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Движение объекта по орбите
         /// </summary>
-        protected override void move(double speed)
+        /// <param name="speed">Угловая скорость</param>
+        /// <param name="angle">Текущий орбитальный угол</param>
+        protected override void move()
         {
-            orbitalAngle += speed;//Изменение орбитального угла планеты
+            orbitalAngle += orbitalSpeed;//Изменение орбитального угла планеты
             this.coords.X = (float)((orbit * Math.Cos(orbitalAngle)));//вычисление новой кординаты X
             this.coords.Y = (float)((orbit * Math.Sin(orbitalAngle)));//вычисление новой координаты У
         }
@@ -56,7 +58,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="home">Управляющая текцщим объектом сущность</param>
         public override void process(GameEntity home)
         {
-            this.move(orbitalSpeed);//вычеслить идеальные координтаы
+            this.move();//вычеслить идеальные координтаы
             this.correctObjectPoint(home.getCoords());//выполнить коррекцию относительно глобальных координт
             this.view.Position = new Vector2f(coords.X - this.radius, coords.Y - this.radius);//вычислить координаты отображения объекта
         }
