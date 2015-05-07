@@ -28,6 +28,12 @@ namespace Project_Space___New_Live
         protected abstract void move(double speed);
 
         /// <summary>
+        /// Процесс жизни сущности
+        /// </summary>
+        /// <param name="home"></param>
+        public abstract void process(GameEntity home);
+
+        /// <summary>
         /// Скорректировать координаты объекта отностиельно
         /// </summary>
         /// <param name="correction">Коррекция</param>
@@ -36,7 +42,7 @@ namespace Project_Space___New_Live
             coords.X += correction.X;
             coords.Y += correction.Y;
         }
-
+        
         
 
     }

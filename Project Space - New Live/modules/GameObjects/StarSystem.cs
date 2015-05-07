@@ -47,14 +47,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Процесс жизни звездной системы  (БЫДЛОКОД К ИСПРАВЛЕНЮ)
+        /// Процесс жизни звездной системы
         /// </summary>
-        public void process(RenderTarget Target)
+        public override void process(GameEntity home = null)
         {
-            //for (int i = 0; i < starComponent.Length; i++)
-            //{//работа со звездным компонентом
-            //    starComponent[i].process(this);//движение звезд звездной системы
-            //}
             massCenter.process(this);//работа со звездной состовляющей
             if (planetComponent != null)
             {
@@ -63,29 +59,30 @@ namespace Project_Space___New_Live.modules.GameObjects
                     planetComponent[i].process(this);//жизнь планеты
                 }
             }
-            renderSystem(Target);//отрисовка
         }
 
+
         /// <summary>
-        /// Отрисовать звездную систему (БЫДЛОКОД К ИНКАПСУЛЯЦИИ В СПЕЦИАЛЬНЫЙ КЛАСС)
+        /// Вернуть коллекция отображений объектов звездной системы
         /// </summary>
-        /// <param name="Target"></param>
-        private void renderSystem(RenderTarget Target)
+        /// <returns></returns>
+        public List<Shape> getView()
         {
-            Target.Draw(background);//отрисовать фон
-            List<Shape> starComponent = massCenter.getStarsViews();
-            foreach (Shape view in starComponent)
+            List<Shape> systemsViews = new List<Shape>();
+            List<Shape> starCompanent = massCenter.getView();
+            systemsViews.Add(background);//засунуть в возвращаемый массив фон
+            foreach (Shape view in starCompanent)//заполнить возвращаемый массив образами звезд
             {
-                Target.Draw(view);
+                systemsViews.Add(view);
             }
-            if (planetComponent != null)
+            if (planetComponent != null)//если звездная система имеет планетарный компанент
             {
-                for (int i = 0; i < planetComponent.Length; i++)
-                {//отрисовать планеты
-                    Target.Draw(planetComponent[i].getView());//движение звезд звездной системы
+                foreach (Planet planet in planetComponent)//заполнить возвращаемый массив образами планет
+                {
+                    systemsViews.Add(planet.getView());
                 }
             }
-
+            return systemsViews;
         }
 
         /// <summary>

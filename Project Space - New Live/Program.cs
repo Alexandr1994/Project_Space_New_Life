@@ -33,7 +33,7 @@ namespace Project_Space___New_Live
         Texture planetText = new Texture("testPlanetText.jpg");//загруженная текстура планет 
         Texture backText = new Texture("testBackground.png");//загруженная текстура планет 
 
-        static VideoMode testMode = new VideoMode(1600, 900);//переменные окна: видеорежим
+        static VideoMode testMode = new VideoMode(800, 450);//переменные окна: видеорежим
         RenderWindow testWindow = new RenderWindow(testMode, "Test");//окно
         //CircleShape star = new CircleShape();
         StarSystem system;
@@ -158,7 +158,11 @@ namespace Project_Space___New_Live
             //    planetProcess(planets[i], orbits[i], angle[i]);//вычисление новых координат планеты
             //    testWindow.Draw(planets[i]);//переотрисовка планет
             //}
-            system.process(testWindow);
+            system.process();
+            foreach (Shape view in system.getView())
+            {
+                testWindow.Draw(view);
+            }
 
         }
 

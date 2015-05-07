@@ -74,13 +74,16 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Управление подчиненными центарми масс
+        /// Управление подчиненными данного центара масс
         /// </summary>
-        private void locMassCentersProcess()
+        private void processCompanent(GameEntity[] companents)
         {
-            for (int i = 0; i < massCenters.Length; i++)
+            if (companents != null)
             {
-                this.massCenters[i].process(this);
+                foreach (GameEntity entity in companents)
+                {
+                    entity.process(this);
+                }
             }
         }
 
@@ -88,16 +91,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Функция "жизни" локального центра масс
         /// </summary>
         /// <param name="home"></param>
-        public void process(GameEntity home)
+        public override void process(GameEntity home)
         {
-            if (stars != null)//если центр масс управляет звездами, проивести управление
-            {
-                this.starProcess();
-            }
-            if (massCenters != null)//если центр масс управляет подчиненными центрами масс, проивести управление
-            {
-                this.locMassCentersProcess();
-            }
+            processCompanent(massCenters);//управление подчиненными центрами масс
+            processCompanent(stars);//управление подчиненными звездами
             this.move(orbitalSpeed);//вычислить идеальные координтаы
             this.correctObjectPoint(home.getCoords());//выполнить коррекцию относительно глобальных координт
         }
@@ -106,7 +103,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Получить все отображения данного центра масс
         /// </summary>
         /// <returns></returns>
-        public List<SFML.Graphics.Shape> getStarsViews()
+        public List<SFML.Graphics.Shape> getView()
         {
             List<SFML.Graphics.Shape> retViews = new List<SFML.Graphics.Shape>();//массив возвращаемых отображений
             if (stars != null)//если центр масс имеет звезды, передать их отображения в возвращаемый массив
@@ -120,7 +117,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 for (int i = 0; i < massCenters.Length; i++)
                 {//получить все отображения звезд в подчиненном центре масс
-                    foreach (SFML.Graphics.Shape singleView in massCenters[i].getStarsViews())
+                    foreach (SFML.Graphics.Shape singleView in massCenters[i].getView())
                     {//перевести полученные отображения в возвращаемый массив
                         retViews.Add(singleView);
                     }

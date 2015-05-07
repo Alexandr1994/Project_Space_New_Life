@@ -54,7 +54,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Жизнь объекта
         /// </summary>
         /// <param name="home">Управляющая текцщим объектом сущность</param>
-        public void process(GameEntity home)
+        public override void process(GameEntity home)
         {
             this.move(orbitalSpeed);//вычеслить идеальные координтаы
             this.correctObjectPoint(home.getCoords());//выполнить коррекцию относительно глобальных координт
