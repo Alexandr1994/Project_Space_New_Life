@@ -9,14 +9,16 @@ namespace Project_Space___New_Live
 {
     public abstract class GameEntity
     {
-
-        protected Vector2f coords;//координаты объекта
+        /// <summary>
+        /// координаты объекта
+        /// </summary>
+        protected Vector2f coords;
         
         /// <summary>
         /// Получить координаты объекта
         /// </summary>
         /// <returns></returns>
-        public Vector2f getCoords()
+        public Vector2f GetCoords()
         {
             return this.coords;
         }
@@ -25,19 +27,16 @@ namespace Project_Space___New_Live
         /// Процесс жизни сущности
         /// </summary>
         /// <param name="home"></param>
-        public abstract void process(GameEntity home);
+        public abstract void Process(GameEntity home);
 
         /// <summary>
         /// Скорректировать координаты объекта отностиельно
         /// </summary>
         /// <param name="correction">Коррекция</param>
-        public void correctObjectPoint(Vector2f correction)
+        public void CorrectObjectPoint(Vector2f correction)
         {
             coords.X += correction.X;
             coords.Y += correction.Y;
         }
-        
-        
-
     }
 }

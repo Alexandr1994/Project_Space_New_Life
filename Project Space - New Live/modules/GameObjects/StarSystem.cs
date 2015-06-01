@@ -10,12 +10,18 @@ namespace Project_Space___New_Live.modules.GameObjects
 {
     public class StarSystem : GameEntity
     {
-
-
-        //Star[] starComponent;//звездная составляющая 
-        Planet[] planetComponent;//планетарная система
-        RectangleShape background;//фон звездной системы
-        LocalMassCenter massCenter;//центр масс
+        /// <summary>
+        /// планетарная система
+        /// </summary>
+        Planet[] planetComponent;
+        /// <summary>
+        /// фон звездной системы
+        /// </summary>
+        RectangleShape background;
+        /// <summary>
+        /// центр масс
+        /// </summary>
+        LocalMassCenter massCenter;
 
 
         /// <summary>
@@ -30,7 +36,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.massCenter = massCenter;//Инициализация компонетов звездной системы
             this.planetComponent = planetComponent;
             this.coords = Coords;
-            initBackgroung(background);//Построение фона звездной системы
+            InitBackgroung(background);//Построение фона звездной системы
         }
 
 
@@ -38,7 +44,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Построить фон звездной системы
         /// </summary>
         /// <param name="skin"></param>
-        private void initBackgroung(Texture skin)
+        private void InitBackgroung(Texture skin)
         {
             background = new RectangleShape();
             background.Texture = skin;
@@ -49,14 +55,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Процесс жизни звездной системы
         /// </summary>
-        public override void process(GameEntity home = null)
+        public override void Process(GameEntity home = null)
         {
-            massCenter.process(this);//работа со звездной состовляющей
+            massCenter.Process(this);//работа со звездной состовляющей
             if (planetComponent != null)
             {
                 for (int i = 0; i < planetComponent.Length; i++)
                 {//работа с планетарным компонентом
-                    planetComponent[i].process(this);//жизнь планеты
+                    planetComponent[i].Process(this);//жизнь планеты
                 }
             }
         }
@@ -66,10 +72,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Вернуть коллекция отображений объектов звездной системы
         /// </summary>
         /// <returns></returns>
-        public List<Shape> getView()
+        public List<Shape> GetView()
         {
             List<Shape> systemsViews = new List<Shape>();
-            List<Shape> starCompanent = massCenter.getView();
+            List<Shape> starCompanent = massCenter.GetView();
             systemsViews.Add(background);//засунуть в возвращаемый массив фон
             foreach (Shape view in starCompanent)//заполнить возвращаемый массив образами звезд
             {
@@ -79,7 +85,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 foreach (Planet planet in planetComponent)//заполнить возвращаемый массив образами планет
                 {
-                    systemsViews.Add(planet.getView());
+                    systemsViews.Add(planet.GetView());
                 }
             }
             return systemsViews;
@@ -90,7 +96,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="speed"></param>
         /// <param name="angle"></param>
-        public void move(double speed, double angle)
+        public void Move(double speed, double angle)
         {
             this.coords.X -= (float)(speed * Math.Cos(angle));
             this.coords.Y -= (float)(speed * Math.Sin(angle));
@@ -99,7 +105,5 @@ namespace Project_Space___New_Live.modules.GameObjects
             newPos.Y = (float)(this.background.Position.Y - (speed * Math.Sin(angle) / 100));//вычисление новой координаты фона Y
             background.Position = newPos;
         }
-
-
     }
 }

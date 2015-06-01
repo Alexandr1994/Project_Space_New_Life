@@ -25,10 +25,9 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.orbit = orbit;
             this.orbitalSpeed = orbitalSpeed;
             this.orbitalAngle = random.Next();//задать случайный пворот планеты
-            this.move();//сформировать координаты планеты
-            this.constructView(Skin);//сконструировать отображение планеты
+            this.Move();//сформировать координаты планеты
+            this.ConstructView(Skin);//сконструировать отображение планеты
 
         }
-        
     }
 }

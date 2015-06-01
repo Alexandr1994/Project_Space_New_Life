@@ -9,10 +9,18 @@ namespace Project_Space___New_Live.modules.GameObjects
 {
     public class LocalMassCenter : GameEntity
     {
-
-        protected int orbit;//орбита(расстояние от центра масс звездной системы до локального центра масс)
-        protected double orbitalAngle;//орбитальный угол объекта
-        protected double orbitalSpeed;//орбитальная скорость объекта (рад./ед.вр.)
+        /// <summary>
+        /// орбита(расстояние от центра масс звездной системы до локального центра масс)
+        /// </summary>
+        protected int orbit;
+        /// <summary>
+        /// орбитальный угол объекта
+        /// </summary>
+        protected double orbitalAngle;
+        /// <summary>
+        /// орбитальная скорость объекта (рад./ед.вр.)
+        /// </summary>
+        protected double orbitalSpeed;
         
         Star[] stars = null;//звезды контролируемые центорм масс
         LocalMassCenter[] massCenters = null;//локальные центры масс контролируемые данным центром масс
@@ -30,7 +38,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.orbitalAngle = startOrbitalAngle;
             this.orbitalSpeed = orbitalSpeed;
             this.stars = stars;
-            this.move();
+            this.Move();
         }
 
         /// <summary>
@@ -46,14 +54,14 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.orbitalAngle = startOrbitalAngle;
             this.orbitalSpeed = orbitalSpeed;
             this.massCenters = locMasCenters;
-            this.move();
+            this.Move();
         }
 
         /// <summary>
         /// Движение локального центра масс
         /// </summary>
         /// <param name="speed">Скорость</param>
-        private void move()
+        private void Move()
         {
             orbitalAngle += orbitalSpeed;//Изменение орбитального угла планеты
             this.coords.X = (float)((orbit * Math.Cos(orbitalAngle)));//вычисление новой кординаты X
@@ -65,24 +73,24 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Управление звездами
         /// </summary>
-        private void starProcess()
+        private void StarProcess()
         {
             for (int i = 0; i < stars.Length; i++)
             {
-                stars[i].process(this);
+                stars[i].Process(this);
             }
         }
 
         /// <summary>
         /// Управление подчиненными данного центара масс
         /// </summary>
-        private void processCompanent(GameEntity[] companents)
+        private void ProcessCompanent(GameEntity[] companents)
         {
             if (companents != null)
             {
                 foreach (GameEntity entity in companents)
                 {
-                    entity.process(this);
+                    entity.Process(this);
                 }
             }
         }
@@ -91,33 +99,33 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Функция "жизни" локального центра масс
         /// </summary>
         /// <param name="home"></param>
-        public override void process(GameEntity home)
+        public override void Process(GameEntity home)
         {
-            processCompanent(massCenters);//управление подчиненными центрами масс
-            processCompanent(stars);//управление подчиненными звездами
-            this.move();//вычислить идеальные координтаы
-            this.correctObjectPoint(home.getCoords());//выполнить коррекцию относительно глобальных координт
+            ProcessCompanent(massCenters);//управление подчиненными центрами масс
+            ProcessCompanent(stars);//управление подчиненными звездами
+            this.Move();//вычислить идеальные координтаы
+            this.CorrectObjectPoint(home.GetCoords());//выполнить коррекцию относительно глобальных координт
         }
 
         /// <summary>
         /// Получить все отображения данного центра масс
         /// </summary>
         /// <returns></returns>
-        public List<SFML.Graphics.Shape> getView()
+        public List<SFML.Graphics.Shape> GetView()
         {
             List<SFML.Graphics.Shape> retViews = new List<SFML.Graphics.Shape>();//массив возвращаемых отображений
             if (stars != null)//если центр масс имеет звезды, передать их отображения в возвращаемый массив
             {
                 for (int i = 0; i < stars.Length; i++)
                 {
-                    retViews.Add(stars[i].getView());//получить все звездные отображения данного центра масс
+                    retViews.Add(stars[i].GetView());//получить все звездные отображения данного центра масс
                 }
             }
             if (massCenters != null)//если центр масс имеет подчиненными центры масс, извлечь из них отображения звезд
             {
                 for (int i = 0; i < massCenters.Length; i++)
                 {//получить все отображения звезд в подчиненном центре масс
-                    foreach (SFML.Graphics.Shape singleView in massCenters[i].getView())
+                    foreach (SFML.Graphics.Shape singleView in massCenters[i].GetView())
                     {//перевести полученные отображения в возвращаемый массив
                         retViews.Add(singleView);
                     }
@@ -125,7 +133,5 @@ namespace Project_Space___New_Live.modules.GameObjects
             }
             return retViews;//вернуть все звездные отображения
         }
-
-
     }
 }

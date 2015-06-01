@@ -10,18 +10,29 @@ namespace Project_Space___New_Live.modules.GameObjects
 {
     public abstract class SphereObject : GameObject
     {
-
-        protected int radius;//радиус объекта
-        protected int orbit;//орбита(расстояние от центра масс звездной системы до центра объекта)
-        protected double orbitalAngle;//орбитальный угол объекта
-        protected double orbitalSpeed;//орбитальная скорость объекта (рад./ед.вр.)
+        /// <summary>
+        /// радиус объекта
+        /// </summary>
+        protected int radius;
+        /// <summary>
+        /// орбита(расстояние от центра масс звездной системы до центра объекта)
+        /// </summary>
+        protected int orbit;
+        /// <summary>
+        /// орбитальный угол объекта
+        /// </summary>
+        protected double orbitalAngle;
+        /// <summary>
+        /// орбитальная скорость объекта (рад./ед.вр.)
+        /// </summary>
+        protected double orbitalSpeed;
 
         /// <summary>
         /// Сконструировать отображение объекта
         /// </summary>
         /// <param name="skin">Текстура</param>
         /// <returns></returns>
-        protected override void constructView(Texture skin)
+        protected override void ConstructView(Texture skin)
         {
             CircleShape locView = new CircleShape((float)radius);
             locView.Position = coords;
@@ -34,7 +45,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="speed">Угловая скорость</param>
         /// <param name="angle">Текущий орбитальный угол</param>
-        protected override void move()
+        protected override void Move()
         {
             orbitalAngle += orbitalSpeed;//Изменение орбитального угла планеты
             this.coords.X = (float)((orbit * Math.Cos(orbitalAngle)));//вычисление новой кординаты X
@@ -45,7 +56,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Получить сингнатуру объекта
         /// </summary>
         /// <returns></returns>
-        public override object getSignature()
+        public override object GetSignature()
         {
             Tuple<int, int> localSignature = new Tuple<int, int>(this.mass, this.radius);
             return localSignature;
@@ -56,10 +67,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Жизнь объекта
         /// </summary>
         /// <param name="home">Управляющая текцщим объектом сущность</param>
-        public override void process(GameEntity home)
+        public override void Process(GameEntity home)
         {
-            this.move();//вычеслить идеальные координтаы
-            this.correctObjectPoint(home.getCoords());//выполнить коррекцию относительно глобальных координт
+            this.Move();//вычеслить идеальные координтаы
+            this.CorrectObjectPoint(home.GetCoords());//выполнить коррекцию относительно глобальных координт
             this.view.Position = new Vector2f(coords.X - this.radius, coords.Y - this.radius);//вычислить координаты отображения объекта
         }
 

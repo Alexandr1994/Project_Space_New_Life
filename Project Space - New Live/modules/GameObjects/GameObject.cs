@@ -11,40 +11,42 @@ namespace Project_Space___New_Live.modules.GameObjects
 {
     public abstract class GameObject : GameEntity
     {
-
-        protected int mass;//масса объекта
-        protected Shape view;//отображение объекта
+        /// <summary>
+        /// масса объекта
+        /// </summary>
+        protected int mass;
+        /// <summary>
+        /// отображение объекта
+        /// </summary>
+        protected Shape view;
 
         /// <summary>
         /// Функция движения объекта
         /// </summary>
         /// <param name="speed">Скорость движениея</param>
         /// <param name="angle">Угол поворота или орбитальный угол</param>
-        protected abstract void move();
+        protected abstract void Move();
 
         /// <summary>
         /// Получить сигнатуру(набор общих характеристик) обекта
         /// </summary>
         /// <returns></returns>
-        public abstract object getSignature();
+        public abstract object GetSignature();
 
         /// <summary>
         /// Построить отображение объекта (Х)
         /// </summary>
         /// <param name="skin">Текстура</param>
         /// <returns></returns>
-        protected abstract void constructView(Texture skin);
+        protected abstract void ConstructView(Texture skin);
 
         /// <summary>
         /// Получить отображение объекта
         /// </summary>
         /// <returns></returns>
-        public Shape getView()
+        public Shape GetView()
         {
             return view;
         }
-
-
-
     }
 }

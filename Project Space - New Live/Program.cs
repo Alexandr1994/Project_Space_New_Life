@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SFML;
-using SFML.Audio;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -28,15 +27,18 @@ namespace Project_Space___New_Live
     class Test
     {
 
-        Texture img = new Texture("testBackground.png");//загруженная текстура планет 
+        Texture img = new Texture("textPlayer.png");//загруженная текстура планет 
         Texture starText = new Texture("testStarText.jpg");//загруженная текстура звезды
         Texture planetText = new Texture("testPlanetText.jpg");//загруженная текстура планет 
         Texture backText = new Texture("testBackground.png");//загруженная текстура планет 
 
+        Vector2f coords = new Vector2f(400, 225);//идеальные координаты
+        CircleShape player = new CircleShape(25, 3);
 
         double speed = 3;
         double angleS = 0;
         double angSpeed = 3 * Math.PI / 180;
+        Transform t = new Transform();
 
         static VideoMode testMode = new VideoMode(800, 450);//переменные окна: видеорежим
         RenderWindow testWindow = new RenderWindow(testMode, "Test");//окно
@@ -134,28 +136,38 @@ namespace Project_Space___New_Live
 
         private void act()//переодическая функция управления
         {
+            player.Transform.Rotate(0, coords);
             if (left)//перемещение
             {
-                angleS += angSpeed;
+                angleS -= angSpeed;
+                //player.Rotation -= 5;
+                
+                player.Transform.Rotate(3, coords);
             }
             if (right)
             {
-                angleS -= angSpeed;
+                angleS += angSpeed;
+                //player.Rotation += 5;
+                player.Transform.Rotate(3, coords);
             }
             if (up)
             {
-                system.move(speed, angleS);
+                system.Move(speed, angleS);
             }
             if (down)
             {
-                system.move(-speed, angleS);
+                system.Move(-speed, angleS);
             }
+            player.Transform.Translate(coords);
+            player.Transform.TransformPoint(coords);
+            RenderStates states = new RenderStates(player.Transform);
+            testWindow.Draw(player);
+
         }
 
         private void systema()//переодическая функция окружения
         {
             
-            act();
             //testWindow.Draw(star);//отрисовка звезды
             //for (int i = 0; i < planets.Length; i++)//отрисовка планет и приращение орбитальных углов планет
             //{
@@ -163,11 +175,13 @@ namespace Project_Space___New_Live
             //    planetProcess(planets[i], orbits[i], angle[i]);//вычисление новых координат планеты
             //    testWindow.Draw(planets[i]);//переотрисовка планет
             //}
-            system.process();
-            foreach (Shape view in system.getView())
+            system.Process();
+            foreach (Shape view in system.GetView())
             {
                 testWindow.Draw(view);
             }
+            act();
+            
 
         }
 
@@ -211,6 +225,11 @@ namespace Project_Space___New_Live
             //{
             //    planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), planetText);
             //}
+            player.Texture = img;
+            player.Position = new Vector2f(coords.X - 25,coords.Y - 25);
+            player.OutlineColor = Color.Magenta;
+            player.OutlineThickness = 10;
+
             LocalMassCenter[] locCenters = new LocalMassCenter[3];
             for (int i = 0; i < locCenters.Length - 1; i++)
             {
@@ -235,7 +254,7 @@ namespace Project_Space___New_Live
             //    planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), planetText);
             //}
             LocalMassCenter center = new LocalMassCenter(0, 0, 0, locCenters);
-            system = new StarSystem(new Vector2f(800, 450), center, null, backText);
+            system = new StarSystem(new Vector2f(400, 225), center, null, backText);
 
         }
 
