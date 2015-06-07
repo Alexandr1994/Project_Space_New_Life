@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Project_Space___New_Live.modules.Dispatchers;
 using SFML;
 using SFML.Graphics;
 using SFML.System;
@@ -32,6 +33,8 @@ namespace Project_Space___New_Live
         Texture planetText = new Texture("testPlanetText.jpg");//загруженная текстура планет 
         Texture backText = new Texture("testBackground.png");//загруженная текстура планет 
 
+        RenderClass testRenderer;
+
         Vector2f coords = new Vector2f(400, 225);//идеальные координаты
         CircleShape player = new CircleShape(25, 3);
 
@@ -40,8 +43,8 @@ namespace Project_Space___New_Live
         double angSpeed = 3 * Math.PI / 180;
         Transform t = new Transform();
 
-        static VideoMode testMode = new VideoMode(800, 450);//переменные окна: видеорежим
-        RenderWindow testWindow = new RenderWindow(testMode, "Test");//окно
+     //   static VideoMode testMode = new VideoMode(800, 450);//переменные окна: видеорежим
+        RenderWindow testWindow;//окно
         //CircleShape star = new CircleShape();
         StarSystem system;
 
@@ -91,12 +94,17 @@ namespace Project_Space___New_Live
                     }; break;
                 case Keyboard.Key.Space:
                     {//изменение формата отображение окна
-                        testWindow.Close();
-                        testWindow = new RenderWindow(testMode, "LOL!", Styles.Fullscreen);
-                        testWindow.KeyPressed += onKey;
-                        testWindow.KeyReleased += fromKey;
+                       testWindow = testRenderer.changeWindowStyle(Styles.Default);
+                       testWindow.KeyPressed += onKey;
+                       testWindow.KeyReleased += fromKey;
 
                     }; break;
+                case Keyboard.Key.RShift:
+                {
+                    testWindow = testRenderer.changeVideoMode(1024, 768);
+                    testWindow.KeyPressed += onKey;
+                    testWindow.KeyReleased += fromKey;
+                }; break;
                 default:
                 {
                     testWindow.SetTitle(e.Code.ToString());
@@ -260,7 +268,11 @@ namespace Project_Space___New_Live
 
         public void main()
         {
+            testRenderer = RenderClass.getInstance();
+            testWindow = testRenderer.getMainWindow();
             
+   
+
             initSystem();
             testWindow.KeyPressed += onKey;
             testWindow.KeyReleased += fromKey;

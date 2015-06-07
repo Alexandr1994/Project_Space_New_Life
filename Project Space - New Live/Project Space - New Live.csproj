@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="modules\Dispatchers\RenderClass.cs" />
     <Compile Include="modules\GameObjects\GameEntity.cs" />
     <Compile Include="modules\GameObjects\GameObject.cs" />
     <Compile Include="modules\GameObjects\LocalMassCenter.cs" />
@@ -77,7 +78,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="modules\Controlers\" />
-    <Folder Include="modules\Dispatchers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Baseclass.Contrib.Nuget.Output.1.0.7\build\net40\Baseclass.Contrib.Nuget.Output.targets" Condition="Exists('packages\Baseclass.Contrib.Nuget.Output.1.0.7\build\net40\Baseclass.Contrib.Nuget.Output.targets')" />
