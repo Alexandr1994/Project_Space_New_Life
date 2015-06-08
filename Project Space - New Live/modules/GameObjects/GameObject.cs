@@ -21,13 +21,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected Shape view;
 
         /// <summary>
-        /// Функция движения объекта
-        /// </summary>
-        /// <param name="speed">Скорость движениея</param>
-        /// <param name="angle">Угол поворота или орбитальный угол</param>
-        protected abstract void Move();
-
-        /// <summary>
         /// Получить сигнатуру(набор общих характеристик) обекта
         /// </summary>
         /// <returns></returns>

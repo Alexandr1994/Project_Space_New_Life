@@ -100,5 +100,17 @@ namespace Project_Space___New_Live.modules.Dispatchers
             mainWindow = new RenderWindow(windowSize, windowTitle, currentStyle);
         }
 
+        /// <summary>
+        /// Метод отрисовка
+        /// </summary>
+        /// <param name="views"></param>
+        public void RenderProcess(List<Shape> views)
+        {
+            foreach (Shape view in views)
+            {
+                mainWindow.Draw(view);
+            }
+        }
+
     }
 }

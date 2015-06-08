@@ -1,155 +1,166 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
-using SFML;
+using Project_Space___New_Live.modules.GameObjects;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using Project_Space___New_Live.modules.GameObjects;
-
 
 namespace Project_Space___New_Live
 {
-    class Program
+    internal class Program
     {
-
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Test test = new Test();
+            var test = new Test();
             test.main();
-
         }
     }
 
-    class Test
+    internal class Test
     {
-
-        Texture img = new Texture("textPlayer.png");//загруженная текстура планет 
-        Texture starText = new Texture("testStarText.jpg");//загруженная текстура звезды
-        Texture planetText = new Texture("testPlanetText.jpg");//загруженная текстура планет 
-        Texture backText = new Texture("testBackground.png");//загруженная текстура планет 
-
-        RenderClass testRenderer;
-
-        Vector2f coords = new Vector2f(400, 225);//идеальные координаты
-        CircleShape player = new CircleShape(25, 3);
-
-        double speed = 3;
-        double angleS = 0;
-        double angSpeed = 3 * Math.PI / 180;
-        Transform t = new Transform();
-
-     //   static VideoMode testMode = new VideoMode(800, 450);//переменные окна: видеорежим
-        RenderWindow testWindow;//окно
-        //CircleShape star = new CircleShape();
-        StarSystem system;
-
+        private readonly double angSpeed = 3*Math.PI/180;
+        private readonly Texture backText = new Texture("testBackground.png"); //загруженная текстура планет 
+        private readonly Texture img = new Texture("textPlayer.png"); //загруженная текстура планет 
+        private readonly CircleShape player = new CircleShape(25, 3);
+        private readonly double speed = 3;
+        private readonly Texture starText = new Texture("testStarText.jpg"); //загруженная текстура звезды
+        private double[] angle = new double[5]; //орбитальные углы планет
+        private double angleS;
+        private Vector2f coords = new Vector2f(400, 225); //идеальные координаты
+        private bool down;
+        private bool left; //флаги контроля перемещения играока
         //Random rand = new Random();
 
         //CircleShape[] planets = new CircleShape[5];//переменные планет: образы
-        int[] orbits = { 600, 140, 300, 200 };//орибиты планет 
-        double[] angle = new double[5];//орбитальные углы планет
-        
-        bool left = false;//флаги контроля перемещения играока
-        bool right = false;
-        bool up = false;
-        bool down = false;
-        
+        private int[] orbits = {600, 140, 300, 200}; //орибиты планет 
+        private Texture planetText = new Texture("testPlanetText.jpg"); //загруженная текстура планет 
+        private bool right;
+        //CircleShape star = new CircleShape();
+        private StarSystem system;
+        private RenderClass testRenderer;
+        // Transform t = new Transform();
 
-        private void onKey(object sender,KeyEventArgs e)//обработка нажатия на клавишу
+        //   static VideoMode testMode = new VideoMode(800, 450);//переменные окна: видеорежим
+        private RenderWindow testWindow; //окно
+        private bool up;
+
+        private void onKey(object sender, KeyEventArgs e) //обработка нажатия на клавишу
         {
             switch (e.Code)
             {
                 case Keyboard.Key.Escape:
                 {
-                    testWindow.Close();//закрытие окна
-                };break;
+                    testWindow.Close(); //закрытие окна
+                }
+                    ;
+                    break;
                 case Keyboard.Key.Right:
                 {
                     right = true;
-                }; break;
+                }
+                    ;
+                    break;
                 case Keyboard.Key.Left:
-                    {
-                        left = true;
-                    }; break;
+                {
+                    left = true;
+                }
+                    ;
+                    break;
                 case Keyboard.Key.Up:
-                    {
-                        up = true;
-                    }; break;
+                {
+                    up = true;
+                }
+                    ;
+                    break;
                 case Keyboard.Key.Down:
-                    {
-                        down = true;
-                    }; break;
+                {
+                    down = true;
+                }
+                    ;
+                    break;
                 case Keyboard.Key.Return:
-                    {//наложение текстуры
-                        //star.Texture = new Texture(img);
-                        //for (int i = 0; i < planets.Length; i++)
-                        //{
-                        //    planets[i].Texture = new Texture(img);
-                        //}
-                    }; break;
+                {
+//наложение текстуры
+                    //star.Texture = new Texture(img);
+                    //for (int i = 0; i < planets.Length; i++)
+                    //{
+                    //    planets[i].Texture = new Texture(img);
+                    //}
+                }
+                    ;
+                    break;
                 case Keyboard.Key.Space:
-                    {//изменение формата отображение окна
-                       testWindow = testRenderer.changeWindowStyle(Styles.Default);
-                       testWindow.KeyPressed += onKey;
-                       testWindow.KeyReleased += fromKey;
-
-                    }; break;
+                {
+//изменение формата отображение окна
+                    testWindow = testRenderer.changeWindowStyle(Styles.Default);
+                    testWindow.KeyPressed += onKey;
+                    testWindow.KeyReleased += fromKey;
+                }
+                    ;
+                    break;
                 case Keyboard.Key.RShift:
                 {
                     testWindow = testRenderer.changeVideoMode(1024, 768);
                     testWindow.KeyPressed += onKey;
                     testWindow.KeyReleased += fromKey;
-                }; break;
+                }
+                    ;
+                    break;
                 default:
                 {
                     testWindow.SetTitle(e.Code.ToString());
-                }; break;
-
+                }
+                    ;
+                    break;
             }
         }
 
-        private void fromKey(object sender, KeyEventArgs e)//обработка отжатия клавиш
+        private void fromKey(object sender, KeyEventArgs e) //обработка отжатия клавиш
         {
             switch (e.Code)
             {
                 case Keyboard.Key.Right:
-                    {
-                        right = false;
-                    }; break;
+                {
+                    right = false;
+                }
+                    ;
+                    break;
                 case Keyboard.Key.Left:
-                    {
-                        left = false;
-                    }; break;
+                {
+                    left = false;
+                }
+                    ;
+                    break;
                 case Keyboard.Key.Up:
-                    {
-                        up = false;
-                    }; break;
+                {
+                    up = false;
+                }
+                    ;
+                    break;
                 case Keyboard.Key.Down:
-                    {
-                        down = false;
-                    }; break;
+                {
+                    down = false;
+                }
+                    ;
+                    break;
                 default:
-                    { 
-                        testWindow.SetTitle(e.Code.ToString());
-                    }; break;
-
+                {
+                    testWindow.SetTitle(e.Code.ToString());
+                }
+                    ;
+                    break;
             }
         }
 
-
-        private void act()//переодическая функция управления
+        private void act() //переодическая функция управления
         {
             player.Transform.Rotate(0, coords);
-            if (left)//перемещение
+            if (left) //перемещение
             {
                 angleS -= angSpeed;
                 //player.Rotation -= 5;
-                
+
                 player.Transform.Rotate(3, coords);
             }
             if (right)
@@ -168,14 +179,12 @@ namespace Project_Space___New_Live
             }
             player.Transform.Translate(coords);
             player.Transform.TransformPoint(coords);
-            RenderStates states = new RenderStates(player.Transform);
+            var states = new RenderStates(player.Transform);
             testWindow.Draw(player);
-
         }
 
-        private void systema()//переодическая функция окружения
+        private void systema() //переодическая функция окружения
         {
-            
             //testWindow.Draw(star);//отрисовка звезды
             //for (int i = 0; i < planets.Length; i++)//отрисовка планет и приращение орбитальных углов планет
             //{
@@ -184,16 +193,10 @@ namespace Project_Space___New_Live
             //    testWindow.Draw(planets[i]);//переотрисовка планет
             //}
             system.Process();
-            foreach (Shape view in system.GetView())
-            {
-                testWindow.Draw(view);
-            }
             act();
-            
-
         }
 
-        private void planetProcess(CircleShape planet, double orbit, double angle)//вычисление новых координат планеты
+        private void planetProcess(CircleShape planet, double orbit, double angle) //вычисление новых координат планеты
         {
             //Vector2f starPoint = star.Position;
             //Vector2f point = new Vector2f();//50 - радиус звезды, 20 
@@ -202,8 +205,7 @@ namespace Project_Space___New_Live
             //planet.Position = point;
         }
 
-
-        private void initSystem()//инициализацимя звездной системы
+        private void initSystem() //инициализацимя звездной системы
         {
             //Color[] colors = { Color.Red, Color.Green, Color.Blue, Color.Magenta, Color.Cyan};
             //star.Position = new Vector2f(100, 100);//инициализация звезды
@@ -234,24 +236,24 @@ namespace Project_Space___New_Live
             //    planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), planetText);
             //}
             player.Texture = img;
-            player.Position = new Vector2f(coords.X - 25,coords.Y - 25);
+            player.Position = new Vector2f(coords.X - 25, coords.Y - 25);
             player.OutlineColor = Color.Magenta;
             player.OutlineThickness = 10;
 
-            LocalMassCenter[] locCenters = new LocalMassCenter[3];
-            for (int i = 0; i < locCenters.Length - 1; i++)
+            var locCenters = new LocalMassCenter[3];
+            for (var i = 0; i < locCenters.Length - 1; i++)
             {
-                Star[] starsDouble = new Star[2];
-                for (int j = 0; j < starsDouble.Length; j++)
+                var starsDouble = new Star[2];
+                for (var j = 0; j < starsDouble.Length; j++)
                 {
-                    starsDouble[j] = new Star(1000, 40, 55, 180 * (j + 1) * (Math.PI / 180), 0.008, starText);
+                    starsDouble[j] = new Star(1000, 40, 55, 180*(j + 1)*(Math.PI/180), 0.008, starText);
                 }
-                locCenters[i] = new LocalMassCenter(150, (i + 1)  * (Math.PI), 0.004, starsDouble);
+                locCenters[i] = new LocalMassCenter(150, (i + 1)*(Math.PI), 0.004, starsDouble);
             }
-            Star[] stars = new Star[3];
-            for (int i = 0; i < stars.Length - 1; i++)
+            var stars = new Star[3];
+            for (var i = 0; i < stars.Length - 1; i++)
             {
-                stars[i] = new Star(1000, 40, 55, 180 * (i + 1) * (Math.PI / 180), 0.008, starText);
+                stars[i] = new Star(1000, 40, 55, 180*(i + 1)*(Math.PI/180), 0.008, starText);
             }
             stars[2] = new Star(1000, 40, 200, new Random().Next(), 0.006, starText);
             locCenters[2] = new LocalMassCenter(500, new Random().Next(), 0.002, stars);
@@ -261,37 +263,31 @@ namespace Project_Space___New_Live
             //{
             //    planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), planetText);
             //}
-            LocalMassCenter center = new LocalMassCenter(0, 0, 0, locCenters);
+            var center = new LocalMassCenter(0, 0, 0, locCenters);
             system = new StarSystem(new Vector2f(400, 225), center, null, backText);
-
         }
 
         public void main()
         {
             testRenderer = RenderClass.getInstance();
             testWindow = testRenderer.getMainWindow();
-            
-   
+
 
             initSystem();
             testWindow.KeyPressed += onKey;
             testWindow.KeyReleased += fromKey;
 
+
             //пока окно открыто ловить события и перерисовывать окно
-            while(testWindow.IsOpen)
+            while (testWindow.IsOpen)
             {
                 Thread.Sleep(25);
                 testWindow.DispatchEvents();
-                testWindow.Clear();//перерисовка окна
+                testWindow.Clear(); //перерисовка окна
                 systema();
-                testWindow.Display();//перерисовка окна
-             
+                testRenderer.RenderProcess(system.GetView());
+                testWindow.Display(); //перерисовка окна
             }
-            
         }
-
-
-
     }
 }
-

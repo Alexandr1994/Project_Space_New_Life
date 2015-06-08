@@ -12,15 +12,15 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// орбита(расстояние от центра масс звездной системы до локального центра масс)
         /// </summary>
-        protected int orbit;
+        private int orbit;
         /// <summary>
         /// орбитальный угол объекта
         /// </summary>
-        protected double orbitalAngle;
+        private double orbitalAngle;
         /// <summary>
         /// орбитальная скорость объекта (рад./ед.вр.)
         /// </summary>
-        protected double orbitalSpeed;
+        private double orbitalSpeed;
         
         Star[] stars = null;//звезды контролируемые центорм масс
         LocalMassCenter[] massCenters = null;//локальные центры масс контролируемые данным центром масс
@@ -61,7 +61,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Движение локального центра масс
         /// </summary>
         /// <param name="speed">Скорость</param>
-        private void Move()
+        protected override void Move()
         {
             orbitalAngle += orbitalSpeed;//Изменение орбитального угла планеты
             this.coords.X = (float)((orbit * Math.Cos(orbitalAngle)));//вычисление новой кординаты X
@@ -77,7 +77,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             for (int i = 0; i < stars.Length; i++)
             {
-                stars[i].Process(this);
+                stars[i].Process(this.GetCoords());
             }
         }
 
@@ -90,7 +90,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 foreach (GameEntity entity in companents)
                 {
-                    entity.Process(this);
+                    entity.Process(this.GetCoords());
                 }
             }
         }
@@ -98,13 +98,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Функция "жизни" локального центра масс
         /// </summary>
-        /// <param name="home"></param>
-        public override void Process(GameEntity home)
+        /// <param name="homeCoords">Коордтнаты управляющей сущности</param>
+        public override void Process(Vector2f homeCoords)
         {
             ProcessCompanent(massCenters);//управление подчиненными центрами масс
             ProcessCompanent(stars);//управление подчиненными звездами
             this.Move();//вычислить идеальные координтаы
-            this.CorrectObjectPoint(home.GetCoords());//выполнить коррекцию относительно глобальных координт
+            this.CorrectObjectPoint(homeCoords);//выполнить коррекцию относительно глобальных координт
         }
 
         /// <summary>

@@ -66,11 +66,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Жизнь объекта
         /// </summary>
-        /// <param name="home">Управляющая текцщим объектом сущность</param>
-        public override void Process(GameEntity home)
+        /// <param name="homeCoords">Коордтнаты управляющей сущности</param>
+        public override void Process(Vector2f homeCoords)
         {
             this.Move();//вычеслить идеальные координтаы
-            this.CorrectObjectPoint(home.GetCoords());//выполнить коррекцию относительно глобальных координт
+            this.CorrectObjectPoint(homeCoords);//выполнить коррекцию относительно глобальных координт
             this.view.Position = new Vector2f(coords.X - this.radius, coords.Y - this.radius);//вычислить координаты отображения объекта
         }
 

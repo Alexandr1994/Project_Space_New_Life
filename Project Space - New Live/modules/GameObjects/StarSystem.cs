@@ -8,8 +8,14 @@ using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
 {
-    public class StarSystem : GameEntity
+    public class StarSystem
     {
+
+
+        /// <summary>
+        /// координаты объекта
+        /// </summary>
+        protected Vector2f coords;
         /// <summary>
         /// планетарная система
         /// </summary>
@@ -55,14 +61,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Процесс жизни звездной системы
         /// </summary>
-        public override void Process(GameEntity home = null)
+        public void Process()
         {
-            massCenter.Process(this);//работа со звездной состовляющей
+            massCenter.Process(this.GetCoords());//работа со звездной состовляющей
             if (planetComponent != null)
             {
                 for (int i = 0; i < planetComponent.Length; i++)
                 {//работа с планетарным компонентом
-                    planetComponent[i].Process(this);//жизнь планеты
+                    planetComponent[i].Process(this.GetCoords());//жизнь планеты
                 }
             }
         }
@@ -105,5 +111,25 @@ namespace Project_Space___New_Live.modules.GameObjects
             newPos.Y = (float)(this.background.Position.Y - (speed * Math.Sin(angle) / 100));//вычисление новой координаты фона Y
             background.Position = newPos;
         }
+
+        /// <summary>
+        /// Получить координаты объекта
+        /// </summary>
+        /// <returns></returns>
+        public Vector2f GetCoords()
+        {
+            return this.coords;
+        }
+
+        /// <summary>
+        /// Скорректировать координаты объекта отностиельно
+        /// </summary>
+        /// <param name="correction">Коррекция</param>
+        public void CorrectObjectPoint(Vector2f correction)
+        {
+            coords.X += correction.X;
+            coords.Y += correction.Y;
+        }
+
     }
 }

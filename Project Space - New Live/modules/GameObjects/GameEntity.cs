@@ -26,8 +26,8 @@ namespace Project_Space___New_Live
         /// <summary>
         /// Процесс жизни сущности
         /// </summary>
-        /// <param name="home"></param>
-        public abstract void Process(GameEntity home);
+        /// <param name="homeCoords"></param>
+        public abstract void Process(Vector2f homeCoords);
 
         /// <summary>
         /// Скорректировать координаты объекта отностиельно
@@ -38,5 +38,11 @@ namespace Project_Space___New_Live
             coords.X += correction.X;
             coords.Y += correction.Y;
         }
+
+        /// <summary>
+        /// Функция движения объекта
+        /// </summary>
+        protected abstract void Move();
+
     }
 }
