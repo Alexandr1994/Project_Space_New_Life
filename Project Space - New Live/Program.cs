@@ -20,6 +20,10 @@ namespace Project_Space___New_Live
 
     internal class Test
     {
+
+        View test = new View(new Vector2f(0, 0), new Vector2f(640, 480));
+
+
         private double angSpeed = 3*Math.PI/180;
         private static Texture backText = new Texture("testBackground.png"); //загруженная текстура планет 
         private static Texture img = new Texture("textPlayer.png"); //загруженная текстура планет 
@@ -36,7 +40,7 @@ namespace Project_Space___New_Live
         //Random rand = new Random();
 
         //CircleShape[] planets = new CircleShape[5];//переменные планет: образы
-        private int[] orbits = {600, 140, 300, 200}; //орибиты планет 
+        private int[] orbits = {400, 500, 600, 800}; //орибиты планет 
         private Texture planetText = new Texture("testPlanetText.jpg"); //загруженная текстура планет 
         private bool right;
         //CircleShape star = new CircleShape();
@@ -95,7 +99,7 @@ namespace Project_Space___New_Live
                 case Keyboard.Key.Space:
                 {
 //изменение формата отображение окна
-                    testWindow = testRenderer.changeWindowStyle(Styles.Default);
+                    testWindow = testRenderer.changeWindowStyle(Styles.Fullscreen);
                     testWindow.KeyPressed += onKey;
                     testWindow.KeyReleased += fromKey;
                 }
@@ -173,19 +177,27 @@ namespace Project_Space___New_Live
             {
                 dX = (float)(player.Position.X + speed * Math.Cos(angleS));
                 dY = (float)(player.Position.Y + speed * Math.Sin(angleS));
+                test.Move(new Vector2f((float)(speed * 2 * Math.Cos(angleS)), (float)(speed * 2 * Math.Sin(angleS))));
                 player.Position = new Vector2f(dX, dY);
+                
+
             }
             if (down)
             {
                 dX = (float)(player.Position.X - speed * Math.Cos(angleS));
                 dY = (float)(player.Position.Y - speed * Math.Sin(angleS));
+                test.Move(new Vector2f((float)(-speed * 2 *Math.Cos(angleS)), (float)(-speed * 2 * Math.Sin(angleS))));
                 player.Position = new Vector2f(dX, dY);
+                
+                
             }
             coords.X = player.Position.X + player.Size.X / 2;
             coords.Y = player.Position.Y + player.Size.Y / 2;
             rotate.Rotate((float)(angleS * 180 / Math.PI), coords);
-
+            
             state.Transform = rotate;
+
+            
             testWindow.Draw(player, state);
         }
 
@@ -228,10 +240,6 @@ namespace Project_Space___New_Live
             //{
             //    planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), planetText);
             //}
-            player.Texture = img;
-            player.Position = new Vector2f(coords.X - 25, coords.Y - 25);
-            player.OutlineColor = Color.Magenta;
-            player.OutlineThickness = 10;
 
             LocalMassCenter[] locCenters = new LocalMassCenter[2];
             texts[0] = starText;
@@ -250,13 +258,13 @@ namespace Project_Space___New_Live
             texts[0] = planetText;
             texts[1] = shadowTexture;
 
-            Planet[] planets = new Planet[1];
+            Planet[] planets = new Planet[3];
             for (int i = 0; i < planets.Length; i++)
             {
-                planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), texts);
+                planets[i] = new Planet(10, 10, orbits[i], 0.01 / (1 + i), texts);
             }
             var center = new LocalMassCenter(0, 0, 0, locCenters);
-            system = new StarSystem(new Vector2f(400, 225), center, null, backText);
+            system = new StarSystem(new Vector2f(400, 225), center, planets, backText);
         }
 
         public void main()
@@ -265,7 +273,7 @@ namespace Project_Space___New_Live
             testWindow = testRenderer.getMainWindow();
 
 
-      //      initSystem();
+            initSystem();
             testWindow.KeyPressed += onKey;
             testWindow.KeyReleased += fromKey;
 
@@ -274,10 +282,11 @@ namespace Project_Space___New_Live
             while (testWindow.IsOpen)
             {
                 Thread.Sleep(25);
+                testWindow.SetView(test);
                 testWindow.DispatchEvents();
                 testWindow.Clear(); //перерисовка окна
-        //        system.Process();
-         //       testRenderer.RenderProcess(system.GetView());
+                system.Process();
+                testRenderer.RenderProcess(system.GetView());
                 act();
                 testWindow.Display(); //перерисовка окна
             }
