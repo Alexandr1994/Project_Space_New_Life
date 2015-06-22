@@ -20,7 +20,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="startOrbitalAngle">Начальный поворот звезды</param>
         /// <param name="orbitalSpeed">//Скорость варщениея вокруг центра масс (рад/ед.вр.)</param>
         /// <param name="Skin">Текстура</param>
-        public Star(int mass, int radius, int orbit, double startOrbitalAngle, double orbitalSpeed, SFML.Graphics.Texture Skin)
+        public Star(int mass, int radius, int orbit, double startOrbitalAngle, double orbitalSpeed, SFML.Graphics.Texture[] Skin)
         {
             Random random = new Random();
             this.mass = mass;//инициализировать основные характеристики звезды

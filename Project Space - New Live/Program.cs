@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
@@ -19,12 +20,14 @@ namespace Project_Space___New_Live
 
     internal class Test
     {
-        private readonly double angSpeed = 3*Math.PI/180;
-        private readonly Texture backText = new Texture("testBackground.png"); //загруженная текстура планет 
-        private readonly Texture img = new Texture("textPlayer.png"); //загруженная текстура планет 
-        private readonly CircleShape player = new CircleShape(25, 3);
-        private readonly double speed = 3;
-        private readonly Texture starText = new Texture("testStarText.jpg"); //загруженная текстура звезды
+        private double angSpeed = 3*Math.PI/180;
+        private static Texture backText = new Texture("testBackground.png"); //загруженная текстура планет 
+        private static Texture img = new Texture("textPlayer.png"); //загруженная текстура планет 
+        private RectangleShape player = new RectangleShape(new Vector2f(20, 10));
+        private double speed = 3;
+        private Texture starText = new Texture("testStarText.jpg"); //загруженная текстура звезды
+        private  Texture shadowTexture = new Texture("shadow.png");//тень
+        private  Texture crownText = new Texture("crown.png");//звездная корона
         private double[] angle = new double[5]; //орбитальные углы планет
         private double angleS;
         private Vector2f coords = new Vector2f(400, 225); //идеальные координаты
@@ -39,7 +42,6 @@ namespace Project_Space___New_Live
         //CircleShape star = new CircleShape();
         private StarSystem system;
         private RenderClass testRenderer;
-        // Transform t = new Transform();
 
         //   static VideoMode testMode = new VideoMode(800, 450);//переменные окна: видеорежим
         private RenderWindow testWindow; //окно
@@ -155,46 +157,39 @@ namespace Project_Space___New_Live
 
         private void act() //переодическая функция управления
         {
-            player.Transform.Rotate(0, coords);
+            float dX = 0;
+            float dY = 0;
+            RenderStates state = new RenderStates(BlendMode.None);
+            Transform rotate = player.Transform;
             if (left) //перемещение
             {
                 angleS -= angSpeed;
-                //player.Rotation -= 5;
-
-                player.Transform.Rotate(3, coords);
             }
             if (right)
             {
                 angleS += angSpeed;
-                //player.Rotation += 5;
-                player.Transform.Rotate(3, coords);
             }
             if (up)
             {
-                system.Move(speed, angleS);
+                dX = (float)(player.Position.X + speed * Math.Cos(angleS));
+                dY = (float)(player.Position.Y + speed * Math.Sin(angleS));
+                player.Position = new Vector2f(dX, dY);
             }
             if (down)
             {
-                system.Move(-speed, angleS);
+                dX = (float)(player.Position.X - speed * Math.Cos(angleS));
+                dY = (float)(player.Position.Y - speed * Math.Sin(angleS));
+                player.Position = new Vector2f(dX, dY);
             }
-            player.Transform.Translate(coords);
-            player.Transform.TransformPoint(coords);
-            var states = new RenderStates(player.Transform);
-            testWindow.Draw(player);
+            coords.X = player.Position.X + player.Size.X / 2;
+            coords.Y = player.Position.Y + player.Size.Y / 2;
+            rotate.Rotate((float)(angleS * 180 / Math.PI), coords);
+
+            state.Transform = rotate;
+            testWindow.Draw(player, state);
         }
 
-        private void systema() //переодическая функция окружения
-        {
-            //testWindow.Draw(star);//отрисовка звезды
-            //for (int i = 0; i < planets.Length; i++)//отрисовка планет и приращение орбитальных углов планет
-            //{
-            //    angle[i] += 0.05 / (i + 1);//приращение орбитального угла
-            //    planetProcess(planets[i], orbits[i], angle[i]);//вычисление новых координат планеты
-            //    testWindow.Draw(planets[i]);//переотрисовка планет
-            //}
-            system.Process();
-            act();
-        }
+
 
         private void planetProcess(CircleShape planet, double orbit, double angle) //вычисление новых координат планеты
         {
@@ -207,11 +202,9 @@ namespace Project_Space___New_Live
 
         private void initSystem() //инициализацимя звездной системы
         {
-            //Color[] colors = { Color.Red, Color.Green, Color.Blue, Color.Magenta, Color.Cyan};
-            //star.Position = new Vector2f(100, 100);//инициализация звезды
-            //star.Radius = 50;
-            //star.OutlineColor = Color.Yellow;
-            //star.FillColor = Color.Yellow;
+            Texture[] texts = new Texture[2];
+
+
             //for (int i = 0; i < planets.Length; i++)//инициализация планет
             //{
             //    angle[i] = rand.Next();
@@ -240,29 +233,28 @@ namespace Project_Space___New_Live
             player.OutlineColor = Color.Magenta;
             player.OutlineThickness = 10;
 
-            var locCenters = new LocalMassCenter[3];
-            for (var i = 0; i < locCenters.Length - 1; i++)
+            LocalMassCenter[] locCenters = new LocalMassCenter[2];
+            texts[0] = starText;
+            texts[1] = crownText;
+            for (var i = 0; i < locCenters.Length; i++)
             {
                 var starsDouble = new Star[2];
                 for (var j = 0; j < starsDouble.Length; j++)
                 {
-                    starsDouble[j] = new Star(1000, 40, 55, 180*(j + 1)*(Math.PI/180), 0.008, starText);
+                    starsDouble[j] = new Star(1000, 40, 55, 180*(j + 1)*(Math.PI/180), 0.008, texts);
                 }
                 locCenters[i] = new LocalMassCenter(150, (i + 1)*(Math.PI), 0.004, starsDouble);
             }
-            var stars = new Star[3];
-            for (var i = 0; i < stars.Length - 1; i++)
-            {
-                stars[i] = new Star(1000, 40, 55, 180*(i + 1)*(Math.PI/180), 0.008, starText);
-            }
-            stars[2] = new Star(1000, 40, 200, new Random().Next(), 0.006, starText);
-            locCenters[2] = new LocalMassCenter(500, new Random().Next(), 0.002, stars);
+ 
 
-            //Planet[] planets = new Planet[1];
-            //for (int i = 0; i < planets.Length; i++)
-            //{
-            //    planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), planetText);
-            //}
+            texts[0] = planetText;
+            texts[1] = shadowTexture;
+
+            Planet[] planets = new Planet[1];
+            for (int i = 0; i < planets.Length; i++)
+            {
+                planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), texts);
+            }
             var center = new LocalMassCenter(0, 0, 0, locCenters);
             system = new StarSystem(new Vector2f(400, 225), center, null, backText);
         }
@@ -273,7 +265,7 @@ namespace Project_Space___New_Live
             testWindow = testRenderer.getMainWindow();
 
 
-            initSystem();
+      //      initSystem();
             testWindow.KeyPressed += onKey;
             testWindow.KeyReleased += fromKey;
 
@@ -284,8 +276,9 @@ namespace Project_Space___New_Live
                 Thread.Sleep(25);
                 testWindow.DispatchEvents();
                 testWindow.Clear(); //перерисовка окна
-                systema();
-                testRenderer.RenderProcess(system.GetView());
+        //        system.Process();
+         //       testRenderer.RenderProcess(system.GetView());
+                act();
                 testWindow.Display(); //перерисовка окна
             }
         }

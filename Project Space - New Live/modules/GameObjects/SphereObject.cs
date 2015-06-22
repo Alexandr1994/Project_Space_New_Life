@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
@@ -10,6 +11,9 @@ namespace Project_Space___New_Live.modules.GameObjects
 {
     public abstract class SphereObject : GameObject
     {
+
+        
+
         /// <summary>
         /// радиус объекта
         /// </summary>
@@ -32,11 +36,15 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="skin">Текстура</param>
         /// <returns></returns>
-        protected override void ConstructView(Texture skin)
+        protected override void ConstructView(Texture[] skin)
         {
-            CircleShape locView = new CircleShape((float)radius);
-            locView.Position = coords;
-            locView.Texture = skin;
+            CircleShape[] locView = new CircleShape[2];
+            for (int i = 0; i < locView.Length; i++)
+            {
+                locView[i] = new CircleShape((float) radius);
+                locView[i].Position = coords;
+                locView[i].Texture = skin[i];
+            }
             this.view = locView;
         }
 
@@ -71,7 +79,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             this.Move();//вычеслить идеальные координтаы
             this.CorrectObjectPoint(homeCoords);//выполнить коррекцию относительно глобальных координт
-            this.view.Position = new Vector2f(coords.X - this.radius, coords.Y - this.radius);//вычислить координаты отображения объекта
+            foreach (Shape locView in this.view)
+            {
+                locView.Position = new Vector2f(coords.X - this.radius, coords.Y - this.radius);//вычислить координаты отображений объекта
+            }
         }
 
     }

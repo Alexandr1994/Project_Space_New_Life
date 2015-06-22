@@ -91,7 +91,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 foreach (Planet planet in planetComponent)//заполнить возвращаемый массив образами планет
                 {
-                    systemsViews.Add(planet.GetView());
+                    foreach (Shape view in planet.View)
+                    {
+                        systemsViews.Add(view);    
+                    }
                 }
             }
             return systemsViews;

@@ -15,10 +15,18 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// масса объекта
         /// </summary>
         protected int mass;
+
         /// <summary>
         /// отображение объекта
         /// </summary>
-        protected Shape view;
+        protected Shape[] view;
+        /// <summary>
+        /// Свойство отображения объекта
+        /// </summary>
+        public Shape[] View 
+        {
+            get { return view;}           
+        }
 
         /// <summary>
         /// Получить сигнатуру(набор общих характеристик) обекта
@@ -31,15 +39,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="skin">Текстура</param>
         /// <returns></returns>
-        protected abstract void ConstructView(Texture skin);
-
-        /// <summary>
-        /// Получить отображение объекта
-        /// </summary>
-        /// <returns></returns>
-        public Shape GetView()
-        {
-            return view;
-        }
+        protected abstract void ConstructView(Texture[] skin);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SFML.Graphics;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
@@ -118,7 +119,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 for (int i = 0; i < stars.Length; i++)
                 {
-                    retViews.Add(stars[i].GetView());//получить все звездные отображения данного центра масс
+                    foreach (Shape view in stars[i].View)//получить все звездные отображения данного центра масс
+                    {
+                        retViews.Add(view);
+                    }
                 }
             }
             if (massCenters != null)//если центр масс имеет подчиненными центры масс, извлечь из них отображения звезд
