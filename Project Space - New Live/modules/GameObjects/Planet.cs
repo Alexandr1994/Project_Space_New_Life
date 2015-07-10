@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SFML.Graphics;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
@@ -27,7 +28,16 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.orbitalAngle = random.Next();//задать случайный пворот планеты
             this.Move();//сформировать координаты планеты
             this.ConstructView(Skin);//сконструировать отображение планеты
-
         }
+
+        /// <summary>
+        /// Жизнь объекта
+        /// </summary>
+        /// <param name="homeCoords">Коордтнаты управляющей сущности</param>
+        public override void Process(Vector2f homeCoords)
+        {
+            this.OrbitalMoving(homeCoords);//движение планеты по заданой орбиет
+        }
+
     }
 }

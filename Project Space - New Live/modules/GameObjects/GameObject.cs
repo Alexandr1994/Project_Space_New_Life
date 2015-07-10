@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Project_Space___New_Live.modules.Dispatchers;
 using SFML.System;
 using SFML.Graphics;
 
@@ -19,11 +20,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// отображение объекта
         /// </summary>
-        protected Shape[] view;
+        protected ObjectView[] view;
         /// <summary>
         /// Свойство отображения объекта
         /// </summary>
-        public Shape[] View 
+        public ObjectView[] View 
         {
             get { return view;}           
         }
@@ -40,5 +41,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin">Текстура</param>
         /// <returns></returns>
         protected abstract void ConstructView(Texture[] skin);
+
     }
 }

@@ -62,9 +62,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="modules\Dispatchers\RenderClass.cs" />
+    <Compile Include="modules\Dispatchers\ObjectView.cs" />
     <Compile Include="modules\GameObjects\GameEntity.cs" />
     <Compile Include="modules\GameObjects\GameObject.cs" />
     <Compile Include="modules\GameObjects\LocalMassCenter.cs" />
+    <Compile Include="modules\GameObjects\Ship.cs" />
     <Compile Include="modules\GameObjects\SphereObject.cs" />
     <Compile Include="modules\GameObjects\Star.cs" />
     <Compile Include="modules\GameObjects\Planet.cs" />

@@ -27,7 +27,7 @@ namespace Project_Space___New_Live
         private double angSpeed = 3*Math.PI/180;
         private static Texture backText = new Texture("testBackground.png"); //загруженная текстура планет 
         private static Texture img = new Texture("textPlayer.png"); //загруженная текстура планет 
-        private RectangleShape player = new RectangleShape(new Vector2f(20, 10));
+        private RectangleShape player = new RectangleShape(new Vector2f(40, 20));
         private double speed = 3;
         private Texture starText = new Texture("testStarText.jpg"); //загруженная текстура звезды
         private  Texture shadowTexture = new Texture("shadow.png");//тень
@@ -161,6 +161,7 @@ namespace Project_Space___New_Live
 
         private void act() //переодическая функция управления
         {
+            player.Texture = starText;
             float dX = 0;
             float dY = 0;
             RenderStates state = new RenderStates(BlendMode.None);
@@ -168,10 +169,12 @@ namespace Project_Space___New_Live
             if (left) //перемещение
             {
                 angleS -= angSpeed;
+               // test.Rotate((float)(2*angSpeed));
             }
             if (right)
             {
                 angleS += angSpeed;
+                //test.Rotate((float)(-2*angSpeed));
             }
             if (up)
             {
@@ -261,7 +264,7 @@ namespace Project_Space___New_Live
             Planet[] planets = new Planet[3];
             for (int i = 0; i < planets.Length; i++)
             {
-                planets[i] = new Planet(10, 10, orbits[i], 0.01 / (1 + i), texts);
+                planets[i] = new Planet(10, 15, orbits[i], 0.01 / (1 + i), texts);
             }
             var center = new LocalMassCenter(0, 0, 0, locCenters);
             system = new StarSystem(new Vector2f(400, 225), center, planets, backText);
@@ -273,10 +276,12 @@ namespace Project_Space___New_Live
             testWindow = testRenderer.getMainWindow();
 
 
+
             initSystem();
             testWindow.KeyPressed += onKey;
             testWindow.KeyReleased += fromKey;
 
+    
 
             //пока окно открыто ловить события и перерисовывать окно
             while (testWindow.IsOpen)

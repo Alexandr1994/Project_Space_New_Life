@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Project_Space___New_Live.modules.Dispatchers;
 using SFML.Graphics;
 using SFML.System;
 
@@ -78,12 +79,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Вернуть коллекция отображений объектов звездной системы
         /// </summary>
         /// <returns></returns>
-        public List<Shape> GetView()
+        public List<ObjectView> GetView()
         {
-            List<Shape> systemsViews = new List<Shape>();
-            List<Shape> starCompanent = massCenter.GetView();
-            systemsViews.Add(background);//засунуть в возвращаемый массив фон
-            foreach (Shape view in starCompanent)//заполнить возвращаемый массив образами звезд
+            List<ObjectView> systemsViews = new List<ObjectView>();
+            List<ObjectView> starCompanent = massCenter.GetView();
+            systemsViews.Add(new ObjectView(background, BlendMode.None));//засунуть в возвращаемый массив фон
+            foreach (ObjectView view in starCompanent)//заполнить возвращаемый массив образами звезд
             {
                 systemsViews.Add(view);
             }
@@ -91,7 +92,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 foreach (Planet planet in planetComponent)//заполнить возвращаемый массив образами планет
                 {
-                    foreach (Shape view in planet.View)
+                    foreach (ObjectView view in planet.View)
                     {
                         systemsViews.Add(view);    
                     }

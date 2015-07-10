@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Project_Space___New_Live.modules.Dispatchers;
 using SFML.Graphics;
 using SFML.System;
 
@@ -11,8 +12,6 @@ namespace Project_Space___New_Live.modules.GameObjects
 {
     public abstract class SphereObject : GameObject
     {
-
-        
 
         /// <summary>
         /// радиус объекта
@@ -38,14 +37,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <returns></returns>
         protected override void ConstructView(Texture[] skin)
         {
-            CircleShape[] locView = new CircleShape[2];
-            for (int i = 0; i < locView.Length; i++)
+            this.view = new ObjectView[2];
+            for (int i = 0; i < this.view.Length; i++)
             {
-                locView[i] = new CircleShape((float) radius);
-                locView[i].Position = coords;
-                locView[i].Texture = skin[i];
+                this.view[i] = new ObjectView(new CircleShape((float)radius), BlendMode.Alpha);//создание нового ObjectView
+                this.view[i].Image.Position = coords;//установка позиции отображегния ObjectView
+                this.view[i].Image.Texture = skin[i];//установка текстуры отображения ObjectMode
             }
-            this.view = locView;
+
         }
 
         /// <summary>
@@ -70,20 +69,20 @@ namespace Project_Space___New_Live.modules.GameObjects
             return localSignature;
         }
 
-
         /// <summary>
-        /// Жизнь объекта
+        /// Функция перемещения объекта по орбите
         /// </summary>
-        /// <param name="homeCoords">Коордтнаты управляющей сущности</param>
-        public override void Process(Vector2f homeCoords)
+        /// <param name="homeCoords">Координаты управляющей сущности</param>
+        protected void OrbitalMoving(Vector2f homeCoords)
         {
             this.Move();//вычеслить идеальные координтаы
             this.CorrectObjectPoint(homeCoords);//выполнить коррекцию относительно глобальных координт
-            foreach (Shape locView in this.view)
+            foreach (ObjectView locView in this.view)
             {
-                locView.Position = new Vector2f(coords.X - this.radius, coords.Y - this.radius);//вычислить координаты отображений объекта
+                locView.Image.Position = new Vector2f(coords.X - this.radius, coords.Y - this.radius);//вычислить координаты отображений объекта
             }
         }
+
 
     }
 }

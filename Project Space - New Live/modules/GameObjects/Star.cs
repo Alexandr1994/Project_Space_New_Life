@@ -31,5 +31,14 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.Move();//сформировать координаты звезды
             this.ConstructView(Skin);//построить отображение звезды
         }
+
+        /// <summary>
+        /// Жизнь объекта
+        /// </summary>
+        /// <param name="homeCoords">Коордтнаты управляющей сущности</param>
+        public override void Process(Vector2f homeCoords)
+        {
+            this.OrbitalMoving(homeCoords);
+        }
     }
 }

@@ -14,6 +14,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
     /// </summary>
     class RenderClass
     {
+
+
         /// <summary>
         /// Окно программы
         /// </summary>
@@ -104,11 +106,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Метод отрисовка
         /// </summary>
         /// <param name="views"></param>
-        public void RenderProcess(List<Shape> views)
+        public void RenderProcess(List<ObjectView> views)
         {
-            foreach (Shape view in views)
+            foreach (ObjectView view in views)
             {
-                mainWindow.Draw(view);
+                mainWindow.Draw(view.Image, view.State);
             }
         }
 
