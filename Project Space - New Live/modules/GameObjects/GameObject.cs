@@ -12,6 +12,7 @@ namespace Project_Space___New_Live.modules.GameObjects
 {
     public abstract class GameObject : GameEntity
     {
+
         /// <summary>
         /// масса объекта
         /// </summary>
@@ -33,7 +34,17 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Получить сигнатуру(набор общих характеристик) обекта
         /// </summary>
         /// <returns></returns>
-        public abstract object GetSignature();
+        public ObjectSignature GetSignature()
+        {
+            return ConstructSignature();//вернеть сконструированную сигнатуру объекта
+        }
+
+        /// <summary>
+        /// Построение сигнатуры конкретного игрового объекта
+        /// </summary>
+        /// <returns></returns>
+        protected abstract ObjectSignature ConstructSignature();
+
 
         /// <summary>
         /// Построить отображение объекта (Х)

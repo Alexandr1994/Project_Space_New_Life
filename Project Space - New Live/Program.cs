@@ -21,13 +21,13 @@ namespace Project_Space___New_Live
     internal class Test
     {
 
-        View test = new View(new Vector2f(0, 0), new Vector2f(640, 480));
+        View test = new View(new Vector2f(0, 0), new Vector2f(800, 600));
 
 
         private double angSpeed = 3*Math.PI/180;
         private static Texture backText = new Texture("testBackground.png"); //загруженная текстура планет 
         private static Texture img = new Texture("textPlayer.png"); //загруженная текстура планет 
-        private RectangleShape player = new RectangleShape(new Vector2f(40, 20));
+        private RectangleShape player = new RectangleShape(new Vector2f(20, 10));
         private double speed = 3;
         private Texture starText = new Texture("testStarText.jpg"); //загруженная текстура звезды
         private  Texture shadowTexture = new Texture("shadow.png");//тень
@@ -280,7 +280,7 @@ namespace Project_Space___New_Live
             initSystem();
             testWindow.KeyPressed += onKey;
             testWindow.KeyReleased += fromKey;
-
+            
     
 
             //пока окно открыто ловить события и перерисовывать окно

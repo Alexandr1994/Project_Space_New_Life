@@ -15,7 +15,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
     class RenderClass
     {
 
-
+        Font font = new Font("times.ttf");
         /// <summary>
         /// Окно программы
         /// </summary>
@@ -23,7 +23,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Доступные видеорежимы
         /// </summary>
-        private static VideoMode windowSize = new VideoMode(640, 480);
+        private static VideoMode windowSize = new VideoMode(800, 600);
         /// <summary>
         /// Экземпляр класса отрисовки
         /// </summary>
@@ -111,8 +111,25 @@ namespace Project_Space___New_Live.modules.Dispatchers
             foreach (ObjectView view in views)
             {
                 mainWindow.Draw(view.Image, view.State);
+                DrawDebugLabel(view);
             }
         }
+
+        /// <summary>
+        /// Отрисовка координат объекта для отладки
+        /// </summary>
+        private void DrawDebugLabel(ObjectView drawObject)
+        {
+            String infoString = drawObject.Image.Position.X.ToString() + " " + drawObject.Image.Position.Y.ToString();
+            
+            
+            Text info = new Text(infoString, font);
+            info.CharacterSize = 12;
+            info.Color = Color.Green;
+            info.Position = drawObject.Image.Position;
+            mainWindow.Draw(info);
+        }
+
 
     }
 }

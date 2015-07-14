@@ -10,6 +10,8 @@ namespace Project_Space___New_Live.modules.GameObjects
 {
     class Ship : GameObject
     {
+
+
         protected override void ConstructView(Texture[] skin)
         {
 
@@ -26,7 +28,7 @@ namespace Project_Space___New_Live.modules.GameObjects
 
         }
 
-        public override object GetSignature()
+        protected override ObjectSignature ConstructSignature()
         {
             return null;
         }
