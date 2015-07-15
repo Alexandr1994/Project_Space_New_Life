@@ -15,7 +15,7 @@ namespace Project_Space___New_Live
         {
             var test = new Test();
             test.main();
-        }
+        } 
     }
 
     internal class Test
@@ -23,7 +23,8 @@ namespace Project_Space___New_Live
 
         View test = new View(new Vector2f(0, 0), new Vector2f(800, 600));
 
-
+        private CircleShape RedButton1 = new CircleShape(1);
+        private CircleShape RedButton2 = new CircleShape(1);
         private double angSpeed = 3*Math.PI/180;
         private static Texture backText = new Texture("testBackground.png"); //загруженная текстура планет 
         private static Texture img = new Texture("textPlayer.png"); //загруженная текстура планет 
@@ -166,42 +167,65 @@ namespace Project_Space___New_Live
             float dY = 0;
             RenderStates state = new RenderStates(BlendMode.None);
             Transform rotate = player.Transform;
-            if (left) //перемещение
+            if (up)//перемещение
             {
-                angleS -= angSpeed;
-               // test.Rotate((float)(2*angSpeed));
-            }
-            if (right)
-            {
-                angleS += angSpeed;
-                //test.Rotate((float)(-2*angSpeed));
-            }
-            if (up)
-            {
+
+
+
+                coords.X += (float)(speed * Math.Cos(angleS));
+                coords.Y += (float)(speed * Math.Sin(angleS));
+
                 dX = (float)(player.Position.X + speed * Math.Cos(angleS));
                 dY = (float)(player.Position.Y + speed * Math.Sin(angleS));
-                test.Move(new Vector2f((float)(speed * 2 * Math.Cos(angleS)), (float)(speed * 2 * Math.Sin(angleS))));
+
                 player.Position = new Vector2f(dX, dY);
-                
+
+
+
 
             }
             if (down)
             {
+                coords.X -= (float)(speed * Math.Cos(angleS));
+                coords.Y -= (float)(speed * Math.Sin(angleS));
+
+
                 dX = (float)(player.Position.X - speed * Math.Cos(angleS));
                 dY = (float)(player.Position.Y - speed * Math.Sin(angleS));
-                test.Move(new Vector2f((float)(-speed * 2 *Math.Cos(angleS)), (float)(-speed * 2 * Math.Sin(angleS))));
-                player.Position = new Vector2f(dX, dY);
-                
-                
-            }
-            coords.X = player.Position.X + player.Size.X / 2;
-            coords.Y = player.Position.Y + player.Size.Y / 2;
-            rotate.Rotate((float)(angleS * 180 / Math.PI), coords);
-            
-            state.Transform = rotate;
 
-            
+
+                player.Position = new Vector2f(dX, dY);
+        
+
+            }
+            if (left) 
+            {
+                angleS += angSpeed;
+                dX = (float)(coords.X + ((player.Position.X - coords.X) * (Math.Cos(angSpeed)) - ((player.Position.Y - coords.Y) * (Math.Sin(angSpeed)))));
+                dY = (float)(coords.Y + ((player.Position.X - coords.X) * (Math.Sin(angSpeed)) + ((player.Position.Y - coords.Y) * (Math.Cos(angSpeed)))));
+                player.Rotation += (float)(angSpeed * (180 / Math.PI));
+                player.Position = new Vector2f(dX, dY);
+            }
+            if (right)
+            {
+                angleS -= angSpeed;
+                dX = (float)(coords.X + ((player.Position.X - coords.X) * (Math.Cos(-angSpeed)) - ((player.Position.Y - coords.Y) * (Math.Sin(-angSpeed)))));
+                dY = (float)(coords.Y + ((player.Position.X - coords.X) * (Math.Sin(-angSpeed)) + ((player.Position.Y - coords.Y) * (Math.Cos(-angSpeed)))));
+                player.Rotation -= (float)(angSpeed * (180/Math.PI));
+                player.Position = new Vector2f(dX, dY);
+                //test.Rotate((float)(-2*angSpeed));
+            }
+
+           // coords.X = player.Position.X + player.Size.X / 2;
+          //  coords.Y = player.Position.Y + player.Size.Y / 2;
+        //    rotate.Rotate((float)(angleS * 180 / Math.PI), coords);
+
+          //  state.Transform = rotate;
+            test.Center = coords;
+           
+             
             testWindow.Draw(player, state);
+
         }
 
 
@@ -218,8 +242,10 @@ namespace Project_Space___New_Live
         private void initSystem() //инициализацимя звездной системы
         {
             Texture[] texts = new Texture[2];
-
-
+            RedButton1.Position = new Vector2f(0, 0);
+            RedButton1.FillColor = Color.Green;
+            RedButton2.Position = new Vector2f(100, 100);
+            RedButton2.FillColor = Color.Green;
             //for (int i = 0; i < planets.Length; i++)//инициализация планет
             //{
             //    angle[i] = rand.Next();
@@ -282,7 +308,7 @@ namespace Project_Space___New_Live
             testWindow.KeyReleased += fromKey;
             
     
-
+            coords = new Vector2f(player.Size.X/2, player.Size.Y/2);
             //пока окно открыто ловить события и перерисовывать окно
             while (testWindow.IsOpen)
             {
@@ -292,7 +318,15 @@ namespace Project_Space___New_Live
                 testWindow.Clear(); //перерисовка окна
                 system.Process();
                 testRenderer.RenderProcess(system.GetView());
+                
                 act();
+                testWindow.Draw(RedButton1);
+                testWindow.Draw(RedButton2);
+                
+                String infoString1 = player.Position.X.ToString() + " " + player.Position.Y.ToString();
+                String infoString2 = coords.X.ToString() + " " + coords.Y.ToString();
+                testRenderer.DrawLabel(player.Position - new Vector2f(0,10), infoString1);
+                testRenderer.DrawLabel(player.Position - new Vector2f(0, 20), infoString2);
                 testWindow.Display(); //перерисовка окна
             }
         }

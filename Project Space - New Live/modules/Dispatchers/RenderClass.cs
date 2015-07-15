@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
+using SFML.System;
 using SFML.Window;
 
 namespace Project_Space___New_Live.modules.Dispatchers
@@ -121,15 +122,17 @@ namespace Project_Space___New_Live.modules.Dispatchers
         private void DrawDebugLabel(ObjectView drawObject)
         {
             String infoString = drawObject.Image.Position.X.ToString() + " " + drawObject.Image.Position.Y.ToString();
-            
-            
+            DrawLabel(drawObject.Image.Position, infoString);  
+        }
+
+        public void DrawLabel(Vector2f pos, String infoString)
+        {
             Text info = new Text(infoString, font);
             info.CharacterSize = 12;
             info.Color = Color.Green;
-            info.Position = drawObject.Image.Position;
+            info.Position = pos;
             mainWindow.Draw(info);
         }
-
 
     }
 }
