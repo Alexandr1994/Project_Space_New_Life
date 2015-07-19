@@ -37,10 +37,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.radius = radius;
             this.orbit = orbit;
             this.orbitalSpeed = orbitalSpeed;
-            this.orbitalAngle = random.Next();//задать случайный пворот планеты
+            this.orbitalAngle = random.Next()%(2*Math.PI);//задать случайный пворот планеты
             this.Move();//сформировать координаты планеты
             this.ConstructView(Skin);//сконструировать отображение планеты
-            this.ShadowViewControler((float) ((180/Math.PI)*this.orbitalAngle), coords);
+            this.view[(int)Views.Shadow].Rotate(this.coords, (float)this.orbitalAngle);
         }
 
         /// <summary>
@@ -51,13 +51,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected override void ConstructView(Texture[] skin)
         {
             this.view = new ObjectView[2];
+            BlendMode[] modes = new[] {BlendMode.Alpha, BlendMode.Multiply};
             for (int i = 0; i < this.view.Length; i++)
             {
-                this.view[i] = new ObjectView(new CircleShape((float)radius), BlendMode.Alpha);//создание нового ObjectView
+                this.view[i] = new ObjectView(new CircleShape((float)radius), modes[i]);//создание нового ObjectView
                 this.view[i].Image.Position = coords - new Vector2f(radius, radius);//установка позиции отображегния ObjectView
                 this.view[i].Image.Texture = skin[i];//установка текстуры отображения ObjectMode
             }
-            ShadowViewControler((float)((180 / Math.PI) * this.orbitalSpeed), this.coords);
+         //   
         }
 
 
@@ -68,26 +69,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="homeCoords">Коордтнаты управляющей сущности</param>
         public override void Process(Vector2f homeCoords)
         {
-            this.OrbitalMoving(homeCoords);//движение планеты по заданой орбите
-            this.ShadowViewControler((float) ((180 / Math.PI) * this.orbitalSpeed), this.coords);
+            this.View[(int)Views.Shadow].Rotate(this.coords, (float)this.orbitalSpeed);
+            this.OrbitalMoving(homeCoords);//движение планеты по заданой орбите 
         }
 
-       
-
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="deltaAngle">Угол поворота в градусах</param>
-        /// <param name="homePoint">Точка, относительно которой происходит вращение</param>
-        private void ShadowViewControler(float deltaAngle, Vector2f homePoint)
-        {
-            RenderStates tempState = this.View[(int)Views.Shadow].State;//получение ссылки на состоняние отображения
-            Transform transformAction = tempState.Transform;//получение копии трансформирующего воздействрия 
-            transformAction.Rotate(deltaAngle, homePoint);//произведение тарнсформирующего  воздействия
-            tempState.Transform = transformAction;
-            this.View[(int)Views.Shadow].State = tempState;
-        }
 
         /// <summary>
         /// Функция перемещения объекта по орбите
@@ -95,10 +80,20 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="homeCoords">Координаты управляющей сущности</param>
         protected override void OrbitalMoving(Vector2f homeCoords)
         {
+            Vector2f offsets = this.coords;
             this.Move();//вычислить идеальные координтаы
             this.CorrectObjectPoint(homeCoords);//выполнить коррекцию относительно глобальных координт
-            this.View[(int)Views.Planet].Image.Position = new Vector2f(coords.X - this.radius, coords.Y - this.radius);//вычислить координаты отображений объект
+            offsets = this.coords - offsets;//вычислить смещения
+            foreach (ObjectView locView in View)
+            {
+                locView.Translate(offsets);
+           //     locView.Image.Position = new Vector2f(coords.X - this.radius, coords.Y - this.radius);//вычислить координаты отображений объект
+            }
         }
+        
+
+
+
 
         /// <summary>
         /// Построение сигнатуры планеты

@@ -16,7 +16,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
     class RenderClass
     {
 
-        Font font = new Font("times.ttf");
         /// <summary>
         /// Окно программы
         /// </summary>
@@ -112,27 +111,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             foreach (ObjectView view in views)
             {
                 mainWindow.Draw(view.Image, view.State);
-                DrawDebugLabel(view);
             }
         }
-
-        /// <summary>
-        /// Отрисовка координат объекта для отладки
-        /// </summary>
-        private void DrawDebugLabel(ObjectView drawObject)
-        {
-            String infoString = drawObject.Image.Position.X.ToString() + " " + drawObject.Image.Position.Y.ToString();
-            DrawLabel(drawObject.Image.Position, infoString);  
-        }
-
-        public void DrawLabel(Vector2f pos, String infoString)
-        {
-            Text info = new Text(infoString, font);
-            info.CharacterSize = 12;
-            info.Color = Color.Green;
-            info.Position = pos;
-            mainWindow.Draw(info);
-        }
-
     }
 }

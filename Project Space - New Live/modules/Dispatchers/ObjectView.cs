@@ -80,6 +80,28 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.State = imageState;
         }
 
+        /// <summary>
+        /// Повернуть изображение на угол относительно точнки
+        /// </summary>
+        /// <param name="rotationCenter">Центр вращения</param>
+        /// <param name="angle">Угол, на который будет произведен поворот (в радианах)</param>
+        public void Rotate(Vector2f rotationCenter, float angle)
+        {
+            //вычсление новых координат 
+            float newX = (float)(rotationCenter.X + ((image.Position.X - rotationCenter.X) * (Math.Cos(angle)) - ((image.Position.Y - rotationCenter.Y) * (Math.Sin(angle)))));
+            float newY = (float)(rotationCenter.Y + ((image.Position.X - rotationCenter.X) * (Math.Sin(angle)) + ((image.Position.Y - rotationCenter.Y) * (Math.Cos(angle)))));
+            this.image.Rotation += (float)(angle * (180 / Math.PI));//поворот изображения
+            this.image.Position = new Vector2f(newX, newY);//Установка скорректированной позиции объекта
+        }
+
+        /// <summary>
+        /// Переместить изображение
+        /// </summary>
+        /// <param name="offsets">Смещение по осям Х и Y</param>
+        public void Translate(Vector2f offsets)
+        {
+            this.image.Position = new Vector2f(this.image.Position.X + offsets.X, this.image.Position.Y + offsets.Y);
+        }
 
     }
 }

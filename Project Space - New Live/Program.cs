@@ -25,11 +25,11 @@ namespace Project_Space___New_Live
 
         private CircleShape RedButton1 = new CircleShape(1);
         private CircleShape RedButton2 = new CircleShape(1);
-        private double angSpeed = 3*Math.PI/180;
+        private double angSpeed = 5*Math.PI/180;
         private static Texture backText = new Texture("testBackground.png"); //загруженная текстура планет 
         private static Texture img = new Texture("textPlayer.png"); //загруженная текстура планет 
         private RectangleShape player = new RectangleShape(new Vector2f(20, 10));
-        private double speed = 3;
+        private double speed = 5;
         private Texture starText = new Texture("testStarText.jpg"); //загруженная текстура звезды
         private  Texture shadowTexture = new Texture("shadow.png");//тень
         private  Texture crownText = new Texture("crown.png");//звездная корона
@@ -290,6 +290,7 @@ namespace Project_Space___New_Live
             Planet[] planets = new Planet[3];
             for (int i = 0; i < planets.Length; i++)
             {
+              
                 planets[i] = new Planet(10, 15, orbits[i], 0.01 / (1 + i), texts);
             }
             var center = new LocalMassCenter(0, 0, 0, locCenters);
@@ -325,8 +326,6 @@ namespace Project_Space___New_Live
                 
                 String infoString1 = player.Position.X.ToString() + " " + player.Position.Y.ToString();
                 String infoString2 = coords.X.ToString() + " " + coords.Y.ToString();
-                testRenderer.DrawLabel(player.Position - new Vector2f(0,10), infoString1);
-                testRenderer.DrawLabel(player.Position - new Vector2f(0, 20), infoString2);
                 testWindow.Display(); //перерисовка окна
             }
         }

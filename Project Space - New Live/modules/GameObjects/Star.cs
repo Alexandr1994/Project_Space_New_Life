@@ -86,8 +86,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="homeCoords">Координаты управляющей сущности</param>
         protected override void OrbitalMoving(Vector2f homeCoords)
         {
+            Vector2f offsets = this.coords;
             this.Move();//вычеслить идеальные координтаы
             this.CorrectObjectPoint(homeCoords);//выполнить коррекцию относительно глобальных координт
+            offsets = this.coords - offsets;
             for(int i = 0; i < view.Length; i++)
             {
                 view[i].Image.Position = new Vector2f((float)(coords.X - this.radius * ((0.5 * i) + 1)), (float)(coords.Y - this.radius * ((0.5 * i) + 1)));//вычислить координаты отображений объекта
