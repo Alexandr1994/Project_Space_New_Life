@@ -41,7 +41,7 @@ namespace Project_Space___New_Live
         //Random rand = new Random();
 
         //CircleShape[] planets = new CircleShape[5];//переменные планет: образы
-        private int[] orbits = {400, 500, 600, 800}; //орибиты планет 
+        private int[] orbits = {900, 1300, 1600}; //орибиты планет 
         private Texture planetText = new Texture("testPlanetText.jpg"); //загруженная текстура планет 
         private bool right;
         //CircleShape star = new CircleShape();
@@ -278,9 +278,9 @@ namespace Project_Space___New_Live
                 var starsDouble = new Star[2];
                 for (var j = 0; j < starsDouble.Length; j++)
                 {
-                    starsDouble[j] = new Star(1000, 40, 55, 180*(j + 1)*(Math.PI/180), 0.008, texts);
+                    starsDouble[j] = new Star(1000, 120, 660, 30*(j + 1)*(Math.PI/180), 0.008, texts);
                 }
-                locCenters[i] = new LocalMassCenter(150, (i + 1)*(Math.PI), 0.004, starsDouble);
+                locCenters[i] = new LocalMassCenter(400, (i + 1)*(Math.PI), 0.004, starsDouble);
             }
  
 
@@ -291,7 +291,7 @@ namespace Project_Space___New_Live
             for (int i = 0; i < planets.Length; i++)
             {
               
-                planets[i] = new Planet(10, 15, orbits[i], 0.01 / (1 + i), texts);
+                planets[i] = new Planet(10, 15*(1 + i), orbits[i], 0.01 / (1 + i), texts);
             }
             var center = new LocalMassCenter(0, 0, 0, locCenters);
             system = new StarSystem(new Vector2f(400, 225), center, planets, backText);
