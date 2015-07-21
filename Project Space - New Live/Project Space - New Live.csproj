@@ -68,6 +68,9 @@
     <Compile Include="modules\GameObjects\LocalMassCenter.cs" />
     <Compile Include="modules\GameObjects\ObjectSignature.cs" />
     <Compile Include="modules\GameObjects\Ship.cs" />
+    <Compile Include="modules\GameObjects\ShipEquipment\Battery.cs" />
+    <Compile Include="modules\GameObjects\ShipEquipment\Engine.cs" />
+    <Compile Include="modules\GameObjects\ShipEquipment\Reactor.cs" />
     <Compile Include="modules\GameObjects\ShipEquipment\ShipEquipment.cs" />
     <Compile Include="modules\GameObjects\SphereObject.cs" />
     <Compile Include="modules\GameObjects\Star.cs" />

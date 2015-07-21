@@ -4,11 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
+using SFML.Graphics;
 
 namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
 {
     public abstract class ShipEquipment
     {
+
+        /// <summary>
+        /// Флаг аварийного состояния (true - объект в аварийном состоянии)
+        /// </summary>
+        protected bool emergensyState;
 
         /// <summary>
         /// Изображение оборудования
@@ -49,7 +55,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
         /// <summary>
         /// История улучшений
         /// </summary>
-        private List<int> upgrateDirectionsHistory; 
+        protected List<int> upgrateDirectionsHistory; 
 
 
         /// <summary>
@@ -77,14 +83,6 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
         }
 
         /// <summary>
-        /// Восстановление оборудования (установка износа в 0%)
-        /// </summary>
-        public void Repair()
-        {
-            this.wearState = 0;
-        }
-
-        /// <summary>
         /// Модификация оборудования
         /// </summary>
         /// <param name="directionID"></param>
@@ -92,28 +90,71 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
         {
             this.version ++;//увеличение версии
             this.upgrateDirectionsHistory.Add(directionID);//сохраниение в истории данных об улучшении
-            this.CustomUpgrate();//улучшение оборудования
+            this.CustomModification();//улучшение оборудования
         }
-
-        /// <summary>
-        /// Модификация конкретного типа оборудованиея
-        /// </summary>
-        /// <param name="directionID"></param>
-        protected abstract void CustomUpgrate();
 
         /// <summary>
         /// Даунгрейт оборудования
         /// </summary>
         public void Downgrate()
         {
-            this.version --;//умениьшение версии
-            this.CustomDowngrate();//даунгрейт оборудования
-            this.upgrateDirectionsHistory.RemoveAt(upgrateDirectionsHistory.Count - 1);//уничтожение данных о последнем улучшении в истории
+            if (version > 0)
+            {
+                this.version--; //умениьшение версии
+                this.upgrateDirectionsHistory.RemoveAt(upgrateDirectionsHistory.Count - 1);//уничтожение данных о последнем улучшении в истории
+                this.CustomModification(); //модификация оборудования
+            }
         }
 
         /// <summary>
-        /// Даунгрейт конкретного типа оборудования
+        /// Модификация конкретного типа оборудованиея
         /// </summary>
-        protected abstract void CustomDowngrate();
+        /// <param name="directionID"></param>
+        protected abstract void CustomModification();
+
+
+
+        /// <summary>
+        /// Функция изнашивания оборудования
+        /// </summary>
+        /// <param name="damage"></param>
+        public void Wearing(int damage)
+        {
+            if (this.wearState < 100)//если степень износа менее 100%
+            {
+                this.wearState += damage; //увеличение процента износа
+                if (this.wearState >= 100) //если оборудование изношенно на 100 и более %
+                {
+                    this.wearState = 100; //то установить степень износа в 100%
+                    this.emergensyState = true; //и установить состояние оборудования в аварийное
+                }
+            }
+        }
+
+        /// <summary>
+        /// Восстановление оборудования (установка износа в 0%)
+        /// </summary>
+        public void Repair()
+        {
+            this.wearState = 0;//установка процента износа в 0
+            this.emergensyState = false;//установка состояния в нормальное
+        }
+
+        /// <summary>
+        /// Сохранение общих характеристик
+        /// </summary>
+        /// <param name="mass">Масса</param>
+        /// <param name="energyNeeds">Энергопотребление</param>
+        /// <param name="image">Изображение</param>
+        protected void SetCommonCharacteristics(int mass, int energyNeeds, Shape image)
+        {
+            this.mass = mass;//установка массы
+            this.energyNeeds = energyNeeds;//установка энергопотребления
+            this.view = new ObjectView(image, BlendMode.Alpha);//построение отображения
+            this.Repair();//установка состояния и износа
+            this.version = 0;//Установка версии оборудования в 0
+            this.upgrateDirectionsHistory.Add(0);//сохранение базовой модификации
+        }
+
     }
 }
