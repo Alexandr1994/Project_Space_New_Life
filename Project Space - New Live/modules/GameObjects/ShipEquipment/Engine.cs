@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
@@ -139,8 +140,8 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
             this.baseCharacteristics.Add("ForwardSpeed",this.forwardSpeed = forwardCharacteristics.X);
             this.baseCharacteristics.Add("ForwardAcceleration" ,this.forwardAcceleration = forwardCharacteristics.Y);
             this.baseCharacteristics.Add("ShuntingSpeed" ,this.shuntingSpeed = shuningCharacteristics.X);
-            this.baseCharacteristics.Add("ShuntingAccelerationn",this.shuntingAcceleration = shuningCharacteristics.Y);
-            this.baseCharacteristics.Add("ShuntingAccelerationn", this.rotationSpeed = rotateSpeed);
+            this.baseCharacteristics.Add("ShuntingAcceleration",this.shuntingAcceleration = shuningCharacteristics.Y);
+            this.baseCharacteristics.Add("Rotation", this.rotationSpeed = rotateSpeed);
         }
 
 
@@ -148,8 +149,18 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
         /// Изменение конкретных характеристик двигателя
         /// </summary>
         protected override void CustomModification()
-        {
-           // soon
+        {//Характеристики улучшаются на 20% на каждое улучшение
+            //определение количества модификаций по возможным направлениям
+            int forwardUpdates = this.upgrateDirectionsHistory.Count(i => i == (int)UpgrateDirectionID.ForwardSpeed);
+            int shuntingUpdates = this.upgrateDirectionsHistory.Count(i => i == (int) UpgrateDirectionID.ShuntingSpeed);
+            // soon
+            //Изменение текущих параметров по направлению улучшения маршевых характеристик
+            this.forwardSpeed = baseCharacteristics["ForwardSpeed"] + (forwardUpdates * baseCharacteristics["ForwardSpeed"]/5);
+            this.forwardAcceleration = baseCharacteristics["ForwardAcceleration"] + (forwardUpdates * baseCharacteristics["ForwardAcceleration"] / 5);
+            //Изменение текущик параметров по направлению улучшения маневровых и поворотных характеристик
+            this.shuntingSpeed = baseCharacteristics["ShuntingSpeed"] + (shuntingUpdates * baseCharacteristics["ShuntingSpeed"] / 5);
+            this.shuntingSpeed = baseCharacteristics["ShuntingAcceleration"] + (shuntingUpdates * baseCharacteristics["ShuntingAcceleration"] / 5);
+            this.rotationSpeed = baseCharacteristics["Rotation"] + (shuntingUpdates * baseCharacteristics["ShuntingSpeed"] / 5);
         }
 
         

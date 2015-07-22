@@ -48,8 +48,8 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
         /// Модификация конкретного типа оборудованиея
         /// </summary>
         protected override void CustomModification()
-        {
-            //soon
+        {//Характеристики улучшаются на 100% на каждое улучшение
+            this.energyGeneration = baseGeneration + baseGeneration*this.Version;
         }
     }
 }
