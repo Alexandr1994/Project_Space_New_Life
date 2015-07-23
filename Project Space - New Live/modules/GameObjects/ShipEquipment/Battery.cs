@@ -82,6 +82,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
         {
             this.SetCommonCharacteristics(mass, 0, image);//установка общих характеристик (энергопотребление = 0)
             this.baseMaxEnergy = this.maxEnergy = maxEnergy;
+            this.State = true;
         }
 
         protected override void CustomModification()

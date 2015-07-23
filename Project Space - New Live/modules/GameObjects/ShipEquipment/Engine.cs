@@ -142,6 +142,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
             this.baseCharacteristics.Add("ShuntingSpeed" ,this.shuntingSpeed = shuningCharacteristics.X);
             this.baseCharacteristics.Add("ShuntingAcceleration",this.shuntingAcceleration = shuningCharacteristics.Y);
             this.baseCharacteristics.Add("Rotation", this.rotationSpeed = rotateSpeed);
+            this.State = false;
         }
 
 

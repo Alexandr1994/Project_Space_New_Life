@@ -12,6 +12,19 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
     {
 
         /// <summary>
+        /// Состояние (активно-неактивно)
+        /// </summary>
+        protected bool state;
+        /// <summary>
+        /// Состояние (активно-неактивно)
+        /// </summary>
+        public bool State
+        {//неактивное оборудование не потребляет энергии 
+            get { return this.state; }
+            set { this.state = value; }
+        }
+
+        /// <summary>
         /// Флаг аварийного состояния (true - объект в аварийном состоянии)
         /// </summary>
         protected bool emergensyState;

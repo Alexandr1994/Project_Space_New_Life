@@ -23,9 +23,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// орбитальная скорость объекта (рад./ед.вр.)
         /// </summary>
         private double orbitalSpeed;
-        
-        Star[] stars = null;//звезды контролируемые центорм масс
-        LocalMassCenter[] massCenters = null;//локальные центры масс контролируемые данным центром масс
+
+        private Planet[] planets;//Планеты контролируемые центром масс
+        Star[] stars;//звезды контролируемые центорм масс
+        LocalMassCenter[] massCenters;//локальные центры масс контролируемые данным центром масс
 
         /// <summary>
         /// Создание локального центра масс, управляющего звездами
@@ -34,12 +35,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="startOrbitalAngle">//начальный орбитальный угол</param>
         /// <param name="orbitalSpeed">орбитальная угловая скорость</param>
         /// <param name="stars">Звезды, управляемые центром масс</param>
-        public LocalMassCenter(int orbit, double startOrbitalAngle, double orbitalSpeed, Star[] stars)
+        public LocalMassCenter(int orbit, double startOrbitalAngle, double orbitalSpeed, Star[] stars, Planet[] planets)
         {
             this.orbit = orbit;
             this.orbitalAngle = startOrbitalAngle;
             this.orbitalSpeed = orbitalSpeed;
             this.stars = stars;
+            this.planets = planets;
             this.Move();
         }
 
@@ -70,19 +72,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.coords.Y = (float)((orbit * Math.Sin(orbitalAngle)));//вычисление новой координаты У
         }
 
-        //Вероятно объединение 2 следующих методов
-
-        /// <summary>
-        /// Управление звездами
-        /// </summary>
-        private void StarProcess()
-        {
-            for (int i = 0; i < stars.Length; i++)
-            {
-                stars[i].Process(this.GetCoords());
-            }
-        }
-
         /// <summary>
         /// Управление подчиненными данного центара масс
         /// </summary>
@@ -105,6 +94,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             ProcessCompanent(massCenters);//управление подчиненными центрами масс
             ProcessCompanent(stars);//управление подчиненными звездами
+            ProcessCompanent(planets);//управление подчиненными планетами
             this.Move();//вычислить идеальные координтаы
             this.CorrectObjectPoint(homeCoords);//выполнить коррекцию относительно глобальных координт
         }
@@ -116,6 +106,16 @@ namespace Project_Space___New_Live.modules.GameObjects
         public List<ObjectView> GetView()
         {
             List<ObjectView> retViews = new List<ObjectView>();//массив возвращаемых отображений
+            if (planets != null)//если центр масс имеет планеты, передать их отображения в возвращаемый массив
+            {
+                for (int i = 0; i < planets.Length; i++)
+                {
+                    foreach (ObjectView view in planets[i].View)//получить все планетарные отображения данного центра масс
+                    {
+                        retViews.Add(view);
+                    }
+                }
+            }
             if (stars != null)//если центр масс имеет звезды, передать их отображения в возвращаемый массив
             {
                 for (int i = 0; i < stars.Length; i++)

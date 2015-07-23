@@ -46,8 +46,10 @@ namespace Project_Space___New_Live
         private bool left; //флаги контроля перемещения играока
         //Random rand = new Random();
 
+        
+
         //CircleShape[] planets = new CircleShape[5];//переменные планет: образы
-        private int[] orbits = {900, 1300, 1600}; //орибиты планет 
+        private int[] orbits = {600, 1000, 1700}; //орибиты планет 
         private Texture planetText = new Texture("testPlanetText.jpg"); //загруженная текстура планет 
         private bool right;
         //CircleShape star = new CircleShape();
@@ -248,6 +250,8 @@ namespace Project_Space___New_Live
         private void initSystem() //инициализацимя звездной системы
         {
             Texture[] texts = new Texture[2];
+            texts[0] = starText;
+            texts[1] = crownText;
             RedButton1.Position = new Vector2f(0, 0);
             RedButton1.FillColor = Color.Green;
             RedButton2.Position = new Vector2f(100, 100);
@@ -275,20 +279,10 @@ namespace Project_Space___New_Live
             //{
             //    planets[i] = new Planet(10, 10, orbits[i], 0.1 / (1 + i), planetText);
             //}
+            Star[] stars = new Star[1];
+            stars[0] = new Star(10000000, 250, 0, 0,0 , texts);
+            
 
-            LocalMassCenter[] locCenters = new LocalMassCenter[2];
-            texts[0] = starText;
-            texts[1] = crownText;
-            for (var i = 0; i < locCenters.Length; i++)
-            {
-                var starsDouble = new Star[2];
-                for (var j = 0; j < starsDouble.Length; j++)
-                {
-                    starsDouble[j] = new Star(1000, 120, 660, 30*(j + 1)*(Math.PI/180), 0.008, texts);
-                }
-                locCenters[i] = new LocalMassCenter(400, (i + 1)*(Math.PI), 0.004, starsDouble);
-            }
- 
 
             texts[0] = planetText;
             texts[1] = shadowTexture;
@@ -297,10 +291,11 @@ namespace Project_Space___New_Live
             for (int i = 0; i < planets.Length; i++)
             {
               
-                planets[i] = new Planet(10, 15*(1 + i), orbits[i], 0.01 / (1 + i), texts);
+                planets[i] = new Planet(10, 50, orbits[i], 0.002 / (1 + i), texts);
             }
-            var center = new LocalMassCenter(0, 0, 0, locCenters);
-            system = new StarSystem(new Vector2f(400, 225), center, planets, backText);
+            LocalMassCenter center = new LocalMassCenter(0, 0, 0, stars, planets);
+
+            system = new StarSystem(center,backText);
         }
 
         public void main()

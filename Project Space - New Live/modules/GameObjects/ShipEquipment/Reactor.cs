@@ -40,7 +40,8 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
         public Reactor(int mass, int energyGeneration, Shape image)
         {
             this.SetCommonCharacteristics(mass, 0, image);//установка общих характеристик (энергопотребление = 0, реактор производит, а не потребляет энергию)
-            this.baseGeneration = this.energyGeneration = energyGeneration;//установка текущей и базовой генерируемой энергии
+            this.baseGeneration = this.energyGeneration = energyGeneration;//установка текущей и базовой генерируемой энергии\
+            this.State = true;
         }
 
 
