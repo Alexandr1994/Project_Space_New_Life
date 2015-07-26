@@ -29,8 +29,6 @@ namespace Project_Space___New_Live
 
         View test = new View(new Vector2f(0, 0), new Vector2f(800, 600));
 
-        private CircleShape RedButton1 = new CircleShape(1);
-        private CircleShape RedButton2 = new CircleShape(1);
         private double angSpeed = 5*Math.PI/180;
         private static Texture backText = new Texture("testBackground.png"); //загруженная текстура планет 
         private static Texture img = new Texture("textPlayer.png"); //загруженная текстура планет 
@@ -252,10 +250,7 @@ namespace Project_Space___New_Live
             Texture[] texts = new Texture[2];
             texts[0] = starText;
             texts[1] = crownText;
-            RedButton1.Position = new Vector2f(0, 0);
-            RedButton1.FillColor = Color.Green;
-            RedButton2.Position = new Vector2f(100, 100);
-            RedButton2.FillColor = Color.Green;
+
             //for (int i = 0; i < planets.Length; i++)//инициализация планет
             //{
             //    angle[i] = rand.Next();
@@ -309,8 +304,14 @@ namespace Project_Space___New_Live
             testWindow.KeyPressed += onKey;
             testWindow.KeyReleased += fromKey;
             
-    
+            Texture[] textures = new Texture[4];
+            for (int i = 0; i < 4; i++)
+            {
+                textures[i] = new Texture("textPlayer.png");
+            }
+
             coords = new Vector2f(player.Size.X/2, player.Size.Y/2);
+            GameObject testShipView = new Ship(new Vector2f(600, 0), textures);
             //пока окно открыто ловить события и перерисовывать окно
             while (testWindow.IsOpen)
             {
@@ -322,8 +323,11 @@ namespace Project_Space___New_Live
                 testRenderer.RenderProcess(system.GetView());
                 
                 act();
-                testWindow.Draw(RedButton1);
-                testWindow.Draw(RedButton2);
+                foreach (ObjectView testingView in testShipView.View)
+                {
+                    testWindow.Draw(testingView.Image, testingView.State);
+                }
+
                 
                 String infoString1 = player.Position.X.ToString() + " " + player.Position.Y.ToString();
                 String infoString2 = coords.X.ToString() + " " + coords.Y.ToString();

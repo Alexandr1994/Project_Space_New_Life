@@ -21,6 +21,16 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         LocalMassCenter massCenter;
 
+        /// <summary>
+        /// Управление позицией фона звездной системы
+        /// </summary>
+        public Vector2f backgroundPosition
+        {
+            get { return this.background.Position; }
+            set { this.background.Position = value; }
+        }
+
+
 
         /// <summary>
         /// Построить звездную систему
@@ -54,7 +64,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             massCenter.Process(new Vector2f(0, 0));//работа со звездной состовляющей
         }
 
-
         /// <summary>
         /// Вернуть коллекция отображений объектов звездной системы
         /// </summary>
@@ -62,14 +71,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         public List<ObjectView> GetView()
         {
             List<ObjectView> systemsViews = new List<ObjectView>();
-            List<ObjectView> systemObjects = massCenter.GetView();
+
             systemsViews.Add(new ObjectView(background, BlendMode.None));//засунуть в возвращаемый массив фон
-            foreach (ObjectView view in systemObjects)//заполнить возвращаемый массив образами звезд
-            {
-                systemsViews.Add(view);
-            }
+            systemsViews.AddRange(massCenter.GetView());//Заполнить массив образов системы образами объектов главного центар масс
+   
             return systemsViews;
         }
+     
+        
 
  }
 }

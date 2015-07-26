@@ -36,12 +36,16 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Заголовок окна
         /// </summary>
         private String windowTitle = "Project Space - New Life";
+
+        private View GameView = new View();
         /// <summary>
         /// Запрет на вызов конструктора извне
         /// </summary>
         private RenderClass()
         {
-            mainWindow = new RenderWindow(windowSize, windowTitle, currentStyle);
+            mainWindow = new RenderWindow(windowSize, windowTitle, currentStyle);//построение главного окна
+            GameView.Size = (Vector2f)mainWindow.Size;//установка размера вида
+            GameView.Center =  new Vector2f(GameView.Size.X/2, GameView.Size.Y/2);//установка центра вида
         }
 
         /// <summary>

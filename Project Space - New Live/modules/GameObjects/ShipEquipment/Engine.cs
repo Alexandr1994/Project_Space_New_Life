@@ -25,104 +25,62 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
             ShuntingSpeed,//Улучшение маневровых
         }
 
-        /// <summary>
-        /// Набор базовых характеристик оборудования
-        /// </summary>
-        private Dictionary<String, float> baseCharacteristics; 
-
-        /// <summary>
-        /// Маршевая максимальная маршевая скорость
-        /// </summary>
-        private float forwardSpeed;
+        
+        // Набор базовых характеристик оборудования
         
         /// <summary>
-        /// Маршевая максимальная скорость скорость
+        /// Базовая тяга маршевого двигателя
         /// </summary>
-        public float ForwardSpeed
+        private float baseForwardThrust;
+
+        /// <summary>
+        /// Базовая тяга маневровых двинателей
+        /// </summary>
+        private float baseShuntingThrust;
+
+        //Текущие характеристики оборудования
+
+        /// <summary>
+        /// Текущая тяга маршевого двигателя
+        /// </summary>
+        private float forwardThrust;
+        
+        /// <summary>
+        /// Текущая тяга маршевого двигателя
+        /// </summary>
+        public float ForwardThrust
         {
             get
             {
                 if (this.emergensyState)
-                {//в аварийном состоянии максимальная скорость маршевых двигателей состовляет 10% от номинальной
-                    return this.forwardSpeed/10;
+                {//в аварийном состоянии тяга маршевых двигателей состовляет 20% от номинальной
+                    return this.forwardThrust / 5;
                 }
-                return this.forwardSpeed;
+                return this.forwardThrust;
             }
         }
 
-        /// <summary>
-        /// Ускорение маршевых двигателей
-        /// </summary>
-        private float forwardAcceleration;
+
 
         /// <summary>
-        /// Ускорение маршевых двигателей
+        /// текущая тяга маневровых двигателей
         /// </summary>
-        public float ForwardAcceleration
-        {
-            get
-            {
-                if (this.emergensyState)
-                {//в аварийном состоянии ускорение маршевых двигателей состовляет 20% от номинального
-                    return this.forwardAcceleration/5;
-                }
-                return this.forwardAcceleration;
-            }    
-        }
+        private float shuntingThrust;
 
         /// <summary>
-        /// Максимальнгая маневровая скорость
+        /// текущая тяга маневровых двигателей
         /// </summary>
-        private float shuntingSpeed;
-
-        /// <summary>
-        /// Максимальнгая боковых маневровая скорость
-        /// </summary>
-        public float ShuntingSpeed
+        public float ShuntingThrust
         {
             get
             {
                 if (this.emergensyState)
                 {//в аварийном состоянии максимальная скорость маршевых двигателей состовляет 20% от номинальной
-                    return this.shuntingSpeed / 5;
+                    return this.shuntingThrust / 5;
                 }
-                return this.shuntingSpeed;
+                return this.shuntingThrust;
             }
         }
-
-        /// <summary>
-        /// Ускорение маневровых двигателей
-        /// </summary>
-        private float shuntingAcceleration;
-
-        /// <summary>
-        /// Ускорение боковых маневровых двигателей
-        /// </summary>
-        public float ShuntingAccleleration
-        {
-            get
-            {
-                if (this.emergensyState)
-                {//в аварийном состоянии максимальная скорость маршевых двигателей состовляет 20% от номинальной
-                    return this.shuntingAcceleration / 5;
-                }
-                return this.shuntingAcceleration;
-            }
-        }
-
-        /// <summary>
-        /// Скорость поворота корабля (в радианах/ ед. вр.)
-        /// </summary>
-        private float rotationSpeed;
-
-        /// <summary>
-        /// Скорость поворота корабля (в радианах/ ед. вр.)
-        /// </summary>
-        public float RotationSpeed
-        {
-            get { return this.rotationSpeed; }
-        }
-
 
         /// <summary>
         /// Двигательная установка
@@ -133,15 +91,12 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
         /// <param name="shuningCharacteristics">Маневровые характеристики: Макс. скорость(X) и ускорение(Y)</param>
         /// <param name="rotateSpeed">Скорость разворота</param>
         /// <param name="image">Изображение</param>
-        public Engine(int mass, int energyNeeds,Vector2f forwardCharacteristics, Vector2f shuningCharacteristics, float rotateSpeed, Shape image)
+        public Engine(int mass, int energyNeeds,float forwardThrust, float shuntingThrust, Shape image)
         {
             this.SetCommonCharacteristics(mass, energyNeeds, image);//сохранение общих характеристик
             //установка текущих характеристик двигательной установки и сохранение базовых характеристик
-            this.baseCharacteristics.Add("ForwardSpeed",this.forwardSpeed = forwardCharacteristics.X);
-            this.baseCharacteristics.Add("ForwardAcceleration" ,this.forwardAcceleration = forwardCharacteristics.Y);
-            this.baseCharacteristics.Add("ShuntingSpeed" ,this.shuntingSpeed = shuningCharacteristics.X);
-            this.baseCharacteristics.Add("ShuntingAcceleration",this.shuntingAcceleration = shuningCharacteristics.Y);
-            this.baseCharacteristics.Add("Rotation", this.rotationSpeed = rotateSpeed);
+            this.baseForwardThrust = this.forwardThrust = forwardThrust;
+            this.baseShuntingThrust = this.shuntingThrust = shuntingThrust;
             this.State = false;
         }
 
@@ -154,14 +109,11 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
             //определение количества модификаций по возможным направлениям
             int forwardUpdates = this.upgrateDirectionsHistory.Count(i => i == (int)UpgrateDirectionID.ForwardSpeed);
             int shuntingUpdates = this.upgrateDirectionsHistory.Count(i => i == (int) UpgrateDirectionID.ShuntingSpeed);
-            // soon
             //Изменение текущих параметров по направлению улучшения маршевых характеристик
-            this.forwardSpeed = baseCharacteristics["ForwardSpeed"] + (forwardUpdates * baseCharacteristics["ForwardSpeed"]/5);
-            this.forwardAcceleration = baseCharacteristics["ForwardAcceleration"] + (forwardUpdates * baseCharacteristics["ForwardAcceleration"] / 5);
-            //Изменение текущик параметров по направлению улучшения маневровых и поворотных характеристик
-            this.shuntingSpeed = baseCharacteristics["ShuntingSpeed"] + (shuntingUpdates * baseCharacteristics["ShuntingSpeed"] / 5);
-            this.shuntingSpeed = baseCharacteristics["ShuntingAcceleration"] + (shuntingUpdates * baseCharacteristics["ShuntingAcceleration"] / 5);
-            this.rotationSpeed = baseCharacteristics["Rotation"] + (shuntingUpdates * baseCharacteristics["ShuntingSpeed"] / 5);
+            this.forwardThrust = this.baseForwardThrust + (forwardUpdates * this.baseForwardThrust / 5);
+            //Изменение текущик параметров по направлению улучшения маневровых характеристик
+            this.shuntingThrust = this.baseShuntingThrust + (shuntingUpdates * this.baseShuntingThrust / 5);
+
         }
 
         

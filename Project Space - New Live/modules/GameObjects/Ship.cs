@@ -10,7 +10,7 @@ using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
 {
-    class Ship : GameObject
+    public class Ship : GameObject
     {
 
 
