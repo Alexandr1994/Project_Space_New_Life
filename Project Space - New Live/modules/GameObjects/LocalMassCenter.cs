@@ -81,7 +81,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 foreach (GameEntity entity in companents)
                 {
-                    entity.Process(this.GetCoords());
+                    entity.Process(this.Coords);
                 }
             }
         }
@@ -99,6 +99,23 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.CorrectObjectPoint(homeCoords);//выполнить коррекцию относительно глобальных координт
         }
 
+        private List<ObjectView> GetCompanentViews(GameObject[] companetn)
+        {
+            List<ObjectView> retViews = new List<ObjectView>();//массив возвращаемых отображений
+            if (companetn != null)//если центр масс имеет данные комапненты, передать их отображения в возвращаемый массив
+            {
+                for (int i = 0; i < companetn.Length; i++)
+                {
+                    foreach (ObjectView view in companetn[i].View)//получить все отображения данного компанента центра масс
+                    {
+                        retViews.Add(view);
+                    }
+                }
+            }
+            return retViews;
+        }
+
+
         /// <summary>
         /// Получить все отображения данного центра масс
         /// </summary>
@@ -106,26 +123,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         public List<ObjectView> GetView()
         {
             List<ObjectView> retViews = new List<ObjectView>();//массив возвращаемых отображений
-            if (planets != null)//если центр масс имеет планеты, передать их отображения в возвращаемый массив
-            {
-                for (int i = 0; i < planets.Length; i++)
-                {
-                    foreach (ObjectView view in planets[i].View)//получить все планетарные отображения данного центра масс
-                    {
-                        retViews.Add(view);
-                    }
-                }
-            }
-            if (stars != null)//если центр масс имеет звезды, передать их отображения в возвращаемый массив
-            {
-                for (int i = 0; i < stars.Length; i++)
-                {
-                    foreach (ObjectView view in stars[i].View)//получить все звездные отображения данного центра масс
-                    {
-                        retViews.Add(view);
-                    }
-                }
-            }
             if (massCenters != null)//если центр масс имеет подчиненными центры масс, извлечь из них отображения звезд
             {
                 for (int i = 0; i < massCenters.Length; i++)
@@ -136,6 +133,8 @@ namespace Project_Space___New_Live.modules.GameObjects
                     }
                 }
             }
+            retViews.AddRange(this.GetCompanentViews(this.stars));//добавить в массив возращаемых отображений отображения звезд
+            retViews.AddRange(this.GetCompanentViews(this.planets));//добавить в массив возвращаемых отображений отображения планет
             return retViews;//вернуть все звездные отображения
         }
     }

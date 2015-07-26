@@ -13,16 +13,14 @@ namespace Project_Space___New_Live
         /// координаты объекта
         /// </summary>
         protected Vector2f coords;
-        
         /// <summary>
-        /// Получить координаты объекта
+        /// Координаты объекта
         /// </summary>
-        /// <returns></returns>
-        public Vector2f GetCoords()
+        public Vector2f Coords
         {
-            return this.coords;
+            get { return this.coords; }
         }
-
+        
         /// <summary>
         /// Процесс жизни сущности
         /// </summary>
