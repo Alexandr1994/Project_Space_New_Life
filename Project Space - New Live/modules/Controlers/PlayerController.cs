@@ -36,7 +36,8 @@ namespace Project_Space___New_Live.modules.Controlers
         {
             this.PlayerShip = playerShip;
             GameRenderer = RenderClass.getInstance();//Получение класса отрисовщика
-
+            GameRenderer.getMainWindow().KeyPressed += OnKey;
+            GameRenderer.getMainWindow().KeyReleased += FromKey;
         }
 
         /// <summary>
@@ -63,18 +64,109 @@ namespace Project_Space___New_Live.modules.Controlers
         private bool LeftRotate = false;
         private bool RightRotate = false;
 
+        /// <summary>
+        /// Обрабочик нажатий на клавиши
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="Args"></param>
+        private void OnKey(object sender, KeyEventArgs Args)
+        {
+            switch (Args.Code)
+            {//(Модификация в скором времени)
+                case Keyboard.Key.W:
+                {
+                    this.Forward = true;
+                }; break;
+                case Keyboard.Key.S:
+                {
+                    this.Reverse = true;
+                }; break;
+                case Keyboard.Key.A :
+                {
+                    this.LeftRotate = true;
+                }; break;
+                case Keyboard.Key.D:
+                {
+                    this.RightRotate = true;
+                }; break;
+                case Keyboard.Key.Z:
+                {
+                    this.LeftFly = true;
+                }; break;
+                case Keyboard.Key.C:
+                {
+                    this.RightFly = true;
+                }; break;
+                default: break;   
+            }
+        }
 
+        private void FromKey(object sender, KeyEventArgs Args)
+        {
+            switch (Args.Code)
+            {//(Модификация в скором времени)
+                case Keyboard.Key.W:
+                    {
+                        this.Forward = false;
+                    }; break;
+                case Keyboard.Key.S:
+                    {
+                        this.Reverse = false;
+                    }; break;
+                case Keyboard.Key.A:
+                    {
+                        this.LeftRotate = false;
+                    }; break;
+                case Keyboard.Key.D:
+                    {
+                        this.RightRotate = false;
+                    }; break;
+                case Keyboard.Key.Z:
+                    {
+                        this.LeftFly = false;
+                    }; break;
+                case Keyboard.Key.C:
+                    {
+                        this.RightFly = false;
+                    }; break;
+                default: break;
+            }
+        }
 
-
-
-
-
-
-
+        /// <summary>
+        /// Обработка движений корабля
+        /// </summary>
+        private void Moving()
+        {
+            if (Forward)
+            {
+                this.PlayerShip.ForwardAcceleration();
+            }
+            if (Reverse)
+            {
+                this.PlayerShip.ReverseAcceleration();
+            }
+            if (LeftFly)
+            {
+                this.PlayerShip.SideAcceleration(-1);
+            }
+            if (RightFly)
+            {
+                this.PlayerShip.SideAcceleration(1);
+            }
+            if (LeftRotate)
+            {
+                this.PlayerShip.Rotation(1);
+            }
+            if (RightFly)
+            {
+                this.PlayerShip.Rotation(-1);
+            }
+        }
 
         public override void Process()
         {
-            throw new NotImplementedException();
+            Moving();
         }
     }
 }

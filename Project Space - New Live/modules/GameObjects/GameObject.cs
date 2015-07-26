@@ -16,7 +16,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// масса объекта
         /// </summary>
-        protected int mass;
+        protected float mass;
 
         /// <summary>
         /// отображение объекта

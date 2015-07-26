@@ -30,7 +30,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="orbit">Орбита</param>
         /// <param name="orbitalSpeed">Орбитальная скорость</param>
         /// <param name="Skin">Текструа</param>
-        public Planet(int mass, int radius, int orbit, double orbitalSpeed, SFML.Graphics.Texture[] Skin)
+        public Planet(float mass, int radius, int orbit, double orbitalSpeed, SFML.Graphics.Texture[] Skin)
         {
             Random random = new Random();
             this.mass = mass;//инициализировать основные характеристики планеты

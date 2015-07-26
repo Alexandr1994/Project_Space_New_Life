@@ -14,7 +14,6 @@ namespace Project_Space___New_Live.modules.GameObjects
     {
 
 
-
         //Оборудование корабля
 
         /// <summary>
@@ -31,23 +30,32 @@ namespace Project_Space___New_Live.modules.GameObjects
         private Battery shipBattery;
 
 
+        //Общие данные о корабле
+
+        /// <summary>
+        /// Размер части корабля
+        /// </summary>
+        private Vector2f viewPartSize;
+        /// <summary>
+        /// Полная масса корабля 
+        /// </summary>
+        private float Mass
+        {//Скоро полное описание
+            get { return this.mass; }
+        }
+
+
+
         //Данные необходимые для перемещения корабля
         /// <summary>
         /// Текущая скорость перемещения корабля вперед-назад
         /// </summary>
         private float speed = 0;
         /// <summary>
-        /// Текущее ускорение перемещения корабля вперед-назад
-        /// </summary>
-        private float acceleration = 0;
         /// <summary>
         /// Текущая скорость бокового перемещения корабля
         /// </summary>
         private float sideSpeed = 0;
-        /// <summary>
-        /// Текущее ускорение бокового перемещения
-        /// </summary>
-        private float sideAcceleration = 0;
         /// <summary>
         /// Текущая скорость поворота корабля (рад/ед.вр)
         /// </summary>
@@ -64,15 +72,16 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected override void ConstructView(Texture[] skin)
         {
             this.view = new ObjectView[4];
+            this.viewPartSize = new Vector2f(10, 20);
             for (int i = 0; i < this.view.Length; i++)
             {
                 this.view[i] = new ObjectView(BlendMode.Alpha);
-                this.view[i].Image = new RectangleShape(new Vector2f(10, 20));
+                this.view[i].Image = new RectangleShape(viewPartSize);
                 this.view[i].Image.Texture = skin[i];
             }
             this.view[0].Image.Position = coords - new Vector2f(-5, -20);//Носовя часть
             this.view[1].Image.Position = coords - new Vector2f(-5, 0);//Кормовая часть
-            this.view[2].Image.Position = coords - new Vector2f(-15, -5);//Левое "крыло"
+            this.view[2].Image.Position = coords - new Vector2f(-15, -10);//Левое "крыло"
             this.view[3].Image.Position = coords - new Vector2f(5, -5);//Правое "крыло"
         }
 
@@ -132,12 +141,42 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Изменения скоростей
+        /// Ускорение маршевого двигателя
         /// </summary>
-        private void SpeedChanges()
+        public void ForwardAcceleration()
         {
-            this.speed += this.acceleration;
-            this.sideSpeed += this.sideAcceleration;
+            float acceleration = this.shipEngine.ForwardThrust / this.Mass;
+            this.speed += acceleration;
+        }
+
+        /// <summary>
+        /// Ускорение реверсного двигателя
+        /// </summary>
+        public void ReverseAcceleration()
+        {
+            float acceleration = this.shipEngine.ShuntingThrust / this.Mass;
+            this.speed -= acceleration;
+        }
+
+        /// <summary>
+        /// Ускорение боковых дивгателей
+        /// </summary>
+        /// <param name="SideSingle">Знак ускорения (+) - смещение вправо (-) - смещение влево </param>
+        public void SideAcceleration(int SideSingle)
+        {
+            float acceleration = SideSingle/Math.Abs(SideSingle) * this.shipEngine.ShuntingThrust/this.Mass;
+            this.sideSpeed += acceleration;
+        }
+
+        /// <summary>
+        /// Ускорение вращения
+        /// </summary>
+        /// <param name="SideSingle">Знак ускорения (+) - против (-) - по часовой стрелке</param>
+        public void Rotation(int SideSingle)
+        {
+            float acceleration = SideSingle / Math.Abs(SideSingle) * this.shipEngine.ShuntingThrust / this.Mass;
+            acceleration /= (float)Math.Sqrt(Math.Pow(viewPartSize.X / 2, 2) + Math.Pow(viewPartSize.Y / 2, 2));//вычисление углового ускорение
+            this.rotationSpeed += acceleration;
         }
 
         /// <summary>
