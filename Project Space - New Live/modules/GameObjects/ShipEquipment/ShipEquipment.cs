@@ -68,7 +68,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
         /// <summary>
         /// История улучшений
         /// </summary>
-        protected List<int> upgrateDirectionsHistory; 
+        protected List<int> upgrateDirectionsHistory = new List<int>(); 
 
 
         /// <summary>

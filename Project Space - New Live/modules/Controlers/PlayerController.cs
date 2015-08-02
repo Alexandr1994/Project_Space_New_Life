@@ -36,8 +36,8 @@ namespace Project_Space___New_Live.modules.Controlers
         {
             this.PlayerShip = playerShip;
             GameRenderer = RenderClass.getInstance();//Получение класса отрисовщика
-            GameRenderer.getMainWindow().KeyPressed += OnKey;
-            GameRenderer.getMainWindow().KeyReleased += FromKey;
+            GameRenderer.MainWindow.KeyPressed += OnKey;
+            GameRenderer.MainWindow.KeyReleased += FromKey;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         /// <param name="playerShip"></param>
         /// <returns></returns>
-        static PlayerController GetInstanse(Ship playerShip)
+        public static PlayerController GetInstanse(Ship playerShip)
         {
             if (GameController == null)
             {
@@ -158,15 +158,21 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 this.PlayerShip.Rotation(1);
             }
-            if (RightFly)
+            if (RightRotate)
             {
                 this.PlayerShip.Rotation(-1);
             }
+            if (!RightRotate && !LeftRotate)
+            {
+                this.PlayerShip.StopRotation();
+            }
+            
         }
 
         public override void Process()
         {
             Moving();
+            GameRenderer.GameView.Center = this.PlayerShip.Coords;
         }
     }
 }

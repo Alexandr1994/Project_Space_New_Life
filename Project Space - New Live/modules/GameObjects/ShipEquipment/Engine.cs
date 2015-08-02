@@ -38,7 +38,17 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
         /// </summary>
         private float baseShuntingThrust;
 
+        /// <summary>
+        /// Базовая максимальная скорость
+        /// </summary>
+        private float baseMaxSpeed;
+
+
         //Текущие характеристики оборудования
+
+
+
+
 
         /// <summary>
         /// Текущая тяга маршевого двигателя
@@ -60,7 +70,17 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
             }
         }
 
-
+        /// <summary>
+        /// Максимальная скорость
+        /// </summary>
+        private float maxSpeed;
+        /// <summary>
+        /// Максимальная скорость
+        /// </summary>
+        public float MaxSpeed
+        {
+            get { return this.maxSpeed; }
+        }
 
         /// <summary>
         /// текущая тяга маневровых двигателей
@@ -82,6 +102,9 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
             }
         }
 
+
+
+
         /// <summary>
         /// Двигательная установка
         /// </summary>
@@ -91,12 +114,13 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
         /// <param name="shuningCharacteristics">Маневровые характеристики: Макс. скорость(X) и ускорение(Y)</param>
         /// <param name="rotateSpeed">Скорость разворота</param>
         /// <param name="image">Изображение</param>
-        public Engine(int mass, int energyNeeds,float forwardThrust, float shuntingThrust, Shape image)
+        public Engine(int mass, int energyNeeds,float forwardThrust, float shuntingThrust, float maxSpeed, Shape image)
         {
             this.SetCommonCharacteristics(mass, energyNeeds, image);//сохранение общих характеристик
             //установка текущих характеристик двигательной установки и сохранение базовых характеристик
             this.baseForwardThrust = this.forwardThrust = forwardThrust;
             this.baseShuntingThrust = this.shuntingThrust = shuntingThrust;
+            this.baseMaxSpeed = this.maxSpeed = maxSpeed;
             this.State = false;
         }
 
@@ -113,6 +137,8 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
             this.forwardThrust = this.baseForwardThrust + (forwardUpdates * this.baseForwardThrust / 5);
             //Изменение текущик параметров по направлению улучшения маневровых характеристик
             this.shuntingThrust = this.baseShuntingThrust + (shuntingUpdates * this.baseShuntingThrust / 5);
+
+            this.maxSpeed = this.baseMaxSpeed + (this.Version*this.baseMaxSpeed/5);
 
         }
 

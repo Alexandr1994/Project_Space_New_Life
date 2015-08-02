@@ -20,32 +20,55 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Окно программы
         /// </summary>
         private RenderWindow mainWindow;
+
+        public RenderWindow MainWindow
+        {
+            get { return this.mainWindow; }
+        }
+
+
         /// <summary>
         /// Доступные видеорежимы
         /// </summary>
         private static VideoMode windowSize = new VideoMode(800, 600);
+
         /// <summary>
         /// Экземпляр класса отрисовки
         /// </summary>
         private static RenderClass graphicModule = null;
+
         /// <summary>
         /// Текущий стиль отображения окна
         /// </summary>
         private Styles currentStyle = Styles.Titlebar;
+
         /// <summary>
         /// Заголовок окна
         /// </summary>
         private String windowTitle = "Project Space - New Life";
 
-        private View GameView = new View();
+        /// <summary>
+        /// Вид
+        /// </summary>
+        private View gameView = new View();
+
+        /// <summary>
+        /// Вид
+        /// </summary>
+        public View GameView
+        {
+            get { return this.gameView; }
+            set { this.gameView = value; }
+        }
+
         /// <summary>
         /// Запрет на вызов конструктора извне
         /// </summary>
         private RenderClass()
         {
-            mainWindow = new RenderWindow(windowSize, windowTitle, currentStyle);//построение главного окна
-            GameView.Size = (Vector2f)mainWindow.Size;//установка размера вида
-            GameView.Center =  new Vector2f(GameView.Size.X/2, GameView.Size.Y/2);//установка центра вида
+            this.mainWindow = new RenderWindow(windowSize, windowTitle, currentStyle);//построение главного окна
+            this.gameView.Size = (Vector2f)mainWindow.Size;//установка размера вида
+            this.gameView.Center =  new Vector2f(gameView.Size.X/2, gameView.Size.Y/2);//установка центра вида
         }
 
         /// <summary>
@@ -62,16 +85,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             return graphicModule;
         }
 
-        /// <summary>
-        /// Получить главное графическое окно
-        /// </summary>
-        /// <returns></returns>
-        public RenderWindow getMainWindow()
-        {
-            return mainWindow;
-        }
-
-        /// <summary>
+          /// <summary>
         /// Получить окно нового размера
         /// </summary>
         /// <param name="width">Ширина</param>
@@ -107,11 +121,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Метод отрисовка
+        /// Метод отрисовки
         /// </summary>
         /// <param name="views"></param>
         public void RenderProcess(List<ObjectView> views)
         {
+            this.mainWindow.SetView(this.gameView);//установка вида отрисовки
             foreach (ObjectView view in views)
             {
                 mainWindow.Draw(view.Image, view.State);
