@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
 
-namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
+namespace Project_Space___New_Live.modules.GameObjects.ShipModules
 {
     /// <summary>
     /// Реактор

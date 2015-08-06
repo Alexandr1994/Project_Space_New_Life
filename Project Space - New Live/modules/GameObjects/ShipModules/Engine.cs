@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using SFML.Graphics;
 using SFML.System;
 
-namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
+namespace Project_Space___New_Live.modules.GameObjects.ShipModules
 {
     /// <summary>
     /// Двигательная установка

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
+using Project_Space___New_Live.modules.GameObjects.ShipModules;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -138,29 +139,31 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         private void Moving()
         {
+            Engine engine = this.PlayerShip.Equipment[(int) Ship.EquipmentNames.Engine] as Engine;
+
             if (Forward)
             {
-                this.PlayerShip.ForwardAcceleration();
+                this.PlayerShip.MoveManager.AddNewSpeedVector(engine.ForwardThrust/this.PlayerShip.Mass, this.PlayerShip.Rotation);
             }
             if (Reverse)
             {
-                this.PlayerShip.ReverseAcceleration();
+                this.PlayerShip.MoveManager.AddNewSpeedVector(engine.ShuntingThrust / this.PlayerShip.Mass, this.PlayerShip.Rotation + (float)Math.PI);
             }
             if (LeftFly)
             {
-                this.PlayerShip.SideAcceleration(-1);
+                this.PlayerShip.MoveManager.AddNewSpeedVector(engine.ShuntingThrust / this.PlayerShip.Mass, this.PlayerShip.Rotation + (float)Math.PI/2); ;
             }
             if (RightFly)
             {
-                this.PlayerShip.SideAcceleration(1);
+                this.PlayerShip.MoveManager.AddNewSpeedVector(engine.ShuntingThrust / this.PlayerShip.Mass, this.PlayerShip.Rotation - (float)Math.PI/2);
             }
             if (LeftRotate)
             {
-                this.PlayerShip.Rotation(1);
+                this.PlayerShip.Rotate(1);
             }
             if (RightRotate)
             {
-                this.PlayerShip.Rotation(-1);
+                this.PlayerShip.Rotate(-1);
             }
             if (!RightRotate && !LeftRotate)
             {

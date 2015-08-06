@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
 using SFML.Graphics;
 
-namespace Project_Space___New_Live.modules.GameObjects.ShipEquipment
+namespace Project_Space___New_Live.modules.GameObjects.ShipModules
 {
     public abstract class ShipEquipment
     {

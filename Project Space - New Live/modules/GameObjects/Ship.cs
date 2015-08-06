@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Controlers;
 using Project_Space___New_Live.modules.Dispatchers;
-using Project_Space___New_Live.modules.GameObjects.ShipEquipment;
+using Project_Space___New_Live.modules.GameObjects.ShipModules;
 using SFML.Graphics;
 using SFML.System;
 
@@ -18,20 +19,37 @@ namespace Project_Space___New_Live.modules.GameObjects
         //Оборудование корабля
 
         /// <summary>
-        /// Двигатель корабля
+        /// Идентификаторы оборудования корабля
         /// </summary>
-        private Engine shipEngine;
-        /// <summary>
-        /// Реактор корабля
-        /// </summary>
-        private Reactor shipReactor;
-        /// <summary>
-        /// Энергобатарея корабля
-        /// </summary>
-        private Battery shipBattery;
+        public enum EquipmentNames : int
+        {
+            /// <summary>
+            /// Двигатель
+            /// </summary>
+            Engine = 0, 
+            /// <summary>
+            /// Реактор
+            /// </summary>
+            Reactor,
+            /// <summary>
+            /// Энергобатеря
+            /// </summary>
+            Battery
+        }
 
-        
-        //Общие данные о корабле
+        /// <summary>
+        /// Оборудование корабля
+        /// </summary>
+        private List<ShipEquipment> shipEquipment;
+
+        /// <summary>
+        /// Оборудование корабля
+        /// </summary>
+        public List<ShipEquipment> Equipment
+        {
+            get { return this.shipEquipment; }
+        }
+
 
         /// <summary>
         /// Размер части корабля
@@ -40,7 +58,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Полная масса корабля 
         /// </summary>
-        private float Mass
+        public float Mass
         {//Скоро полное описание
             get { return this.mass; }
         }
@@ -51,23 +69,36 @@ namespace Project_Space___New_Live.modules.GameObjects
         private AbstractController pilot; 
 
         //Данные необходимые для перемещения корабля
+        
         /// <summary>
-        /// Текущая скорость перемещения корабля вперед-назад
+        /// Модуль отвечающий за движения корабля
         /// </summary>
-        private float speed = 0;
-        /// <summary>
-        /// <summary>
-        /// Текущая скорость бокового перемещения корабля
-        /// </summary>
-        private float sideSpeed = 0;
-        /// <summary>
-        /// Текущая скорость поворота корабля (рад/ед.вр)
-        /// </summary>
+        private ShipMover moveManager = new ShipMover();
+
         private float rotationSpeed = 0;
+
+        /// <summary>
+        /// Модуль отвечающий за движения корабля
+        /// </summary>
+        public ShipMover MoveManager
+        {
+            get { return this.moveManager; }
+        }
+
+
         /// <summary>
         /// Текущий поворот корабля в рад.
         /// </summary>
         private float rotation = (float)(Math.PI/2);
+
+        /// <summary>
+        /// Текущий поворот корабля в рад.
+        /// </summary>
+        public float Rotation
+        {
+            get { return this.rotation; }
+        }
+
 
         /// <summary>
         /// Построить отображение корабля
@@ -96,9 +127,8 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         protected override void Move()
         {
-            this.ShipRotation();//Поворот корабля
-            this.ShipSideMoving();//Боковое перемещение корабля
-            this.ShipMainMoving();//Прямое перемещение корабля     
+            ShipRotation();
+            this.MoveManager.Process(this); 
         }
 
         /// <summary>
@@ -116,77 +146,26 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Перемещение корабля вперед-назад
         /// </summary>
-        private void ShipMainMoving()
+        public void ShipAtomMoving(float speed, float angle)
         {
             Vector2f tempCoords = this.coords;
-            this.coords.X += (float) (this.speed * Math.Cos(rotation));
-            this.coords.Y += (float) (this.speed * Math.Sin(rotation));
+            this.coords.X += (float)(speed * Math.Cos(angle));
+            this.coords.Y += (float)(speed * Math.Sin(angle));
             Vector2f delta = this.coords - tempCoords;//Изменение по координатам Х и Y
             foreach (ObjectView partView in this.View)
             {
                 partView.Translate(delta);
             }
-        }
-
-        /// <summary>
-        /// боковое перемещение корабля
-        /// </summary>
-        private void ShipSideMoving()
-        {
-            Vector2f tempCoords = this.coords;
-            this.coords.X += (float)(this.sideSpeed * Math.Sin(rotation));
-            this.coords.Y += (float)(this.sideSpeed * Math.Cos(rotation));
-            Vector2f delta = this.coords - tempCoords;//Изменение по координатам Х и Y
-            foreach (ObjectView partView in this.View)
-            {
-                partView.Translate(delta);
-            }
-        }
-
-        /// <summary>
-        /// Ускорение маршевого двигателя
-        /// </summary>
-        public void ForwardAcceleration()
-        {
-            float acceleration = this.shipEngine.ForwardThrust / this.Mass;
-            if (this.speed < (this.shipEngine.MaxSpeed + acceleration))
-            {
-                this.speed += acceleration;
-            }
-        }
-
-        /// <summary>
-        /// Ускорение реверсного двигателя
-        /// </summary>
-        public void ReverseAcceleration()
-        {
-            float acceleration = this.shipEngine.ShuntingThrust / this.Mass;
-            if (this.speed > -(this.shipEngine.MaxSpeed + acceleration))
-            {
-                this.speed -= acceleration;
-            }
-        }
-
-        /// <summary>
-        /// Ускорение боковых дивгателей
-        /// </summary>
-        /// <param name="SideSingle">Знак ускорения (+) - смещение вправо (-) - смещение влево </param>
-        public void SideAcceleration(int SideSingle)
-        {
-            float acceleration = (SideSingle / Math.Abs(SideSingle)) * this.shipEngine.ShuntingThrust/this.Mass;
-            if (Math.Abs(this.speed) < (this.shipEngine.MaxSpeed + acceleration))
-            {
-                this.sideSpeed += acceleration;
-            }   
         }
 
         /// <summary>
         /// Вращение
         /// </summary>
         /// <param name="SideSingle">Знак ускорения (+) - против (-) - по часовой стрелке</param>
-        public void Rotation(int SideSingle)
+        public void Rotate(int SideSingle)
         {
-            float acceleration = SideSingle / Math.Abs(SideSingle) * this.shipEngine.ShuntingThrust / this.Mass;
+            Engine engine = this.shipEquipment[(int)EquipmentNames.Engine] as Engine;
+            float acceleration = SideSingle / Math.Abs(SideSingle) * engine.ShuntingThrust / this.Mass;
             acceleration /= (float)Math.Sqrt(Math.Pow(viewPartSize.X / 4, 2) + Math.Pow(viewPartSize.Y / 4, 2));//вычисление углового ускорение
             this.rotationSpeed = acceleration;
         }
@@ -219,10 +198,11 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.mass = mass;
             this.coords = coords;
             this.ConstructView(textures);
-            
-            this.shipEngine = new Engine(100, 1, 150, 200, 5,null);
-            this.shipBattery = new Battery(100, 500, null);
-            this.shipReactor = new Reactor(100, 1, null);
+            this.shipEquipment = new List<ShipEquipment>();
+
+            this.shipEquipment.Add(new Engine(100, 1, 100, 100, 10, null));
+            this.shipEquipment.Add(new Battery(100, 500, null));
+            this.shipEquipment.Add(new Reactor(100, 1, null));
 
             this.pilot = PlayerController.GetInstanse(this);
         }
