@@ -64,6 +64,7 @@ namespace Project_Space___New_Live.modules.Controlers
         private bool RightFly = false;
         private bool LeftRotate = false;
         private bool RightRotate = false;
+        private bool StopMoving = false;
 
         /// <summary>
         /// Обрабочик нажатий на клавиши
@@ -75,29 +76,33 @@ namespace Project_Space___New_Live.modules.Controlers
             switch (Args.Code)
             {//(Модификация в скором времени)
                 case Keyboard.Key.W:
-                {
-                    this.Forward = true;
-                }; break;
+                    {
+                        this.Forward = true;
+                    }; break;
                 case Keyboard.Key.S:
-                {
-                    this.Reverse = true;
-                }; break;
+                    {
+                        this.Reverse = true;
+                    }; break;
                 case Keyboard.Key.A :
-                {
-                    this.LeftRotate = true;
-                }; break;
+                    {
+                        this.LeftRotate = true;
+                    }; break;
                 case Keyboard.Key.D:
-                {
-                    this.RightRotate = true;
-                }; break;
+                    {
+                        this.RightRotate = true;
+                    }; break;
                 case Keyboard.Key.Z:
-                {
-                    this.LeftFly = true;
-                }; break;
+                    {
+                        this.LeftFly = true;
+                    }; break;
                 case Keyboard.Key.C:
-                {
-                    this.RightFly = true;
-                }; break;
+                    {
+                        this.RightFly = true;
+                    }; break;
+                case  Keyboard.Key.X:
+                    {
+                        this.StopMoving = true;
+                    }; break;
                 default: break;   
             }
         }
@@ -130,6 +135,10 @@ namespace Project_Space___New_Live.modules.Controlers
                     {
                         this.RightFly = false;
                     }; break;
+                case Keyboard.Key.X:
+                    {
+                        this.StopMoving = false;
+                    }; break;
                 default: break;
             }
         }
@@ -139,23 +148,23 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         private void Moving()
         {
-            Engine engine = this.PlayerShip.Equipment[(int) Ship.EquipmentNames.Engine] as Engine;
+            
 
             if (Forward)
             {
-                this.PlayerShip.MoveManager.AddNewSpeedVector(engine.ForwardThrust/this.PlayerShip.Mass, this.PlayerShip.Rotation);
+                this.PlayerShip.MoveManager.GiveForwardThrust(this.PlayerShip);
             }
             if (Reverse)
             {
-                this.PlayerShip.MoveManager.AddNewSpeedVector(engine.ShuntingThrust / this.PlayerShip.Mass, this.PlayerShip.Rotation + (float)Math.PI);
+                this.PlayerShip.MoveManager.GiveReversThrust(this.PlayerShip);
             }
             if (LeftFly)
             {
-                this.PlayerShip.MoveManager.AddNewSpeedVector(engine.ShuntingThrust / this.PlayerShip.Mass, this.PlayerShip.Rotation + (float)Math.PI/2); ;
+                this.PlayerShip.MoveManager.GiveSideThrust(this.PlayerShip, 1);
             }
             if (RightFly)
             {
-                this.PlayerShip.MoveManager.AddNewSpeedVector(engine.ShuntingThrust / this.PlayerShip.Mass, this.PlayerShip.Rotation - (float)Math.PI/2);
+                this.PlayerShip.MoveManager.GiveSideThrust(this.PlayerShip, -1);
             }
             if (LeftRotate)
             {
@@ -164,6 +173,10 @@ namespace Project_Space___New_Live.modules.Controlers
             if (RightRotate)
             {
                 this.PlayerShip.Rotate(-1);
+            }
+            if (StopMoving)
+            {
+                this.PlayerShip.MoveManager.FullStop(this.PlayerShip);
             }
             if (!RightRotate && !LeftRotate)
             {

@@ -39,15 +39,18 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         private float baseShuntingThrust;
 
         /// <summary>
-        /// Базовая максимальная скорость
+        /// Базовая максимальная маршевая скорость
         /// </summary>
-        private float baseMaxSpeed;
+        private float baseMaxForwardSpeed;
+
+
+        /// <summary>
+        /// Базовая максимальная маневровая скорость
+        /// </summary>
+        private float baseMaxShuntingSpeed;
 
 
         //Текущие характеристики оборудования
-
-
-
 
 
         /// <summary>
@@ -71,21 +74,34 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         }
 
         /// <summary>
-        /// Максимальная скорость
+        /// Максимальная маршевая скорость
         /// </summary>
-        private float maxSpeed;
+        private float maxForwardSpeed;
         /// <summary>
-        /// Максимальная скорость
+        /// Максимальная маршевая скорость
         /// </summary>
-        public float MaxSpeed
+        public float MaxForwardSpeed
         {
-            get { return this.maxSpeed; }
+            get { return this.maxForwardSpeed; }
         }
 
         /// <summary>
         /// текущая тяга маневровых двигателей
         /// </summary>
         private float shuntingThrust;
+
+        /// <summary>
+        /// Максимальная маневровая скорость
+        /// </summary>
+        private float maxShuntingSpeed;
+        /// <summary>
+        /// Максимальная маневровая скорость
+        /// </summary>
+        public float MaxShuntingSpeed
+        {
+            get { return this.maxShuntingSpeed; }
+        }
+
 
         /// <summary>
         /// текущая тяга маневровых двигателей
@@ -114,13 +130,14 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// <param name="shuningCharacteristics">Маневровые характеристики: Макс. скорость(X) и ускорение(Y)</param>
         /// <param name="rotateSpeed">Скорость разворота</param>
         /// <param name="image">Изображение</param>
-        public Engine(int mass, int energyNeeds,float forwardThrust, float shuntingThrust, float maxSpeed, Shape image)
+        public Engine(int mass, int energyNeeds,float forwardThrust, float shuntingThrust, float maxForwardSpeed, float maxShuntingSpeed,Shape image)
         {
             this.SetCommonCharacteristics(mass, energyNeeds, image);//сохранение общих характеристик
             //установка текущих характеристик двигательной установки и сохранение базовых характеристик
             this.baseForwardThrust = this.forwardThrust = forwardThrust;
             this.baseShuntingThrust = this.shuntingThrust = shuntingThrust;
-            this.baseMaxSpeed = this.maxSpeed = maxSpeed;
+            this.baseMaxForwardSpeed = this.maxForwardSpeed = maxForwardSpeed;
+            this.baseMaxShuntingSpeed = this.maxShuntingSpeed = maxShuntingSpeed;
             this.State = false;
         }
 
@@ -135,11 +152,10 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             int shuntingUpdates = this.upgrateDirectionsHistory.Count(i => i == (int) UpgrateDirectionID.ShuntingSpeed);
             //Изменение текущих параметров по направлению улучшения маршевых характеристик
             this.forwardThrust = this.baseForwardThrust + (forwardUpdates * this.baseForwardThrust / 5);
+            this.maxForwardSpeed = this.baseMaxForwardSpeed + (this.Version * this.baseMaxForwardSpeed / 5);
             //Изменение текущик параметров по направлению улучшения маневровых характеристик
             this.shuntingThrust = this.baseShuntingThrust + (shuntingUpdates * this.baseShuntingThrust / 5);
-
-            this.maxSpeed = this.baseMaxSpeed + (this.Version*this.baseMaxSpeed/5);
-
+            this.maxShuntingSpeed = this.baseMaxShuntingSpeed + (this.Version * this.baseMaxShuntingSpeed / 5);
         }
 
         
