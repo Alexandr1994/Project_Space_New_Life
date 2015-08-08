@@ -75,7 +75,7 @@ namespace Project_Space___New_Live
             {
                 textures[i] = new Texture("textPlayer.png");
             }
-            Ship testPlayer = new Ship(1000, new Vector2f(400, 400), textures);
+            Ship testPlayer = new Ship(1000, new Vector2f(400, 400), textures, new Vector2f(10, 20));
             //пока окно открыто ловить события и перерисовывать окно
             while (testRenderer.MainWindow.IsOpen)
             {

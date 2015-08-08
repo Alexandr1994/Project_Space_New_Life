@@ -160,29 +160,24 @@ namespace Project_Space___New_Live.modules.Controlers
             }
             if (LeftFly)
             {
-                this.PlayerShip.MoveManager.GiveSideThrust(this.PlayerShip, 1);
+                this.PlayerShip.MoveManager.GiveSideThrust(this.PlayerShip, -1);
             }
             if (RightFly)
             {
-                this.PlayerShip.MoveManager.GiveSideThrust(this.PlayerShip, -1);
+                this.PlayerShip.MoveManager.GiveSideThrust(this.PlayerShip, 1);
             }
             if (LeftRotate)
             {
-                this.PlayerShip.Rotate(1);
+                this.PlayerShip.MoveManager.Rotate(this.PlayerShip, -1);
             }
             if (RightRotate)
             {
-                this.PlayerShip.Rotate(-1);
+                this.PlayerShip.MoveManager.Rotate(this.PlayerShip, 1);
             }
             if (StopMoving)
             {
                 this.PlayerShip.MoveManager.FullStop(this.PlayerShip);
-            }
-            if (!RightRotate && !LeftRotate)
-            {
-                this.PlayerShip.StopRotation();
-            }
-            
+            }           
         }
 
         public override void Process()
