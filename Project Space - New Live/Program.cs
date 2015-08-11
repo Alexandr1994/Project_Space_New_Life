@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
+using Project_Space___New_Live.modules.Controlers;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -65,6 +66,10 @@ namespace Project_Space___New_Live
             system = new StarSystem(center,backText);
         }
 
+
+        
+
+
         public void main()
         {
             testRenderer = RenderClass.getInstance();
@@ -75,12 +80,24 @@ namespace Project_Space___New_Live
             {
                 textures[i] = new Texture("textPlayer.png");
             }
+
+
+
+
+            RectangleShape lol = new RectangleShape();
+            lol.Size = new Vector2f(100, 20);
+            lol.FillColor = Color.Green;
+           // Button lol1 = new Button(lol, new Vector2f(100, 100), lol.Size);
+
+ 
+
+
             Ship testPlayer = new Ship(1000, new Vector2f(400, 400), textures, new Vector2f(10, 20));
             //пока окно открыто ловить события и перерисовывать окно
             while (testRenderer.MainWindow.IsOpen)
             {
                 Thread.Sleep(25);
-               // testWindow.SetView(test);
+           /*    // testWindow.SetView(test);
                 testRenderer.MainWindow.DispatchEvents();
                 testRenderer.MainWindow.Clear(); //перерисовка окна
                 system.Process();
@@ -90,7 +107,8 @@ namespace Project_Space___New_Live
                 foreach (ObjectView testingView in testPlayer.View)
                 {
                     testRenderer.MainWindow.Draw(testingView.Image, testingView.State);
-                }
+                }*/
+         //       testRenderer.RenderProcess(lol1.GetFormView());
                 testRenderer.MainWindow.Display(); //перерисовка окна
             }
         }
