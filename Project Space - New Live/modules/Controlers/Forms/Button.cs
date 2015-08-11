@@ -76,7 +76,10 @@ namespace Project_Space___New_Live.modules.Controlers
             retValue.Add(this.view);//добавление в массив возвращаемых занчений отображения данной формы
             foreach (Form childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
             {
-                retValue.AddRange(childForm.GetFormView());
+                foreach (ObjectView view in childForm.GetFormView())
+                {
+                    retValue.Add(view);
+                }
             }
             this.CatchEvents();//обнаружение событий данной формы
             return retValue;

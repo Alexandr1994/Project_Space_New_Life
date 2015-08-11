@@ -68,7 +68,7 @@ namespace Project_Space___New_Live
 
 
         bool start = false;
-        bool over = false;
+
 
         private void onButton(object sender, EventArgs e)
         {
@@ -76,11 +76,6 @@ namespace Project_Space___New_Live
 
         }
 
-        private void onButton2(object sender, EventArgs e)
-        {
-            over = true;
-
-        }
 
         public void main()
         {
@@ -100,8 +95,14 @@ namespace Project_Space___New_Live
             buttonTextures[2] = new Texture("Click.png");
             buttonTextures[3] = new Texture("Click2.png");
 
+            CircleButton btn = new CircleButton(buttonTextures);
+            btn.MouseClick += onButton;
 
-
+            while (!start)
+            {
+                testRenderer.RenderProcess(btn.GetFormView());
+                testRenderer.MainWindow.Display(); //перерисовка окна
+            }
 
 
 

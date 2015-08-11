@@ -33,8 +33,17 @@ namespace Project_Space___New_Live.modules.Controlers
         public Vector2f Location
         {
             get { return this.location; }
-            set { this.location = value; }
+            set
+            { 
+                this.location = value;
+                this.ChangeLocation();
+            }
         }
+
+        /// <summary>
+        /// Изменение размещения формы
+        /// </summary>
+        protected abstract void ChangeLocation();
 
         /// <summary>
         /// Размер
@@ -46,8 +55,18 @@ namespace Project_Space___New_Live.modules.Controlers
         public Vector2f Size
         {
             get { return this.size; }
-            set { this.size = value; }
+            set 
+            { 
+                this.size = value;
+                this.ChangeSize();
+            }
         }
+
+        /// <summary>
+        /// Изменение размера формы
+        /// </summary>
+        protected abstract void ChangeSize();
+        
 
         /// <summary>
         /// Надпись на форме

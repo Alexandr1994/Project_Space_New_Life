@@ -15,16 +15,37 @@ namespace Project_Space___New_Live.modules.Controlers
 
         private float radius;
 
-        public CircleButton(Vector2f location, float radius, Texture[] textures)
+        /// <summary>
+        /// Круглая кнопка
+        /// </summary>
+        /// <param name="textures"></param>
+        public CircleButton(Texture[] textures)
         {
-            this.CatchEvents();
-            this.view = new ObjectView(new CircleShape(radius), BlendMode.Alpha);
-            this.Location = view.Image.Position = location;
+            this.view = new ObjectView(new CircleShape(10), BlendMode.Alpha);
+            this.Location = view.Image.Position = new Vector2f(0, 0);
             this.viewStates = textures;
-            this.radius = radius;
+            this.radius = 10;
             this.Size = new Vector2f(radius * 2, radius * 2);
             this.view.Image.Texture = textures[0];
             this.ButtonViewEventReaction();
+        }
+
+        /// <summary>
+        /// Изменение размещения кнопки
+        /// </summary>
+        protected override void ChangeLocation()
+        {
+            this.view.Image.Position = this.Location;
+        }
+
+        /// <summary>
+        /// Изменение размера кнопки
+        /// </summary>
+        protected override void ChangeSize()
+        {
+            CircleShape image = this.view.Image as CircleShape;//Извлечение изображения
+            this.radius = image.Radius = this.Size.X/2;//изменеие размера
+            this.view.Image = image;//сохранение изображения
         }
 
         /// <summary>
