@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
@@ -18,10 +19,14 @@ namespace Project_Space___New_Live.modules.Controlers
         /// Флаг нахождения курсора на форме
         /// </summary>
         private bool CursorOnForm = false;
-
+        /// <summary>
+        /// Флаг удержания левой кнопки мыши
+        /// </summary>
         private bool ButtonPresed = false;
-
-
+        /// <summary>
+        /// Флаг клика
+        /// </summary>
+        private bool ButtonClicked = false;
         /// <summary>
         /// Позиция
         /// </summary>
@@ -102,27 +107,27 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Возникает при вхождении курсора в область формы
         /// </summary>
-        public event EventHandler MouseIn;
+        public event EventHandler MouseIn = null;
         /// <summary>
         /// Возникает при покидании курсором области формы
         /// </summary>
-        public event EventHandler MouseOut;
+        public event EventHandler MouseOut = null;
         /// <summary>
         /// Возникает при нахождении курсора в области формы
         /// </summary>
-        public event EventHandler MouseMove;
+        public event EventHandler MouseMove = null;
         /// <summary>
         /// Возникает при отжатии левой кнопки мыши
         /// </summary>
-        public event EventHandler MouseUp;
+        public event EventHandler MouseUp = null;
         /// <summary>
         /// Возникает при нажатии на левую кнопку мыши
         /// </summary>
-        public event EventHandler MouseDown;
+        public event EventHandler MouseDown = null;
         /// <summary>
         /// Событие клика (нажатие-отжатие левой кнопки мыши)
         /// </summary>
-        public event EventHandler MouseClick;
+        public event EventHandler MouseClick = null;
 
         /// <summary>
         /// Отлавливание событий
@@ -142,24 +147,30 @@ namespace Project_Space___New_Live.modules.Controlers
                     this.MouseDown(this, new MouseButtonEventArgs(new MouseButtonEvent()));//то возникает событие MouseDown
                     this.ButtonPresed = true;//установка флага зажатия кнопки в true
                 }
-                else
-                {//иначе
+                if (!Mouse.IsButtonPressed(Mouse.Button.Left))//если левая кнопка мыши отжата
+                {
                     if (this.ButtonPresed)//если кнопка была зажата
                     {
                         this.MouseUp(this, new MouseButtonEventArgs(new MouseButtonEvent()));//то возникает событие MouseUp
                         this.ButtonPresed = false;//установка флага зажатия кнопки в false
                         this.MouseClick(this, new MouseButtonEventArgs(new MouseButtonEvent()));//то возникает событие MouseClick
-                    }
+                     }
                 }
             }//иначе
-            if (this.CursorOnForm)//если курср раннее находился на форме
+            else
             {
-                this.MouseOut(this, new MouseMoveEventArgs(new MouseMoveEvent()));//то возникает событие MouseOut
-                this.ButtonPresed = false;
-                this.CursorOnForm = false;
+                if (this.CursorOnForm)//если курср раннее находился на форме
+                {
+                    this.MouseOut(this, new MouseMoveEventArgs(new MouseMoveEvent()));//то возникает событие MouseOut
+                    this.CursorOnForm = false;
+                }
             }
         }
 
+        /// <summary>
+        /// Проверка на нахождение курсора в области формы
+        /// </summary>
+        /// <returns></returns>
         protected abstract bool MoveTest();
         
 

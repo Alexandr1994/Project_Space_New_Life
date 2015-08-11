@@ -81,15 +81,14 @@ namespace Project_Space___New_Live
                 textures[i] = new Texture("textPlayer.png");
             }
 
+            Texture[] buttonTextures = new Texture[4];
 
+            buttonTextures[0] = new Texture("Norm.png");
+            buttonTextures[1] = new Texture("Act.png");
+            buttonTextures[2] = new Texture("Click.png");
+            buttonTextures[3] = new Texture("Click2.png");
 
-
-            RectangleShape lol = new RectangleShape();
-            lol.Size = new Vector2f(100, 20);
-            lol.FillColor = Color.Green;
-           // Button lol1 = new Button(lol, new Vector2f(100, 100), lol.Size);
-
- 
+            CircleButton testButton = new CircleButton(new Vector2f(20, 20), 20, buttonTextures);
 
 
             Ship testPlayer = new Ship(1000, new Vector2f(400, 400), textures, new Vector2f(10, 20));
@@ -108,7 +107,7 @@ namespace Project_Space___New_Live
                 {
                     testRenderer.MainWindow.Draw(testingView.Image, testingView.State);
                 }*/
-         //       testRenderer.RenderProcess(lol1.GetFormView());
+                testRenderer.RenderProcess(testButton.GetFormView());
                 testRenderer.MainWindow.Display(); //перерисовка окна
             }
         }

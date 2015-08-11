@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
 using SFML.System;
@@ -16,7 +17,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Состояния кнопки
         /// </summary>
-        private enum ViewStates : int
+        protected enum ViewStates : int
         {
             /// <summary>
             /// Нормальное
@@ -29,7 +30,11 @@ namespace Project_Space___New_Live.modules.Controlers
             /// <summary>
             /// Зажатое
             /// </summary>
-            Pressed
+            Pressed,
+            /// <summary>
+            /// После клика
+            /// </summary>
+            Clicked
         }
 
         /// <summary>
@@ -40,7 +45,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Текстуры состояний отображения формы
         /// </summary>
-        protected Texture[] viewStates = new Texture[3];
+        protected Texture[] viewStates = new Texture[4];
 
         /// <summary>
         /// Включение графического отображения состояний кнопки
@@ -49,8 +54,10 @@ namespace Project_Space___New_Live.modules.Controlers
         {
             this.MouseIn += this.ViewToActiveState;
             this.MouseOut += this.ViewToNormalState;
+            this.MouseMove += this.ViewToActiveState;
             this.MouseDown += this.ViewToPressedState;
-            this.MouseUp += this.ViewToNormalState;
+            this.MouseUp += this.ViewToClickedState;
+            this.MouseClick += this.ViewToClickedState;
         }
 
 
@@ -58,15 +65,15 @@ namespace Project_Space___New_Live.modules.Controlers
         /// Отображения формы
         /// </summary>
         /// <returns></returns>
-        public abstract List<ObjectView> GetFormView()
-        {
-            this.CatchEvents();//обнаружение событий данной формы
+        public override List<ObjectView> GetFormView()
+        { 
             List<ObjectView> retValue = new List<ObjectView>();
             retValue.Add(this.view);//добавление в массив возвращаемых занчений отображения данной формы
             foreach (Form childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
             {
                 retValue.AddRange(childForm.GetFormView());
             }
+            this.CatchEvents();//обнаружение событий данной формы
             return retValue;
         }
 
@@ -95,10 +102,19 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private abstract void ViewToPressedState(object sender, EventArgs e)
+        private void ViewToPressedState(object sender, EventArgs e)
         {
             this.view.Image.Texture = this.viewStates[(int)(ViewStates.Pressed)];
         }
 
+        /// <summary>
+        /// Преведение отображения в состояние после клика
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ViewToClickedState(object sender, EventArgs e)
+        {  
+            this.view.Image.Texture = this.viewStates[(int)(ViewStates.Clicked)];
+        }
     }
 }
