@@ -67,8 +67,20 @@ namespace Project_Space___New_Live
         }
 
 
-        
+        bool start = false;
+        bool over = false;
 
+        private void onButton(object sender, EventArgs e)
+        {
+            start = true;
+
+        }
+
+        private void onButton2(object sender, EventArgs e)
+        {
+            over = true;
+
+        }
 
         public void main()
         {
@@ -88,27 +100,33 @@ namespace Project_Space___New_Live
             buttonTextures[2] = new Texture("Click.png");
             buttonTextures[3] = new Texture("Click2.png");
 
-            CircleButton testButton = new CircleButton(new Vector2f(20, 20), 20, buttonTextures);
+
+
+
 
 
             Ship testPlayer = new Ship(1000, new Vector2f(400, 400), textures, new Vector2f(10, 20));
+
+
+
             //пока окно открыто ловить события и перерисовывать окно
             while (testRenderer.MainWindow.IsOpen)
             {
                 Thread.Sleep(25);
-           /*    // testWindow.SetView(test);
+               // testWindow.SetView(test);
                 testRenderer.MainWindow.DispatchEvents();
                 testRenderer.MainWindow.Clear(); //перерисовка окна
                 system.Process();
                 testPlayer.Process(new Vector2f(0, 0));
-                testRenderer.RenderProcess(system.GetView());
+                List<ObjectView> viewS = system.GetView();
+                testRenderer.RenderProcess(viewS);
                 
                 foreach (ObjectView testingView in testPlayer.View)
                 {
                     testRenderer.MainWindow.Draw(testingView.Image, testingView.State);
-                }*/
-                testRenderer.RenderProcess(testButton.GetFormView());
+                }
                 testRenderer.MainWindow.Display(); //перерисовка окна
+                
             }
         }
     }

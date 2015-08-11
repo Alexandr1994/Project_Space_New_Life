@@ -38,6 +38,11 @@ namespace Project_Space___New_Live.modules.Controlers
         }
 
         /// <summary>
+        /// Флаг нажатия левой кнопки мыши
+        /// </summary>
+        private bool LeftPressed = false;
+
+        /// <summary>
         /// отображение кнопки
         /// </summary>
         protected ObjectView view = new ObjectView();
@@ -56,7 +61,7 @@ namespace Project_Space___New_Live.modules.Controlers
             this.MouseOut += this.ViewToNormalState;
             this.MouseMove += this.ViewToActiveState;
             this.MouseDown += this.ViewToPressedState;
-            this.MouseUp += this.ViewToClickedState;
+            this.MouseUp += this.ButtonClickTest;
             this.MouseClick += this.ViewToClickedState;
         }
 
@@ -105,6 +110,7 @@ namespace Project_Space___New_Live.modules.Controlers
         private void ViewToPressedState(object sender, EventArgs e)
         {
             this.view.Image.Texture = this.viewStates[(int)(ViewStates.Pressed)];
+            this.LeftPressed = true;
         }
 
         /// <summary>
@@ -112,9 +118,26 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void ButtonClickTest(object sender, EventArgs e)
+        {
+            if (LeftPressed)
+            {
+                this.MouseClick(this, new MouseButtonEventArgs(new MouseButtonEvent()));
+            }
+            this.LeftPressed = false;
+        }
+
         private void ViewToClickedState(object sender, EventArgs e)
-        {  
+        {
             this.view.Image.Texture = this.viewStates[(int)(ViewStates.Clicked)];
         }
+
+        /// <summary>
+        /// Событие клика кнопки
+        /// </summary>
+        public event EventHandler MouseClick = null;
+
+   
+
     }
 }

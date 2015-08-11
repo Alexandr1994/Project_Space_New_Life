@@ -24,10 +24,6 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         private bool ButtonPresed = false;
         /// <summary>
-        /// Флаг клика
-        /// </summary>
-        private bool ButtonClicked = false;
-        /// <summary>
         /// Позиция
         /// </summary>
         private Vector2f location;
@@ -124,17 +120,13 @@ namespace Project_Space___New_Live.modules.Controlers
         /// Возникает при нажатии на левую кнопку мыши
         /// </summary>
         public event EventHandler MouseDown = null;
-        /// <summary>
-        /// Событие клика (нажатие-отжатие левой кнопки мыши)
-        /// </summary>
-        public event EventHandler MouseClick = null;
 
         /// <summary>
         /// Отлавливание событий
         /// </summary>
-        public void CatchEvents()
+        protected void CatchEvents()
         {
-            if (this.MoveTest())//елси курсор находится на форме
+            if (this.MoveTest())//если курсор находится на форме
             {
                 if (!this.CursorOnForm)//и до этого он не находился на ней
                 {
@@ -153,16 +145,16 @@ namespace Project_Space___New_Live.modules.Controlers
                     {
                         this.MouseUp(this, new MouseButtonEventArgs(new MouseButtonEvent()));//то возникает событие MouseUp
                         this.ButtonPresed = false;//установка флага зажатия кнопки в false
-                        this.MouseClick(this, new MouseButtonEventArgs(new MouseButtonEvent()));//то возникает событие MouseClick
                      }
-                }
-            }//иначе
+                } 
+            }
             else
             {
                 if (this.CursorOnForm)//если курср раннее находился на форме
                 {
                     this.MouseOut(this, new MouseMoveEventArgs(new MouseMoveEvent()));//то возникает событие MouseOut
                     this.CursorOnForm = false;
+                    this.ButtonPresed = false;
                 }
             }
         }
