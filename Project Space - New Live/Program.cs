@@ -104,7 +104,7 @@ namespace Project_Space___New_Live
             
             testRenderer.Form.AddForm(btn);
             btn.Location = new Vector2f(200,200);
-            
+            btn.Size = new Vector2f(80,40);
             btn.MouseClick += onButton;
             
             while (!start)

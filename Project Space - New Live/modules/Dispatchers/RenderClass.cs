@@ -68,7 +68,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public View GameView
         {
             get { return this.gameView; }
-            set { this.gameView = value; }
+            set
+            {
+                this.gameView = value;
+                
+            }
         }
 
         /// <summary>
@@ -149,9 +153,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         /// <param name="views">Набор игровых объектов</param>
         public void RenderProcess(List<ObjectView> views)
-        {
-            views.AddRange(this.Form.RenderForm());
+        {  
             this.mainWindow.SetView(this.gameView);//установка вида отрисовки
+            this.Form.Location = gameView.Center - gameView.Size / 2;
+            views.AddRange(this.Form.RenderForm());
             foreach (ObjectView view in views)
             {
                 mainWindow.Draw(view.Image, view.State);

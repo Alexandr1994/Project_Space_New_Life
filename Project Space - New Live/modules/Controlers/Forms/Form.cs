@@ -202,8 +202,6 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         /// <returns></returns>
         protected abstract bool MoveTest();
-        
-
 
     }
 }

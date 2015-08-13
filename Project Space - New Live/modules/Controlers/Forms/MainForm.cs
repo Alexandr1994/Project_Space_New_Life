@@ -12,6 +12,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
 {
     class MainForm : Form
     {
+       
         private static MainForm form = null;
 
         public override Vector2f Size
@@ -32,8 +33,8 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         private MainForm(View gameView)
         {
             this.Size = gameView.Size;//Установка размера формы равным размеру вида
-            this.SetHomeLocation(gameView.Center - gameView.Size / 2);//Установка управляющих координат равными координатам вида
-            this.Location = new Vector2f(0,0);//Установка позиции в 0,0
+            this.SetHomeLocation(new Vector2f(0, 0));//Установка управляющих координат равными координатам вида
+            this.Location = gameView.Center - gameView.Size / 2;//Установка позиции в 0,0
         }
 
         /// <summary>

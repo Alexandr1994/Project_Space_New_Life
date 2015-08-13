@@ -19,8 +19,8 @@ namespace Project_Space___New_Live.modules.Controlers
             set
             {//Уравнивание значений
                 //Нахождение коэффициентов масштабирования размеров
-                float Xcoef = this.size.X/value.X;
-                float Ycoef = this.size.Y/value.Y;
+                float Xcoef = value.X/this.size.X;
+                float Ycoef = value.Y/this.size.Y;
                 //Изменение размеров изображения
                 this.view.Image.Scale = new Vector2f(Xcoef, Ycoef);
                 this.size = value;//сохранение размеров
@@ -49,13 +49,13 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <returns></returns>
         protected override bool MoveTest()
         {
-            Vector2f center = this.Location + new Vector2f(this.size.X, this.size.Y);//нахождение центра окружности образующей кнопку
+            Vector2f center = this.Location + new Vector2f(this.size.X/2, this.size.Y/2);//нахождение центра окружности образующей кнопку
             Vector2i mousePosition = Mouse.GetPosition(RenderClass.getInstance().MainWindow);//Нахождение текущей позиции мыши
             float dX = mousePosition.X - center.X;
             float dY = mousePosition.Y - center.Y;
-            float angle = (float)Math.Atan2(dY, dX);
-            float distanse = (float)Math.Sqrt(Math.Pow(dX, 2) + Math.Pow(dY, 2));//нахождение расстояния от курсора до центра кнопки 
-            float radius = (float)(Math.Sqrt(Math.Pow(this.size.X * Math.Cos(angle), 2) + Math.Pow(this.size.Y * Math.Sin(angle), 2)));
+            float distanse = (float)Math.Sqrt(Math.Pow(dX, 2) + Math.Pow(dY, 2));//нахождение расстояния от курсора до центра кнопки
+            float angle = (float)Math.Atan(dY/dX);
+            float radius = (float)(Math.Sqrt(Math.Pow((this.size.X/2) * Math.Cos(angle), 2) + Math.Pow((this.size.Y/2)* Math.Sin(angle), 2)));
             if (distanse < radius)//если это расстояние меньше радиуса
             {
                 return true;//то true
