@@ -14,6 +14,19 @@ namespace Project_Space___New_Live.modules.Controlers
     public abstract class Form
     {
 
+        /// <summary>
+        /// Позиция управляющей формы
+        /// </summary>
+        protected Vector2f homeLocation;
+
+        /// <summary>
+        /// Устанеовка позиции управляющей формы
+        /// </summary>
+        /// <param name="newHomeLocation"></param>
+        protected void SetHomeLocation(Vector2f newHomeLocation)
+        {
+            this.homeLocation = newHomeLocation;
+        }
 
         /// <summary>
         /// Флаг нахождения курсора на форме
@@ -26,47 +39,29 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Позиция
         /// </summary>
-        private Vector2f location;
+        protected Vector2f location;
         /// <summary>
         /// Позиция
         /// </summary>
-        public Vector2f Location
+        public abstract Vector2f Location
         {
-            get { return this.location; }
-            set
-            { 
-                this.location = value;
-                this.ChangeLocation();
-            }
+            get;
+            set;
         }
-
-        /// <summary>
-        /// Изменение размещения формы
-        /// </summary>
-        protected abstract void ChangeLocation();
 
         /// <summary>
         /// Размер
         /// </summary>
-        private Vector2f size;
+        protected Vector2f size;
         /// <summary>
         /// Размер
         /// </summary>
-        public Vector2f Size
+        public abstract Vector2f Size
         {
-            get { return this.size; }
-            set 
-            { 
-                this.size = value;
-                this.ChangeSize();
-            }
+            get; 
+            set; 
         }
 
-        /// <summary>
-        /// Изменение размера формы
-        /// </summary>
-        protected abstract void ChangeSize();
-        
 
         /// <summary>
         /// Надпись на форме
@@ -101,6 +96,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <param name="newForm"></param>
         public void AddForm(Form newForm)
         {
+            newForm.SetHomeLocation(this.location);
             this.childForms.Add(newForm);
         }
 
@@ -113,11 +109,34 @@ namespace Project_Space___New_Live.modules.Controlers
             this.childForms.Remove(targetForm);
         }
 
+
         /// <summary>
-        /// Отображения формы
+        /// Отображения дочерних форм
         /// </summary>
         /// <returns></returns>
-        public abstract List<ObjectView> GetFormView();
+        protected List<ObjectView> GetChildFormView()
+        {
+            List<ObjectView> retValue = new List<ObjectView>();
+            if (this.GetPersonalView() != null)
+            {
+                retValue.Add(this.GetPersonalView());
+            }
+            foreach (Form childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
+            {    
+                foreach (ObjectView view in childForm.GetChildFormView())
+                {
+                    retValue.Add(view);
+                }               
+            }
+            this.CatchEvents();//обнаружение событий данной формы
+            return retValue;
+        }
+
+        /// <summary>
+        /// Получить отображение текущей формы
+        /// </summary>
+        /// <returns></returns>
+        protected abstract ObjectView GetPersonalView();
 
         /// <summary>
         /// Возникает при вхождении курсора в область формы

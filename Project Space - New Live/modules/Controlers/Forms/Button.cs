@@ -13,6 +13,19 @@ namespace Project_Space___New_Live.modules.Controlers
 {
     public abstract class Button : Form
     {
+        /// <summary>
+        /// Позиция формы
+        /// </summary>
+        public override Vector2f Location 
+        {
+            get { return this.location; }
+            set
+            {//установка координат изображения с учетом позиции родительской формы
+                this.location = value;
+                this.view.Image.Position = this.location + this.homeLocation;
+            }
+         }
+
 
         /// <summary>
         /// Состояния кнопки
@@ -65,24 +78,13 @@ namespace Project_Space___New_Live.modules.Controlers
             this.MouseClick += this.ViewToClickedState;
         }
 
-
         /// <summary>
-        /// Отображения формы
+        /// Получить отображение текущей формы
         /// </summary>
         /// <returns></returns>
-        public override List<ObjectView> GetFormView()
-        { 
-            List<ObjectView> retValue = new List<ObjectView>();
-            retValue.Add(this.view);//добавление в массив возвращаемых занчений отображения данной формы
-            foreach (Form childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
-            {
-                foreach (ObjectView view in childForm.GetFormView())
-                {
-                    retValue.Add(view);
-                }
-            }
-            this.CatchEvents();//обнаружение событий данной формы
-            return retValue;
+        protected override ObjectView GetPersonalView()
+        {
+            return this.view;
         }
 
         /// <summary>

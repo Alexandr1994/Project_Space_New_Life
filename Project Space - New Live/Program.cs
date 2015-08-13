@@ -82,6 +82,9 @@ namespace Project_Space___New_Live
             testRenderer = RenderClass.getInstance();
             initSystem();
             
+
+            
+
             Texture[] textures = new Texture[4];
             for (int i = 0; i < 4; i++)
             {
@@ -95,17 +98,22 @@ namespace Project_Space___New_Live
             buttonTextures[2] = new Texture("Click.png");
             buttonTextures[3] = new Texture("Click2.png");
 
-            CircleButton btn = new CircleButton(buttonTextures);
-            btn.MouseClick += onButton;
 
+
+            CircleButton btn = new CircleButton(buttonTextures);
+            
+            testRenderer.Form.AddForm(btn);
+            btn.Location = new Vector2f(200,200);
+            
+            btn.MouseClick += onButton;
+            
             while (!start)
             {
-                testRenderer.RenderProcess(btn.GetFormView());
+                Thread.Sleep(25);
+                testRenderer.RenderProcess();
                 testRenderer.MainWindow.Display(); //перерисовка окна
             }
-
-
-
+ 
             Ship testPlayer = new Ship(1000, new Vector2f(400, 400), textures, new Vector2f(10, 20));
 
 
@@ -114,7 +122,6 @@ namespace Project_Space___New_Live
             while (testRenderer.MainWindow.IsOpen)
             {
                 Thread.Sleep(25);
-               // testWindow.SetView(test);
                 testRenderer.MainWindow.DispatchEvents();
                 testRenderer.MainWindow.Clear(); //перерисовка окна
                 system.Process();

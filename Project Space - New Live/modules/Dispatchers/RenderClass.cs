@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Project_Space___New_Live.modules.Controlers.Forms;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -24,6 +25,15 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public RenderWindow MainWindow
         {
             get { return this.mainWindow; }
+        }
+
+
+        private MainForm mainForm;
+
+        public MainForm Form
+        {
+            get { return this.mainForm; }
+            set { this.mainForm = value; }
         }
 
 
@@ -69,6 +79,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.mainWindow = new RenderWindow(windowSize, windowTitle, currentStyle);//построение главного окна
             this.gameView.Size = (Vector2f)mainWindow.Size;//установка размера вида
             this.gameView.Center =  new Vector2f(gameView.Size.X/2, gameView.Size.Y/2);//установка центра вида
+            mainForm = MainForm.GetInstance(gameView);
         }
 
         /// <summary>
@@ -91,10 +102,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="width">Ширина</param>
         /// <param name="height">Высота</param>
         /// <returns>Новое окно</returns>
-        public RenderWindow changeVideoMode(uint width, uint height)
+        public RenderWindow СhangeVideoMode(uint width, uint height)
         {
             windowSize = new VideoMode(width, height);
-            reconstructWindow();
+            ReconstructWindow();
             return mainWindow;
         }
 
@@ -106,7 +117,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public RenderWindow changeWindowStyle(Styles newStyle)
         {
             currentStyle = newStyle;
-            reconstructWindow();
+            ReconstructWindow();
             return mainWindow;
         }
 
@@ -114,18 +125,32 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Перестроение окна
         /// </summary>
-        private void reconstructWindow()
+        private void ReconstructWindow()
         {
             mainWindow.Close();
             mainWindow = new RenderWindow(windowSize, windowTitle, currentStyle);
         }
 
+
         /// <summary>
-        /// Метод отрисовки
+        /// Метод отрисовки (только интерфейса)
         /// </summary>
-        /// <param name="views"></param>
+        public void RenderProcess()
+        {
+            this.mainWindow.SetView(this.gameView);//установка вида отрисовки
+            foreach (ObjectView view in this.Form.RenderForm())
+            {
+                mainWindow.Draw(view.Image, view.State);
+            }
+        }
+
+        /// <summary>
+        /// Метод отрисовки (игровых объектов и интерфейса)
+        /// </summary>
+        /// <param name="views">Набор игровых объектов</param>
         public void RenderProcess(List<ObjectView> views)
         {
+            views.AddRange(this.Form.RenderForm());
             this.mainWindow.SetView(this.gameView);//установка вида отрисовки
             foreach (ObjectView view in views)
             {
