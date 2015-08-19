@@ -49,7 +49,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <returns></returns>
         protected override bool MoveTest()
         {
-            Vector2f center = this.Location + new Vector2f(this.size.X/2, this.size.Y/2);//нахождение центра окружности образующей кнопку
+            Vector2f center = this.GetScreenPosition() - RenderClass.getInstance().GameViewLocation + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра окружности образующей кнопку
             Vector2i mousePosition = Mouse.GetPosition(RenderClass.getInstance().MainWindow);//Нахождение текущей позиции мыши
             float dX = mousePosition.X - center.X;
             float dY = mousePosition.Y - center.Y;

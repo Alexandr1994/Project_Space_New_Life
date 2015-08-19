@@ -31,10 +31,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// Конструктор главной формы
         /// </summary>
         private MainForm(View gameView)
-        {
+        {     
             this.Size = gameView.Size;//Установка размера формы равным размеру вида
-            this.SetHomeLocation(new Vector2f(0, 0));//Установка управляющих координат равными координатам вида
             this.Location = gameView.Center - gameView.Size / 2;//Установка позиции в 0,0
+            this.view = new ObjectView(new RectangleShape(this.Size), BlendMode.Multiply);
         }
 
         /// <summary>
@@ -57,11 +57,12 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <returns></returns>
         protected override bool MoveTest()
         {
+            /*
             Vector2i mousePosition = Mouse.GetPosition(RenderClass.getInstance().MainWindow);//Получить позицию курсора с учетом позиции окна
             if (mousePosition.X > this.Size.X || mousePosition.Y > this.Size.Y || mousePosition.X < 0 || mousePosition.Y < 0)
             {
-                return false;
-            }
+                return true;
+            }*/
             return false;
         }
 
@@ -74,13 +75,5 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             return this.GetChildFormView();
         }
 
-        /// <summary>
-        /// Получить отображение текущей формы
-        /// </summary>
-        /// <returns></returns>
-        protected override ObjectView GetPersonalView()
-        {
-            return null;
-        }
     }
 }

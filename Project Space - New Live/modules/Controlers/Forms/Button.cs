@@ -22,10 +22,8 @@ namespace Project_Space___New_Live.modules.Controlers
             set
             {//установка координат изображения с учетом позиции родительской формы
                 this.location = value;
-                this.view.Image.Position = this.location + this.homeLocation;
             }
          }
-
 
         /// <summary>
         /// Состояния кнопки
@@ -56,11 +54,6 @@ namespace Project_Space___New_Live.modules.Controlers
         private bool LeftPressed = false;
 
         /// <summary>
-        /// отображение кнопки
-        /// </summary>
-        protected ObjectView view = new ObjectView();
-
-        /// <summary>
         /// Текстуры состояний отображения формы
         /// </summary>
         protected Texture[] viewStates = new Texture[4];
@@ -76,15 +69,6 @@ namespace Project_Space___New_Live.modules.Controlers
             this.MouseDown += this.ViewToPressedState;
             this.MouseUp += this.ButtonClickTest;
             this.MouseClick += this.ViewToClickedState;
-        }
-
-        /// <summary>
-        /// Получить отображение текущей формы
-        /// </summary>
-        /// <returns></returns>
-        protected override ObjectView GetPersonalView()
-        {
-            return this.view;
         }
 
         /// <summary>
@@ -137,6 +121,7 @@ namespace Project_Space___New_Live.modules.Controlers
             this.view.Image.Texture = this.viewStates[(int)(ViewStates.Clicked)];
         }
 
+   
         /// <summary>
         /// Событие клика кнопки
         /// </summary>

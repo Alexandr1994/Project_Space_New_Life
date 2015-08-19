@@ -76,6 +76,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
+        /// Позиция вида
+        /// </summary>
+        public Vector2f GameViewLocation
+        {
+            get { return this.gameView.Center - this.gameView.Size/2; }
+        }
+
+        /// <summary>
         /// Запрет на вызов конструктора извне
         /// </summary>
         private RenderClass()
@@ -135,13 +143,22 @@ namespace Project_Space___New_Live.modules.Dispatchers
             mainWindow = new RenderWindow(windowSize, windowTitle, currentStyle);
         }
 
+        /// <summary>
+        /// Управление положением вида и главной формы
+        /// </summary>
+        private void ViewControl()
+        {
+            this.mainWindow.SetView(this.gameView);//установка вида отрисовки
+           this.Form.Location = gameView.Center - gameView.Size / 2;
+        }
+
 
         /// <summary>
         /// Метод отрисовки (только интерфейса)
         /// </summary>
         public void RenderProcess()
         {
-            this.mainWindow.SetView(this.gameView);//установка вида отрисовки
+            this.ViewControl();
             foreach (ObjectView view in this.Form.RenderForm())
             {
                 mainWindow.Draw(view.Image, view.State);
@@ -153,9 +170,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         /// <param name="views">Набор игровых объектов</param>
         public void RenderProcess(List<ObjectView> views)
-        {  
-            this.mainWindow.SetView(this.gameView);//установка вида отрисовки
-            this.Form.Location = gameView.Center - gameView.Size / 2;
+        {
+            this.ViewControl();
             views.AddRange(this.Form.RenderForm());
             foreach (ObjectView view in views)
             {

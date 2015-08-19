@@ -15,20 +15,6 @@ namespace Project_Space___New_Live.modules.Controlers
     {
 
         /// <summary>
-        /// Позиция управляющей формы
-        /// </summary>
-        protected Vector2f homeLocation;
-
-        /// <summary>
-        /// Устанеовка позиции управляющей формы
-        /// </summary>
-        /// <param name="newHomeLocation"></param>
-        protected void SetHomeLocation(Vector2f newHomeLocation)
-        {
-            this.homeLocation = newHomeLocation;
-        }
-
-        /// <summary>
         /// Флаг нахождения курсора на форме
         /// </summary>
         private bool CursorOnForm = false;
@@ -62,6 +48,10 @@ namespace Project_Space___New_Live.modules.Controlers
             set; 
         }
 
+        /// <summary>
+        /// отображение
+        /// </summary>
+        protected ObjectView view = new ObjectView();
 
         /// <summary>
         /// Надпись на форме
@@ -74,6 +64,20 @@ namespace Project_Space___New_Live.modules.Controlers
         {
             get {return this.text; }
             set { this.text = value; }
+        }
+
+        /// <summary>
+        /// Указатель на родительскую форму (если таковая есть)
+        /// </summary>
+        protected Form parentForm;
+
+        /// <summary>
+        /// Установка родителской формы
+        /// </summary>
+        /// <param name="parentForm"></param>
+        protected void SetPatentForm(Form parentForm)
+        {
+            this.parentForm = parentForm;
         }
 
 
@@ -96,8 +100,8 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <param name="newForm"></param>
         public void AddForm(Form newForm)
         {
-            newForm.SetHomeLocation(this.location);
             this.childForms.Add(newForm);
+            newForm.SetPatentForm(this);
         }
 
         /// <summary>
@@ -111,32 +115,24 @@ namespace Project_Space___New_Live.modules.Controlers
 
 
         /// <summary>
-        /// Отображения дочерних форм
+        /// Отображения текущией и дочерних форм
         /// </summary>
         /// <returns></returns>
         protected List<ObjectView> GetChildFormView()
         {
             List<ObjectView> retValue = new List<ObjectView>();
-            if (this.GetPersonalView() != null)
-            {
-                retValue.Add(this.GetPersonalView());
-            }
+            view.Image.Position = this.GetScreenPosition();//коррекция отображения
+            retValue.Add(this.view);//добавление отображени в массив
             foreach (Form childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
-            {    
-                foreach (ObjectView view in childForm.GetChildFormView())
+            {
+                foreach (ObjectView locView in childForm.GetChildFormView())
                 {
-                    retValue.Add(view);
+                    retValue.Add(locView);
                 }               
             }
             this.CatchEvents();//обнаружение событий данной формы
             return retValue;
         }
-
-        /// <summary>
-        /// Получить отображение текущей формы
-        /// </summary>
-        /// <returns></returns>
-        protected abstract ObjectView GetPersonalView();
 
         /// <summary>
         /// Возникает при вхождении курсора в область формы
@@ -202,6 +198,21 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         /// <returns></returns>
         protected abstract bool MoveTest();
+
+        /// <summary>
+        /// Получение позиции относительно окна
+        /// </summary>
+        /// <returns></returns>
+        protected Vector2f GetScreenPosition()
+        {
+            Vector2f point = new Vector2f(0, 0);
+            if (this.parentForm != null)//Если форма имеет родительскую форму
+            {//получить позицию с учетом её положения
+                point = this.parentForm.GetScreenPosition();
+            }
+            return point += this.Location;
+        }
+
 
     }
 }

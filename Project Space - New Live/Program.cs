@@ -7,6 +7,7 @@ using System.Threading;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
 using Project_Space___New_Live.modules.Controlers;
+using Project_Space___New_Live.modules.Controlers.Forms;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -106,7 +107,13 @@ namespace Project_Space___New_Live
             btn.Location = new Vector2f(200,200);
             btn.Size = new Vector2f(80,40);
             btn.MouseClick += onButton;
-            
+
+            CircleButton btn2 = new CircleButton(buttonTextures);
+            btn2.Location = new Vector2f(10, 10);
+            btn2.Size = new Vector2f(10, 20);
+            btn.AddForm(btn2);
+
+
             while (!start)
             {
                 Thread.Sleep(25);
