@@ -15,18 +15,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
        
         private static MainForm form = null;
 
-        public override Vector2f Size
-        {
-            get { return this.size; } 
-            set { this.size = value; }
-        }
-
-        public override Vector2f Location 
-        {
-            get { return this.location; } 
-            set { this.location = value; }
-        }
-
         /// <summary>
         /// Конструктор главной формы
         /// </summary>
@@ -64,6 +52,15 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 return true;
             }*/
             return false;
+        }
+
+        /// <summary>
+        /// Вернуть нулевое смещение относительно начала координат
+        /// </summary>
+        /// <returns></returns>
+        protected override Vector2f GetPhizicalPosition()
+        {
+            return new Vector2f(0, 0);
         }
 
         /// <summary>

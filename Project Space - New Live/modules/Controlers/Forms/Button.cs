@@ -9,22 +9,10 @@ using SFML.System;
 using SFML.Window;
 using SFML.Graphics;
 
-namespace Project_Space___New_Live.modules.Controlers
+namespace Project_Space___New_Live.modules.Controlers.Forms
 {
     public abstract class Button : Form
     {
-        /// <summary>
-        /// Позиция формы
-        /// </summary>
-        public override Vector2f Location 
-        {
-            get { return this.location; }
-            set
-            {//установка координат изображения с учетом позиции родительской формы
-                this.location = value;
-            }
-         }
-
         /// <summary>
         /// Состояния кнопки
         /// </summary>
@@ -126,8 +114,6 @@ namespace Project_Space___New_Live.modules.Controlers
         /// Событие клика кнопки
         /// </summary>
         public event EventHandler MouseClick = null;
-
-   
 
     }
 }

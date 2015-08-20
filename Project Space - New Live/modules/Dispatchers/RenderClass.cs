@@ -76,14 +76,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Позиция вида
-        /// </summary>
-        public Vector2f GameViewLocation
-        {
-            get { return this.gameView.Center - this.gameView.Size/2; }
-        }
-
-        /// <summary>
         /// Запрет на вызов конструктора извне
         /// </summary>
         private RenderClass()

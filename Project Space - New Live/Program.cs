@@ -17,7 +17,6 @@ namespace Project_Space___New_Live
     internal class Program
     {
 
-  
         private static void Main(string[] args)
         {
 
@@ -28,8 +27,8 @@ namespace Project_Space___New_Live
 
     internal class Test
     {
-        private static Texture backText = new Texture("testBackground.png"); //загруженная текстура планет 
-        private static Texture img = new Texture("textPlayer.png"); //загруженная текстура планет 
+        private Texture backText = new Texture("testBackground.png"); //загруженная текстура планет 
+        private Texture img = new Texture("textPlayer.png"); //загруженная текстура планет 
         private Texture starText = new Texture("testStarText.jpg"); //загруженная текстура звезды
         private  Texture shadowTexture = new Texture("shadow.png");//тень
         private  Texture crownText = new Texture("crown.png");//звездная корона
@@ -69,12 +68,16 @@ namespace Project_Space___New_Live
 
 
         bool start = false;
-
+        bool end = false;
 
         private void onButton(object sender, EventArgs e)
         {
             start = true;
+        }
 
+        private void onButton2(object sender, EventArgs e)
+        {
+            end = true;
         }
 
 
@@ -98,23 +101,30 @@ namespace Project_Space___New_Live
             buttonTextures[1] = new Texture("Act.png");
             buttonTextures[2] = new Texture("Click.png");
             buttonTextures[3] = new Texture("Click2.png");
-
+            
 
 
             CircleButton btn = new CircleButton(buttonTextures);
             
+
             testRenderer.Form.AddForm(btn);
             btn.Location = new Vector2f(200,200);
             btn.Size = new Vector2f(80,40);
             btn.MouseClick += onButton;
 
-            CircleButton btn2 = new CircleButton(buttonTextures);
-            btn2.Location = new Vector2f(10, 10);
-            btn2.Size = new Vector2f(10, 20);
-            btn.AddForm(btn2);
+            Texture[] buttonTextures1 = new Texture[4];
+
+            buttonTextures1[0] = new Texture("Norm1.png");
+            buttonTextures1[1] = new Texture("Act1.png");
+            buttonTextures1[2] = new Texture("Click1.png");
+            buttonTextures1[3] = new Texture("Click21.png");
 
 
-            while (!start)
+            RectButton btn2 = new RectButton(buttonTextures1);
+            testRenderer.Form.AddForm(btn2);
+            btn2.MouseClick += onButton2;
+
+            while (!start && !end)
             {
                 Thread.Sleep(25);
                 testRenderer.RenderProcess();
@@ -126,7 +136,7 @@ namespace Project_Space___New_Live
 
 
             //пока окно открыто ловить события и перерисовывать окно
-            while (testRenderer.MainWindow.IsOpen)
+            while (!end)
             {
                 Thread.Sleep(25);
                 testRenderer.MainWindow.DispatchEvents();

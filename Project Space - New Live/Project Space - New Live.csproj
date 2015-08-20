@@ -66,6 +66,8 @@
     <Compile Include="modules\Controlers\Forms\CircleButton.cs" />
     <Compile Include="modules\Controlers\Forms\Form.cs" />
     <Compile Include="modules\Controlers\Forms\MainForm.cs" />
+    <Compile Include="modules\Controlers\Forms\RectButton.cs" />
+    <Compile Include="modules\Controlers\GameRoot.cs" />
     <Compile Include="modules\Controlers\PlayerController.cs" />
     <Compile Include="modules\Dispatchers\RenderClass.cs" />
     <Compile Include="modules\Dispatchers\ObjectView.cs" />

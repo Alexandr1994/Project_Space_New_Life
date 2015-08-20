@@ -9,19 +9,12 @@ using SFML.Window;
 using SFML.System;
 using Project_Space___New_Live.modules.Dispatchers;
 
-namespace Project_Space___New_Live.modules.Controlers
+namespace Project_Space___New_Live.modules.Controlers.Forms
 {
     public abstract class Form
     {
 
-        /// <summary>
-        /// Флаг нахождения курсора на форме
-        /// </summary>
-        private bool CursorOnForm = false;
-        /// <summary>
-        /// Флаг удержания левой кнопки мыши
-        /// </summary>
-        private bool ButtonPresed = false;
+        
         /// <summary>
         /// Позиция
         /// </summary>
@@ -29,11 +22,12 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Позиция
         /// </summary>
-        public abstract Vector2f Location
+        public virtual Vector2f Location
         {
-            get;
-            set;
+            get { return this.location; }
+            set { this.location = value;}
         }
+
 
         /// <summary>
         /// Размер
@@ -42,16 +36,11 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Размер
         /// </summary>
-        public abstract Vector2f Size
+        public virtual Vector2f Size
         {
-            get; 
-            set; 
+            get { return this.size; }
+            set { this.size = value; }
         }
-
-        /// <summary>
-        /// отображение
-        /// </summary>
-        protected ObjectView view = new ObjectView();
 
         /// <summary>
         /// Надпись на форме
@@ -113,7 +102,11 @@ namespace Project_Space___New_Live.modules.Controlers
             this.childForms.Remove(targetForm);
         }
 
-
+        /// <summary>
+        /// отображение
+        /// </summary>
+  
+        protected ObjectView view = new ObjectView();
         /// <summary>
         /// Отображения текущией и дочерних форм
         /// </summary>
@@ -121,7 +114,7 @@ namespace Project_Space___New_Live.modules.Controlers
         protected List<ObjectView> GetChildFormView()
         {
             List<ObjectView> retValue = new List<ObjectView>();
-            view.Image.Position = this.GetScreenPosition();//коррекция отображения
+            view.Image.Position = this.GetGraphicPosition();//коррекция отображения
             retValue.Add(this.view);//добавление отображени в массив
             foreach (Form childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
             {
@@ -134,6 +127,15 @@ namespace Project_Space___New_Live.modules.Controlers
             return retValue;
         }
 
+
+        /// <summary>
+        /// Флаг нахождения курсора на форме
+        /// </summary>
+        private bool CursorOnForm = false;
+        /// <summary>
+        /// Флаг удержания левой кнопки мыши
+        /// </summary>
+        private bool ButtonPresed = false;
         /// <summary>
         /// Возникает при вхождении курсора в область формы
         /// </summary>
@@ -158,7 +160,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Отлавливание событий
         /// </summary>
-        protected void CatchEvents()
+        internal void CatchEvents()
         {
             if (this.MoveTest())//если курсор находится на форме
             {
@@ -200,19 +202,32 @@ namespace Project_Space___New_Live.modules.Controlers
         protected abstract bool MoveTest();
 
         /// <summary>
-        /// Получение позиции относительно окна
+        /// Получение графической позиции формы
         /// </summary>
         /// <returns></returns>
-        protected Vector2f GetScreenPosition()
+        protected Vector2f GetGraphicPosition()
         {
             Vector2f point = new Vector2f(0, 0);
             if (this.parentForm != null)//Если форма имеет родительскую форму
             {//получить позицию с учетом её положения
-                point = this.parentForm.GetScreenPosition();
+                point = this.parentForm.GetGraphicPosition();
             }
             return point += this.Location;
         }
 
+        /// <summary>
+        /// Получение физической позиции формы(отличается от графической на смещение камеры)
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Vector2f GetPhizicalPosition()
+        {
+            Vector2f point = new Vector2f(0, 0);
+            if (this.parentForm != null)//Если форма имеет родительскую форму
+            {//получить позицию с учетом её положения
+                point = this.parentForm.GetPhizicalPosition();
+            }
+            return point += this.Location;
+        }
 
     }
 }

@@ -9,7 +9,7 @@ using SFML.System;
 using SFML.Window;
 using Project_Space___New_Live.modules.Dispatchers;
 
-namespace Project_Space___New_Live.modules.Controlers
+namespace Project_Space___New_Live.modules.Controlers.Forms
 {
     class CircleButton : Button
     {
@@ -30,7 +30,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Круглая кнопка
         /// </summary>
-        /// <param name="textures"></param>
+        /// <param name="textures">Внешний набор текстур</param>
         public CircleButton(Texture[] textures)
         {
             this.view = new ObjectView(new CircleShape(20), BlendMode.Alpha);
@@ -42,14 +42,13 @@ namespace Project_Space___New_Live.modules.Controlers
             this.CatchEvents();
         }
 
-
         /// <summary>
         /// Проверка на нахождение курсора в области формы
         /// </summary>
         /// <returns></returns>
         protected override bool MoveTest()
         {
-            Vector2f center = this.GetScreenPosition() - RenderClass.getInstance().GameViewLocation + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра окружности образующей кнопку
+            Vector2f center = this.GetPhizicalPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра окружности образующей кнопку
             Vector2i mousePosition = Mouse.GetPosition(RenderClass.getInstance().MainWindow);//Нахождение текущей позиции мыши
             float dX = mousePosition.X - center.X;
             float dY = mousePosition.Y - center.Y;
