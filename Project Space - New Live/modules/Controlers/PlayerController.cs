@@ -17,7 +17,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Ссылка на экземпляр класса-отрисовщика 
         /// </summary>
-        private RenderClass GameRenderer;
+        private RenderModule GameRenderer;
 
         /// <summary>
         /// Экземпляр класса-игрового контроллера
@@ -36,7 +36,7 @@ namespace Project_Space___New_Live.modules.Controlers
         private PlayerController(Ship playerShip)
         {
             this.PlayerShip = playerShip;
-            GameRenderer = RenderClass.getInstance();//Получение класса отрисовщика
+            GameRenderer = RenderModule.getInstance();//Получение класса отрисовщика
             GameRenderer.MainWindow.KeyPressed += OnKey;
             GameRenderer.MainWindow.KeyReleased += FromKey;
         }

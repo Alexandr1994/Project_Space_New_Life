@@ -46,7 +46,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         protected override bool MoveTest()
         {
             /*
-            Vector2i mousePosition = Mouse.GetPosition(RenderClass.getInstance().MainWindow);//Получить позицию курсора с учетом позиции окна
+            Vector2i mousePosition = Mouse.GetPosition(RenderModule.getInstance().MainWindow);//Получить позицию курсора с учетом позиции окна
             if (mousePosition.X > this.Size.X || mousePosition.Y > this.Size.Y || mousePosition.X < 0 || mousePosition.Y < 0)
             {
                 return true;

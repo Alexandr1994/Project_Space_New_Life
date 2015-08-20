@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Controlers.Forms;
+using Project_Space___New_Live.modules.GameObjects;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -14,7 +15,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
     /// <summary>
     /// Графика и отрисовка
     /// </summary>
-    class RenderClass
+    class RenderModule
     {
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Экземпляр класса отрисовки
         /// </summary>
-        private static RenderClass graphicModule = null;
+        private static RenderModule graphicModule = null;
 
         /// <summary>
         /// Текущий стиль отображения окна
@@ -78,7 +79,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Запрет на вызов конструктора извне
         /// </summary>
-        private RenderClass()
+        private RenderModule()
         {
             this.mainWindow = new RenderWindow(windowSize, windowTitle, currentStyle);//построение главного окна
             this.gameView.Size = (Vector2f)mainWindow.Size;//установка размера вида
@@ -90,11 +91,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Получить экземпляр класса отрисовки
         /// </summary>
         /// <returns></returns>
-        public static RenderClass getInstance()
+        public static RenderModule getInstance()
         {
             if (graphicModule == null)
             {
-                graphicModule = new RenderClass();
+                graphicModule = new RenderModule();
 
             }
             return graphicModule;
@@ -161,13 +162,19 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Метод отрисовки (игровых объектов и интерфейса)
         /// </summary>
         /// <param name="views">Набор игровых объектов</param>
-        public void RenderProcess(List<ObjectView> views)
+        public void RenderProcess(StarSystem activeStarSystem, List<Ship> ships)
         {
             this.ViewControl();
-            views.AddRange(this.Form.RenderForm());
-            foreach (ObjectView view in views)
+            List<ObjectView> views = new List<ObjectView>();
+            views.AddRange(activeStarSystem.GetView());
+            foreach (Ship currentShip in ships)
             {
-                mainWindow.Draw(view.Image, view.State);
+                views.AddRange(currentShip.View);
+            }
+            views.AddRange(this.Form.RenderForm());
+           foreach (ObjectView view in views)
+            {
+               mainWindow.Draw(view.Image, view.State);
             }
         }
     }

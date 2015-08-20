@@ -33,7 +33,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <returns></returns>
         protected override bool MoveTest()
         {
-            Vector2i mousePosition = Mouse.GetPosition(RenderClass.getInstance().MainWindow);
+            Vector2i mousePosition = Mouse.GetPosition(RenderModule.getInstance().MainWindow);
             Vector2f coords = this.GetPhizicalPosition();
             if (mousePosition.X > coords.X && mousePosition.Y > coords.Y && mousePosition.X < coords.X + this.Size.X && mousePosition.Y < coords.X + this.Size.Y)
             {

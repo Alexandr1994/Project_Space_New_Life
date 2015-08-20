@@ -108,6 +108,20 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
+        /// Индекс звездной системы, в которой находится корабль
+        /// </summary>
+        private int starSystemIndex;
+
+        /// <summary>
+        /// Индекс звездной системы, в которой находится корабль
+        /// </summary>
+        public int StarSystemIndex
+        {
+            get { return this.starSystemIndex; }
+            set { this.starSystemIndex = value; }
+        }
+
+        /// <summary>
         /// Постоянное перемещение корабля
         /// </summary>
         protected override void Move()
@@ -145,28 +159,28 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 this.rotation -= (float)(2 * Math.PI);
             }
-        }   
+        }
 
         /// <summary>
-        /// Постороение корабля
+        /// Постороение корабля игрока
         /// </summary>
         /// <param name="mass">Масса</param>
         /// <param name="coords">Начальные координаты</param>
         /// <param name="textures">Набор текстур</param>
         /// <param name="newPartSize">Начальный размер составных частей</param>
-        public Ship(float mass, Vector2f coords, Texture[] textures, Vector2f newPartSize)
+        /// <param name="startSystemIndex">Индекс стартовой звездной системы</param>
+        public Ship(float mass, Vector2f coords, Texture[] textures, Vector2f newPartSize, int startSystemIndex)
         {
             this.mass = mass;
             this.coords = coords;
             this.viewPartSize = newPartSize;
             this.ConstructView(textures);
+            this.pilot = PlayerController.GetInstanse(this);
             this.shipEquipment = new List<ShipEquipment>();
 
             this.shipEquipment.Add(new Engine(100, 1, 100, 100, 10, 8, null));
             this.shipEquipment.Add(new Battery(100, 500, null));
             this.shipEquipment.Add(new Reactor(100, 1, null));
-
-            this.pilot = PlayerController.GetInstanse(this);
         }
 
         /// <summary>
@@ -182,10 +196,10 @@ namespace Project_Space___New_Live.modules.GameObjects
                 this.view[i].Image = new RectangleShape(viewPartSize);
                 this.view[i].Image.Texture = skin[i];
             }
-            this.view[0].Image.Position = coords + new Vector2f(-this.viewPartSize.X / 2, - this.viewPartSize.Y);//Носовя часть
-            this.view[1].Image.Position = coords + new Vector2f(-this.viewPartSize.X / 2, 0);//Кормовая часть
-            this.view[2].Image.Position = coords + new Vector2f(-this.viewPartSize.X * 3 / 2, -this.viewPartSize.Y * 3 / 4);//Левое "крыло"
-            this.view[3].Image.Position = coords + new Vector2f(this.viewPartSize.X / 2, -this.viewPartSize.Y * 3 / 4);//Правое "крыло"
+            this.view[0].Image.Position = coords + new Vector2f(-this.viewPartSize.X / 2, 0);//Носовя часть
+            this.view[1].Image.Position = coords + new Vector2f(-this.viewPartSize.X / 2, -this.viewPartSize.Y);//Кормовая часть
+            this.view[2].Image.Position = coords + new Vector2f(this.viewPartSize.X / 2, -this.viewPartSize.Y * 3 / 4);//Левое "крыло"
+            this.view[3].Image.Position = coords + new Vector2f(-this.viewPartSize.X * 3 / 2, -this.viewPartSize.Y * 3 / 4);//Правое "крыло"
         }
 
         /// <summary>
@@ -202,6 +216,15 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected override ObjectSignature ConstructSignature()
         {
             return null;
+        }
+
+        /// <summary>
+        /// Вернуть контроллер корабля
+        /// </summary>
+        /// <returns></returns>
+        internal AbstractController GetController()
+        {
+            return this.pilot;
         }
     }
 }
