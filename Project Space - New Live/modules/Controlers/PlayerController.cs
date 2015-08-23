@@ -7,12 +7,17 @@ using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
 using Project_Space___New_Live.modules.GameObjects.ShipModules;
 using SFML.Graphics;
+using SFML.System;
 using SFML.Window;
 
 namespace Project_Space___New_Live.modules.Controlers
 {
     public class PlayerController : AbstractController
     {
+        /// <summary>
+        /// Прошлые координаты объекта
+        /// </summary>
+        private Vector2f lastCoords = new Vector2f();
 
         /// <summary>
         /// Ссылка на экземпляр класса-отрисовщика 
@@ -33,12 +38,22 @@ namespace Project_Space___New_Live.modules.Controlers
         /// Конструктор
         /// </summary>
         /// <param name="playerShip">Корабль игрока</param>
-        private PlayerController(Ship playerShip)
+        private PlayerController()
         {
-            this.PlayerShip = playerShip;
             GameRenderer = RenderModule.getInstance();//Получение класса отрисовщика
             GameRenderer.MainWindow.KeyPressed += OnKey;
             GameRenderer.MainWindow.KeyReleased += FromKey;
+        }
+
+        /// <summary>
+        /// Установка корабля игрока
+        /// </summary>
+        /// <param name="playerShip"></param>
+        public void SetPlayerShip(Ship playerShip)
+        {
+            this.PlayerShip = playerShip;
+            this.lastCoords = this.PlayerShip.Coords;
+
         }
 
         /// <summary>
@@ -46,11 +61,11 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         /// <param name="playerShip"></param>
         /// <returns></returns>
-        public static PlayerController GetInstanse(Ship playerShip)
+        public static PlayerController GetInstanse()
         {
             if (GameController == null)
             {
-                GameController = new PlayerController(playerShip);
+                GameController = new PlayerController();
             }
             return GameController;
         }
@@ -148,8 +163,6 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         private void Moving()
         {
-            
-
             if (Forward)
             {
                 this.PlayerShip.MoveManager.GiveForwardThrust(this.PlayerShip);
@@ -182,8 +195,12 @@ namespace Project_Space___New_Live.modules.Controlers
 
         public override void Process()
         {
-            Moving();
+            Vector2f playerOffSet = this.lastCoords;
+            playerOffSet -= this.PlayerShip.Coords;
+            this.lastCoords = this.PlayerShip.Coords;
+            this.Moving();
             GameRenderer.GameView.Center = this.PlayerShip.Coords;
+            GameRenderer.CurrentSystem.OffsetBackground(playerOffSet/(float)-1.2);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// фон звездной системы
         /// </summary>
-        RectangleShape background;
+        ObjectView background;
         /// <summary>
         /// Главный центр масс
         /// </summary>
@@ -24,10 +24,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Управление позицией фона звездной системы
         /// </summary>
-        public Vector2f backgroundPosition
+        public ObjectView Background
         {
-            get { return this.background.Position; }
-            set { this.background.Position = value; }
+            get { return this.background; }
         }
 
 
@@ -50,11 +49,20 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin"></param>
         private void InitBackgroung(Texture skin)
         {
-            background = new RectangleShape();
-            background.Texture = skin;
-            background.Size = new Vector2f(2000, 2000);
-            background.Position = new Vector2f(-1000, -1000);
+            background = new ObjectView(new RectangleShape(new Vector2f(2000, 2000)), BlendMode.Alpha);
+            background.Image.Texture = skin;
+            background.Image.Position = new Vector2f(-1000, -1000);
         }
+
+        /// <summary>
+        /// Изменение позиции фона Звездной системы
+        /// </summary>
+        /// <param name="offset"></param>
+        public void OffsetBackground(Vector2f offset)
+        {
+            this.background.Translate(offset);
+        }
+
 
         /// <summary>
         /// Процесс жизни звездной системы
@@ -72,7 +80,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             List<ObjectView> systemsViews = new List<ObjectView>();
 
-            systemsViews.Add(new ObjectView(background, BlendMode.None));//засунуть в возвращаемый массив фон
+            systemsViews.Add(this.background);//засунуть в возвращаемый массив фон
             systemsViews.AddRange(massCenter.GetView());//Заполнить массив образов системы образами объектов главного центар масс
    
             return systemsViews;

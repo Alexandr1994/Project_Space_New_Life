@@ -52,7 +52,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.GraphicModule = RenderModule.getInstance();//Полученить указатель на модуль отрисовки
             this.GraphicInterface = this.GraphicModule.Form;//Получить указатель на главную форму
             this.ConstructWorld();//Сконструировать игровой мир
-            this.ShipsCollection.Add(new Ship(800, new Vector2f(400, 400), ResurceStorage.shipTextures, new Vector2f(15, 30), 0));//создание корабля игрока и получение контроллера
+            this.playerController = PlayerController.GetInstanse();//Получение пустого контроллера
+            this.ShipsCollection.Add(new Ship(800, new Vector2f(400, 400), ResurceStorage.shipTextures, new Vector2f(15, 30), 0, this.playerController));//создание корабля игрока и установка контроллера
+            this.GraphicModule.CurrentSystem = this.SystemCollection[this.ShipsCollection[PlayerID].StarSystemIndex];
         }
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 {
                     currentSystem.Process();
                 }
-                GraphicModule.RenderProcess(this.SystemCollection[this.ShipsCollection[PlayerID].StarSystemIndex], ShipsCollection);
+                GraphicModule.RenderProcess(ShipsCollection);
                 GraphicModule.MainWindow.Display();
             }
         }

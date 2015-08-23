@@ -28,15 +28,32 @@ namespace Project_Space___New_Live.modules.Dispatchers
             get { return this.mainWindow; }
         }
 
-
+        /// <summary>
+        /// Главная форма (Интерфейс)
+        /// </summary>
         private MainForm mainForm;
-
+        /// <summary>
+        /// Главная форма (Интерфейс)
+        /// </summary>
         public MainForm Form
         {
             get { return this.mainForm; }
             set { this.mainForm = value; }
         }
 
+        /// <summary>
+        /// Отображаемая система
+        /// </summary>
+        private StarSystem currentSystem;
+
+        /// <summary>
+        /// Отображаемая система, (система) в которой находится игрок)
+        /// </summary>
+        public StarSystem CurrentSystem
+        {
+            get { return this.currentSystem; }
+            set { this.currentSystem = value; }
+        }
 
         /// <summary>
         /// Доступные видеорежимы
@@ -162,11 +179,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Метод отрисовки (игровых объектов и интерфейса)
         /// </summary>
         /// <param name="views">Набор игровых объектов</param>
-        public void RenderProcess(StarSystem activeStarSystem, List<Ship> ships)
+        public void RenderProcess(List<Ship> ships)
         {
             this.ViewControl();
             List<ObjectView> views = new List<ObjectView>();
-            views.AddRange(activeStarSystem.GetView());
+            views.AddRange(this.currentSystem.GetView());
             foreach (Ship currentShip in ships)
             {
                 views.AddRange(currentShip.View);

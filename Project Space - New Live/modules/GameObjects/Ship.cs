@@ -162,7 +162,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Постороение корабля игрока
+        /// Постороение корабля
         /// </summary>
         /// <param name="mass">Масса</param>
         /// <param name="coords">Начальные координаты</param>
@@ -175,7 +175,32 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.coords = coords;
             this.viewPartSize = newPartSize;
             this.ConstructView(textures);
-            this.pilot = PlayerController.GetInstanse(this);
+            this.shipEquipment = new List<ShipEquipment>();
+
+            this.shipEquipment.Add(new Engine(100, 1, 100, 100, 10, 8, null));
+            this.shipEquipment.Add(new Battery(100, 500, null));
+            this.shipEquipment.Add(new Reactor(100, 1, null));
+
+        }
+
+
+        /// <summary>
+        /// Постороение корабля игрока
+        /// </summary>
+        /// <param name="mass">Масса</param>
+        /// <param name="coords">Начальные координаты</param>
+        /// <param name="textures">Набор текстур</param>
+        /// <param name="newPartSize">Начальный размер составных частей</param>
+        /// <param name="startSystemIndex">Индекс стартовой звездной системы</param>
+        /// <param name="pilot">Контроллер игрока</param>
+        public Ship(float mass, Vector2f coords, Texture[] textures, Vector2f newPartSize, int startSystemIndex, PlayerController pilot)
+        {
+            this.mass = mass;
+            this.coords = coords;
+            this.viewPartSize = newPartSize;
+            this.ConstructView(textures);
+            pilot.SetPlayerShip(this);
+            this.pilot = pilot;
             this.shipEquipment = new List<ShipEquipment>();
 
             this.shipEquipment.Add(new Engine(100, 1, 100, 100, 10, 8, null));
