@@ -69,6 +69,7 @@
     <Compile Include="modules\Controlers\Forms\RectButton.cs" />
     <Compile Include="modules\Dispatchers\GameRoot.cs" />
     <Compile Include="modules\Controlers\PlayerController.cs" />
+    <Compile Include="modules\Dispatchers\PlayerContainer.cs" />
     <Compile Include="modules\Dispatchers\RenderModule.cs" />
     <Compile Include="modules\Dispatchers\ObjectView.cs" />
     <Compile Include="modules\Dispatchers\ResurceStorage.cs" />

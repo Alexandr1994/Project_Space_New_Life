@@ -35,9 +35,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
         List<StarSystem> SystemCollection = new List<StarSystem>();
 
         /// <summary>
-        /// Индекс игрока в коллекции кораблей
+        /// Хранилище информации об игроке и активной звездной системе
         /// </summary>
-        private const int PlayerID = 0; 
+        private PlayerContainer playerContainer;
 
         /// <summary>
         /// Коллекция космических кораблей
@@ -52,9 +52,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.GraphicModule = RenderModule.getInstance();//Полученить указатель на модуль отрисовки
             this.GraphicInterface = this.GraphicModule.Form;//Получить указатель на главную форму
             this.ConstructWorld();//Сконструировать игровой мир
-            this.playerController = PlayerController.GetInstanse();//Получение пустого контроллера
-            this.ShipsCollection.Add(new Ship(800, new Vector2f(400, 400), ResurceStorage.shipTextures, new Vector2f(15, 30), 0, this.playerController));//создание корабля игрока и установка контроллера
-            this.GraphicModule.CurrentSystem = this.SystemCollection[this.ShipsCollection[PlayerID].StarSystemIndex];
+            this.playerContainer = PlayerContainer.GetInstanse(this.SystemCollection);//Инициализация игрока
+            this.ShipsCollection.Add(this.playerContainer.PlayerShip);//создание корабля игрока и установка контроллера
         }
 
         /// <summary>
@@ -80,7 +79,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 {
                     currentSystem.Process();
                 }
-                GraphicModule.RenderProcess(ShipsCollection);
+                this.playerContainer.Process();
+                GraphicModule.RenderProcess(this.playerContainer.ActiveSystem, ShipsCollection);
                 GraphicModule.MainWindow.Display();
             }
         }

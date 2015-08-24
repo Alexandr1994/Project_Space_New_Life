@@ -15,11 +15,6 @@ namespace Project_Space___New_Live.modules.Controlers
     public class PlayerController : AbstractController
     {
         /// <summary>
-        /// Прошлые координаты объекта
-        /// </summary>
-        private Vector2f lastCoords = new Vector2f();
-
-        /// <summary>
         /// Ссылка на экземпляр класса-отрисовщика 
         /// </summary>
         private RenderModule GameRenderer;
@@ -38,22 +33,12 @@ namespace Project_Space___New_Live.modules.Controlers
         /// Конструктор
         /// </summary>
         /// <param name="playerShip">Корабль игрока</param>
-        private PlayerController()
+        private PlayerController(Ship playerShip)
         {
+            this.PlayerShip = playerShip;
             GameRenderer = RenderModule.getInstance();//Получение класса отрисовщика
             GameRenderer.MainWindow.KeyPressed += OnKey;
             GameRenderer.MainWindow.KeyReleased += FromKey;
-        }
-
-        /// <summary>
-        /// Установка корабля игрока
-        /// </summary>
-        /// <param name="playerShip"></param>
-        public void SetPlayerShip(Ship playerShip)
-        {
-            this.PlayerShip = playerShip;
-            this.lastCoords = this.PlayerShip.Coords;
-
         }
 
         /// <summary>
@@ -61,11 +46,11 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         /// <param name="playerShip"></param>
         /// <returns></returns>
-        public static PlayerController GetInstanse()
+        public static PlayerController GetInstanse(Ship playerShip)
         {
             if (GameController == null)
             {
-                GameController = new PlayerController();
+                GameController = new PlayerController(playerShip);
             }
             return GameController;
         }
@@ -195,12 +180,7 @@ namespace Project_Space___New_Live.modules.Controlers
 
         public override void Process()
         {
-            Vector2f playerOffSet = this.lastCoords;
-            playerOffSet -= this.PlayerShip.Coords;
-            this.lastCoords = this.PlayerShip.Coords;
             this.Moving();
-            GameRenderer.GameView.Center = this.PlayerShip.Coords;
-            GameRenderer.CurrentSystem.OffsetBackground(playerOffSet/(float)-1.2);
         }
     }
 }

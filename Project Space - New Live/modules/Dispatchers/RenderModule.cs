@@ -42,20 +42,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Отображаемая система
-        /// </summary>
-        private StarSystem currentSystem;
-
-        /// <summary>
-        /// Отображаемая система, (система) в которой находится игрок)
-        /// </summary>
-        public StarSystem CurrentSystem
-        {
-            get { return this.currentSystem; }
-            set { this.currentSystem = value; }
-        }
-
-        /// <summary>
         /// Доступные видеорежимы
         /// </summary>
         private static VideoMode windowSize = new VideoMode(800, 600);
@@ -179,11 +165,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Метод отрисовки (игровых объектов и интерфейса)
         /// </summary>
         /// <param name="views">Набор игровых объектов</param>
-        public void RenderProcess(List<Ship> ships)
+        public void RenderProcess(StarSystem activeStarSystem, List<Ship> ships)
         {
             this.ViewControl();
             List<ObjectView> views = new List<ObjectView>();
-            views.AddRange(this.currentSystem.GetView());
+            views.AddRange(activeStarSystem.GetView());
             foreach (Ship currentShip in ships)
             {
                 views.AddRange(currentShip.View);
