@@ -118,15 +118,30 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             retValue.Add(this.view);//добавление отображени в массив
             foreach (Form childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
             {
-                foreach (ObjectView locView in childForm.GetChildFormView())
-                {
-                    retValue.Add(locView);
-                }               
+                if (this.ChildFormFallTest(childForm))//проверка если дочерняя форма не "падает" с текущей
+                {//получаем отображение данной дочерней формы
+                    foreach (ObjectView locView in childForm.GetChildFormView())
+                    {
+                        retValue.Add(locView);
+                    }               
+
+                }
             }
             this.CatchEvents();//обнаружение событий данной формы
             return retValue;
         }
 
+        /// <summary>
+        /// Анализ формы на "падение" с родительской формы.
+        /// Если за пределами родительской формы лежит болше половины дочерней формы,
+        ///  то дочерняя форма не будет отображаться и отлавливать события
+        /// </summary>
+        /// <returns></returns>
+        private bool ChildFormFallTest(Form childForm)
+        {
+            Vector2f centerOfForm = childForm.GetPhizicalPosition() + childForm.Size / 2;//Нахождение центра формы
+            return this.PointTest(centerOfForm);
+        }
 
         /// <summary>
         /// Флаг нахождения курсора на форме
@@ -139,23 +154,23 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Возникает при вхождении курсора в область формы
         /// </summary>
-        public event EventHandler MouseIn = null;
+        public event EventHandler MouseIn = NotReaction;
         /// <summary>
         /// Возникает при покидании курсором области формы
         /// </summary>
-        public event EventHandler MouseOut = null;
+        public event EventHandler MouseOut = NotReaction;
         /// <summary>
         /// Возникает при нахождении курсора в области формы
         /// </summary>
-        public event EventHandler MouseMove = null;
+        public event EventHandler MouseMove = NotReaction;
         /// <summary>
         /// Возникает при отжатии левой кнопки мыши
         /// </summary>
-        public event EventHandler MouseUp = null;
+        public event EventHandler MouseUp = NotReaction;
         /// <summary>
         /// Возникает при нажатии на левую кнопку мыши
         /// </summary>
-        public event EventHandler MouseDown = null;
+        public event EventHandler MouseDown = NotReaction;
 
         /// <summary>
         /// Отлавливание событий
@@ -199,7 +214,18 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// Проверка на нахождение курсора в области формы
         /// </summary>
         /// <returns></returns>
-        protected abstract bool MoveTest();
+        private bool MoveTest()
+        {
+            Vector2i mousePoint = Mouse.GetPosition(RenderModule.getInstance().MainWindow);
+            return this.PointTest(new Vector2f(mousePoint.X, mousePoint.Y));
+        }
+
+        /// <summary>
+        /// /// Проверка на нахождение точки в области формы
+        /// </summary>
+        /// <param name="testingPoint"></param>
+        /// <returns></returns>
+        protected abstract bool PointTest(Vector2f testingPoint);
 
         /// <summary>
         /// Получение графической позиции формы
@@ -228,6 +254,12 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             }
             return point += this.Location;
         }
+
+        private static void NotReaction(object sender, EventArgs e)
+        {
+            
+        }
+        
 
     }
 }

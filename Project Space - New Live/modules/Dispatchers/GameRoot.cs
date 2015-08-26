@@ -27,8 +27,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         private MainForm GraphicInterface;
 
-        private PlayerController playerController;
-
         /// <summary>
         /// Коллекция Звездных систем
         /// </summary>

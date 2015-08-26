@@ -91,6 +91,16 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
+        /// Преведение отображения в послекликовое состояние
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ViewToClickedState(object sender, EventArgs e)
+        {
+            this.view.Image.Texture = this.viewStates[(int)(ViewStates.Clicked)];
+        }
+
+        /// <summary>
         /// Преведение отображения в состояние после клика
         /// </summary>
         /// <param name="sender"></param>
@@ -104,12 +114,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             this.LeftPressed = false;
         }
 
-        private void ViewToClickedState(object sender, EventArgs e)
-        {
-            this.view.Image.Texture = this.viewStates[(int)(ViewStates.Clicked)];
-        }
-
-   
         /// <summary>
         /// Событие клика кнопки
         /// </summary>

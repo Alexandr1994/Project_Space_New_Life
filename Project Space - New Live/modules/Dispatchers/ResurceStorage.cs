@@ -13,15 +13,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
     /// </summary>
     static class ResurceStorage
     {
-        /// <summary>
-        /// Bc[jlyst lfyyst
-        /// </summary>
         static public Texture[] shipTextures = new Texture[4];
+        static public Texture[] circuleButtonTextures = new Texture[4];
         static private Texture backText = new Texture("testBackground.png"); //фон
         static private Texture planetText = new Texture("testPlanetText.jpg"); //загруженная текстура планет 
         static private Texture starText = new Texture("testStarText.jpg"); //загруженная текстура звезды
         static private Texture shadowTexture = new Texture("shadow.png");//тень
         static private Texture crownText = new Texture("crown.png");//звездная корона
+        static public Texture PanelText = new Texture("Panel.png");//звездная корона
         static private int[] orbits = { 600, 1000, 1700 }; //орибиты планет 
 
         /// <summary>
@@ -33,6 +32,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
             shipTextures[1] = new Texture("textPlayer3.png");
             shipTextures[2] = new Texture("textPlayer2.png");
             shipTextures[3] = new Texture("textPlayer1.png");
+            circuleButtonTextures[0] = new Texture("Norm.png");
+            circuleButtonTextures[1] = new Texture("Act.png");
+            circuleButtonTextures[2] = new Texture("Click.png");
+            circuleButtonTextures[3] = new Texture("Click2.png");
         }
 
         /// <summary>

@@ -10,21 +10,19 @@ using SFML.Window;
 
 namespace Project_Space___New_Live.modules.Controlers.Forms
 {
-    class RectButton : Button
+    class RectPanel : Form
     {
+
         /// <summary>
-        /// Прямоугольная кнопка кнопка
+        /// Конструктор прямоугольной панели
         /// </summary>
-        /// <param name="textures">Внешний набор текстур</param>
-        public RectButton(Texture[] textures)
+        /// <param name="texture"></param>
+        public RectPanel(Texture texture)
         {
-            this.view = new ObjectView(new RectangleShape(new Vector2f(80, 20)), BlendMode.Alpha);
+            this.view = new ObjectView(new RectangleShape(new Vector2f(200, 200)), BlendMode.Alpha);
             this.Location = view.Image.Position = new Vector2f(0, 0);
-            this.viewStates = textures;
-            this.size = new Vector2f(80, 20);
-            this.view.Image.Texture = textures[0];
-            this.ButtonViewEventReaction();
-            this.CatchEvents();
+            this.size = new Vector2f(200, 200);
+            this.view.Image.Texture = texture;
         }
 
         /// <summary>

@@ -40,18 +40,17 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Проверка на нахождение курсора в области формы
+        /// /// Проверка на нахождение точки в области формы
         /// </summary>
+        /// <param name="testingPoint"></param>
         /// <returns></returns>
-        protected override bool MoveTest()
+        protected override bool PointTest(Vector2f testingPoint)
         {
-            /*
-            Vector2i mousePosition = Mouse.GetPosition(RenderModule.getInstance().MainWindow);//Получить позицию курсора с учетом позиции окна
-            if (mousePosition.X > this.Size.X || mousePosition.Y > this.Size.Y || mousePosition.X < 0 || mousePosition.Y < 0)
+            if (testingPoint.X > this.Size.X || testingPoint.Y > this.Size.Y || testingPoint.X < 0 || testingPoint.Y < 0)
             {
-                return true;
-            }*/
-            return false;
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -71,6 +70,5 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         {
             return this.GetChildFormView();
         }
-
     }
 }
