@@ -27,7 +27,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public ObjectView[] View 
         {
-            get { return view;}           
+            get { return this.view;}           
         }
 
         /// <summary>

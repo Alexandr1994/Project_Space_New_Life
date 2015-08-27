@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Controlers;
 using Project_Space___New_Live.modules.Controlers.Forms;
+using Project_Space___New_Live.modules.Controlers.InterfaceParts;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
 using SFML.System;
@@ -64,6 +65,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
         public void Main()
         {
+
+            RadarScreen testRadarScreen = new RadarScreen();
+            this.GraphicInterface.AddForm(testRadarScreen);
+
             while (true)
             {
                 Thread.Sleep(25);
@@ -78,6 +83,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
                     currentSystem.Process();
                 }
                 this.playerContainer.Process();
+
+                testRadarScreen.RadarProcess(this.playerContainer.ActiveSystem, playerContainer.PlayerShip);
+
                 GraphicModule.RenderProcess(this.playerContainer.ActiveSystem, ShipsCollection);
                 GraphicModule.MainWindow.Display();
             }

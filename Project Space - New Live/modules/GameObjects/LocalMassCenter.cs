@@ -99,6 +99,11 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.CorrectObjectPoint(homeCoords);//выполнить коррекцию относительно глобальных координт
         }
 
+        /// <summary>
+        /// Получить массив отображений компанента
+        /// </summary>
+        /// <param name="companetn"></param>
+        /// <returns></returns>
         private List<ObjectView> GetCompanentViews(GameObject[] companetn)
         {
             List<ObjectView> retViews = new List<ObjectView>();//массив возвращаемых отображений
@@ -137,5 +142,31 @@ namespace Project_Space___New_Live.modules.GameObjects
             retViews.AddRange(this.GetCompanentViews(this.planets));//добавить в массив возвращаемых отображений отображения планет
             return retViews;//вернуть все звездные отображения
         }
+
+        /// <summary>
+        /// Получить массив управляемых объектов (временная реализация)
+        /// </summary>
+        /// <returns></returns>
+        public List<GameObject> GetObjects()
+        {
+            List<GameObject> retValue = new List<GameObject>();
+            if (this.stars != null)
+            {
+                retValue.AddRange(this.stars);//Получить все звезды данного центар масс
+            }
+            if (this.planets != null)
+            {
+                retValue.AddRange(this.planets);//Получить все планеты данного центра масс
+            }
+            if (this.massCenters != null)
+            {
+                foreach (LocalMassCenter currentCenter in this.massCenters)//получить все объект подчиненных центров масс
+                {
+                    retValue.AddRange(currentCenter.GetObjects());
+                }
+            }
+           return retValue;//Вернуть все объекты в данном и подчиненных центрах масс
+        }
+
     }
 }

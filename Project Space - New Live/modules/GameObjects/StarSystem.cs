@@ -85,8 +85,15 @@ namespace Project_Space___New_Live.modules.GameObjects
    
             return systemsViews;
         }
-     
-        
+
+        /// <summary>
+        /// Получить коллекцию объектов находящихся в ситеме (временная реализация)
+        /// </summary>
+        /// <returns></returns>
+        public List<GameObject> GetObjectsInSystem()
+        {
+            return this.massCenter.GetObjects();
+        }
 
  }
 }
