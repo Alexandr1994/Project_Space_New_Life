@@ -109,15 +109,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         {
             if (LeftPressed)
             {
-                this.MouseClick(this, new MouseButtonEventArgs(new MouseButtonEvent()));
+                //this.MouseClick(this, new MouseButtonEventArgs(new MouseButtonEvent()));
             }
             this.LeftPressed = false;
         }
-
-        /// <summary>
-        /// Событие клика кнопки
-        /// </summary>
-        public event EventHandler MouseClick = null;
 
     }
 }

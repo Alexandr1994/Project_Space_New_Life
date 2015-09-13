@@ -33,6 +33,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <param name="textures">Внешний набор текстур</param>
         public CircleButton(Texture[] textures)
         {
+            this.SetBasicReactions();
             this.view = new ObjectView(new CircleShape(20), BlendMode.Alpha);
             this.Location = view.Image.Position = new Vector2f(0, 0);
             this.viewStates = textures;

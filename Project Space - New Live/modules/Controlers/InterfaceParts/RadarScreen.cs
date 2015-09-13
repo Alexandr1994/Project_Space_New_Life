@@ -24,9 +24,13 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         /// <param name="player"></param>
         public RadarScreen()
         {
-            this.view = new ObjectView(new RectangleShape(new Vector2f(180, 180)), BlendMode.Alpha);
+            this.SetBasicReactions();
+            this.view = new ObjectView(new CircleShape(100), BlendMode.Alpha);
+
+            this.view.Image.OutlineThickness = 5;
+
             this.Location = new Vector2f(0,0);
-            this.Size = new Vector2f(180, 180);
+            this.Size = new Vector2f(200, 200);
             this.radarCenter = this.Size/2;
             this.view.Image.FillColor = Color.Black;
         }
@@ -37,16 +41,25 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         /// <param name="activeStarSystem"></param>
         public void RadarProcess(StarSystem activeStarSystem, Ship playerShip)
         {
-            this.ChildForms.Clear();//Отчистить коллекцию объектов на радаре
+            this.ChildForms.Clear();//Отчистить коллекцию объектов на радаре 
             foreach (GameObject currentObject in activeStarSystem.GetObjectsInSystem())
             {
                 RadarEntity newObject = new RadarEntity();
-                newObject.Location = currentObject.Coords/40 + this.radarCenter;
                 newObject.Size = new Vector2f(5, 5);
+                newObject.Location = (currentObject.Coords - playerShip.Coords) / 40 + this.radarCenter - newObject.Size / 2;
                 this.AddForm(newObject);
             }
+            this.AddForm(new VisibleRegion(this.radarCenter));
+            this.RenderPlayerOnRadar();
+            
+        }
+
+
+        private void RenderPlayerOnRadar()
+        {
+
             RadarEntity ship = new RadarEntity();
-            ship.Location = playerShip.Coords / 45 + this.radarCenter;
+            ship.Location = this.radarCenter;
             ship.Size = new Vector2f(2, 2);
             this.AddForm(ship);
         }
@@ -58,12 +71,17 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         /// <returns></returns>
         protected override bool PointTest(Vector2f testingPoint)
         {
-            Vector2f coords = this.GetPhizicalPosition();
-            if (testingPoint.X > coords.X && testingPoint.Y > coords.Y && testingPoint.X < coords.X + this.Size.X && testingPoint.Y < coords.X + this.Size.Y)
+            Vector2f center = this.GetPhizicalPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра окружности образующей кнопку
+            float dX = testingPoint.X - center.X;
+            float dY = testingPoint.Y - center.Y;
+            float distanse = (float)Math.Sqrt(Math.Pow(dX, 2) + Math.Pow(dY, 2));//нахождение расстояния от точки до центра кнопки
+            float angle = (float)Math.Atan(dY / dX);
+            float radius = (float)(Math.Sqrt(Math.Pow((this.size.X / 2) * Math.Cos(angle), 2) + Math.Pow((this.size.Y / 2) * Math.Sin(angle), 2)));
+            if (distanse < radius)//если это расстояние меньше радиуса
             {
-                return true;
+                return true;//то true
             }
-            return false;
+            return false;//иначе false
         }
 
         /// <summary>
@@ -95,6 +113,27 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
                 this.view.Image.FillColor = Color.Green;
             }
 
+
+            protected override bool PointTest(Vector2f testingPoint)
+            {
+                return false;
+            }
+        }
+
+        private class VisibleRegion : Form
+        {
+
+            public VisibleRegion(Vector2f loc)
+            {
+                this.view = new ObjectView(new RectangleShape(RenderModule.getInstance().GameView.Size / 40), BlendMode.Alpha);
+                this.Size = RenderModule.getInstance().GameView.Size/40;
+                this.Location = loc - this.Size/2 + new Vector2f(1,1);
+                this.view.Image.OutlineThickness = 2;
+                this.view.Image.OutlineColor = Color.Green;
+                this.view.Image.FillColor = new Color(0,0,0,0);
+                Vector2f lol = this.GetPhizicalPosition();
+                
+            }
 
             protected override bool PointTest(Vector2f testingPoint)
             {

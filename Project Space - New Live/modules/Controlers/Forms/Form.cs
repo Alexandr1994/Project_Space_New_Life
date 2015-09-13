@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
@@ -19,6 +20,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// Позиция
         /// </summary>
         protected Vector2f location;
+
         /// <summary>
         /// Позиция
         /// </summary>
@@ -27,7 +29,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             get { return this.location; }
             set { this.location = value;}
         }
-
 
         /// <summary>
         /// Размер
@@ -142,7 +143,14 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             Vector2f centerOfForm = childForm.GetPhizicalPosition() + childForm.Size / 2;//Нахождение центра формы
             return this.PointTest(centerOfForm);
         }
-
+        /// <summary>
+        /// Количество нажатий на форму
+        /// </summary>
+        private int clicks = 0;
+        /// <summary>
+        /// Флаг клика
+        /// </summary>
+        private bool click = false; 
         /// <summary>
         /// Флаг нахождения курсора на форме
         /// </summary>
@@ -154,23 +162,27 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Возникает при вхождении курсора в область формы
         /// </summary>
-        public event EventHandler MouseIn = NotReaction;
+        public event EventHandler MouseIn = null;
         /// <summary>
         /// Возникает при покидании курсором области формы
         /// </summary>
-        public event EventHandler MouseOut = NotReaction;
+        public event EventHandler MouseOut = null;
         /// <summary>
         /// Возникает при нахождении курсора в области формы
         /// </summary>
-        public event EventHandler MouseMove = NotReaction;
+        public event EventHandler MouseMove = null;
         /// <summary>
         /// Возникает при отжатии левой кнопки мыши
         /// </summary>
-        public event EventHandler MouseUp = NotReaction;
+        public event EventHandler MouseUp = null;
         /// <summary>
         /// Возникает при нажатии на левую кнопку мыши
         /// </summary>
-        public event EventHandler MouseDown = NotReaction;
+        public event EventHandler MouseDown = null;
+        /// <summary>
+        /// Событие клика кнопки
+        /// </summary>
+        public event EventHandler MouseClick = null;
 
         /// <summary>
         /// Отлавливание событий
@@ -179,24 +191,21 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         {
             if (this.MoveTest())//если курсор находится на форме
             {
+                this.MouseMove(this, new MouseMoveEventArgs(new MouseMoveEvent()));
                 if (!this.CursorOnForm)//и до этого он не находился на ней
                 {
                     this.MouseIn(this, new MouseMoveEventArgs(new MouseMoveEvent()));//то возникает событие MouseIn 
-                    this.CursorOnForm = true;//и флаг нахождения курсора на форме устанавливается в true
                 }//в независимости от предыдущего нахождения курсора
-                this.MouseMove(this, new MouseMoveEventArgs(new MouseMoveEvent()));//то возникает событие MouseMove 
                 if (Mouse.IsButtonPressed(Mouse.Button.Left))//если левая кнопка мыши зажата
                 {
                     this.MouseDown(this, new MouseButtonEventArgs(new MouseButtonEvent()));//то возникает событие MouseDown
-                    this.ButtonPresed = true;//установка флага зажатия кнопки в true
                 }
                 if (!Mouse.IsButtonPressed(Mouse.Button.Left))//если левая кнопка мыши отжата
                 {
                     if (this.ButtonPresed)//если кнопка была зажата
                     {
                         this.MouseUp(this, new MouseButtonEventArgs(new MouseButtonEvent()));//то возникает событие MouseUp
-                        this.ButtonPresed = false;//установка флага зажатия кнопки в false
-                     }
+                    }
                 } 
             }
             else
@@ -204,10 +213,28 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 if (this.CursorOnForm)//если курср раннее находился на форме
                 {
                     this.MouseOut(this, new MouseMoveEventArgs(new MouseMoveEvent()));//то возникает событие MouseOut
-                    this.CursorOnForm = false;
-                    this.ButtonPresed = false;
                 }
             }
+        }
+
+        /// <summary>
+        /// Проверка нахождения точнки в областях дочерних форм
+        /// </summary>
+        /// <returns></returns>
+        private bool ChildMoveTest(Vector2f point)
+        {
+            foreach (Form currentForm in this.childForms)
+            {
+                if (currentForm.PointTest(point))//проверка данного уровня дочерних форм на нахождение курсора в их области
+                {
+                    return true;//если курсор находится в области одной из дочерних форм, то вернуть true
+                }
+                if (currentForm.ChildMoveTest(point))//проверка более вложенного уровня дочерних форм
+                {
+                    return true;//если курсор находится на дочерней форме на более вложенном уровне, то вернуть true
+                }
+            }
+            return false;//иначе вернуть false
         }
 
         /// <summary>
@@ -216,8 +243,16 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <returns></returns>
         private bool MoveTest()
         {
-            Vector2i mousePoint = Mouse.GetPosition(RenderModule.getInstance().MainWindow);
-            return this.PointTest(new Vector2f(mousePoint.X, mousePoint.Y));
+            Vector2i mousePoint = Mouse.GetPosition(RenderModule.getInstance().MainWindow);//Получить позицию мыши в окне
+            if(this.PointTest(new Vector2f(mousePoint.X, mousePoint.Y)))//если курсор находится в области данной формы
+            {
+                if (ChildMoveTest(new Vector2f(mousePoint.X, mousePoint.Y))) //Проверить все дочерние формы данной формы
+                {//если задетектированно нахождение курсора на области формы на одном из уровней дочерних форм, 
+                    return false; //то курсор находится за пределами области данной формы   
+                }
+                return true;//если курсор находится вне областей дочерних форм разных уровней вложенности, то true
+            }
+            return false;//иначе false
         }
 
         /// <summary>
@@ -255,11 +290,91 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             return point += this.Location;
         }
 
-        private static void NotReaction(object sender, EventArgs e)
+        /// <summary>
+        /// Устванвка базовых реакций формы
+        /// </summary>
+        protected void SetBasicReactions()
+        {
+            this.MouseMove += ClickReaction;
+            this.MouseIn += InReaction;
+            this.MouseOut += OutReaction;
+            this.MouseDown += DownReaction;
+            this.MouseUp += UpReaction;
+            this.MouseClick += ClickReaction;
+        }
+
+        /// <summary>
+        /// Элементарная реакция на вхождение курсора в область формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void InReaction(object sender, EventArgs e)
+        {
+            this.CursorOnForm = true;//флаг нахождения курсора на форме устанавливается в true
+            this.clicks = 0;//сброс счетчика кликов
+        }
+
+        /// <summary>
+        /// Элементарная реакция на покидание курсора в области формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OutReaction(object sender, EventArgs e)
+        {
+            this.CursorOnForm = false;//флаг нахождения курсора на форме устанавливается в false
+            this.ButtonPresed = false;//флаг нажатия кнопки на форме устанавливается в false
+            this.clicks = 0;//сброс счетчика кликов
+            this.click = false;
+        }
+
+        /// <summary>
+        /// Элементарная реакция на нажатие левой кнопки мыши
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DownReaction(object sender, EventArgs e)
+        {
+            this.ButtonPresed = true;//флаг нажатия кнопки на форме устанавливается в true
+            if (!this.click)
+            {
+                this.click = true;
+            }
+        }
+
+        /// <summary>
+        /// Элементарная реакция на отжатия левой кнопки мыши
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UpReaction(object sender, EventArgs e)
+        {
+            this.ButtonPresed = false;//флаг нажатия кнопки на форме устанавливается в true
+            if (this.click)
+            {
+                this.MouseClick(this, new MouseButtonEventArgs(new MouseButtonEvent()));
+            }
+        }
+
+        /// <summary>
+        /// Элементарная функция на нахождение курсора в пределах области формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MoveReaction(object sender, EventArgs e)
         {
             
         }
-        
+
+        /// <summary>
+        /// Элементарная реакция на нахождение курсора в области формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void ClickReaction(object sender, EventArgs e)
+        {
+            
+        }
+
 
     }
 }

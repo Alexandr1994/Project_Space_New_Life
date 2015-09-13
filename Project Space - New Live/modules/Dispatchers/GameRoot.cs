@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -63,13 +64,27 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.SystemCollection.Add(ResurceStorage.initSystem());//сконструировать одну звездную систему
         }
 
+
+        private void OnClick(object sender, EventArgs e)
+        {
+            cont = false;
+        }
+
+        private bool cont = true;
+
         public void Main()
         {
 
             RadarScreen testRadarScreen = new RadarScreen();
             this.GraphicInterface.AddForm(testRadarScreen);
+            
+            CircleButton button = new CircleButton(ResurceStorage.circuleButtonTextures);
+            button.MouseClick += OnClick;
+            button.Size = new Vector2f(100, 80);
+            button.Location = new Vector2f(700,0);
+            this.GraphicInterface.AddForm(button);
 
-            while (true)
+            while (cont)
             {
                 Thread.Sleep(25);
                 GraphicModule.MainWindow.DispatchEvents();
