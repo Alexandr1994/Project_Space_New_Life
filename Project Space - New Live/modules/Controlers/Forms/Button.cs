@@ -55,7 +55,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             this.MouseOut += this.ViewToNormalState;
             this.MouseMove += this.ViewToActiveState;
             this.MouseDown += this.ViewToPressedState;
-            this.MouseUp += this.ButtonClickTest;
             this.MouseClick += this.ViewToClickedState;
         }
 
@@ -98,20 +97,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         private void ViewToClickedState(object sender, EventArgs e)
         {
             this.view.Image.Texture = this.viewStates[(int)(ViewStates.Clicked)];
-        }
-
-        /// <summary>
-        /// Преведение отображения в состояние после клика
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ButtonClickTest(object sender, EventArgs e)
-        {
-            if (LeftPressed)
-            {
-                //this.MouseClick(this, new MouseButtonEventArgs(new MouseButtonEvent()));
-            }
-            this.LeftPressed = false;
         }
 
     }

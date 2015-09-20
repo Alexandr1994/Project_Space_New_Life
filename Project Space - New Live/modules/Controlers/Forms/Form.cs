@@ -40,7 +40,14 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         public virtual Vector2f Size
         {
             get { return this.size; }
-            set { this.size = value; }
+            set
+            {
+                float Xcoef = value.X / this.size.X;
+                float Ycoef = value.Y / this.size.Y;
+                //Изменение размеров изображения
+                this.view.Image.Scale = new Vector2f(Xcoef, Ycoef);
+                this.size = value;//сохранение размеров
+            }
         }
 
         /// <summary>
@@ -295,7 +302,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         protected void SetBasicReactions()
         {
-            this.MouseMove += ClickReaction;
+            this.MouseMove += MoveReaction;
             this.MouseIn += InReaction;
             this.MouseOut += OutReaction;
             this.MouseDown += DownReaction;

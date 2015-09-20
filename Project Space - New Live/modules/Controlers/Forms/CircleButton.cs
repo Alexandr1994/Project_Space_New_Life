@@ -13,19 +13,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
 {
     class CircleButton : Button
     {
-        public override Vector2f Size
-        {
-            get { return this.size; }
-            set
-            {//Уравнивание значений
-                //Нахождение коэффициентов масштабирования размеров
-                float Xcoef = value.X/this.size.X;
-                float Ycoef = value.Y/this.size.Y;
-                //Изменение размеров изображения
-                this.view.Image.Scale = new Vector2f(Xcoef, Ycoef);
-                this.size = value;//сохранение размеров
-            }
-        }
+
 
         /// <summary>
         /// Круглая кнопка

@@ -12,18 +12,22 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
 {
     class MainForm : Form
     {
-       
+
+       /// <summary>
+       /// Экземпляр формы
+       /// </summary>
         private static MainForm form = null;
 
+        
         /// <summary>
         /// Конструктор главной формы
         /// </summary>
         private MainForm(View gameView)
         {     
             this.SetBasicReactions();
+            this.view = new ObjectView(new RectangleShape(new Vector2f(10, 10)), BlendMode.Multiply);
             this.Size = gameView.Size;//Установка размера формы равным размеру вида
             this.Location = gameView.Center - gameView.Size / 2;//Установка позиции в 0,0
-            this.view = new ObjectView(new RectangleShape(this.Size), BlendMode.Multiply);
         }
 
         /// <summary>

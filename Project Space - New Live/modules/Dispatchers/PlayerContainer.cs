@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.GameObjects;
+using Project_Space___New_Live.modules.GameObjects.ShipModules;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.Dispatchers
@@ -77,6 +78,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.lastPlayerCoords = this.playerShip.Coords;//последних координат корабля игрока
             this.activeSystem = GameWorld[this.playerShip.StarSystemIndex];//Текузей звездной системы
             this.GameRenderer = RenderModule.getInstance();//ССылки на модуль отрисовки
+        }
+
+        public float GetEnergy()
+        {
+            Battery battery = playerShip.Equipment[(int) Ship.EquipmentNames.Battery] as Battery;
+            return (float)battery.Energy / (float)battery.MaxEnergy *100;
         }
 
         /// <summary>

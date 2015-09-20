@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="modules\Controlers\AbstractController.cs" />
+    <Compile Include="modules\Controlers\Forms\LinearBar.cs" />
     <Compile Include="modules\Controlers\Forms\Button.cs" />
     <Compile Include="modules\Controlers\Forms\CircleButton.cs" />
     <Compile Include="modules\Controlers\Forms\Form.cs" />

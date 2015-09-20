@@ -12,6 +12,7 @@ using Project_Space___New_Live.modules.Controlers.Forms;
 using Project_Space___New_Live.modules.Controlers.InterfaceParts;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
+using SFML.Graphics;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.Dispatchers
@@ -74,14 +75,19 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
         public void Main()
         {
-
+            
             RadarScreen testRadarScreen = new RadarScreen();
             this.GraphicInterface.AddForm(testRadarScreen);
             
+            LinearBar scale = new LinearBar();
+            scale.Location = new Vector2f(200,0);
+            this.GraphicInterface.AddForm(scale);
+
             CircleButton button = new CircleButton(ResurceStorage.circuleButtonTextures);
             button.MouseClick += OnClick;
-            button.Size = new Vector2f(100, 80);
-            button.Location = new Vector2f(700,0);
+            button.Size = new Vector2f(80, 30);
+            button.Location = new Vector2f(720,0);
+
             this.GraphicInterface.AddForm(button);
 
             while (cont)
@@ -100,6 +106,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 this.playerContainer.Process();
 
                 testRadarScreen.RadarProcess(this.playerContainer.ActiveSystem, playerContainer.PlayerShip);
+                scale.PercentOfBar = this.playerContainer.GetEnergy();
 
                 GraphicModule.RenderProcess(this.playerContainer.ActiveSystem, ShipsCollection);
                 GraphicModule.MainWindow.Display();

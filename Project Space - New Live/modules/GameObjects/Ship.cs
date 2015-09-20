@@ -179,8 +179,8 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.pilot = PlayerController.GetInstanse(this);
 
             this.shipEquipment.Add(new Engine(100, 1, 100, 100, 10, 8, null));
-            this.shipEquipment.Add(new Battery(100, 500, null));
             this.shipEquipment.Add(new Reactor(100, 1, null));
+            this.shipEquipment.Add(new Battery(100, 500, null));
 
         }
 

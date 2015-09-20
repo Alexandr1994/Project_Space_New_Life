@@ -26,14 +26,16 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// </summary>
         public int MaxEnergy
         {//Емкость батареи тем ниже, чем выше процент износа, минимальная емкость равна 20% от номинальной
-            get { return (int)(this.maxEnergy * (100 - (0.8*this.WearState))); }
+            get { return (int)(this.maxEnergy * (1 - (0.8*this.WearState))); }
         }
 
         /// <summary>
         /// Запас энергии
         /// </summary>
         private int energy;
-
+        /// <summary>
+        /// Запас энергии
+        /// </summary>
         public int Energy
         {
             get { return this.energy; }
@@ -73,7 +75,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// <summary>
         /// Полнаязарядка батареи
         /// </summary>
-        public void fullCharge()
+        public void FullCharge()
         {
             this.energy = this.MaxEnergy;
         }
@@ -82,6 +84,9 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         {
             this.SetCommonCharacteristics(mass, 0, image);//установка общих характеристик (энергопотребление = 0)
             this.baseMaxEnergy = this.maxEnergy = maxEnergy;
+
+            this.FullCharge();
+
             this.State = true;
         }
 

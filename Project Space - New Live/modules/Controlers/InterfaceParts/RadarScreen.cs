@@ -30,7 +30,7 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
             this.view.Image.OutlineThickness = 5;
 
             this.Location = new Vector2f(0,0);
-            this.Size = new Vector2f(200, 200);
+            this.size = new Vector2f(200, 200);
             this.radarCenter = this.Size/2;
             this.view.Image.FillColor = Color.Black;
         }

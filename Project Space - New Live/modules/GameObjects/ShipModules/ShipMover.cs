@@ -50,8 +50,12 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         public void GiveForwardThrust(Ship ship)
         {
             Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;//Получение двигателя корабля
-            float acceleration = (float) (engine.ForwardThrust/ ship.Mass);
-            this.AddNewSpeedVector(acceleration, ship.Rotation, engine.MaxForwardSpeed);
+            Battery battery = ship.Equipment[(int)Ship.EquipmentNames.Battery] as Battery;//получение батареи корабля
+            if (battery.Uncharge(engine.EnergyNeeds))
+            {
+                float acceleration = (float) (engine.ForwardThrust/ship.Mass);
+                this.AddNewSpeedVector(acceleration, ship.Rotation, engine.MaxForwardSpeed);
+            }
         }
 
         /// <summary>
@@ -61,8 +65,12 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         public void GiveReversThrust(Ship ship)
         {
             Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;//Получение двигателя корабля
-            float acceleration = (float)(engine.ShuntingThrust / ship.Mass);
-            this.AddNewSpeedVector(acceleration, ship.Rotation + (float)Math.PI, engine.MaxShuntingSpeed);
+            Battery battery = ship.Equipment[(int)Ship.EquipmentNames.Battery] as Battery;//получение батареи корабля
+            if (battery.Uncharge(engine.EnergyNeeds))
+            {
+                float acceleration = (float) (engine.ShuntingThrust/ship.Mass);
+                this.AddNewSpeedVector(acceleration, ship.Rotation + (float) Math.PI, engine.MaxShuntingSpeed);
+            }
         }
 
         /// <summary>
@@ -73,9 +81,13 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         public void GiveSideThrust(Ship ship, int directionSign)
         {
             Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;//Получение двигателя корабля
-            float acceleration = (float)(engine.ShuntingThrust / ship.Mass);
-            directionSign /= Math.Abs(directionSign);//Сохранение только знака числа
-            this.AddNewSpeedVector(acceleration, ship.Rotation + (float)(directionSign * Math.PI / 2), engine.MaxShuntingSpeed);
+            Battery battery = ship.Equipment[(int)Ship.EquipmentNames.Battery] as Battery;//получение батареи корабля
+            if (battery.Uncharge(engine.EnergyNeeds))
+            {
+                float acceleration = (float) (engine.ShuntingThrust/ship.Mass);
+                directionSign /= Math.Abs(directionSign); //Сохранение только знака числа
+                this.AddNewSpeedVector(acceleration, ship.Rotation + (float) (directionSign*Math.PI/2),engine.MaxShuntingSpeed);
+            }
         }
 
         /// <summary>
@@ -83,11 +95,16 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// </summary>
         public void FullStop(Ship ship)
         {//Ликвидация всех векторов движения
+            Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;//Получение двигателя корабля
+            Battery battery = ship.Equipment[(int)Ship.EquipmentNames.Battery] as Battery;//получение батареи корабля
             foreach (SpeedVector vector in speedVectors)
             {
-                Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;//Получение двигателя корабля
-                float acceleration = (float)(engine.ShuntingThrust / ship.Mass);
-                vector.SpeedAcceleration(-acceleration);
+             if (battery.Uncharge(engine.EnergyNeeds))
+                {
+                    //Получение двигателя корабля
+                    float acceleration = (float) (engine.ShuntingThrust/ship.Mass);
+                    vector.SpeedAcceleration(-acceleration);
+                }
             }
         }
 
@@ -99,9 +116,13 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         public void Rotate(Ship ship,int Sign)
         {
             Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;
-            float acceleration = Sign / Math.Abs(Sign) * engine.ShuntingThrust / ship.Mass;
-            acceleration /= (float)Math.Sqrt(Math.Pow(ship.ViewPartSize.X / 2, 2) + Math.Pow(ship.ViewPartSize.Y / 2, 2));//вычисление углового ускорение
-            ship.ChangeRotation(acceleration);
+            Battery battery = ship.Equipment[(int)Ship.EquipmentNames.Battery] as Battery;//получение батареи корабля
+            if (battery.Uncharge(engine.EnergyNeeds))
+            {
+                float acceleration = Sign/Math.Abs(Sign)*engine.ShuntingThrust/ship.Mass;
+                acceleration /= (float) Math.Sqrt(Math.Pow(ship.ViewPartSize.X/2, 2) + Math.Pow(ship.ViewPartSize.Y/2, 2));//вычисление углового ускорение
+                ship.ChangeRotation(acceleration);
+            }
         }
 
 
