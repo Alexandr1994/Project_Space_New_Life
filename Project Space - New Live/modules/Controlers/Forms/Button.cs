@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Project_Space___New_Live.modules.Dispatchers;
 using SFML.System;
 using SFML.Window;
@@ -45,6 +46,21 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// Текстуры состояний отображения формы
         /// </summary>
         protected Texture[] viewStates = new Texture[4];
+
+        /// <summary>
+        /// Установка набора текстур кнопки
+        /// </summary>
+        /// <param name="viewStates"></param>
+        public void SetViewStates(Texture[] viewStates)
+        {
+            if (viewStates.Length == 4)
+            {
+                this.viewStates = viewStates;
+                return;
+            }
+            throw new Exception("Несовпадающее количество текстур");
+        }
+
 
         /// <summary>
         /// Включение графического отображения состояний кнопки

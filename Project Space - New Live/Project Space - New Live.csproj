@@ -67,6 +67,7 @@
     <Compile Include="modules\Controlers\Forms\CircleButton.cs" />
     <Compile Include="modules\Controlers\Forms\Form.cs" />
     <Compile Include="modules\Controlers\Forms\MainForm.cs" />
+    <Compile Include="modules\Controlers\Forms\Panel.cs" />
     <Compile Include="modules\Controlers\Forms\RectPanel.cs" />
     <Compile Include="modules\Controlers\Forms\RectButton.cs" />
     <Compile Include="modules\Controlers\InterfaceParts\RadarScreen.cs" />

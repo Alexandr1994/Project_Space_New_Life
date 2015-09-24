@@ -15,6 +15,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
     {
         static public Texture[] shipTextures = new Texture[4];
         static public Texture[] circuleButtonTextures = new Texture[4];
+        static public Texture[] rectangleButtonTextures = new Texture[4];
         static private Texture backText = new Texture("testBackground.png"); //фон
         static private Texture planetText = new Texture("testPlanetText.jpg"); //загруженная текстура планет 
         static private Texture starText = new Texture("testStarText.jpg"); //загруженная текстура звезды
@@ -36,6 +37,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
             circuleButtonTextures[1] = new Texture("Act.png");
             circuleButtonTextures[2] = new Texture("Click.png");
             circuleButtonTextures[3] = new Texture("Click2.png");
+            rectangleButtonTextures[0] = new Texture("Norm1.png");
+            rectangleButtonTextures[1] = new Texture("Act1.png");
+            rectangleButtonTextures[2] = new Texture("Click1.png");
+            rectangleButtonTextures[3] = new Texture("Click21.png");
+            
         }
 
         /// <summary>

@@ -98,8 +98,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             if (graphicModule == null)
             {
-                graphicModule = new RenderModule();
-
+                self:graphicModule = new RenderModule();
             }
             return graphicModule;
         }

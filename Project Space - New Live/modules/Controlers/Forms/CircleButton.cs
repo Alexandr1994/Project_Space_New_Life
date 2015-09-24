@@ -14,19 +14,16 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
     class CircleButton : Button
     {
 
-
         /// <summary>
-        /// Круглая кнопка
+        /// Конструктор круглой кнопки
         /// </summary>
-        /// <param name="textures">Внешний набор текстур</param>
-        public CircleButton(Texture[] textures)
+        protected override void CustomConstructor()
         {
-            this.SetBasicReactions();
             this.view = new ObjectView(new CircleShape(20), BlendMode.Alpha);
             this.Location = view.Image.Position = new Vector2f(0, 0);
-            this.viewStates = textures;
+            this.SetViewStates(ResurceStorage.circuleButtonTextures);
             this.size = new Vector2f(40, 40);
-            this.view.Image.Texture = textures[0];
+            this.view.Image.Texture = this.viewStates[0];
             this.ButtonViewEventReaction();
             this.CatchEvents();
         }

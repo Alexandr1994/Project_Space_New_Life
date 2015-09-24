@@ -83,7 +83,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             scale.Location = new Vector2f(200,0);
             this.GraphicInterface.AddForm(scale);
 
-            CircleButton button = new CircleButton(ResurceStorage.circuleButtonTextures);
+            CircleButton button = new CircleButton();
             button.MouseClick += OnClick;
             button.Size = new Vector2f(80, 30);
             button.Location = new Vector2f(720,0);

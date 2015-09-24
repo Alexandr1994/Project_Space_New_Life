@@ -10,7 +10,7 @@ using SFML.Window;
 
 namespace Project_Space___New_Live.modules.Controlers.Forms
 {
-    class RectPanel : Form
+    class RectPanel : Panel
     {
         /// <summary>
         /// Изменение размера формы
@@ -28,16 +28,14 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Конструктор прямоугольной панели
+        /// Конструктор прямоугольной панели/подложки
         /// </summary>
-        /// <param name="texture"></param>
-        public RectPanel(Texture texture)
+        protected override void CustomConstructor()
         {
-            this.SetBasicReactions();
-            this.view = new ObjectView(new RectangleShape(new Vector2f(200, 200)), BlendMode.Alpha);
+            view = new ObjectView(new RectangleShape(new Vector2f(200, 200)), BlendMode.Alpha);
             this.Location = view.Image.Position = new Vector2f(0, 0);
             this.size = new Vector2f(200, 200);
-            this.view.Image.Texture = texture;
+            this.SetPanelTexture(ResurceStorage.PanelText);
         }
 
         /// <summary>

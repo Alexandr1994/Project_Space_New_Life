@@ -50,7 +50,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             }
         }
 
-        public LinearBar()
+        /// <summary>
+        /// Конструктор индикаторной линии
+        /// </summary>
+        protected override void CustomConstructor()
         {
             this.view = new ObjectView(new RectangleShape(new Vector2f(200, 20)), BlendMode.Alpha);
             this.Size = new Vector2f(200, 20);
@@ -66,7 +69,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         protected override bool PointTest(Vector2f testingPoint)
         {
             Vector2f coords = this.GetPhizicalPosition();
-            if (testingPoint.X > coords.X && testingPoint.Y > coords.Y && testingPoint.X < coords.X + this.Size.X && testingPoint.Y < coords.X + this.Size.Y)
+            if (testingPoint.X > coords.X && testingPoint.Y > coords.Y && testingPoint.X < coords.X + this.Size.X && testingPoint.Y < coords.Y + this.Size.Y)
             {
                 return true;
             }
@@ -97,7 +100,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 }
             }
 
-            public BarLine()
+            /// <summary>
+            /// Конструктор заполняющей линии
+            /// </summary>
+            protected override void CustomConstructor()
             {
                 this.view = new ObjectView(new RectangleShape(new Vector2f(200, 20)), BlendMode.Alpha);
                
@@ -119,8 +125,9 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             /// <returns></returns>
             protected override bool PointTest(Vector2f testingPoint)
             {
+                this.SetBasicReactions();
                 Vector2f coords = this.GetPhizicalPosition();
-                if (testingPoint.X > coords.X && testingPoint.Y > coords.Y && testingPoint.X < coords.X + this.Size.X && testingPoint.Y < coords.X + this.Size.Y)
+                if (testingPoint.X > coords.X && testingPoint.Y > coords.Y && testingPoint.X < coords.X + this.Size.X && testingPoint.Y < coords.Y + this.Size.Y)
                 {
                     return true;
                 }

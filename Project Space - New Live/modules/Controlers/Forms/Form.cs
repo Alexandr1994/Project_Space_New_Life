@@ -198,20 +198,32 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         {
             if (this.MoveTest())//если курсор находится на форме
             {
-                this.MouseMove(this, new MouseMoveEventArgs(new MouseMoveEvent()));
+                if (this.MouseMove != null)//в независимости от предыдущего нахождения курсора
+                {//при условии что есть обработчик события
+                    this.MouseMove(this, new MouseMoveEventArgs(new MouseMoveEvent()));
+                }
                 if (!this.CursorOnForm)//и до этого он не находился на ней
                 {
-                    this.MouseIn(this, new MouseMoveEventArgs(new MouseMoveEvent()));//то возникает событие MouseIn 
-                }//в независимости от предыдущего нахождения курсора
+                    if (this.MouseIn != null)
+                    {//при условии что есть обработчик события
+                        this.MouseIn(this, new MouseMoveEventArgs(new MouseMoveEvent()));//то возникает событие MouseIn 
+                    }  
+                }
                 if (Mouse.IsButtonPressed(Mouse.Button.Left))//если левая кнопка мыши зажата
                 {
-                    this.MouseDown(this, new MouseButtonEventArgs(new MouseButtonEvent()));//то возникает событие MouseDown
+                    if (this.MouseDown != null)
+                    {//при условии что есть обработчик события
+                        this.MouseDown(this, new MouseButtonEventArgs(new MouseButtonEvent()));//то возникает событие MouseDown
+                    }
                 }
                 if (!Mouse.IsButtonPressed(Mouse.Button.Left))//если левая кнопка мыши отжата
                 {
                     if (this.ButtonPresed)//если кнопка была зажата
                     {
-                        this.MouseUp(this, new MouseButtonEventArgs(new MouseButtonEvent()));//то возникает событие MouseUp
+                        if (this.MouseUp != null)
+                        {//при условии что есть обработчик события
+                            this.MouseUp(this, new MouseButtonEventArgs(new MouseButtonEvent()));//то возникает событие MouseUp
+                        }
                     }
                 } 
             }
@@ -219,7 +231,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             {
                 if (this.CursorOnForm)//если курср раннее находился на форме
                 {
-                    this.MouseOut(this, new MouseMoveEventArgs(new MouseMoveEvent()));//то возникает событие MouseOut
+                    if (this.MouseOut != null)
+                    {//при условии что есть обработчик события
+                        this.MouseOut(this, new MouseMoveEventArgs(new MouseMoveEvent()));//то возникает событие MouseOut
+                    }
                 }
             }
         }
@@ -302,12 +317,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         protected void SetBasicReactions()
         {
-            this.MouseMove += MoveReaction;
             this.MouseIn += InReaction;
             this.MouseOut += OutReaction;
             this.MouseDown += DownReaction;
             this.MouseUp += UpReaction;
-            this.MouseClick += ClickReaction;
         }
 
         /// <summary>
@@ -358,30 +371,26 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             this.ButtonPresed = false;//флаг нажатия кнопки на форме устанавливается в true
             if (this.click)
             {
-                this.MouseClick(this, new MouseButtonEventArgs(new MouseButtonEvent()));
+                if (this.MouseClick != null)
+                {//если имеются слушатели события
+                    this.MouseClick(this, new MouseButtonEventArgs(new MouseButtonEvent()));
+                }      
             }
         }
 
         /// <summary>
-        /// Элементарная функция на нахождение курсора в пределах области формы
+        /// Абстрактный конструктор формы
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MoveReaction(object sender, EventArgs e)
+        public Form()
         {
-            
+            this.SetBasicReactions();//установка базовых слушателей формы
+            this.CustomConstructor();//установка базовых характеристик формы 
         }
 
         /// <summary>
-        /// Элементарная реакция на нахождение курсора в области формы
+        /// Конструктор конкретной формы
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected virtual void ClickReaction(object sender, EventArgs e)
-        {
-            
-        }
-
+        protected abstract void CustomConstructor();
 
     }
 }

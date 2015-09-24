@@ -212,6 +212,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         public override void Process(Vector2f homeCoords)
         {
             this.pilot.Process();
+            Reactor shipReactor = this.shipEquipment[(int) EquipmentNames.Reactor] as Reactor;
+            Battery shipBattery = this.shipEquipment[(int) EquipmentNames.Battery] as Battery;
+            shipBattery.Charge(shipReactor.EnergyGeneration);
             this.Move();
 
         }

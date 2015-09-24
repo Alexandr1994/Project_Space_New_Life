@@ -21,13 +21,12 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         /// <summary>
         /// Построение экрана радара (временная реализация)
         /// </summary>
-        /// <param name="player"></param>
-        public RadarScreen()
+        protected override void CustomConstructor()
         {
             this.SetBasicReactions();
             this.view = new ObjectView(new CircleShape(100), BlendMode.Alpha);
 
-            this.view.Image.OutlineThickness = 5;
+            this.view.Image.OutlineThickness = 1;
 
             this.Location = new Vector2f(0,0);
             this.size = new Vector2f(200, 200);
@@ -49,7 +48,7 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
                 newObject.Location = (currentObject.Coords - playerShip.Coords) / 40 + this.radarCenter - newObject.Size / 2;
                 this.AddForm(newObject);
             }
-            this.AddForm(new VisibleRegion(this.radarCenter));
+            this.AddForm(new VisibleRegion());
             this.RenderPlayerOnRadar();
             
         }
@@ -71,6 +70,7 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         /// <returns></returns>
         protected override bool PointTest(Vector2f testingPoint)
         {
+            this.SetBasicReactions();
             Vector2f center = this.GetPhizicalPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра окружности образующей кнопку
             float dX = testingPoint.X - center.X;
             float dY = testingPoint.Y - center.Y;
@@ -107,7 +107,7 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
             /// <summary>
             /// Построение сущности на радаре (временная реализация)
             /// </summary>
-            public RadarEntity()
+            protected override void CustomConstructor()
             {
                 this.view = new ObjectView(new CircleShape(), BlendMode.Alpha);
                 this.view.Image.FillColor = Color.Green;
@@ -122,12 +122,12 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
 
         private class VisibleRegion : Form
         {
-
-            public VisibleRegion(Vector2f loc)
+            protected override void CustomConstructor()
             {
-                this.view = new ObjectView(new RectangleShape(RenderModule.getInstance().GameView.Size / 40), BlendMode.Alpha);
+               
+                view = new ObjectView(new RectangleShape(RenderModule.getInstance().GameView.Size / 40), BlendMode.Alpha);
                 this.Size = RenderModule.getInstance().GameView.Size/40;
-                this.Location = loc - this.Size/2 + new Vector2f(1,1);
+                this.Location = new Vector2f(0,0) + this.Size/2 + new Vector2f(1,1);
                 this.view.Image.OutlineThickness = 2;
                 this.view.Image.OutlineColor = Color.Green;
                 this.view.Image.FillColor = new Color(0,0,0,0);
@@ -137,7 +137,7 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
 
             protected override bool PointTest(Vector2f testingPoint)
             {
-                return false;
+                return true;
             }
         }
 
