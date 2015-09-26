@@ -34,7 +34,11 @@ namespace Project_Space___New_Live.modules.GameObjects
             /// <summary>
             /// Энергобатеря
             /// </summary>
-            Battery
+            Battery,
+            /// <summary>
+            /// Радар
+            /// </summary>
+            Radar
         }
 
         /// <summary>
@@ -178,9 +182,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment = new List<ShipEquipment>();
             this.pilot = PlayerController.GetInstanse(this);
 
-            this.shipEquipment.Add(new Engine(100, 1, 100, 100, 10, 8, null));
-            this.shipEquipment.Add(new Reactor(100, 1, null));
-            this.shipEquipment.Add(new Battery(100, 500, null));
+            this.shipEquipment.Add(new Engine(100, 1, 100, 100, 10, 8, null));//двигатель
+            this.shipEquipment.Add(new Reactor(100, 1, null));//реактор
+            this.shipEquipment.Add(new Battery(100, 500, null));//энергобатарея
+            this.shipEquipment.Add(null);//радар
 
         }
 

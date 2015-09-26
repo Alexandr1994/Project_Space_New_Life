@@ -67,7 +67,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <returns></returns>
         protected override ObjectSignature ConstructSignature()
         {
-            return null;
+            return new ObjectSignature(new Vector2f(this.radius*2,this.radius*2), this.mass);
         }
 
 

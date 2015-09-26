@@ -19,17 +19,20 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         private Vector2f radarCenter;
 
         /// <summary>
-        /// Построение экрана радара (временная реализация)
+        /// Коэффициент уменьшения размера
+        /// </summary>
+        private int sizeCoef;
+
+
+        /// <summary>
+        /// Построение экрана радара
         /// </summary>
         protected override void CustomConstructor()
         {
-            this.SetBasicReactions();
-            this.view = new ObjectView(new CircleShape(100), BlendMode.Alpha);
-
+            this.view = new ObjectView(new CircleShape(85), BlendMode.Alpha);
             this.view.Image.OutlineThickness = 1;
-
-            this.Location = new Vector2f(0,0);
-            this.size = new Vector2f(200, 200);
+            this.Location = new Vector2f(5, 5);
+            this.size = new Vector2f(170, 170);
             this.radarCenter = this.Size/2;
             this.view.Image.FillColor = Color.Black;
         }
@@ -58,8 +61,9 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         {
 
             RadarEntity ship = new RadarEntity();
-            ship.Location = this.radarCenter;
             ship.Size = new Vector2f(2, 2);
+            ship.Location = this.radarCenter - ship.Size/2;
+            
             this.AddForm(ship);
         }
 
@@ -75,6 +79,10 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
             float dX = testingPoint.X - center.X;
             float dY = testingPoint.Y - center.Y;
             float distanse = (float)Math.Sqrt(Math.Pow(dX, 2) + Math.Pow(dY, 2));//нахождение расстояния от точки до центра кнопки
+            if (distanse == 0)//Если расстояние от центра до точки равно 0
+            {
+                return true;//то true
+            }
             float angle = (float)Math.Atan(dY / dX);
             float radius = (float)(Math.Sqrt(Math.Pow((this.size.X / 2) * Math.Cos(angle), 2) + Math.Pow((this.size.Y / 2) * Math.Sin(angle), 2)));
             if (distanse < radius)//если это расстояние меньше радиуса
@@ -83,6 +91,10 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
             }
             return false;//иначе false
         }
+
+        
+
+
 
         /// <summary>
         /// Cущность на радаре
@@ -124,20 +136,29 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         {
             protected override void CustomConstructor()
             {
-               
-                view = new ObjectView(new RectangleShape(RenderModule.getInstance().GameView.Size / 40), BlendMode.Alpha);
-                this.Size = RenderModule.getInstance().GameView.Size/40;
-                this.Location = new Vector2f(0,0) + this.Size/2 + new Vector2f(1,1);
+                view = new ObjectView(new RectangleShape(new Vector2f(20, 15)), BlendMode.Alpha);
                 this.view.Image.OutlineThickness = 2;
                 this.view.Image.OutlineColor = Color.Green;
                 this.view.Image.FillColor = new Color(0,0,0,0);
-                Vector2f lol = this.GetPhizicalPosition();
+                this.Location = new Vector2f(90,90);
+            }
+
+            protected override bool PointTest(Vector2f testingPoint)
+            {
+                return false;
+            }
+        }
+
+        private class RadarRing : Form
+        {
+            protected override void CustomConstructor()
+            {
                 
             }
 
             protected override bool PointTest(Vector2f testingPoint)
             {
-                return true;
+                return false;
             }
         }
 

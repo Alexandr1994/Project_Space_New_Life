@@ -4,6 +4,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Project_Space___New_Live.modules.Controlers.Forms;
+using Project_Space___New_Live.modules.Controlers.InterfaceParts;
 using Project_Space___New_Live.modules.GameObjects;
 using Project_Space___New_Live.modules.GameObjects.ShipModules;
 using SFML.System;
@@ -41,6 +43,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
+        /// Указатель на контейнер интерфейса игрока
+        /// </summary>
+        private PlayerInterfaceContainer playerInterface;
+
+
+        /// <summary>
         /// Активная звездная система
         /// </summary>
         private StarSystem activeSystem = null;
@@ -58,11 +66,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         /// <param name="GameWorld"></param>
         /// <returns></returns>
-        public static PlayerContainer GetInstanse(List<StarSystem> GameWorld)
+        public static PlayerContainer GetInstanse(List<StarSystem> GameWorld, PlayerInterfaceContainer playerInterface)
         {
             if (container == null)
             {
-                container = new PlayerContainer(GameWorld);
+                container = new PlayerContainer(GameWorld, playerInterface);
             }
             return container;
         }
@@ -71,19 +79,35 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Конструктор контейнера
         /// </summary>
         /// <param name="GameWorld"></param>
-        private PlayerContainer(List<StarSystem> GameWorld)
+        private PlayerContainer(List<StarSystem> GameWorld, PlayerInterfaceContainer playerInterface)
         {//Временная реализация конструктора корабля
             //Сохранение в контейнере
             this.playerShip = new Ship(800, new Vector2f(400, 400), ResurceStorage.shipTextures, new Vector2f(15, 30), 0);//Корабля игрока
             this.lastPlayerCoords = this.playerShip.Coords;//последних координат корабля игрока
             this.activeSystem = GameWorld[this.playerShip.StarSystemIndex];//Текузей звездной системы
             this.GameRenderer = RenderModule.getInstance();//ССылки на модуль отрисовки
+            this.playerInterface = playerInterface;
         }
+
 
         public float GetEnergy()
         {
             Battery battery = playerShip.Equipment[(int) Ship.EquipmentNames.Battery] as Battery;
             return (float)battery.Energy / (float)battery.MaxEnergy *100;
+        }
+
+        /// <summary>
+        /// Вернуть радиус действия радара игрока
+        /// </summary>
+        /// <returns></returns>
+        public float GetRadarRange()
+        {
+            if (this.PlayerShip.Equipment[(int) Ship.EquipmentNames.Radar] == null)
+            {//если радар отстутствует вернуть 0
+                return 0;
+            }
+            Radar radar = this.PlayerShip.Equipment[(int) Ship.EquipmentNames.Radar] as Radar;
+            return radar.VisibleRadius;//вернуть радиус заны видимости радара
         }
 
         /// <summary>
@@ -94,6 +118,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
             Vector2f shipOffset = this.lastPlayerCoords - this.playerShip.Coords;//Вычисление смещения игрока
             this.lastPlayerCoords = this.playerShip.Coords;//сохранение новых координат
             this.activeSystem.OffsetBackground(shipOffset*(float)(-0.90));//установить смещение фона активной звездной системы
+
+            this.playerInterface.RadarScr.RadarProcess(this.activeSystem, this.playerShip);
             GameRenderer.GameView.Center = this.PlayerShip.Coords;//Установка камеры
         }
 

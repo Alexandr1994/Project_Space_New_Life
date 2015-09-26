@@ -53,7 +53,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.GraphicModule = RenderModule.getInstance();//Полученить указатель на модуль отрисовки
             this.GraphicInterface = this.GraphicModule.Form;//Получить указатель на главную форму
             this.ConstructWorld();//Сконструировать игровой мир
-            this.playerContainer = PlayerContainer.GetInstanse(this.SystemCollection);//Инициализация игрока
+            this.playerContainer = PlayerContainer.GetInstanse(this.SystemCollection, new PlayerInterfaceContainer(this.GraphicInterface));//Инициализация игрока
             this.ShipsCollection.Add(this.playerContainer.PlayerShip);//создание корабля игрока и установка контроллера
         }
 
@@ -75,9 +75,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
         public void Main()
         {
-            
-            RadarScreen testRadarScreen = new RadarScreen();
-            this.GraphicInterface.AddForm(testRadarScreen);
             
             LinearBar scale = new LinearBar();
             scale.Location = new Vector2f(200,0);
@@ -105,7 +102,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 }
                 this.playerContainer.Process();
 
-                testRadarScreen.RadarProcess(this.playerContainer.ActiveSystem, playerContainer.PlayerShip);
                 scale.PercentOfBar = this.playerContainer.GetEnergy();
 
                 GraphicModule.RenderProcess(this.playerContainer.ActiveSystem, ShipsCollection);
