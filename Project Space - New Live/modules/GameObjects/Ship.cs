@@ -185,8 +185,8 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment.Add(new Engine(100, 1, 100, 100, 10, 8, null));//двигатель
             this.shipEquipment.Add(new Reactor(100, 1, null));//реактор
             this.shipEquipment.Add(new Battery(100, 500, null));//энергобатарея
-            this.shipEquipment.Add(null);//радар
-
+            this.shipEquipment.Add(new Radar(20, 2000, null));//радар
+             
         }
 
 
@@ -230,7 +230,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <returns></returns>
         protected override ObjectSignature ConstructSignature()
         {
-            return null;
+            ObjectSignature signature = new ObjectSignature();
+            signature.AddCharacteristics(this.mass, typeof(float));
+
+
+            Vector2f sizes = new Vector2f(this.ViewPartSize.X * 3, this.ViewPartSize.Y * 2);
+            signature.AddCharacteristics(sizes, sizes.GetType());
+            return signature;
         }
 
 

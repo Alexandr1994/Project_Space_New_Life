@@ -101,7 +101,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <returns></returns>
         protected override ObjectSignature ConstructSignature()
         {
-            return null;
+            ObjectSignature signature = new ObjectSignature();
+            signature.AddCharacteristics(this.mass, typeof(float));
+            Vector2f sizes = new Vector2f(this.radius * 2, this.radius * 2);
+            signature.AddCharacteristics(sizes, sizes.GetType());
+            return signature;
         }
     }
 }

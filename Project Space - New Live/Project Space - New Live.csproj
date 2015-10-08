@@ -82,6 +82,7 @@
     <Compile Include="modules\GameObjects\GameEntity.cs" />
     <Compile Include="modules\GameObjects\GameObject.cs" />
     <Compile Include="modules\GameObjects\LocalMassCenter.cs" />
+    <Compile Include="modules\GameObjects\ObjectSignature.cs" />
     <Compile Include="modules\GameObjects\Ship.cs" />
     <Compile Include="modules\GameObjects\ShipModules\Battery.cs" />
     <Compile Include="modules\GameObjects\ShipModules\Engine.cs" />
@@ -90,8 +91,6 @@
     <Compile Include="modules\GameObjects\ShipModules\ShipEquipment.cs" />
     <Compile Include="modules\GameObjects\ShipModules\ShipMover.cs" />
     <Compile Include="modules\GameObjects\ShipModules\SpeedVector.cs" />
-    <Compile Include="modules\GameObjects\SignaturePatterns\ObjectSignature.cs" />
-    <Compile Include="modules\GameObjects\SignaturePatterns\PlanetSignature.cs" />
     <Compile Include="modules\GameObjects\SphereObject.cs" />
     <Compile Include="modules\GameObjects\Star.cs" />
     <Compile Include="modules\GameObjects\Planet.cs" />

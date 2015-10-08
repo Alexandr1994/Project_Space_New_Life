@@ -43,7 +43,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         public Radar(int mass, int visibleRadius, Shape image)
         {
             this.SetCommonCharacteristics(mass, 0, image);//установка общих характеристик (энергопотребление = 0, реактор производит, а не потребляет энергию)
-            this.baseVisibleRadius = this.baseVisibleRadius = visibleRadius;//установка текущей и базовой генерируемой энергии\
+            this.baseVisibleRadius = this.visibleRadius = visibleRadius;//установка текущей и базовой генерируемой энергии\
             this.State = true;
         }
 
