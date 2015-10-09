@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
@@ -87,13 +88,36 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Получить коллекцию объектов находящихся в ситеме (временная реализация)
+        /// Получить коллекцию объектов находящихся в системе (временная реализация)
         /// </summary>
         /// <returns></returns>
         public List<GameObject> GetObjectsInSystem()
         {
             return this.massCenter.GetObjects();
         }
+
+        /// <summary>
+        /// Получить коллекцию объектов находящихся в сиcтеме в области радиусом radius около точки point (временная реализация)
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="radius"></param>
+        /// <returns></returns>
+        public List<GameObject> GetObjectsInSystem(Vector2f point, double radius)
+        {
+            List<GameObject> ret_value = new List<GameObject>();
+            foreach (GameObject candidat in this.GetObjectsInSystem())
+            {
+                //Получить расстояние до кандидата в возвращаемые объекты
+                float distanse =
+                    (float)Math.Sqrt(Math.Pow(candidat.Coords.X - point.X, 2) + Math.Pow(candidat.Coords.Y - point.Y, 2));
+                if (distanse < radius)//если кандидат находится в указанной области
+                {
+                    ret_value.Add(candidat);//то добавить его в коллекцию возвращаемых объектов
+                }
+            }
+            return ret_value;
+        }
+
 
  }
 }

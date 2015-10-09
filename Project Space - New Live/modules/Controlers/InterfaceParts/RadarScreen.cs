@@ -16,6 +16,11 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
 {
     class RadarScreen : Form
     {
+
+        /// <summary>
+        /// Размер видимой области
+        /// </summary>
+        Vector2f viewSize;
         /// <summary>
         /// Центр экрана радара
         /// </summary>
@@ -33,21 +38,23 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         protected override void CustomConstructor()
         {
             this.view = new ObjectView(new CircleShape(85), BlendMode.Alpha);
+            this.view.Image.FillColor = Color.Black;
             this.view.Image.OutlineThickness = 1;
+            this.viewSize = RenderModule.getInstance().GameView.Size;
             this.Location = new Vector2f(5, 5);
             this.size = new Vector2f(170, 170);
             this.radarCenter = this.Size/2;
-            this.view.Image.FillColor = Color.Black;
+            
         }
 
-        private double GetSizeCoeffic(Radar playerRadar)
+        /// <summary>
+        /// Найти сотношение размеров на радаре и в игровой зоне  
+        /// </summary>
+        /// <param name="visibleRadius"></param>
+        /// <returns></returns>
+        private double GetSizeCoeffic(double visibleRadius)
         {
-            float screenRadius = this.Size.X/2;
-            if (playerRadar != null && playerRadar.State)
-            {
-                return screenRadius / playerRadar.VisibleRadius;    
-            }
-            return 0;
+            return this.Size.X/2 / visibleRadius;    
         }
 
 
@@ -58,33 +65,47 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         public void RadarProcess(StarSystem activeStarSystem, Ship playerShip)
         {
             float radarCoeffic = 0;
-            this.ChildForms.Clear();//Отчистить коллекцию объектов на радаре 
-            foreach (GameObject currentObject in activeStarSystem.GetObjectsInSystem())
+            Radar playerRadar = playerShip.Equipment[(int) Ship.EquipmentNames.Radar] as Radar;
+            this.ChildForms.Clear();//Отчистить коллекцию объектов на радаре
+            if (playerRadar != null && playerRadar.State)
             {
-               
-                ObjectSignature currentSignature = currentObject.GetSignature();
-                if (currentSignature != null)
+                radarCoeffic = (float) this.GetSizeCoeffic(playerRadar.VisibleRadius);
+                this.rerenderBasicSymbols(radarCoeffic);
+
+                this.RenderPlayerOnRadar(playerShip, radarCoeffic);
+                foreach (GameObject currentObject in activeStarSystem.GetObjectsInSystem(playerShip.Coords, playerRadar.VisibleRadius))
                 {
-                    float mass = (float)currentSignature.Characteristics[(int)ObjectSignature.CharactsKeys.Mass];//Масса объекта
-                    Vector2f size = (Vector2f)currentSignature.Characteristics[(int)ObjectSignature.CharactsKeys.Size];//Размер объекта
-                    RadarEntity newObject = new RadarEntity();
-                    radarCoeffic =
-                        (float) this.GetSizeCoeffic(playerShip.Equipment[(int) Ship.EquipmentNames.Radar] as Radar);
-                    newObject.Size = size * radarCoeffic;
-                    newObject.Location = (currentObject.Coords - playerShip.Coords) * radarCoeffic + this.radarCenter - newObject.Size / 2;
-                    this.AddForm(newObject);
+                    ObjectSignature currentSignature = currentObject.GetSignature();
+                    if (currentSignature != null)
+                    {
+                        float mass = (float) currentSignature.Characteristics[(int) ObjectSignature.CharactsKeys.Mass];
+                            //Масса объекта
+                        Vector2f size = (Vector2f) currentSignature.Characteristics[(int) ObjectSignature.CharactsKeys.Size];
+                            //Размер объекта
+                        RadarEntity newObject = new RadarEntity();
+
+                        newObject.Size = size*radarCoeffic;
+                        newObject.Location = this.radarCenter - newObject.Size + (currentObject.Coords - playerShip.Coords) * radarCoeffic;
+                        this.AddForm(newObject);
+                    }
                 }
             }
-            VisibleRegion region = new VisibleRegion();
-            region.Size = new Vector2f(800, 600)*radarCoeffic;
-            region.Location = radarCenter - new Vector2f(2,2) - region.Size/2 ;
-            this.AddForm(region);
-            
-            this.RenderPlayerOnRadar(playerShip, radarCoeffic);
-            
+
         }
 
+        /// <summary>
+        /// Отрисовка базовых символов на радаре
+        /// </summary>
+        /// <param name="radarCoeffic"></param>
+        private void rerenderBasicSymbols(float radarCoeffic)
+        {
+            VisibleRegion region = new VisibleRegion();
+            region.Size = this.viewSize * radarCoeffic;
+            region.Location = radarCenter - region.Size / 2;
+            this.AddForm(region);
+        }
 
+        
         private void RenderPlayerOnRadar(Ship player, float radarCoeffic)
         { 
 
@@ -92,7 +113,6 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
             ObjectSignature playerSignature = player.GetSignature();
             ship.Size = (Vector2f)playerSignature.Characteristics[(int)ObjectSignature.CharactsKeys.Size] * radarCoeffic;
             ship.Location = this.radarCenter - ship.Size/2;
-            
             this.AddForm(ship);
         }
 
@@ -115,8 +135,7 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
             {
                 return true;//то true
             }
-            float angle = (float)Math.Atan(dY / dX);
-            float radius = (float)(Math.Sqrt(Math.Pow((this.size.X / 2) * Math.Cos(angle), 2) + Math.Pow((this.size.Y / 2) * Math.Sin(angle), 2)));
+            float radius = (this.view.Image as CircleShape).Radius;
             if (distanse < radius)//если это расстояние меньше радиуса
             {
                 return true;//то true
