@@ -14,8 +14,15 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
     public class ShipMover
     {
 
+        /// <summary>
+        /// Коллекция векторов скоростей прямолинейного движения 
+        /// </summary>
         private List<SpeedVector> speedVectors = new List<SpeedVector>();
 
+        /// <summary>
+        /// Скорость вращетельного движения
+        /// </summary>
+        private float rotationSpeed = 0;
 
         /// <summary>
         /// Добавить новый вектор скорости
@@ -101,7 +108,6 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             {
              if (battery.Uncharge(engine.EnergyNeeds))
                 {
-                    //Получение двигателя корабля
                     float acceleration = (float) (engine.ShuntingThrust/ship.Mass);
                     vector.SpeedAcceleration(-acceleration);
                 }
@@ -110,19 +116,37 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
 
 
         /// <summary>
-        /// Вращение корабля
+        /// Начать вращательное движение
         /// </summary>
+        /// <param name="ship"></param>
         /// <param name="Sign"></param>
-        public void Rotate(Ship ship,int Sign)
+        public void GiveRotationThrust(Ship ship, int Sign)
         {
-            Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;
+            Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;//Получение двигателя корабля
             Battery battery = ship.Equipment[(int)Ship.EquipmentNames.Battery] as Battery;//получение батареи корабля
             if (battery.Uncharge(engine.EnergyNeeds))
             {
-                float acceleration = Sign/Math.Abs(Sign)*engine.ShuntingThrust/ship.Mass;
-                acceleration /= (float) Math.Sqrt(Math.Pow(ship.ViewPartSize.X/2, 2) + Math.Pow(ship.ViewPartSize.Y/2, 2));//вычисление углового ускорение
-                ship.ChangeRotation(acceleration);
+                this.rotationSpeed = Sign / Math.Abs(Sign) * engine.ShuntingThrust / ship.Mass;
+                this.rotationSpeed /= (float)Math.Sqrt(Math.Pow(ship.ViewPartSize.X / 4, 2) + Math.Pow(ship.ViewPartSize.Y / 4, 2));//вычисление угловой скорости
             }
+        }
+
+
+        /// <summary>
+        /// Вращение корабля
+        /// </summary>
+        /// <param name="Sign"></param>
+        public void Rotate(Ship ship)
+        {
+            if (this.rotationSpeed > 0)//стабилизация вращения
+            {
+                this.rotationSpeed -= (float)(0.01 * Math.PI / 180);
+            }
+            else if (this.rotationSpeed < 0)
+            {
+                this.rotationSpeed += (float)(0.01 * Math.PI / 180);
+            }
+            ship.ChangeRotation(this.rotationSpeed);//Изменение угла поворота
         }
 
 
@@ -132,7 +156,8 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// <param name="ship"></param>
         public void Process(Ship ship)
         {
-            foreach (SpeedVector vector in speedVectors)
+            this.Rotate(ship);//Вразение
+            foreach (SpeedVector vector in speedVectors)//Прямолинейное смещение
             {
                 ship.ShipAtomMoving(vector.Speed, vector.Angle);//вычисление координат по текущему вектору
                 vector.SpeedAcceleration((float)-0.02);//уменьшение скорости на константу

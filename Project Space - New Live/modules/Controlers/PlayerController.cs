@@ -166,11 +166,11 @@ namespace Project_Space___New_Live.modules.Controlers
             }
             if (LeftRotate)
             {
-                this.PlayerShip.MoveManager.Rotate(this.PlayerShip, -1);
+                this.PlayerShip.MoveManager.GiveRotationThrust(this.PlayerShip, -1);
             }
             if (RightRotate)
             {
-                this.PlayerShip.MoveManager.Rotate(this.PlayerShip, 1);
+                this.PlayerShip.MoveManager.GiveRotationThrust(this.PlayerShip, 1);
             }
             if (StopMoving)
             {

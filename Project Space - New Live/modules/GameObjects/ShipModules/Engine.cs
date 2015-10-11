@@ -49,9 +49,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// </summary>
         private float baseMaxShuntingSpeed;
 
-
         //Текущие характеристики оборудования
-
 
         /// <summary>
         /// Текущая тяга маршевого двигателя
@@ -117,20 +115,17 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
                 return this.shuntingThrust;
             }
         }
-
-
-
-
-        /// <summary>
-        /// Двигательная установка
-        /// </summary>
+        
+        /// <summary> 
         /// <param name="mass">Масса</param>
         /// <param name="energyNeeds">Энергопотребление</param>
-        /// <param name="forvardCharacteristics">Маршевые характеристики: Макс. скорость(X) и ускорение(Y)</param>
-        /// <param name="shuningCharacteristics">Маневровые характеристики: Макс. скорость(X) и ускорение(Y)</param>
-        /// <param name="rotateSpeed">Скорость разворота</param>
+        /// <param name="forwardThrust">Маршевая тяга</param>
+        /// <param name="shuntingThrust">Маневровая тяга</param>
+        /// <param name="maxForwardSpeed">Ограничение по скорости прямого движения</param>
+        /// <param name="maxShuntingSpeed">Ограничение по скорости бокого движения</param>
         /// <param name="image">Изображение</param>
-        public Engine(int mass, int energyNeeds,float forwardThrust, float shuntingThrust, float maxForwardSpeed, float maxShuntingSpeed,Shape image)
+        /// </summary> 
+        public Engine(int mass, int energyNeeds,float forwardThrust, float shuntingThrust, float maxForwardSpeed, float maxShuntingSpeed, Shape image)
         {
             this.SetCommonCharacteristics(mass, energyNeeds, image);//сохранение общих характеристик
             //установка текущих характеристик двигательной установки и сохранение базовых характеристик

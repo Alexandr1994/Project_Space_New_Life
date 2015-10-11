@@ -143,7 +143,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         private void ViewControl()
         {
-            this.mainWindow.SetView(this.gameView);//установка вида отрисовки
+           this.mainWindow.SetView(this.gameView);//установка вида отрисовки
            this.Form.Location = gameView.Center - gameView.Size / 2;
         }
 
@@ -174,7 +174,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 views.AddRange(currentShip.View);
             }
             views.AddRange(this.Form.RenderForm());
-           foreach (ObjectView view in views)
+            foreach (ObjectView view in views)
             {
                mainWindow.Draw(view.Image, view.State);
             }
