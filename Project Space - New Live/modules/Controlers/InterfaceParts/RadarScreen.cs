@@ -37,12 +37,12 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         /// </summary>
         protected override void CustomConstructor()
         {
-            this.view = new ObjectView(new CircleShape(85), BlendMode.Alpha);
+            this.Size = new Vector2f(170, 170);
+            this.view = new ObjectView(new CircleShape(this.Size.X/2), BlendMode.Alpha);
             this.view.Image.FillColor = Color.Black;
             this.view.Image.OutlineThickness = 1;
             this.viewSize = RenderModule.getInstance().GameView.Size;
             this.Location = new Vector2f(5, 5);
-            this.size = new Vector2f(170, 170);
             this.radarCenter = this.Size/2;
             
         }
@@ -160,9 +160,12 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
                 set
                 {
                     this.size = value;
-                    CircleShape image = this.view.Image as CircleShape;
-                    image.Radius = this.size.X;
-                    this.view.Image = image;
+                    if (this.view.Image != null)
+                    {
+                        CircleShape image = this.view.Image as CircleShape;
+                        image.Radius = this.size.X;
+                        this.view.Image = image;
+                    }
                 }
             }
 
@@ -189,8 +192,8 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
 
             protected override void CustomConstructor()
             {
-                view = new ObjectView(new RectangleShape(new Vector2f(20, 15)), BlendMode.Alpha);
-                this.size = new Vector2f(20,15);
+                this.Size = new Vector2f(20, 15);
+                view = new ObjectView(new RectangleShape(this.Size), BlendMode.Alpha);
                 this.view.Image.OutlineThickness = 2;
                 this.view.Image.OutlineColor = Color.Green;
                 this.view.Image.FillColor = new Color(0,0,0,0);

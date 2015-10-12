@@ -98,6 +98,30 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         }
 
         /// <summary>
+        /// Начать вращательное движение
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <param name="Sign"></param>
+        public void GiveRotationThrust(Ship ship, int Sign)
+        {
+            Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;//Получение двигателя корабля
+            Battery battery = ship.Equipment[(int)Ship.EquipmentNames.Battery] as Battery;//получение батареи корабля
+            if (battery.Uncharge(engine.EnergyNeeds))
+            {
+                float acceleration = Sign / Math.Abs(Sign) * engine.ShuntingThrust / ship.Mass;
+                acceleration /= (float)Math.Sqrt(Math.Pow(ship.ViewPartSize.X / 4, 2) + Math.Pow(ship.ViewPartSize.Y / 4, 2));//вычисление угловой скорости
+                if (this.rotationSpeed * acceleration > 0)
+                {
+                    this.rotationSpeed = acceleration;
+                }
+                else
+                {
+                    this.rotationSpeed += acceleration/2;
+                }
+            }
+        }
+
+        /// <summary>
         /// Инмульс экстренного прекращения движения
         /// </summary>
         public void FullStop(Ship ship)
@@ -111,23 +135,6 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
                     float acceleration = (float) (engine.ShuntingThrust/ship.Mass);
                     vector.SpeedAcceleration(-acceleration);
                 }
-            }
-        }
-
-
-        /// <summary>
-        /// Начать вращательное движение
-        /// </summary>
-        /// <param name="ship"></param>
-        /// <param name="Sign"></param>
-        public void GiveRotationThrust(Ship ship, int Sign)
-        {
-            Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;//Получение двигателя корабля
-            Battery battery = ship.Equipment[(int)Ship.EquipmentNames.Battery] as Battery;//получение батареи корабля
-            if (battery.Uncharge(engine.EnergyNeeds))
-            {
-                this.rotationSpeed = Sign / Math.Abs(Sign) * engine.ShuntingThrust / ship.Mass;
-                this.rotationSpeed /= (float)Math.Sqrt(Math.Pow(ship.ViewPartSize.X / 4, 2) + Math.Pow(ship.ViewPartSize.Y / 4, 2));//вычисление угловой скорости
             }
         }
 

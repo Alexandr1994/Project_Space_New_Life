@@ -42,11 +42,18 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             get { return this.size; }
             set
             {
-                float Xcoef = value.X / this.size.X;
-                float Ycoef = value.Y / this.size.Y;
-                //Изменение размеров изображения
-                this.view.Image.Scale = new Vector2f(Xcoef, Ycoef);
-                this.size = value;//сохранение размеров
+                if(this.view.Image != null)
+                {
+                    float Xcoef = value.X / this.size.X;
+                    float Ycoef = value.Y / this.size.Y;
+                    //Изменение размеров изображения
+                    this.view.Image.Scale = new Vector2f(Xcoef, Ycoef);
+                    this.size = value;//сохранение размеров
+                }
+                else
+                {
+                    size = value;
+                }
             }
         }
 

@@ -24,8 +24,8 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         protected override void CustomConstructor()
         {
-            this.view = new ObjectView(new RectangleShape(new Vector2f(10, 10)), BlendMode.Multiply);
             this.Size = gameViewSize;//Установка размера формы равным размеру вида
+            this.view = new ObjectView(new RectangleShape(this.Size), BlendMode.Multiply);    
             this.Location = new Vector2f(0,0);//Установка позиции в 0,0
         }
 

@@ -14,19 +14,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
     /// </summary>
     class LinearBar : Form
     {
-        public override Vector2f Size {
-            get { return this.size; }
-            set
-            {
-                this.size = value;
-                RectangleShape temp = this.view.Image as RectangleShape;
-                temp.Size = this.size;
-                this.view.Image = temp;
-
-            } 
-        }
-
-
         /// <summary>
         /// Указатель на форму линии шкалы
         /// </summary>
@@ -55,11 +42,32 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         protected override void CustomConstructor()
         {
-            this.view = new ObjectView(new RectangleShape(new Vector2f(200, 20)), BlendMode.Alpha);
             this.Size = new Vector2f(200, 20);
+            this.view = new ObjectView(new RectangleShape(this.Size), BlendMode.Alpha);
             this.AddForm(this.lineOfBar = new BarLine());
             this.PercentOfBar = 100;
         }
+
+
+        /// <summary>
+        /// Установка текстур линейного индикатора
+        /// </summary>
+        /// <param name="textures">Массив текстур, где 1-ый элемент - текстура инидикатора, а 2-ой текстура подложки</param>
+        /// <returns></returns>
+        public bool SetTexturets(Texture[] textures)
+        {
+            if (textures.Length >= 2)
+            {
+                if (this.view.Image != null)
+                {
+                    this.view.Image.Texture = textures[0];
+                    this.lineOfBar.LineTexture = textures[1];
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         /// <summary>
         /// Проверка на наличие точки в области формы
@@ -83,20 +91,40 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         {
 
             /// <summary>
+            /// Установка текстуры линиии индикатора
+            /// </summary>
+            public Texture LineTexture
+            {
+                set
+                {
+                    if (this.view.Image != null)
+                    {
+                        this.view.Image.Texture = value;
+                    }
+                }
+            }
+
+
+            /// <summary>
             /// Полная длина индикатора
             /// </summary>
             private float fullLenght;
 
+            /// <summary>
+            /// Размер индикаторной линии
+            /// </summary>
             public override Vector2f Size
             {
                 get { return this.size; }
                 set
                 {
                     this.size = value;
-                    RectangleShape temp = this.view.Image as RectangleShape;
-                    temp.Size = this.size;
-                    this.view.Image = temp;
-
+                    if (this.view.Image != null)
+                    {
+                        RectangleShape temp = this.view.Image as RectangleShape;
+                        temp.Size = this.size;
+                        this.view.Image = temp;
+                    } 
                 }
             }
 
@@ -105,14 +133,15 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             /// </summary>
             protected override void CustomConstructor()
             {
-                this.view = new ObjectView(new RectangleShape(new Vector2f(200, 20)), BlendMode.Alpha);
-               
-                this.view.Image.FillColor = Color.Cyan;
-               
                 this.Size = new Vector2f(200, 20);
+                this.view = new ObjectView(new RectangleShape(this.Size), BlendMode.Alpha);   
                 this.fullLenght = this.Size.X;
             }
 
+            /// <summary>
+            /// Изменене показаний индикатора
+            /// </summary>
+            /// <param name="persent"></param>
             public void ChangePersent(float persent)
             {
                 this.Size = new Vector2f(this.fullLenght * persent/100, this.size.Y);

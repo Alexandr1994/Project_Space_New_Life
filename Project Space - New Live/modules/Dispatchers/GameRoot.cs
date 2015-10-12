@@ -75,9 +75,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
         public void Main()
         {
-            
             LinearBar scale = new LinearBar();
             scale.Location = new Vector2f(200,0);
+            scale.SetTexturets(new Texture[] {ResurceStorage.PanelText ,ResurceStorage.energyBar});
             this.GraphicInterface.AddForm(scale);
 
             CircleButton button = new CircleButton();

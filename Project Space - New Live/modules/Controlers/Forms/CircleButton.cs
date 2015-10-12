@@ -19,14 +19,17 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         protected override void CustomConstructor()
         {
-            this.view = new ObjectView(new CircleShape(20), BlendMode.Alpha);
+            this.Size = new Vector2f(40, 40);
+            this.view = new ObjectView(new CircleShape(this.Size.X/2), BlendMode.Alpha);
             this.Location = view.Image.Position = new Vector2f(0, 0);
-            this.SetViewStates(ResurceStorage.circuleButtonTextures);
-            this.size = new Vector2f(40, 40);
+            this.SetViewStates(ResurceStorage.circuleButtonTextures);   
             this.view.Image.Texture = this.viewStates[0];
             this.ButtonViewEventReaction();
             this.CatchEvents();
         }
+
+        
+
 
         /// <summary>
         /// /// Проверка на нахождение точки в области формы

@@ -16,6 +16,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
         static public Texture[] shipTextures = new Texture[4];
         static public Texture[] circuleButtonTextures = new Texture[4];
         static public Texture[] rectangleButtonTextures = new Texture[4];
+        static public Texture energyBar = new Texture("energyBar.png");
+        static public Texture healthBar = new Texture("healthBar.png");
+        static public Texture protectBar = new Texture("protectBar.png");
         static private Texture backText = new Texture("testBackground.png"); //фон
         static private Texture planetText = new Texture("testPlanetText.jpg"); //загруженная текстура планет 
         static private Texture starText = new Texture("testStarText.jpg"); //загруженная текстура звезды
