@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Remoting.Lifetime;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Controlers.Forms;
@@ -25,12 +26,21 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         /// Центр экрана радара
         /// </summary>
         private Vector2f radarCenter;
+        
+        /// <summary>
+        /// Форма зоны видимости
+        /// </summary>
+     //   private VisibleRegion visReg;
+        /// <summary>
+        /// Форма шума
+        /// </summary>
+        private RadarNoise noise;
+
 
         /// <summary>
         /// Коэффициент уменьшения размера
         /// </summary>
         private int sizeCoef;
-
 
         /// <summary>
         /// Построение экрана радара
@@ -38,13 +48,24 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         protected override void CustomConstructor()
         {
             this.Size = new Vector2f(170, 170);
+            this.Location = new Vector2f(10, 10);
             this.view = new ObjectView(new CircleShape(this.Size.X/2), BlendMode.Alpha);
             this.view.Image.FillColor = Color.Black;
             this.view.Image.OutlineThickness = 1;
             this.viewSize = RenderModule.getInstance().GameView.Size;
-            this.Location = new Vector2f(5, 5);
             this.radarCenter = this.Size/2;
-            
+            this.NoiseConstruct();
+           // this.visReg = new VisibleRegion();
+        }
+
+        /// <summary>
+        /// Постороить радарный шум
+        /// </summary>
+        private void NoiseConstruct()
+        {
+            this.noise = new RadarNoise();
+            this.noise.Size = this.Size;
+            this.noise.Visible = false;
         }
 
         /// <summary>
@@ -67,14 +88,16 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
             float radarCoeffic = 0;
             Radar playerRadar = playerShip.Equipment[(int) Ship.EquipmentNames.Radar] as Radar;
             this.ChildForms.Clear();//Отчистить коллекцию объектов на радаре
-            if (playerRadar != null && playerRadar.State)
-            {
+            if (playerRadar != null && playerRadar.State)//Если радар имеется и функционирует
+            {//то начать посторение отображения
+                this.noise.Visible = false;
                 radarCoeffic = (float) this.GetSizeCoeffic(playerRadar.VisibleRadius);
                 this.rerenderBasicSymbols(radarCoeffic);
 
                 this.RenderPlayerOnRadar(playerShip, radarCoeffic);
                 foreach (GameObject currentObject in activeStarSystem.GetObjectsInSystem(playerShip.Coords, playerRadar.VisibleRadius))
                 {
+                    
                     ObjectSignature currentSignature = currentObject.GetSignature();
                     if (currentSignature != null)
                     {
@@ -89,8 +112,14 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
                         this.AddForm(newObject);
                     }
                 }
+                
             }
-
+            else
+            {//иначе вывести шум
+                this.noise.NoiseProcess();
+                this.noise.Visible = true;
+                this.AddForm(this.noise);
+            }
         }
 
         /// <summary>
@@ -99,10 +128,10 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         /// <param name="radarCoeffic"></param>
         private void rerenderBasicSymbols(float radarCoeffic)
         {
-            VisibleRegion region = new VisibleRegion();
-            region.Size = this.viewSize * radarCoeffic;
-            region.Location = radarCenter - region.Size / 2;
-            this.AddForm(region);
+            VisibleRegion visReg = new VisibleRegion();
+            visReg.Size = this.viewSize * radarCoeffic;
+            visReg.Location = radarCenter - visReg.Size / 2;
+            this.AddForm(visReg);//Вывести область видимости
         }
 
         
@@ -186,13 +215,60 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
             }
         }
 
+        private class RadarNoise : Form
+        {
+
+            /// <summary>
+            /// Текущий знак изменения текстуры
+            /// </summary>
+            private int currentSign = 1;
+            
+            /// <summary>
+            /// Конструктор радарного шума
+            /// </summary>
+            protected override void CustomConstructor()
+            {
+                this.Size = new Vector2f(100,100);
+                this.Location = new Vector2f(0,0);
+                this.view = new ObjectView(new CircleShape(this.Size.X/2), BlendMode.Alpha);
+                this.view.Image.Texture = ResurceStorage.noise;
+                this.view.Image.Texture.Repeated = this.view.Image.Texture.Smooth = true;
+
+            }
+
+            /// <summary>
+            /// Шум радара никогда непроходит проверку на нахождение точки в его области
+            /// </summary>
+            /// <param name="testingPoint"></param>
+            /// <returns></returns>
+            protected override bool PointTest(Vector2f testingPoint)
+            {
+                return false;
+            }
+
+            /// <summary>
+            /// Процесс изменения текстуры шума
+            /// </summary>
+            public void NoiseProcess()
+            {
+                Random rand = new Random();
+                int sign = this.currentSign/Math.Abs(this.currentSign);
+                this.view.Image.TextureRect =
+                    new IntRect(this.view.Image.TextureRect.Left + 150, this.view.Image.TextureRect.Top,
+                        this.view.Image.TextureRect.Width, this.view.Image.TextureRect.Height);
+                
+            }
+
+        }
+
+
         private class VisibleRegion : Form
         {
             
 
             protected override void CustomConstructor()
             {
-                this.Size = new Vector2f(20, 15);
+                this.Size = new Vector2f(120, 90);
                 view = new ObjectView(new RectangleShape(this.Size), BlendMode.Alpha);
                 this.view.Image.OutlineThickness = 2;
                 this.view.Image.OutlineColor = Color.Green;

@@ -31,6 +31,19 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
+        /// Видимость формыи дочерних форм
+        /// </summary>
+        private bool visible;
+        /// <summary>
+        /// Видимость формыи дочерних форм
+        /// </summary>
+        public bool Visible
+        {
+            get { return this.visible; }
+            set { this.visible = value; }
+        }
+
+        /// <summary>
         /// Размер
         /// </summary>
         protected Vector2f size;
@@ -130,19 +143,24 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         {
             List<ObjectView> retValue = new List<ObjectView>();
             view.Image.Position = this.GetGraphicPosition();//коррекция отображения
-            retValue.Add(this.view);//добавление отображени в массив
-            foreach (Form childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
+            if (this.Visible)//если форма видимая
             {
-                if (this.ChildFormFallTest(childForm))//проверка если дочерняя форма не "падает" с текущей
-                {//получаем отображение данной дочерней формы
-                    foreach (ObjectView locView in childForm.GetChildFormView())
+                retValue.Add(this.view); //добавление отображени в массив
+                foreach (Form childForm in this.ChildForms)
+                    //добавление в массив возвращаемых значений дочерних отображений фолрм
+                {
+                    if (this.ChildFormFallTest(childForm)) //проверка если дочерняя форма не "падает" с текущей
                     {
-                        retValue.Add(locView);
-                    }               
+//получаем отображение данной дочерней формы
+                        foreach (ObjectView locView in childForm.GetChildFormView())
+                        {
+                            retValue.Add(locView);
+                        }
 
+                    }
                 }
+                this.CatchEvents(); //обнаружение событий данной формы
             }
-            this.CatchEvents();//обнаружение событий данной формы
             return retValue;
         }
 
@@ -392,6 +410,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         {
             this.SetBasicReactions();//установка базовых слушателей формы
             this.CustomConstructor();//установка базовых характеристик формы 
+            this.Visible = true;
         }
 
         /// <summary>

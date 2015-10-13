@@ -54,6 +54,31 @@ namespace Project_Space___New_Live.modules.GameObjects
             get { return this.shipEquipment; }
         }
 
+        //Параметры корабля
+
+        /// <summary>
+        /// Текущий запас прочности
+        /// </summary>
+        private int health;
+        /// <summary>
+        /// Текущий запас прочности
+        /// </summary>
+        public int Health
+        {
+            get { return this.health; }
+        }
+
+        /// <summary>
+        /// Максимальный запас прочности
+        /// </summary>
+        private int maxHealth;
+        /// <summary>
+        /// Максимальный запас прочности
+        /// </summary>
+        public int MaxHealth
+        {
+            get { return this.maxHealth; }
+        }
 
         /// <summary>
         /// Размер части корабля
@@ -186,6 +211,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment.Add(new Reactor(100, 1, null));//реактор
             this.shipEquipment.Add(new Battery(100, 500, null));//энергобатарея
             this.shipEquipment.Add(new Radar(20, 1500, null));//радар
+           // this.shipEquipment.Add(null);//радар
              
         }
 
