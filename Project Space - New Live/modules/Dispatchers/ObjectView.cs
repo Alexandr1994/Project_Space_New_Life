@@ -91,6 +91,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
             float newX = (float)(rotationCenter.X + ((image.Position.X - rotationCenter.X) * (Math.Cos(angle)) - ((image.Position.Y - rotationCenter.Y) * (Math.Sin(angle)))));
             float newY = (float)(rotationCenter.Y + ((image.Position.X - rotationCenter.X) * (Math.Sin(angle)) + ((image.Position.Y - rotationCenter.Y) * (Math.Cos(angle)))));
             this.image.Rotation += (float)(angle * (180 / Math.PI));//поворот изображения
+            if (this.Image.Rotation > 360)
+            {
+                this.Image.Rotation -= 360;
+            }
             this.image.Position = new Vector2f(newX, newY);//Установка скорректированной позиции объекта
         }
 
@@ -101,6 +105,86 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void Translate(Vector2f offsets)
         {
             this.image.Position = new Vector2f(this.image.Position.X + offsets.X, this.image.Position.Y + offsets.Y);
+        }
+
+        /// <summary>
+        /// Проверка соприкосновения отображений
+        /// </summary>
+        /// <param name="contactObject"></param>
+        /// <returns></returns>
+        public bool ContactAnalize(ObjectView contactObject)
+        {
+            switch (this.Image.GetType().Name)//определить тип данного отображения
+            {
+                case "RectangleShape" ://данное отображение - прямоугольник
+                {
+                    switch (contactObject.Image.GetType().Name)//отобразить тип проверяемого отображенния
+                    {
+                        case "RectangleShape"://проверяемое отображение прямоугольник
+                            {
+                                return this.RectInRectAnalize(contactObject.Image as RectangleShape);
+                            };
+                        case "CircleShape"://проверяемое отображение - круг
+                            {
+                                return this.CircInRectAnalize(contactObject.Image as CircleShape);
+                            };
+                    }
+                }; break;
+                case "CircleShape" ://данное отображение - круг
+                {
+                    switch (contactObject.Image.GetType().Name)
+                    {
+                        case "RectangleShape"://проверяемое отображение прямоугольник
+                            {
+                                return this.RectInCircAnalize(contactObject.Image as RectangleShape);
+                            };
+                        case "CircleShape"://проверяемое отображение - круг
+                            {
+                                return this.CircInCircAnalize(contactObject.Image as CircleShape);
+                            };
+                    }
+                }; break;
+            }
+        }
+
+        /// <summary>
+        /// Проверк соприкосновения прямоугольных отображений
+        /// </summary>
+        /// <param name="contactObject"></param>
+        /// <returns></returns>
+        private bool RectInRectAnalize(RectangleShape contactObject)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Проверка соприкосновения круглого с данным прямоугольным отображением
+        /// </summary>
+        /// <param name="contactObject"></param>
+        /// <returns></returns>
+        private bool CircInRectAnalize(CircleShape contactObject)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// проверка соприкосновения прямоугольного с данным круглым отображением
+        /// </summary>
+        /// <param name="contactObject"></param>
+        /// <returns></returns>
+        private bool RectInCircAnalize(RectangleShape contactObject)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Проверка соприкосновения круглых отображений
+        /// </summary>
+        /// <param name="contactObject"></param>
+        /// <returns></returns>
+        private bool CircInCircAnalize(CircleShape contactObject)
+        {
+            return false;
         }
 
     }

@@ -35,6 +35,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="startOrbitalAngle">//начальный орбитальный угол</param>
         /// <param name="orbitalSpeed">орбитальная угловая скорость</param>
         /// <param name="stars">Звезды, управляемые центром масс</param>
+        /// <param name="planets">Планеты, управляемые центром масс</param>
         public LocalMassCenter(int orbit, double startOrbitalAngle, double orbitalSpeed, Star[] stars, Planet[] planets)
         {
             this.orbit = orbit;
@@ -165,7 +166,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                     retValue.AddRange(currentCenter.GetObjects());
                 }
             }
-           return retValue;//Вернуть все объекты в данном и подчиненных центрах масс
+            return retValue;//Вернуть все объекты в данном и подчиненных центрах масс
         }
 
     }

@@ -265,6 +265,22 @@ namespace Project_Space___New_Live.modules.GameObjects
             return signature;
         }
 
+        /// <summary>
+        /// Анализирование взаимодействия корабля с объектами в звездной системе
+        /// </summary>
+        public void AnalizeObjectInteraction(StarSystem system)
+        {
+            List<GameObject> interactiveObjects = system.GetObjectsInSystem();//получит все объекты в звездной системе
+            foreach (GameObject interactObject in interactiveObjects)
+            {
+                if (interactObject.GetType().Name == "Star")
+                {
+                    Star star = interactObject as Star;      
+                }
+            }
+            
+        }
+
 
     }
 }

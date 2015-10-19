@@ -95,6 +95,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 foreach (Ship currentShip in this.ShipsCollection)
                 {
                     currentShip.Process(new Vector2f(0,0));
+                    currentShip.AnalizeObjectInteraction(this.SystemCollection[currentShip.StarSystemIndex]);
                 }
                 foreach (StarSystem currentSystem in this.SystemCollection)
                 {

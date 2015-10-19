@@ -215,6 +215,9 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
             }
         }
 
+        /// <summary>
+        /// Шум радара
+        /// </summary>
         private class RadarNoise : Form
         {
 
@@ -262,19 +265,27 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         }
 
 
+        /// <summary>
+        /// Видимая заона на экране радара
+        /// </summary>
         private class VisibleRegion : Form
         {
             
 
             protected override void CustomConstructor()
             {
-                this.Size = new Vector2f(120, 90);
+                this.Size = new Vector2f(40, 30);
                 view = new ObjectView(new RectangleShape(this.Size), BlendMode.Alpha);
                 this.view.Image.OutlineThickness = 2;
                 this.view.Image.OutlineColor = Color.Green;
                 this.view.Image.FillColor = new Color(0,0,0,0);
             }
 
+            /// <summary>
+            /// Зона видимости никогда не проходит проверку на нахождение курсора в её области
+            /// </summary>
+            /// <param name="testingPoint"></param>
+            /// <returns></returns>
             protected override bool PointTest(Vector2f testingPoint)
             {
                 return false;
