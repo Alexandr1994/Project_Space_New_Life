@@ -26,20 +26,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             this.CatchEvents();
         }
 
-        /// <summary>
-        /// /// Проверка на нахождение точки в области формы
-        /// </summary>
-        /// <param name="testingPoint"></param>
-        /// <returns></returns>
-        protected override bool PointTest(Vector2f testingPoint)
-        {
-            Vector2f coords = this.GetPhizicalPosition();
-            if (testingPoint.X > coords.X && testingPoint.Y > coords.Y && testingPoint.X < coords.X + this.Size.X && testingPoint.Y < coords.X + this.Size.Y)
-            {
-                return true;
-            }
-            return false;
-        }
-
+       
     }
 }

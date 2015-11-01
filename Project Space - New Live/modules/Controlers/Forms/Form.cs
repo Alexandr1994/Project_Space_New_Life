@@ -307,7 +307,11 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         /// <param name="testingPoint"></param>
         /// <returns></returns>
-        protected abstract bool PointTest(Vector2f testingPoint);
+        protected virtual bool PointTest(Vector2f testingPoint)
+        {
+            Vector2f center = this.GetPhizicalPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра окружности образующей кнопку
+            return this.view.PointAnalize(testingPoint, center);
+        }
 
         /// <summary>
         /// Получение графической позиции формы

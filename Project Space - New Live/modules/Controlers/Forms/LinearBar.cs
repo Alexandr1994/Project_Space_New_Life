@@ -68,22 +68,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             return false;
         }
 
-
-        /// <summary>
-        /// Проверка на наличие точки в области формы
-        /// </summary>
-        /// <param name="testingPoint"></param>
-        /// <returns></returns>
-        protected override bool PointTest(Vector2f testingPoint)
-        {
-            Vector2f coords = this.GetPhizicalPosition();
-            if (testingPoint.X > coords.X && testingPoint.Y > coords.Y && testingPoint.X < coords.X + this.Size.X && testingPoint.Y < coords.Y + this.Size.Y)
-            {
-                return true;
-            }
-            return false;
-        }
-
         /// <summary>
         /// Линия индикатора
         /// </summary>
@@ -146,22 +130,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             {
                 this.Size = new Vector2f(this.fullLenght * persent/100, this.size.Y);
             }
-
-            /// <summary>
-            /// Проверка на наличие точки в области формы
-            /// </summary>
-            /// <param name="testingPoint"></param>
-            /// <returns></returns>
-            protected override bool PointTest(Vector2f testingPoint)
-            {
-                this.SetBasicReactions();
-                Vector2f coords = this.GetPhizicalPosition();
-                if (testingPoint.X > coords.X && testingPoint.Y > coords.Y && testingPoint.X < coords.X + this.Size.X && testingPoint.Y < coords.Y + this.Size.Y)
-                {
-                    return true;
-                }
-                return false;
-            }
+           
         }
 
     }
