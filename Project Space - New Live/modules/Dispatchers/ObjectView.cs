@@ -108,87 +108,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Проверка соприкосновения отображений
-        /// </summary>
-        /// <param name="contactObject"></param>
-        /// <returns></returns>
-        public bool ContactAnalize(ObjectView contactObject)
-        {
-            switch (this.Image.GetType().Name)//определить тип данного отображения
-            {
-                case "RectangleShape" ://данное отображение - прямоугольник
-                {
-                    switch (contactObject.Image.GetType().Name)//отобразить тип проверяемого отображенния
-                    {
-                        case "RectangleShape"://проверяемое отображение прямоугольник
-                            {
-                                return this.RectInRectAnalize(contactObject.Image as RectangleShape);
-                            };
-                        case "CircleShape"://проверяемое отображение - круг
-                            {
-                                return this.CircInRectAnalize(contactObject.Image as CircleShape);
-                            };
-                    }
-                }; break;
-                case "CircleShape" ://данное отображение - круг
-                {
-                    switch (contactObject.Image.GetType().Name)
-                    {
-                        case "RectangleShape"://проверяемое отображение прямоугольник
-                            {
-                                return this.RectInCircAnalize(contactObject.Image as RectangleShape);
-                            };
-                        case "CircleShape"://проверяемое отображение - круг
-                            {
-                                return this.CircInCircAnalize(contactObject.Image as CircleShape);
-                            };
-                    }
-                }; break;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Проверк соприкосновения прямоугольных отображений
-        /// </summary>
-        /// <param name="contactObject"></param>
-        /// <returns></returns>
-        private bool RectInRectAnalize(RectangleShape contactObject)
-        {
-            return false;
-        }
-
-        /// <summary>
-        /// Проверка соприкосновения круглого с данным прямоугольным отображением
-        /// </summary>
-        /// <param name="contactObject"></param>
-        /// <returns></returns>
-        private bool CircInRectAnalize(CircleShape contactObject)
-        {
-            return false;
-        }
-
-        /// <summary>
-        /// проверка соприкосновения прямоугольного с данным круглым отображением
-        /// </summary>
-        /// <param name="contactObject"></param>
-        /// <returns></returns>
-        private bool RectInCircAnalize(RectangleShape contactObject)
-        {
-            return false;
-        }
-
-        /// <summary>
-        /// Проверка соприкосновения круглых отображений
-        /// </summary>
-        /// <param name="contactObject"></param>
-        /// <returns></returns>
-        private bool CircInCircAnalize(CircleShape contactObject)
-        {
-            return false;
-        }
-
-        /// <summary>
         /// Найти центр объекта отображения
         /// </summary>
         /// <returns></returns>
@@ -234,39 +153,58 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             float angle = (float)(this.image.Rotation * Math.PI) / 180;//угол поворота прямоугольника в радианах
             Vector2f sizes = (this.image as RectangleShape).Size;
+            List<Vector2f> rectangleVertex = this.FindRectangleVertexes(center);//ищем координаты вершин прямоугольника
+            List<Vector3f> rectangleLines = this.FindPoligonBorder(rectangleVertex);//ищем характеристики вершин составляющих прямоугольник
+            return this.CommonPointTest(point, rectangleLines);//проверка нахождения точки в области прямоугольника
+        }
+
+        /// <summary>
+        /// Проверка точки на принадлежность многоугольнику
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="poligonLines"></param>
+        /// <returns></returns>
+        private bool CommonPointTest(Vector2f point, List<Vector3f> poligonLines)
+        {
+            foreach (Vector3f line in poligonLines)
+            {
+                if (this.LineFuncValue(point, line) < 0)//определение значениz функции в целевой точке
+                {//если значение функции в заданной точке меньше 0 то точка за пределами многоугольника
+                    return false;
+                }
+            }
+            return true;//в случае, если все значения больше 0, то точка в области многоугольника
+        }
+
+        /// <summary>
+        /// Найти координаты вершин прямоугольника
+        /// </summary>
+        /// <param name="center"></param>
+        /// <returns></returns>
+        private List<Vector2f> FindRectangleVertexes(Vector2f center)
+        {
+            Vector2f tempVertex = new Vector2f();
+            List<Vector2f> vertexesCollection = new List<Vector2f>();
+            float angle = (float)(this.image.Rotation * Math.PI) / 180;//угол поворота прямоугольника в радианах
+            Vector2f sizes = (this.image as RectangleShape).Size;
             //определение координат вершин прямоугольника 
             //вершина А  
-            Vector2f A = new Vector2f();
-            A.X = (float)(center.X - (sizes.X / 2 * Math.Cos(angle) - sizes.Y / 2 * Math.Sin(angle)));
-            A.Y = (float)(center.Y - (sizes.X / 2 * Math.Sin(angle) + sizes.Y / 2 * Math.Cos(angle)));
+            tempVertex.X = (float)(center.X - (sizes.X / 2 * Math.Cos(angle) - sizes.Y / 2 * Math.Sin(angle)));
+            tempVertex.Y = (float)(center.Y - (sizes.X / 2 * Math.Sin(angle) + sizes.Y / 2 * Math.Cos(angle)));
+            vertexesCollection.Add(tempVertex);
             //вершина В 
-            Vector2f B = new Vector2f();
-            B.X = (float)(center.X + (sizes.X / 2 * Math.Cos(angle) + sizes.Y / 2 * Math.Sin(angle)));
-            B.Y = (float)(center.Y - (-sizes.X / 2 * Math.Sin(angle) + sizes.Y / 2 * Math.Cos(angle)));
+            tempVertex.X = (float)(center.X + (sizes.X / 2 * Math.Cos(angle) + sizes.Y / 2 * Math.Sin(angle)));
+            tempVertex.Y = (float)(center.Y - (-sizes.X / 2 * Math.Sin(angle) + sizes.Y / 2 * Math.Cos(angle)));
+            vertexesCollection.Add(tempVertex);
             //Вершина С
-            Vector2f C = new Vector2f();
-            C.X = (float)(center.X + (sizes.X / 2 * Math.Cos(angle) - sizes.Y / 2 * Math.Sin(angle)));
-            C.Y = (float)(center.Y + (sizes.X / 2 * Math.Sin(angle) + sizes.Y / 2 * Math.Cos(angle)));
+            tempVertex.X = (float)(center.X + (sizes.X / 2 * Math.Cos(angle) - sizes.Y / 2 * Math.Sin(angle)));
+            tempVertex.Y = (float)(center.Y + (sizes.X / 2 * Math.Sin(angle) + sizes.Y / 2 * Math.Cos(angle)));
+            vertexesCollection.Add(tempVertex);
             //Вершина D
-            Vector2f D = new Vector2f();
-            D.X = (float)(center.X - (sizes.X / 2 * Math.Cos(angle) + sizes.Y / 2 * Math.Sin(angle)));
-            D.Y = (float)(center.Y + (-sizes.X / 2 * Math.Sin(angle) + sizes.Y / 2 * Math.Cos(angle)));
-            //Определение характеристик прямых составляющих прямоугольник
-            Vector3f lineAB = this.FindLineCharacteristics(A, B);
-            Vector3f lineBC = this.FindLineCharacteristics(B, C);
-            Vector3f lineCD = this.FindLineCharacteristics(C, D);
-            Vector3f lineDA = this.FindLineCharacteristics(D, A);
-            //определение занчений функций в целевлй точке
-            float valueAB = this.LineFuncValue(point, lineAB);
-            float valueBC = this.LineFuncValue(point, lineBC);
-            float valueCD = this.LineFuncValue(point, lineCD);
-            float valueDA = this.LineFuncValue(point, lineDA);
-            //если значение хоть одной функции в заданной точке меньше 0 то точка за пределами прямоугольника
-            if (valueCD > 0 && valueAB > 0 && valueBC > 0 && valueDA > 0)
-            {
-                return true;
-            }
-            return false;
+            tempVertex.X = (float)(center.X - (sizes.X / 2 * Math.Cos(angle) + sizes.Y / 2 * Math.Sin(angle)));
+            tempVertex.Y = (float)(center.Y + (-sizes.X / 2 * Math.Sin(angle) + sizes.Y / 2 * Math.Cos(angle)));
+            vertexesCollection.Add(tempVertex);
+            return vertexesCollection;
         }
         
         /// <summary>
@@ -282,6 +220,26 @@ namespace Project_Space___New_Live.modules.Dispatchers
             retValue.Y = endPoint.X - beginPoint.X;//коэффициент В
             retValue.Z = endPoint.Y * beginPoint.X - endPoint.X * beginPoint.Y;//смещение С
             return retValue;
+        }
+
+        /// <summary>
+        /// Найти характеристики прямых составляющих многоугольник
+        /// </summary>
+        /// <param name="vertexColletion"></param>
+        /// <returns></returns>
+        private List<Vector3f> FindPoligonBorder(List<Vector2f> vertexColletion)
+        {
+            List<Vector3f> linesCollection = new List<Vector3f>();
+            for (int i = 0; i < vertexColletion.Count; i++)//перебрать все пары точек
+            {//и найти характеристики всех линий
+                if (i == vertexColletion.Count-1)
+                {
+                    linesCollection.Add(this.FindLineCharacteristics(vertexColletion[i], vertexColletion[0]));
+                    break;
+                }
+                linesCollection.Add(this.FindLineCharacteristics(vertexColletion[i], vertexColletion[i + 1]));
+            }
+            return linesCollection;
         }
 
         /// <summary>
@@ -328,6 +286,21 @@ namespace Project_Space___New_Live.modules.Dispatchers
             float shY = (float)(-deltaCoords.X * Math.Sin(angle) + deltaCoords.Y * Math.Cos(angle));//Y с учетом поворота эллипас
             return (float)((Math.Pow(shX, 2) / Math.Pow(halfAxises.X, 2)) + (Math.Pow(shY, 2) / Math.Pow(halfAxises.Y, 2)) - 1);
         }
+
+        /// <summary>
+        /// Анализ пересечения границ объектов
+        /// </summary>
+        /// <returns></returns>
+        public bool BorderContactAnalize()
+        {
+            return false;
+        }
+
+        private bool RectangleContactAnalize()
+        {
+            return false;
+        }
+
 
     }
 }

@@ -77,8 +77,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void Main()
         {
 
-            /* TESTING ENTITIES
+            // TESTING ENTITIES
             Vector2f centerCoords = new Vector2f(250, 225);
+            Vector2f centerCoords1 = new Vector2f(345, 245);
             Vector2f sizes = new Vector2f(100, 50);
             ObjectView testView = new ObjectView(new CircleShape(sizes.X/2), BlendMode.Add);
             testView.Image.FillColor = Color.Blue;
@@ -86,48 +87,58 @@ namespace Project_Space___New_Live.modules.Dispatchers
             testView.Image.Position = new Vector2f(200,200);
             float halfaxisX = (testView.Image as CircleShape).Radius * testView.Image.Scale.X;
             float halfaxisY = (testView.Image as CircleShape).Radius * testView.Image.Scale.Y;
+
+            ObjectView testView1 = new ObjectView(new RectangleShape(sizes), BlendMode.Add);
+            testView1.Image.FillColor = Color.Cyan;
+            testView1.Image.Position = new Vector2f(295, 220);
+            
             while (cont)
             {
                 Thread.Sleep(25);
                 GraphicModule.MainWindow.DispatchEvents();
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
                 testView.Rotate(centerCoords, (float)Math.PI / 360);
+                testView1.Rotate(centerCoords1, (float)Math.PI / 180);
                 float angle = (float) (testView.Image.Rotation*Math.PI)/180;
+                float angle1 = (float)(testView1.Image.Rotation * Math.PI) / 180;
+                Vector2f A1 = new Vector2f();
+                A1.X = (float)(centerCoords.X + halfaxisX * Math.Cos(angle));
+                A1.Y = (float)(centerCoords.Y + halfaxisX * Math.Sin(angle));
+                CircleShape a1 = new CircleShape(4);
+                a1.FillColor = Color.Green;
+                a1.Position = new Vector2f(A1.X - 2, A1.Y - 2); ;
+                Vector2f B1 = new Vector2f();
+                B1.X = (float)(centerCoords.X + halfaxisY * Math.Cos(angle + Math.PI / 2));
+                B1.Y = (float)(centerCoords.Y + halfaxisY * Math.Sin(angle + Math.PI/2));
+                CircleShape b1 = new CircleShape(4);
+                b1.FillColor = Color.Yellow;
+                b1.Position = new Vector2f(B1.X - 2, B1.Y - 2);
                 Vector2f A = new Vector2f();
-                A.X = (float)(centerCoords.X + halfaxisX * Math.Cos(angle));
-                A.Y = (float)(centerCoords.Y + halfaxisX * Math.Sin(angle));
+                A.X = (float)(centerCoords1.X - (sizes.X / 2 * Math.Cos(angle1) - sizes.Y / 2 * Math.Sin(angle1)));
+                A.Y = (float)(centerCoords1.Y - (sizes.X / 2 * Math.Sin(angle1) + sizes.Y / 2 * Math.Cos(angle1)));
                 CircleShape a = new CircleShape(4);
-                a.FillColor = Color.Green;
-                a.Position = new Vector2f(A.X - 2, A.Y - 2); ;
+                a.FillColor = Color.Yellow;
+                a.Position = new Vector2f(A.X - 2, A.Y - 2);
                 Vector2f B = new Vector2f();
-                B.X = (float)(centerCoords.X + halfaxisY * Math.Cos(angle + Math.PI / 2));
-                B.Y = (float)(centerCoords.Y + halfaxisY * Math.Sin(angle + Math.PI/2));
-                CircleShape b = new CircleShape(4);
-                b.FillColor = Color.Yellow;
-                b.Position = new Vector2f(B.X - 2, B.Y - 2); ;
-                /*Vector2f A = new Vector2f();
-                A.X = (float)(centerCoords.X - (sizes.X / 2 * Math.Cos(angle) - sizes.Y / 2 * Math.Sin(angle)));
-                A.Y = (float)(centerCoords.Y - (sizes.X / 2 * Math.Sin(angle) + sizes.Y / 2 * Math.Cos(angle)));
-                Vector2f B = new Vector2f();
-                B.X = (float)(centerCoords.X + (sizes.X / 2 * Math.Cos(angle) + sizes.Y / 2 * Math.Sin(angle)));
-                B.Y = (float)(centerCoords.Y - (-sizes.X / 2 * Math.Sin(angle) + sizes.Y / 2 * Math.Cos(angle)));
+                B.X = (float)(centerCoords1.X + (sizes.X / 2 * Math.Cos(angle1) + sizes.Y / 2 * Math.Sin(angle1)));
+                B.Y = (float)(centerCoords1.Y - (-sizes.X / 2 * Math.Sin(angle1) + sizes.Y / 2 * Math.Cos(angle1)));
                 CircleShape b = new CircleShape(4);
                 b.FillColor = Color.Yellow;
                 b.Position = new Vector2f(B.X - 2, B.Y - 2);;
                 Vector2f C = new Vector2f();
-                C.X = (float)(centerCoords.X + (sizes.X / 2 * Math.Cos(angle) - sizes.Y / 2 * Math.Sin(angle)));
-                C.Y = (float)(centerCoords.Y + (sizes.X / 2 * Math.Sin(angle) + sizes.Y / 2 * Math.Cos(angle)));
+                C.X = (float)(centerCoords1.X + (sizes.X / 2 * Math.Cos(angle1) - sizes.Y / 2 * Math.Sin(angle1)));
+                C.Y = (float)(centerCoords1.Y + (sizes.X / 2 * Math.Sin(angle1) + sizes.Y / 2 * Math.Cos(angle1)));
                 CircleShape c = new CircleShape(4);
                 c.FillColor = Color.Green;
                 c.Position = new Vector2f(C.X - 2, C.Y - 2); ;
                 Vector2f D = new Vector2f();
-                D.X = (float)(centerCoords.X - (sizes.X / 2 * Math.Cos(angle) + sizes.Y / 2 * Math.Sin(angle)));
-                D.Y = (float)(centerCoords.Y + (-sizes.X / 2 * Math.Sin(angle) + sizes.Y / 2 * Math.Cos(angle)));
+                D.X = (float)(centerCoords1.X - (sizes.X / 2 * Math.Cos(angle1) + sizes.Y / 2 * Math.Sin(angle1)));
+                D.Y = (float)(centerCoords1.Y + (-sizes.X / 2 * Math.Sin(angle1) + sizes.Y / 2 * Math.Cos(angle1)));
                 CircleShape d = new CircleShape(4);
                 d.FillColor = Color.Yellow;
-                d.Position = new Vector2f(D.X - 2, D.Y - 2)
+                d.Position = new Vector2f(D.X - 2, D.Y - 2);
                 Vector2i coords = Mouse.GetPosition(GraphicModule.MainWindow);
-                if (testView.PointAnalize((Vector2f)coords))
+                if (testView.PointAnalize((Vector2f)coords, testView.FindImageCenter()))
                 {
                     testView.Image.FillColor = Color.Red;
                 }
@@ -135,16 +146,27 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 {
                     testView.Image.FillColor = Color.Blue;
                 }
+                if (testView1.PointAnalize((Vector2f)coords, testView1.FindImageCenter()))
+                {
+                    testView1.Image.FillColor = Color.Magenta;
+                }
+                else
+                {
+                    testView1.Image.FillColor = Color.Cyan;
+                }
                 GraphicModule.MainWindow.Draw(testView.Image);
+                GraphicModule.MainWindow.Draw(testView1.Image);
+                GraphicModule.MainWindow.Draw(a1);
+                GraphicModule.MainWindow.Draw(b1);
                 GraphicModule.MainWindow.Draw(a);
                 GraphicModule.MainWindow.Draw(b);
-               /* GraphicModule.MainWindow.Draw(c);
+                GraphicModule.MainWindow.Draw(c);
                 GraphicModule.MainWindow.Draw(d);
                 GraphicModule.MainWindow.Display();
-            }*/
+            }
 
 
-            LinearBar scale = new LinearBar();
+           /* LinearBar scale = new LinearBar();
             scale.Location = new Vector2f(200,0);
             scale.SetTexturets(new Texture[] {ResurceStorage.PanelText ,ResurceStorage.energyBar});
             this.GraphicInterface.AddForm(scale);
@@ -176,7 +198,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
                 GraphicModule.RenderProcess(this.playerContainer.ActiveSystem, ShipsCollection);
                 GraphicModule.MainWindow.Display();
-            }
+            }*/
         }
 
 
