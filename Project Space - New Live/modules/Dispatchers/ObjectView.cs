@@ -272,6 +272,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             return false;
         }
 
+
         /// <summary>
         /// Вычисление значения функции в целевой точке
         /// </summary>
@@ -296,9 +297,99 @@ namespace Project_Space___New_Live.modules.Dispatchers
             return false;
         }
 
-        private bool RectangleContactAnalize()
+        public bool RectangleContactAnalize(ObjectView targetView, Vector2f center)
         {
-            return false;
+            List<Vector2f> vertexesCoords = this.FindRectangleVertexes(center);//Поиск координат вершин
+            List<Vector3f> linesCollection = this.FindPoligonBorder(vertexesCoords);//Поиск параметров функций прямых составляющих многоугольник
+           
+            //targetView - эллипс
+            Vector2f halfAxises = new Vector2f();//полуоси
+            halfAxises.X = (targetView.Image as CircleShape).Radius * targetView.Image.Scale.X;//нахождение полуоси Х
+            halfAxises.Y = (targetView.Image as CircleShape).Radius * targetView.Image.Scale.Y;//нахождение полуоси Y
+            Vector2f targetCenter = targetView.FindImageCenter();
+            float targetAngle = (float) (targetView.Image.Rotation*Math.PI/180);
+            for (int i = 0; i < linesCollection.Count; i++)
+            {
+                //Индекс начальной вершины отрезка
+                int vertexIndex1 = i;
+                int vertexIndex2 = 0;
+                if (i < linesCollection.Count - 1)
+                {
+                    vertexIndex2 = i + 1;
+                }
+                //Преобразование характеристик прямой
+                float coefK = (float) (linesCollection[i].X/-linesCollection[i].Y);
+                float constB = (float) (linesCollection[i].Z/-linesCollection[i].Y);
+                //Вычисление промежуточных данных
+                //Промежуточные данные первой ступени
+                float C = (float) (Math.Cos(targetAngle) + coefK*Math.Sin(targetAngle));
+                float D =
+                    (float)
+                        (constB*Math.Sin(targetAngle) - targetCenter.Y*Math.Sin(targetAngle) -
+                         targetCenter.X*Math.Cos(targetAngle));
+                float E = (float) (coefK*Math.Cos(targetAngle) - Math.Sin(targetAngle));
+                float F =
+                    (float)
+                        (targetCenter.X*Math.Sin(targetAngle) + constB*Math.Cos(targetAngle) -
+                         targetCenter.Y*Math.Cos(targetAngle));
+                //Промежуточные данные второй ступени
+                float G =
+                    (float) ((Math.Pow(C, 2)/Math.Pow(halfAxises.X, 2)) + (Math.Pow(E, 2)/Math.Pow(halfAxises.Y, 2)));
+                float H = (float) ((2*D*C/Math.Pow(halfAxises.X, 2)) + (2*E*F/Math.Pow(halfAxises.Y, 2)));
+                float I =
+                    (float)
+                        ((Math.Pow(D, 2)/Math.Pow(halfAxises.X, 2)) + (Math.Pow(F, 2)/Math.Pow(halfAxises.Y, 2)) - 1);
+                //Вычисление координат точек пересечения
+                Vector2f[] crossPoints = new Vector2f[2] {new Vector2f(), new Vector2f()};
+                //Вычисление точек пересечения
+                crossPoints[0].X = (float) ((-H + Math.Sqrt(Math.Pow(H, 2) - 4*G*I))/(2*G));
+                crossPoints[0].Y = (float) (coefK*crossPoints[0].X + constB);
+                crossPoints[1].X = (float) ((-H - Math.Sqrt(Math.Pow(H, 2) - 4*G*I))/(2*G));
+                crossPoints[1].Y = (float) (coefK*crossPoints[1].X + constB);
+                if (crossPoints[0].X.Equals(float.NaN) && crossPoints[1].X.Equals(float.NaN))
+                    //если х координаты точек пересечения не найдены
+                {
+                    continue; //Перейти к следующей точке
+                }
+
+                //Определение нахождения данной точник на требуемом отрнезке
+                for (int j = 0; j < crossPoints.Length; j++)
+                {
+                    if (vertexesCoords[vertexIndex1].X < vertexesCoords[vertexIndex2].X)//ограничение по X
+                    {
+                        if (vertexesCoords[vertexIndex1].X > crossPoints[j].X ||
+                            vertexesCoords[vertexIndex2].X < crossPoints[j].X)
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        if (vertexesCoords[vertexIndex1].X < crossPoints[j].X ||
+                            vertexesCoords[vertexIndex2].X > crossPoints[j].X)
+                        {
+                            continue;
+                        }
+                    }
+                    if (vertexesCoords[vertexIndex1].Y < vertexesCoords[vertexIndex2].Y)//ограничение по Y
+                    {
+                        if (vertexesCoords[vertexIndex1].Y < crossPoints[j].Y &&
+                            vertexesCoords[vertexIndex2].Y > crossPoints[j].Y)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (vertexesCoords[vertexIndex1].Y > crossPoints[j].Y &&
+                            vertexesCoords[vertexIndex2].Y < crossPoints[j].Y)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;//Нет соприкосновения
         }
 
 

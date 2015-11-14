@@ -146,13 +146,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 {
                     testView.Image.FillColor = Color.Blue;
                 }
+                testView1.Image.FillColor = Color.Cyan;
                 if (testView1.PointAnalize((Vector2f)coords, testView1.FindImageCenter()))
                 {
                     testView1.Image.FillColor = Color.Magenta;
                 }
-                else
+                if (testView1.RectangleContactAnalize(testView, testView1.FindImageCenter()))
                 {
-                    testView1.Image.FillColor = Color.Cyan;
+                    testView1.Image.FillColor = Color.Green;
                 }
                 GraphicModule.MainWindow.Draw(testView.Image);
                 GraphicModule.MainWindow.Draw(testView1.Image);
