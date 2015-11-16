@@ -297,7 +297,13 @@ namespace Project_Space___New_Live.modules.Dispatchers
             return false;
         }
 
-        public bool RectangleContactAnalize(ObjectView targetView, Vector2f center)
+        /// <summary>
+        /// Анализ пересечения прямоугольника и эллипса
+        /// </summary>
+        /// <param name="targetView"></param>
+        /// <param name="center"></param>
+        /// <returns></returns>
+        public bool RectangleAndEllipceContactAnalize(ObjectView targetView, Vector2f center)
         {
             List<Vector2f> vertexesCoords = this.FindRectangleVertexes(center);//Поиск координат вершин
             List<Vector3f> linesCollection = this.FindPoligonBorder(vertexesCoords);//Поиск параметров функций прямых составляющих многоугольник
@@ -355,43 +361,108 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 //Определение нахождения данной точник на требуемом отрнезке
                 for (int j = 0; j < crossPoints.Length; j++)
                 {
-                    if (vertexesCoords[vertexIndex1].X < vertexesCoords[vertexIndex2].X)//ограничение по X
+                    if (this.OnLineTest(vertexesCoords[vertexIndex1], vertexesCoords[vertexIndex2], crossPoints[j]))
                     {
-                        if (vertexesCoords[vertexIndex1].X > crossPoints[j].X ||
-                            vertexesCoords[vertexIndex2].X < crossPoints[j].X)
-                        {
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        if (vertexesCoords[vertexIndex1].X < crossPoints[j].X ||
-                            vertexesCoords[vertexIndex2].X > crossPoints[j].X)
-                        {
-                            continue;
-                        }
-                    }
-                    if (vertexesCoords[vertexIndex1].Y < vertexesCoords[vertexIndex2].Y)//ограничение по Y
-                    {
-                        if (vertexesCoords[vertexIndex1].Y < crossPoints[j].Y &&
-                            vertexesCoords[vertexIndex2].Y > crossPoints[j].Y)
-                        {
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        if (vertexesCoords[vertexIndex1].Y > crossPoints[j].Y &&
-                            vertexesCoords[vertexIndex2].Y < crossPoints[j].Y)
-                        {
-                            return true;
-                        }
+                        return true;                        
                     }
                 }
             }
             return false;//Нет соприкосновения
         }
 
+        /// <summary>
+        /// Проверак принадлежности точки отрезку
+        /// </summary>
+        /// <param name="beginCoords">Координаты начала отрезка</param>
+        /// <param name="endCoords">Координаты конца отрезка</param>
+        /// <param name="point">Проверяемая точка</param>
+        private bool OnLineTest(Vector2f beginCoords, Vector2f endCoords, Vector2f point)
+        {
+            if (beginCoords.X < endCoords.X)//ограничение по X
+            {
+                if (beginCoords.X > point.X ||
+                    endCoords.X < point.X)
+                {
+                    return false;//точка за пределами отрезка
+                }
+            }
+            else
+            {
+                if (beginCoords.X < point.X ||
+                    endCoords.X > point.X)
+                {
+                    return false;//точка за пределами отрезка
+                }
+            }
+            if (beginCoords.Y < endCoords.Y)//ограничение по Y
+            {
+                if (beginCoords.Y <= point.Y &&
+                    endCoords.Y >= point.Y)
+                {
+                    return true;//точка в области отрезка
+                }
+            }
+            else
+            {
+                if (beginCoords.Y >= point.Y &&
+                    endCoords.Y <= point.Y)
+                {
+                    return true;///точка в области отрезка
+                }
+            }
+            return false;//точка за пределами отрезка
+        }
+
+        /// <summary>
+        /// Проверка пересечения прямоугольников
+        /// </summary>
+        /// <param name="targetView"></param>
+        /// <param name="center"></param>
+        /// <returns></returns>
+        public bool RectangleAndRectangleContactAnalize(ObjectView targetView, Vector2f center)
+        {
+            //поиск собственных вершин и границы
+            List<Vector2f> selfVertexes = this.FindRectangleVertexes(this.FindImageCenter());
+            List<Vector3f> selfLines = this.FindPoligonBorder(selfVertexes);
+            //поиск вершин и границы целевой фигуры
+            List<Vector2f> targetVertexes = targetView.FindRectangleVertexes(targetView.FindImageCenter());
+            List<Vector3f> targetLines = targetView.FindPoligonBorder(targetVertexes);
+
+            for (int i = 0; i < selfLines.Count; i ++)
+            {
+                int selfIndex1 = i;
+                int selfIndex2 = 0;
+                if (i < selfLines.Count - 1)
+                {
+                    selfIndex2 = i + 1;
+                }
+                Vector2f crossPoint = new Vector2f();//точка пересечения
+                float selfK = (float) (selfLines[i].X / -selfLines[i].Y);//параметры прямой линии
+                float selfB = (float) (selfLines[i].Z / -selfLines[i].Y);
+                for (int j = 0; j < targetLines.Count; j ++)
+                {
+                    int targetIndex1 = j;
+                    int targetIndex2 = 0;
+                    if (j < targetLines.Count - 1)
+                    {
+                        targetIndex2 = j + 1;
+                    }
+                    float targetK = (float)(targetLines[j].X / -targetLines[j].Y);//параметры прямой линии
+                    float targetB = (float)(targetLines[j].Z / -targetLines[j].Y);
+                    float dK = selfK - targetK;
+                    float dB = targetB - selfB;
+                    crossPoint.X = (float) (dB / dK);
+                    crossPoint.Y = selfK*crossPoint.X + selfB;
+                    if (OnLineTest(selfVertexes[selfIndex1], selfVertexes[selfIndex2], crossPoint) &&
+                            OnLineTest(targetVertexes[targetIndex1], targetVertexes[targetIndex2], crossPoint))
+                    {//и она лежит на отрезках
+                            return true;//значит прямоугольники пересекаются
+                        
+                    }
+                }
+            }
+            return false;
+        }
 
     }
 }
