@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
@@ -460,6 +461,36 @@ namespace Project_Space___New_Live.modules.Dispatchers
                         
                     }
                 }
+            }
+            return false;
+        }
+
+        public bool EllipseAndEllipseContactAnalize(ObjectView targetView, Vector2f center)
+        {
+            Vector2f targetCenter = targetView.FindImageCenter();
+            center = this.FindImageCenter();
+            Vector2f delta = center - targetCenter;
+            double distance = Math.Sqrt(Math.Pow(delta.X, 2) + Math.Pow(delta.Y, 2));//расстояние между центарми отображений
+            float betweenAngle = (float)(Math.Acos(delta.X / distance));
+            float selfAngle = (float) ((this.Image.Rotation * Math.PI / 180) - betweenAngle);//угол поворота данного отображения
+            float targetAngle = (float) (-(targetView.Image.Rotation * Math.PI / 180) + betweenAngle);//угол поворота проверяемого отображения
+            Vector2f selfHalfAxises = new Vector2f();
+            Vector2f targetHalfAxises = new Vector2f();
+            selfHalfAxises.X = (this.Image as CircleShape).Radius * this.Image.Scale.X;//нахождение полуоси Х
+            selfHalfAxises.Y = (this.Image as CircleShape).Radius * this.Image.Scale.Y;//нахождение полуоси Y
+            targetHalfAxises.X = (targetView.Image as CircleShape).Radius * targetView.Image.Scale.X;//нахождение полуоси Х
+            targetHalfAxises.Y = (targetView.Image as CircleShape).Radius * targetView.Image.Scale.Y;//нахождение полуоси Y
+            float selfRadius =
+                (float)
+                    (Math.Sqrt(Math.Pow(selfHalfAxises.X*Math.Cos(selfAngle), 2) +
+                               Math.Pow(selfHalfAxises.Y*Math.Sin(selfAngle), 2)));
+            float targetRadius =
+                (float)
+                    (Math.Sqrt(Math.Pow(targetHalfAxises.X * Math.Cos(targetAngle), 2) +
+                               Math.Pow(targetHalfAxises.Y * Math.Sin(targetAngle), 2)));
+            if (Math.Abs(distance) < Math.Abs(selfRadius + targetRadius))
+            {
+                return true;
             }
             return false;
         }

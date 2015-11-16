@@ -110,8 +110,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
                 testView.Rotate(centerCoords, (float)Math.PI / 360);
                 testView1.Rotate(centerCoords1, (float)Math.PI / 180);
-                testView2.Rotate(centerCoords2, (float)Math.PI / 45);
-                testView3.Rotate(centerCoords3, (float)Math.PI / 90);
+                testView2.Rotate(centerCoords2, (float)Math.PI / 360);
+                testView3.Rotate(centerCoords3, (float)Math.PI / 180);
               
                 Vector2i coords = Mouse.GetPosition(GraphicModule.MainWindow);
                 if (testView.PointAnalize((Vector2f)coords, testView.FindImageCenter()))
@@ -130,6 +130,19 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 if (testView1.RectangleAndRectangleContactAnalize(testView, testView1.FindImageCenter()))
                 {
                     testView1.Image.FillColor = Color.Green;
+                }
+                if (testView1.RectangleAndEllipceContactAnalize(testView2, testView1.FindImageCenter()))
+                {
+                    testView1.Image.FillColor = Color.Yellow;
+                }
+                testView3.Image.FillColor = Color.Cyan;
+                if (testView3.PointAnalize((Vector2f)coords, testView3.FindImageCenter()))
+                {
+                    testView3.Image.FillColor = Color.Magenta;
+                }
+                if (testView3.EllipseAndEllipseContactAnalize(testView2, testView3.FindImageCenter()))
+                {
+                    testView3.Image.FillColor = Color.Green;
                 }
                 GraphicModule.MainWindow.Draw(testView.Image);
                 GraphicModule.MainWindow.Draw(testView1.Image);
