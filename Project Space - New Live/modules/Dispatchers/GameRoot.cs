@@ -127,11 +127,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 {
                     testView1.Image.FillColor = Color.Magenta;
                 }
-                if (testView1.RectangleAndRectangleContactAnalize(testView, testView1.FindImageCenter()))
+                if (testView1.BorderContactAnalize(testView))
                 {
                     testView1.Image.FillColor = Color.Green;
                 }
-                if (testView1.RectangleAndEllipceContactAnalize(testView2, testView1.FindImageCenter()))
+                if (testView1.BorderContactAnalize(testView2))
                 {
                     testView1.Image.FillColor = Color.Yellow;
                 }
@@ -140,7 +140,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 {
                     testView3.Image.FillColor = Color.Magenta;
                 }
-                if (testView3.EllipseAndEllipseContactAnalize(testView2, testView3.FindImageCenter()))
+                if (testView3.BorderContactAnalize(testView2))
                 {
                     testView3.Image.FillColor = Color.Green;
                 }

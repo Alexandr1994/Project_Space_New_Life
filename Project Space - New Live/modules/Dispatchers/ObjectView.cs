@@ -293,9 +293,46 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Анализ пересечения границ объектов
         /// </summary>
         /// <returns></returns>
-        public bool BorderContactAnalize()
+        public bool BorderContactAnalize(ObjectView targetView)
         {
-            return false;
+            switch (this.Image.GetType().Name)//в зависимости от типа данного отображения
+            {
+                case "RectangleShape":
+                {
+                    switch (targetView.Image.GetType().Name)//и типа проверяемого вызываем один и методов проверки
+                    {
+                        case "RectangleShape":
+                        {//проверка прямоугольник и прямоугольник
+                            return this.RectangleAndRectangleContactAnalize(targetView);
+                        }
+                           break;
+                        case "CircleShape":
+                        {//проверка эллипс и прямоугольник
+                               return this.RectangleAndEllipceContactAnalize(targetView);
+                        }
+                           break;      
+                    }
+                }
+                    break;
+                case "CircleShape"://и типа проверяемого вызываем один и методов проверки
+                {
+                    switch (targetView.Image.GetType().Name)
+                    {//проверка эллипс и прямоугобник
+                        case "RectangleShape":
+                            {
+                                return targetView.RectangleAndEllipceContactAnalize(this);
+                            }
+                            break;
+                        case "CircleShape":
+                            {//проверка эллипс и эллипс
+                                return this.EllipseAndEllipseContactAnalize(targetView);
+                            }
+                            break;
+                    }
+                }
+                    break;
+            }
+            return false;//в противном случае false
         }
 
         /// <summary>
@@ -304,11 +341,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="targetView"></param>
         /// <param name="center"></param>
         /// <returns></returns>
-        public bool RectangleAndEllipceContactAnalize(ObjectView targetView, Vector2f center)
+        private bool RectangleAndEllipceContactAnalize(ObjectView targetView)
         {
+            Vector2f center = this.FindImageCenter();
             List<Vector2f> vertexesCoords = this.FindRectangleVertexes(center);//Поиск координат вершин
             List<Vector3f> linesCollection = this.FindPoligonBorder(vertexesCoords);//Поиск параметров функций прямых составляющих многоугольник
-           
             //targetView - эллипс
             Vector2f halfAxises = new Vector2f();//полуоси
             halfAxises.X = (targetView.Image as CircleShape).Radius * targetView.Image.Scale.X;//нахождение полуоси Х
@@ -420,7 +457,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="targetView"></param>
         /// <param name="center"></param>
         /// <returns></returns>
-        public bool RectangleAndRectangleContactAnalize(ObjectView targetView, Vector2f center)
+        private bool RectangleAndRectangleContactAnalize(ObjectView targetView)
         {
             //поиск собственных вершин и границы
             List<Vector2f> selfVertexes = this.FindRectangleVertexes(this.FindImageCenter());
@@ -452,7 +489,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                     float targetB = (float)(targetLines[j].Z / -targetLines[j].Y);
                     float dK = selfK - targetK;
                     float dB = targetB - selfB;
-                    crossPoint.X = (float) (dB / dK);
+                    crossPoint.X = (float) (dB / dK);//поиск точки пересечения
                     crossPoint.Y = selfK*crossPoint.X + selfB;
                     if (OnLineTest(selfVertexes[selfIndex1], selfVertexes[selfIndex2], crossPoint) &&
                             OnLineTest(targetVertexes[targetIndex1], targetVertexes[targetIndex2], crossPoint))
@@ -465,10 +502,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
             return false;
         }
 
-        public bool EllipseAndEllipseContactAnalize(ObjectView targetView, Vector2f center)
+        private bool EllipseAndEllipseContactAnalize(ObjectView targetView)
         {
             Vector2f targetCenter = targetView.FindImageCenter();
-            center = this.FindImageCenter();
+            Vector2f center = this.FindImageCenter();
             Vector2f delta = center - targetCenter;
             double distance = Math.Sqrt(Math.Pow(delta.X, 2) + Math.Pow(delta.Y, 2));//расстояние между центарми отображений
             float betweenAngle = (float)(Math.Acos(delta.X / distance));
@@ -480,17 +517,17 @@ namespace Project_Space___New_Live.modules.Dispatchers
             selfHalfAxises.Y = (this.Image as CircleShape).Radius * this.Image.Scale.Y;//нахождение полуоси Y
             targetHalfAxises.X = (targetView.Image as CircleShape).Radius * targetView.Image.Scale.X;//нахождение полуоси Х
             targetHalfAxises.Y = (targetView.Image as CircleShape).Radius * targetView.Image.Scale.Y;//нахождение полуоси Y
-            float selfRadius =
+            float selfRadius = //вычисляем расстояние от центра до дуги данного эллипса
                 (float)
-                    (Math.Sqrt(Math.Pow(selfHalfAxises.X*Math.Cos(selfAngle), 2) +
-                               Math.Pow(selfHalfAxises.Y*Math.Sin(selfAngle), 2)));
-            float targetRadius =
+                    (Math.Sqrt(Math.Pow(selfHalfAxises.X * Math.Cos(selfAngle), 2) +
+                               Math.Pow(selfHalfAxises.Y * Math.Sin(selfAngle), 2)));
+            float targetRadius = //вычисляем расстояние от центра до дуги проверяемого эллипса
                 (float)
                     (Math.Sqrt(Math.Pow(targetHalfAxises.X * Math.Cos(targetAngle), 2) +
                                Math.Pow(targetHalfAxises.Y * Math.Sin(targetAngle), 2)));
-            if (Math.Abs(distance) < Math.Abs(selfRadius + targetRadius))
-            {
-                return true;
+            if (Math.Abs(distance) < Math.Abs(selfRadius + targetRadius*0.95))//если расстояние между центрами эллипсов меньше
+            {                                                                //суммы расстояний от центов до дуг эллипсов,
+                return true;//те эллипсы пересекаются
             }
             return false;
         }
