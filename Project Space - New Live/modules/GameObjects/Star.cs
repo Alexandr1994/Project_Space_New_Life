@@ -14,7 +14,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Перечисление индексов
         /// </summary>
-        private enum Views
+        public enum Views
         {
             Star,//изображения звезды
             Crown//изображение короны

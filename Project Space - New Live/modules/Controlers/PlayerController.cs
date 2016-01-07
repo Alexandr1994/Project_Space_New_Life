@@ -180,7 +180,9 @@ namespace Project_Space___New_Live.modules.Controlers
 
         public override void Process()
         {
+            this.RefreshFlags();
             this.Moving();
+            
         }
     }
 }

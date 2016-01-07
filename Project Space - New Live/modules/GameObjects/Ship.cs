@@ -151,6 +151,41 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
+        /// Базовое получение урона кораблем
+        /// </summary>
+        /// <param name="damage"></param>
+        public void GetDamage(int damage)
+        {
+            if (this.health > damage)
+            {
+                this.health -= damage;
+            }
+            else
+            {
+                this.health = 0;
+            } 
+        }
+
+        /// <summary>
+        /// Ремонт корабля
+        /// </summary>
+        /// <param name="recovery"></param>
+        public void Repair(int recovery)
+        {
+            if (this.health < this.MaxHealth)
+            {
+                if (Math.Abs(this.health - this.MaxHealth) > recovery)
+                {
+                    this.health += recovery;
+                }
+                else
+                {
+                    this.health = this.MaxHealth;
+                }
+            }
+        }
+
+        /// <summary>
         /// Постоянное перемещение корабля
         /// </summary>
         protected override void Move()
@@ -198,7 +233,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="textures">Набор текстур</param>
         /// <param name="newPartSize">Начальный размер составных частей</param>
         /// <param name="startSystemIndex">Индекс стартовой звездной системы</param>
-        public Ship(float mass, Vector2f coords, Texture[] textures, Vector2f newPartSize, int startSystemIndex)
+        public Ship(float mass, Vector2f coords, int maxHealth, Texture[] textures, Vector2f newPartSize, int startSystemIndex)
         {
             this.mass = mass;
             this.coords = coords;
@@ -206,6 +241,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.ConstructView(textures);
             this.shipEquipment = new List<ShipEquipment>();
             this.pilot = PlayerController.GetInstanse(this);
+            this.maxHealth = this.health = maxHealth;
 
             this.shipEquipment.Add(new Engine(100, 1, 100, 100, 10, 8, null));//двигатель
             this.shipEquipment.Add(new Reactor(100, 1, null));//реактор
@@ -214,8 +250,6 @@ namespace Project_Space___New_Live.modules.GameObjects
            // this.shipEquipment.Add(null);//радар
              
         }
-
-
 
         /// <summary>
         /// Построить отображение корабля
@@ -270,12 +304,39 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public void AnalizeObjectInteraction(StarSystem system)
         {
-            List<GameObject> interactiveObjects = system.GetObjectsInSystem();//получит все объекты в звездной системе
+            List<GameObject> interactiveObjects = system.GetObjectsInSystem();//получить все объекты в звездной системе
             foreach (GameObject interactObject in interactiveObjects)
             {
-                if (interactObject.GetType().Name == "Star")
+
+                switch (interactObject.GetType().Name)
                 {
-                    Star star = interactObject as Star;      
+                    case "Star"://проверка контакта со звездой
+                    {
+                        Star star = interactObject as Star;
+                        foreach (ObjectView partShipView in this.View)//если одна из частей корабля контактирует 
+                        {
+                            if (partShipView.BorderContactAnalize(interactObject.View[(int) Star.Views.Star]))//с самой звездой
+                            {
+                                this.GetDamage(this.MaxHealth);//нанести максимальный урон кораблю
+                                break;
+                            }
+                            if (partShipView.BorderContactAnalize(interactObject.View[(int) Star.Views.Crown]))//со звездной короной
+                            {
+                                this.GetDamage(5);//нанести некоторый урон
+                            }
+                        }
+                    };break;
+                    case "Planet":
+                    {
+                        Planet planet = interactObject as Planet;
+                        foreach (ObjectView partShipView in this.View)
+                        {
+                            if (partShipView.BorderContactAnalize(interactObject.View[0]))
+                            {
+                                this.Repair(1);
+                            }
+                        }
+                    };break;
                 }
             }
             

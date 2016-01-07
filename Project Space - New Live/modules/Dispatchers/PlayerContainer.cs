@@ -82,11 +82,17 @@ namespace Project_Space___New_Live.modules.Dispatchers
         private PlayerContainer(List<StarSystem> GameWorld, PlayerInterfaceContainer playerInterface)
         {//Временная реализация конструктора корабля
             //Сохранение в контейнере
-            this.playerShip = new Ship(800, new Vector2f(400, 400), ResurceStorage.shipTextures, new Vector2f(15, 30), 0);//Корабля игрока
+            this.playerShip = new Ship(800, new Vector2f(400, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), 0);//Корабля игрока
             this.lastPlayerCoords = this.playerShip.Coords;//последних координат корабля игрока
-            this.activeSystem = GameWorld[this.playerShip.StarSystemIndex];//Текузей звездной системы
+            this.activeSystem = GameWorld[this.playerShip.StarSystemIndex];//Текущей звездной системы
             this.GameRenderer = RenderModule.getInstance();//ССылки на модуль отрисовки
             this.playerInterface = playerInterface;
+        }
+
+
+        public float GetHealh()
+        {
+            return this.playerShip.Health * 100 / this.playerShip.MaxHealth;
         }
 
 

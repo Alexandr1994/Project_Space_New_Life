@@ -116,7 +116,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
                 }
                 else
                 {
-                    this.rotationSpeed += acceleration/2;
+                    this.rotationSpeed += acceleration*2;
                 }
             }
         }
@@ -147,11 +147,11 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         {
             if (this.rotationSpeed > 0)//стабилизация вращения
             {
-                this.rotationSpeed -= (float)(0.01 * Math.PI / 180);
+                this.rotationSpeed -= (float)(0.02 * Math.PI / 180);
             }
             else if (this.rotationSpeed < 0)
             {
-                this.rotationSpeed += (float)(0.01 * Math.PI / 180);
+                this.rotationSpeed += (float)(0.02 * Math.PI / 180);
             }
             ship.ChangeRotation(this.rotationSpeed);//Изменение угла поворота
         }

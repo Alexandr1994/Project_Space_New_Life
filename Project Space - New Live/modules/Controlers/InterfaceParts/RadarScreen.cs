@@ -30,7 +30,7 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
         /// <summary>
         /// Форма зоны видимости
         /// </summary>
-     //   private VisibleRegion visReg;
+        private VisibleRegion visReg;
         /// <summary>
         /// Форма шума
         /// </summary>
@@ -55,7 +55,7 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
             this.viewSize = RenderModule.getInstance().GameView.Size;
             this.radarCenter = this.Size/2;
             this.NoiseConstruct();
-           // this.visReg = new VisibleRegion();
+            this.visReg = new VisibleRegion();
         }
 
         /// <summary>
@@ -171,10 +171,6 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
             }
             return false;//иначе false
         }
-
-        
-
-
 
         /// <summary>
         /// Cущность на радаре

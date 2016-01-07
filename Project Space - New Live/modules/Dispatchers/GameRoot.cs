@@ -76,87 +76,16 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
         public void Main()
         {
+            
+            LinearBar scaleHea = new LinearBar();
+            scaleHea.Location = new Vector2f(200, 0);
+            scaleHea.SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.healthBar });
+            this.GraphicInterface.AddForm(scaleHea);
+            LinearBar scaleEn = new LinearBar();
+            scaleEn.Location = new Vector2f(200, 20);
+            scaleEn.SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.energyBar });
+            this.GraphicInterface.AddForm(scaleEn);
 
-            // TESTING ENTITIES
-            Vector2f centerCoords = new Vector2f(250, 225);
-            Vector2f centerCoords1 = new Vector2f(345, 245);
-            Vector2f centerCoords2 = new Vector2f(425, 235);
-            Vector2f centerCoords3 = new Vector2f(495, 245);
-            Vector2f sizes = new Vector2f(100, 50);
-
-            ObjectView testView2 = new ObjectView(new CircleShape(sizes.X/2), BlendMode.Add);
-            testView2.Image.FillColor = Color.Blue;
-            testView2.Image.Scale = new Vector2f(sizes.X / sizes.X, sizes.Y / sizes.X);
-            testView2.Image.Position = new Vector2f(380,210);
-
-            ObjectView testView = new ObjectView(new RectangleShape(sizes), BlendMode.Add);
-            testView.Image.FillColor = Color.Blue;
-            testView.Image.Position = new Vector2f(200, 210);
-
-            ObjectView testView1 = new ObjectView(new RectangleShape(sizes), BlendMode.Add);
-            testView1.Image.FillColor = Color.Cyan;
-            testView1.Image.Position = new Vector2f(295, 220);
-
-            ObjectView testView3 = new ObjectView(new CircleShape(sizes.X / 2), BlendMode.Add);
-            testView3.Image.FillColor = Color.Cyan;
-            testView3.Image.Scale = new Vector2f(sizes.X / sizes.X, sizes.Y / sizes.X);
-            testView3.Image.Position = new Vector2f(445, 220);
-
-
-            while (cont)
-            {
-                Thread.Sleep(25);
-                GraphicModule.MainWindow.DispatchEvents();
-                GraphicModule.MainWindow.Clear(); //перерисовка окна
-                testView.Rotate(centerCoords, (float)Math.PI / 360);
-                testView1.Rotate(centerCoords1, (float)Math.PI / 180);
-                testView2.Rotate(centerCoords2, (float)Math.PI / 360);
-                testView3.Rotate(centerCoords3, (float)Math.PI / 180);
-              
-                Vector2i coords = Mouse.GetPosition(GraphicModule.MainWindow);
-                if (testView.PointAnalize((Vector2f)coords, testView.FindImageCenter()))
-                {
-                    testView.Image.FillColor = Color.Red;
-                }
-                else
-                {
-                    testView.Image.FillColor = Color.Blue;
-                }
-                testView1.Image.FillColor = Color.Cyan;
-                if (testView1.PointAnalize((Vector2f)coords, testView1.FindImageCenter()))
-                {
-                    testView1.Image.FillColor = Color.Magenta;
-                }
-                if (testView1.BorderContactAnalize(testView))
-                {
-                    testView1.Image.FillColor = Color.Green;
-                }
-                if (testView1.BorderContactAnalize(testView2))
-                {
-                    testView1.Image.FillColor = Color.Yellow;
-                }
-                testView3.Image.FillColor = Color.Cyan;
-                if (testView3.PointAnalize((Vector2f)coords, testView3.FindImageCenter()))
-                {
-                    testView3.Image.FillColor = Color.Magenta;
-                }
-                if (testView3.BorderContactAnalize(testView2))
-                {
-                    testView3.Image.FillColor = Color.Green;
-                }
-                GraphicModule.MainWindow.Draw(testView.Image);
-                GraphicModule.MainWindow.Draw(testView1.Image);
-                GraphicModule.MainWindow.Draw(testView2.Image);
-                GraphicModule.MainWindow.Draw(testView3.Image);
-               
-                GraphicModule.MainWindow.Display();
-            }
-
-
-           /* LinearBar scale = new LinearBar();
-            scale.Location = new Vector2f(200,0);
-            scale.SetTexturets(new Texture[] {ResurceStorage.PanelText ,ResurceStorage.energyBar});
-            this.GraphicInterface.AddForm(scale);
 
             CircleButton button = new CircleButton();
             button.MouseClick += OnClick;
@@ -164,16 +93,15 @@ namespace Project_Space___New_Live.modules.Dispatchers
             button.Location = new Vector2f(720,0);
 
             this.GraphicInterface.AddForm(button);
-
+            
             while (cont)
             {
                 Thread.Sleep(25);
-                GraphicModule.MainWindow.DispatchEvents();
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
                 foreach (Ship currentShip in this.ShipsCollection)
                 {
-                    currentShip.Process(new Vector2f(0,0));
                     currentShip.AnalizeObjectInteraction(this.SystemCollection[currentShip.StarSystemIndex]);
+                    currentShip.Process(new Vector2f(0,0));    
                 }
                 foreach (StarSystem currentSystem in this.SystemCollection)
                 {
@@ -181,11 +109,15 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 }
                 this.playerContainer.Process();
 
-                scale.PercentOfBar = this.playerContainer.GetEnergy();
+                scaleEn.PercentOfBar = this.playerContainer.GetEnergy();
+                scaleHea.PercentOfBar = this.playerContainer.GetHealh();
 
                 GraphicModule.RenderProcess(this.playerContainer.ActiveSystem, ShipsCollection);
+                GraphicModule.MainWindow.DispatchEvents();
                 GraphicModule.MainWindow.Display();
-            }*/
+            }
+             
+
         }
 
 
