@@ -25,7 +25,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Свойство отображения объекта
         /// </summary>
-        public ObjectView[] View 
+        public virtual ObjectView[] View 
         {
             get { return this.view;}           
         }

@@ -107,6 +107,11 @@ namespace Project_Space___New_Live.modules.Controlers
             }
         }
 
+        /// <summary>
+        /// Обработчик отжатий клавиши
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="Args"></param>
         private void FromKey(object sender, KeyEventArgs Args)
         {
             switch (Args.Code)
@@ -139,6 +144,11 @@ namespace Project_Space___New_Live.modules.Controlers
                     {
                         this.StopMoving = false;
                     }; break;
+                case Keyboard.Key.LControl:
+                {
+                    this.ShieldProcess();
+                }
+                    ;break;
                 default: break;
             }
         }
@@ -178,11 +188,28 @@ namespace Project_Space___New_Live.modules.Controlers
             }           
         }
 
+        /// <summary>
+        /// Процесс работы контроллера
+        /// </summary>
         public override void Process()
         {
             this.RefreshFlags();
             this.Moving();
-            
+        }
+
+        /// <summary>
+        /// Работа с энергощитом
+        /// </summary>
+        private void ShieldProcess()
+        {
+            if (this.PlayerShip.ShieldActive)
+            {
+                this.PlayerShip.ShieldActive = false;
+            }
+            else
+            {
+                this.PlayerShip.ShieldActive = true;
+            }
         }
     }
 }

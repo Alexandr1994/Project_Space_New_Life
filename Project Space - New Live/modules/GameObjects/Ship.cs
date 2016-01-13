@@ -15,8 +15,32 @@ namespace Project_Space___New_Live.modules.GameObjects
     public class Ship : GameObject
     {
 
-
-        //Оборудование корабля
+        /// <summary>
+        /// Индексы частей корабля
+        /// </summary>
+        public enum Parts : int
+        {
+            /// <summary>
+            /// носовая часть
+            /// </summary>
+            FrontPart = 0,
+            /// <summary>
+            /// кормовая часть
+            /// </summary>
+            FeedPart,
+            /// <summary>
+            /// правое крыло
+            /// </summary>
+            RightWing,
+            /// <summary>
+            /// левое крыло
+            /// </summary>
+            LeftWing,
+            /// <summary>
+            /// Энергощит
+            /// </summary>
+            Shield
+        }
 
         /// <summary>
         /// Идентификаторы оборудования корабля
@@ -38,7 +62,11 @@ namespace Project_Space___New_Live.modules.GameObjects
             /// <summary>
             /// Радар
             /// </summary>
-            Radar
+            Radar,
+            /// <summary>
+            /// Щит
+            /// </summary>
+            Shield
         }
 
         /// <summary>
@@ -52,6 +80,53 @@ namespace Project_Space___New_Live.modules.GameObjects
         public List<ShipEquipment> Equipment
         {
             get { return this.shipEquipment; }
+        }
+
+        /// <summary>
+        /// Отображение корабля
+        /// </summary>
+        public override ObjectView[] View
+        {
+            get
+            {
+                if (this.ShieldActive)
+                {
+                    return this.view;
+                }
+                ObjectView[] retViews = new ObjectView[4];
+                int index = 0;
+                while (index != (int) (Parts.Shield))
+                {
+                    retViews[index] = this.view[index];
+                    index++;
+                }
+                return retViews;
+            }
+            
+        }
+
+        //Флаги корабля
+
+        /// <summary>
+        /// Текущее состояние энергощита 
+        /// </summary>
+        public bool ShieldActive
+        {
+            get
+            {
+                if (this.Equipment[(int) (EquipmentNames.Shield)] != null)//если щит установлен
+                {
+                    return this.Equipment[(int) (EquipmentNames.Shield)].State;//то опросить его состояние
+                }
+                return false;
+            }
+            set
+            {
+                if (this.Equipment[(int) (EquipmentNames.Shield)] != null)//если щит установлен
+                {//изменить свойстово
+                    (this.Equipment[(int)(EquipmentNames.Shield)] as Shield).State = value;
+                }    
+            }
         }
 
         //Параметры корабля
@@ -154,17 +229,63 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Базовое получение урона кораблем
         /// </summary>
         /// <param name="damage"></param>
-        public void GetDamage(int damage)
+        /// <param name="equipmentDamage"></param>
+        /// <param name="damagedPartIndex"></param>
+        public void GetDamage(int damage, int equipmentDamage, int damagedPartIndex)
         {
-            if (this.health > damage)
-            {
-                this.health -= damage;
+            if (!this.ShieldActive)//если щит не активен
+            {//то нанести урон кораблю
+                this.WearingEquipment(equipmentDamage, damagedPartIndex);//Нанести повреждения оборудованию
+                if (this.health > damage)
+                {
+                    this.health -= damage;
+                }
+                else
+                {
+                    this.health = 0;
+                }
             }
             else
-            {
-                this.health = 0;
-            } 
+            {//иначе нанести урон экрану щита
+                (this.Equipment[(int)(EquipmentNames.Shield)] as Shield).GetDamageOnShield(damage, equipmentDamage/5);
+            }
         }
+
+        /// <summary>
+        /// Наношение урона оборудования
+        /// </summary>
+        /// <param name="equipmentDamage"></param>
+        /// <param name="damagedPartIndex"></param>
+        private void WearingEquipment(int equipmentDamage, int damagedPartIndex)
+        {
+            switch (damagedPartIndex)//в зависимости от части, которой было нанесено повреждение нанести урон оборудованию 
+            {
+                case (int)Parts.FrontPart://Носовая часть
+                    {
+                        this.Equipment[(int)(EquipmentNames.Battery)].Wearing(equipmentDamage);//Износ энергобатареи
+                        this.Equipment[(int)(EquipmentNames.Radar)].Wearing(equipmentDamage);//Износ радара
+                    }
+                    ; break;
+                case (int)Parts.FeedPart://Кормовая часть
+                    {
+                        this.Equipment[(int)(EquipmentNames.Reactor)].Wearing(equipmentDamage);//Износ реактора
+                        this.Equipment[(int)(EquipmentNames.Engine)].Wearing(equipmentDamage);//Износ двигателя
+                    }
+                    ; break;
+                case (int)Parts.LeftWing://Левое крыло
+                    {
+                        this.Equipment[(int)(EquipmentNames.Engine)].Wearing(equipmentDamage);//Износ двигателя
+                    }
+                    ; break;
+                case (int)(Parts.RightWing)://Правое крыло
+                    {
+                        this.Equipment[(int)(EquipmentNames.Engine)].Wearing(equipmentDamage);//Износ двигателя
+                    }
+                    ; break;
+                default: break;
+            }
+        }
+
 
         /// <summary>
         /// Ремонт корабля
@@ -202,7 +323,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.coords.X += (float)(speed * Math.Cos(angle));
             this.coords.Y += (float)(speed * Math.Sin(angle));
             Vector2f delta = this.coords - tempCoords;//Изменение по координатам Х и Y
-            foreach (ObjectView partView in this.View)
+            foreach (ObjectView partView in this.view)
             {
                 partView.Translate(delta);
             }
@@ -233,12 +354,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="textures">Набор текстур</param>
         /// <param name="newPartSize">Начальный размер составных частей</param>
         /// <param name="startSystemIndex">Индекс стартовой звездной системы</param>
-        public Ship(float mass, Vector2f coords, int maxHealth, Texture[] textures, Vector2f newPartSize, int startSystemIndex)
+        public Ship(float mass, Vector2f coords, int maxHealth, Texture[] skin, Vector2f partSize, int startSystemIndex)
         {
             this.mass = mass;
             this.coords = coords;
-            this.viewPartSize = newPartSize;
-            this.ConstructView(textures);
+            this.viewPartSize = partSize;
+            this.ConstructView(skin);
             this.shipEquipment = new List<ShipEquipment>();
             this.pilot = PlayerController.GetInstanse(this);
             this.maxHealth = this.health = maxHealth;
@@ -247,8 +368,8 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment.Add(new Reactor(100, 1, null));//реактор
             this.shipEquipment.Add(new Battery(100, 500, null));//энергобатарея
             this.shipEquipment.Add(new Radar(20, 1500, null));//радар
-           // this.shipEquipment.Add(null);//радар
-             
+            this.shipEquipment.Add(new Shield(20, 3, 100, 0, 1, null));//энергощит 
+            // this.shipEquipment.Add(null);//энергощит 
         }
 
         /// <summary>
@@ -257,17 +378,24 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin">Массив текстур частей корабля</param>
         protected override void ConstructView(Texture[] skin)
         {
-            this.view = new ObjectView[4];
-            for (int i = 0; i < this.view.Length; i++)
+            //добавить защиту
+            this.view = new ObjectView[5];
+            int index = 0;
+            while (index != (int)(Parts.Shield))
             {
-                this.view[i] = new ObjectView(BlendMode.Alpha);
-                this.view[i].Image = new RectangleShape(viewPartSize);
-                this.view[i].Image.Texture = skin[i];
+                this.view[index] = new ObjectView(BlendMode.Alpha);
+                this.view[index].Image = new RectangleShape(this.viewPartSize);
+                this.view[index].Image.Texture = skin[index];
+                index++;
             }
-            this.view[0].Image.Position = coords + new Vector2f(-this.viewPartSize.X / 2, 0);//Носовя часть
-            this.view[1].Image.Position = coords + new Vector2f(-this.viewPartSize.X / 2, -this.viewPartSize.Y);//Кормовая часть
-            this.view[2].Image.Position = coords + new Vector2f(this.viewPartSize.X / 2, -this.viewPartSize.Y * 3 / 4);//Левое "крыло"
-            this.view[3].Image.Position = coords + new Vector2f(-this.viewPartSize.X * 3 / 2, -this.viewPartSize.Y * 3 / 4);//Правое "крыло"
+            this.view[(int)Parts.Shield] = new ObjectView(BlendMode.Alpha);
+            this.view[(int)Parts.Shield].Image = new CircleShape(this.viewPartSize.Y);
+            this.view[(int)Parts.Shield].Image.Texture = skin[(int) Parts.Shield];
+            this.view[(int)Parts.Shield].Image.Position = this.Coords - new Vector2f(this.viewPartSize.Y, this.viewPartSize.Y);//Энергощит
+            this.view[(int)Parts.FrontPart].Image.Position = this.Coords + new Vector2f(-this.viewPartSize.X / 2, 0);//Носовя часть
+            this.view[(int)Parts.FeedPart].Image.Position = this.Coords + new Vector2f(-this.viewPartSize.X / 2, -this.viewPartSize.Y);//Кормовая часть
+            this.view[(int)Parts.RightWing].Image.Position = this.Coords + new Vector2f(this.viewPartSize.X / 2, -this.viewPartSize.Y * 3 / 4);//Левое "крыло"
+            this.view[(int)Parts.LeftWing].Image.Position = this.Coords + new Vector2f(-this.viewPartSize.X * 3 / 2, -this.viewPartSize.Y * 3 / 4);//Правое "крыло"
         }
 
         /// <summary>
@@ -277,11 +405,36 @@ namespace Project_Space___New_Live.modules.GameObjects
         public override void Process(Vector2f homeCoords)
         {
             this.pilot.Process();
-            Reactor shipReactor = this.shipEquipment[(int) EquipmentNames.Reactor] as Reactor;
-            Battery shipBattery = this.shipEquipment[(int) EquipmentNames.Battery] as Battery;
-            shipBattery.Charge(shipReactor.EnergyGeneration);
-            this.Move();
+            this.EnergyProcess();
 
+
+
+            
+            this.Move();
+        }
+
+        /// <summary>
+        /// Управление энергией корабля
+        /// </summary>
+        private void EnergyProcess()
+        {
+            Reactor shipReactor = this.shipEquipment[(int)EquipmentNames.Reactor] as Reactor;
+            Battery shipBattery = this.shipEquipment[(int)EquipmentNames.Battery] as Battery;
+            shipBattery.Charge(shipReactor.EnergyGeneration);
+            for (int i = (int)(EquipmentNames.Radar); i < this.Equipment.Count; i++)
+            {
+                if (shipBattery.Energy >= this.Equipment[i].EnergyNeeds)
+                {
+                    if (this.Equipment[i].State)
+                    {
+                        shipBattery.Uncharge(this.Equipment[i].EnergyNeeds);
+                    }
+                }
+                else
+                {
+                    this.Equipment[i].State = false;
+                }              
+            }
         }
 
         /// <summary>
@@ -313,16 +466,35 @@ namespace Project_Space___New_Live.modules.GameObjects
                     case "Star"://проверка контакта со звездой
                     {
                         Star star = interactObject as Star;
-                        foreach (ObjectView partShipView in this.View)//если одна из частей корабля контактирует 
-                        {
-                            if (partShipView.BorderContactAnalize(interactObject.View[(int) Star.Views.Star]))//с самой звездой
+                        if (!ShieldActive)//если энергощит не активен
+                        {//то проверяем все части корабля
+                            for (int i = 0; i < this.View.Length; i++) //если одна из частей корабля контактирует 
                             {
-                                this.GetDamage(this.MaxHealth);//нанести максимальный урон кораблю
+                                if (View[i].BorderContactAnalize(interactObject.View[(int) Star.Views.Star]))
+                                //с самой звездой
+                                {
+                                    this.GetDamage(this.MaxHealth, 100, i); //нанести максимальный урон кораблю
+                                    break;
+                                }
+                                if (View[i].BorderContactAnalize(interactObject.View[(int) Star.Views.Crown]))
+                                //со звездной короной
+                                {
+                                    this.GetDamage(5, 5, i); //нанести некоторый урон
+                                }
+                            }
+                        }
+                        else//если энергощит активен
+                        {//то проверяем только энергощит
+                            if (View[(int)Parts.Shield].BorderContactAnalize(interactObject.View[(int)Star.Views.Star]))
+                            //с самой звездой
+                            {
+                                this.GetDamage(this.MaxHealth, 100, (int)Parts.Shield); //нанести максимальный урон кораблю
                                 break;
                             }
-                            if (partShipView.BorderContactAnalize(interactObject.View[(int) Star.Views.Crown]))//со звездной короной
+                            if (View[(int)Parts.Shield].BorderContactAnalize(interactObject.View[(int)Star.Views.Crown]))
+                            //со звездной короной
                             {
-                                this.GetDamage(5);//нанести некоторый урон
+                                this.GetDamage(5, 5, (int) Parts.Shield); //нанести некоторый урон
                             }
                         }
                     };break;

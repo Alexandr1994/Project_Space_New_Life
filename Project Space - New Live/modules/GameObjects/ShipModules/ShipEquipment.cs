@@ -18,7 +18,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// <summary>
         /// Состояние (активно-неактивно)
         /// </summary>
-        public bool State
+        public virtual bool State
         {//неактивное оборудование не потребляет энергии 
             get { return this.state; }
             set { this.state = value; }
@@ -124,8 +124,6 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// </summary>
         /// <param name="directionID"></param>
         protected abstract void CustomModification();
-
-
 
         /// <summary>
         /// Функция изнашивания оборудования

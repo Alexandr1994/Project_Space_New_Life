@@ -102,6 +102,16 @@ namespace Project_Space___New_Live.modules.Dispatchers
             return (float)battery.Energy / (float)battery.MaxEnergy *100;
         }
 
+        public float GetShieldPower()
+        {
+            if (this.PlayerShip.ShieldActive)
+            {
+                Shield shield = PlayerShip.Equipment[(int)Ship.EquipmentNames.Shield] as Shield;
+                return (float)shield.ShieldPower / (float)shield.MaxShieldPower * 100;
+            }
+            return 0;
+        }
+
         /// <summary>
         /// Вернуть радиус действия радара игрока
         /// </summary>

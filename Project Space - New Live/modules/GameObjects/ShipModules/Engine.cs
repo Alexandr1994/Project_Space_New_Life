@@ -20,9 +20,18 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// </summary>
         public enum UpgrateDirectionID : int
         {
-            Base = 0,//базовая версия
-            ForwardSpeed,//Улучшение маршевых скоростных характеристик
-            ShuntingSpeed,//Улучшение маневровых
+            /// <summary>
+            /// базовая версия
+            /// </summary>
+            Base = 0,
+            /// <summary>
+            /// Улучшение маршевых скоростных характеристик
+            /// </summary>
+            ForwardSpeed,
+            /// <summary>
+            /// Улучшение маневровых характеристик
+            /// </summary>
+            ShuntingSpeed
         }
 
         

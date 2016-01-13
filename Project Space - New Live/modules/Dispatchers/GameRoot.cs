@@ -85,7 +85,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
             scaleEn.Location = new Vector2f(200, 20);
             scaleEn.SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.energyBar });
             this.GraphicInterface.AddForm(scaleEn);
-
+            LinearBar scaleDef = new LinearBar();
+            scaleDef.Location = new Vector2f(200, 40);
+            scaleDef.SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.energyBar });
+            this.GraphicInterface.AddForm(scaleDef);
 
             CircleButton button = new CircleButton();
             button.MouseClick += OnClick;
@@ -111,6 +114,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
                 scaleEn.PercentOfBar = this.playerContainer.GetEnergy();
                 scaleHea.PercentOfBar = this.playerContainer.GetHealh();
+                scaleDef.PercentOfBar = this.playerContainer.GetShieldPower();
 
                 GraphicModule.RenderProcess(this.playerContainer.ActiveSystem, ShipsCollection);
                 GraphicModule.MainWindow.DispatchEvents();

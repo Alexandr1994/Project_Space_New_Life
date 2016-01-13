@@ -26,7 +26,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// </summary>
         public int MaxEnergy
         {//Емкость батареи тем ниже, чем выше процент износа, минимальная емкость равна 20% от номинальной
-            get { return (int)(this.maxEnergy * (1 - (0.8*this.WearState))); }
+            get { return (int)(this.maxEnergy * (1 - 0.8 * this.WearState/100)); }
         }
 
         /// <summary>

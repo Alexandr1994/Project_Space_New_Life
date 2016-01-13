@@ -116,6 +116,7 @@
     <Compile Include="modules\GameObjects\ShipModules\Engine.cs" />
     <Compile Include="modules\GameObjects\ShipModules\Radar.cs" />
     <Compile Include="modules\GameObjects\ShipModules\Reactor.cs" />
+    <Compile Include="modules\GameObjects\ShipModules\Shield.cs" />
     <Compile Include="modules\GameObjects\ShipModules\ShipEquipment.cs" />
     <Compile Include="modules\GameObjects\ShipModules\ShipMover.cs" />
     <Compile Include="modules\GameObjects\ShipModules\SpeedVector.cs" />

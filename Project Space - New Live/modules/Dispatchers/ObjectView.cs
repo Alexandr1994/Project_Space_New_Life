@@ -580,7 +580,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 (float)
                     (Math.Sqrt(Math.Pow(targetHalfAxises.X * Math.Cos(targetAngle), 2) +
                                Math.Pow(targetHalfAxises.Y * Math.Sin(targetAngle), 2)));
-            if (Math.Abs(distance) < Math.Abs(selfRadius + targetRadius*0.95))//если расстояние между центрами эллипсов меньше
+            if (Math.Abs(distance) < Math.Abs(selfRadius + targetRadius))//если расстояние между центрами эллипсов меньше
             {                                                                //суммы расстояний от центов до дуг эллипсов,
                 return true;//те эллипсы пересекаются
             }
