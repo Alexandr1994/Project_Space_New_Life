@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
@@ -147,11 +148,11 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         {
             if (this.rotationSpeed > 0)//стабилизация вращения
             {
-                this.rotationSpeed -= (float)(0.02 * Math.PI / 180);
+                this.rotationSpeed -= (float)(0.04 * Math.PI / 180);
             }
             else if (this.rotationSpeed < 0)
             {
-                this.rotationSpeed += (float)(0.02 * Math.PI / 180);
+                this.rotationSpeed += (float)(0.04 * Math.PI / 180);
             }
             ship.ChangeRotation(this.rotationSpeed);//Изменение угла поворота
         }
@@ -164,12 +165,81 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         public void Process(Ship ship)
         {
             this.Rotate(ship);//Вразение
+            SpeedVector movingVector = this.ConstructResultVector();
+            ship.ShipAtomMoving(movingVector.Speed, movingVector.Angle);//вычисление координат по текущему вектору
             foreach (SpeedVector vector in speedVectors)//Прямолинейное смещение
             {
-                ship.ShipAtomMoving(vector.Speed, vector.Angle);//вычисление координат по текущему вектору
-                vector.SpeedAcceleration((float)-0.02);//уменьшение скорости на константу
+                vector.SpeedAcceleration((float)-0.04);//уменьшение скорости на константу
             }
             this.speedVectors.RemoveAll(vector => vector.Speed < 0);//Удаление векторов с нулевой скоростью
+        }
+
+        /// <summary>
+        /// Сконструировать разультирующий вектор скорости корабля
+        /// </summary>
+        /// <returns></returns>
+        private SpeedVector ConstructResultVector()
+        {
+            SpeedVector resultVector = null;//создаем "пустой" результирующий вектор скорости
+            foreach (SpeedVector currentVector in this.speedVectors)//поочередно складываем все вектора скоростей с результирующим вектором
+            {
+                if (resultVector == null)//если результирующий вектор - пустой, то результирующий вектор равен текущему вектору
+                {
+                    resultVector = new SpeedVector(currentVector.Speed, currentVector.Angle);
+                    continue;
+                }
+                Vector2f tempDecVector = new Vector2f();//иначе вычисляем декартовы координаты результирующего вектора
+                tempDecVector.X = (float)(resultVector.Speed * Math.Cos(resultVector.Angle) + currentVector.Speed * Math.Cos(currentVector.Angle));//х-состовляющая
+                tempDecVector.Y = (float)(resultVector.Speed * Math.Sin(resultVector.Angle) + currentVector.Speed * Math.Sin(currentVector.Angle));//у-состовляющая
+                float newSpeed = (float) (Math.Sqrt(Math.Pow(tempDecVector.X, 2) + Math.Pow(tempDecVector.Y, 2)));//вычисляем величину скорости нового вектора
+                float newAngle = 0;//определяем угол данного вектора
+                newAngle = (float)(Math.Atan2(tempDecVector.Y, tempDecVector.X));//то произвести вычисление
+                resultVector = new SpeedVector(newSpeed, newAngle);
+            }
+            if (resultVector == null)
+            {
+                resultVector = new SpeedVector(0, 0);
+            }
+            return resultVector;
+        }
+
+        /// <summary>
+        /// Обработка столкновения
+        /// </summary>
+        /// <param name="contacterNoveManager"></param>
+        /// <param name="ownMass"></param>
+        /// <param name="contacterMass"></param>
+        /// <param name="angle"></param>
+        public void CrashMove(ShipMover contacterNoveManager, float ownMass, float contacterMass, float angle)
+        {
+            SpeedVector ownSpeedVector = this.ConstructResultVector();
+            SpeedVector contacterSpeedVector = contacterNoveManager.ConstructResultVector();
+            this.speedVectors.Clear();//работа с собственными векторами
+            this.ConstructAfterCrashSpeedVector(ownSpeedVector, contacterSpeedVector, ownMass, contacterMass, angle);
+            contacterNoveManager.speedVectors.Clear();//работа с векторами контактирующего
+            contacterNoveManager.ConstructAfterCrashSpeedVector(contacterSpeedVector, ownSpeedVector, contacterMass, ownMass, angle);
+
+        }
+
+        /// <summary>
+        /// Сконструировать вектор скорости после столкновения
+        /// </summary>
+        /// <param name="ownSpeedVector"></param>
+        /// <param name="contacterSpeedVector"></param>
+        /// <param name="ownMass"></param>
+        /// <param name="contacterMass"></param>
+        /// <param name="angle"></param>
+        private void ConstructAfterCrashSpeedVector(SpeedVector ownSpeedVector, SpeedVector contacterSpeedVector, float ownMass, float contacterMass, float angle)
+        {
+            double coefA = (ownSpeedVector.Speed * Math.Cos(ownSpeedVector.Angle - angle) * (ownMass - contacterMass)
+                + 2 * contacterMass * contacterSpeedVector.Speed * Math.Cos(contacterSpeedVector.Angle - angle))
+                / (ownMass + contacterMass);
+            double coefB = ownSpeedVector.Speed * Math.Sin(ownSpeedVector.Angle - angle);
+            double newXSpeed = coefA * Math.Cos(angle) + coefB * Math.Cos(angle - Math.PI / 2);//Получение Х и Y состовляющих скорости
+            double newYSpeed = coefA * Math.Sin(angle) + coefB * Math.Sin(angle - Math.PI / 2);
+            float newSpeed = (float)(Math.Sqrt(Math.Pow(newXSpeed, 2) + Math.Pow(newYSpeed, 2)));//Построение и добавление вектора
+            float newAngle = (float)(Math.Atan2(newYSpeed, newXSpeed));
+            this.speedVectors.Add(new SpeedVector(newSpeed, newAngle));
         }
 
 

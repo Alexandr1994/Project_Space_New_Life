@@ -407,7 +407,13 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.pilot.Process();
             this.EnergyProcess();
 
-
+            if (this.Health < 1)
+            {
+                foreach (ObjectView view in this.View)
+                {
+                    view.Image.FillColor = new Color(0,0,0,0);
+                }
+            }
 
             
             this.Move();
@@ -508,6 +514,27 @@ namespace Project_Space___New_Live.modules.GameObjects
                                 this.Repair(1);
                             }
                         }
+                    };break;
+                    case "Ship":
+                    {
+                        Ship ship = interactObject as Ship;
+                        if (ship == this)//если анализируемый корабли является данным кораблем
+                        {
+                            continue;//то перейти к анализу следующего объекта
+                        }
+                        foreach (ObjectView partShipView in this.View)
+                        {
+                            foreach (ObjectView view in ship.View)
+                            {
+                                if (partShipView.BorderContactAnalize(view))
+                                {
+                                    float deltaX = this.Coords.X - ship.Coords.X;
+                                    float deltaY = this.Coords.Y - ship.Coords.Y;
+                                    float contactAngle = (float)(Math.Atan2(deltaY, deltaX));
+                                    this.moveManager.CrashMove(ship.moveManager, this.Mass, ship.Mass, contactAngle);
+                                }
+                            }
+                        }    
                     };break;
                 }
             }

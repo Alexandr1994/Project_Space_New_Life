@@ -64,6 +64,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
         private void ConstructWorld()
         {
             this.SystemCollection.Add(ResurceStorage.initSystem());//сконструировать одну звездную систему
+            for (int i = 0; i < this.SystemCollection.Count; i++)
+            {
+                this.SystemCollection[i].SetIndex(i);
+            }
         }
 
 
@@ -77,6 +81,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void Main()
         {
             
+            this.ShipsCollection.Add(new Ship(1000, new Vector2f(-450, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), 0));
+            this.ShipsCollection.Add(new Ship(900, new Vector2f(-450, -400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), 0));
+            this.ShipsCollection.Add(new Ship(800, new Vector2f(450, -400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), 0));
+            this.ShipsCollection.Add(new Ship(500, new Vector2f(450, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), 0));
+
             LinearBar scaleHea = new LinearBar();
             scaleHea.Location = new Vector2f(200, 0);
             scaleHea.SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.healthBar });
@@ -101,14 +110,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
             {
                 Thread.Sleep(25);
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
-                foreach (Ship currentShip in this.ShipsCollection)
-                {
-                    currentShip.AnalizeObjectInteraction(this.SystemCollection[currentShip.StarSystemIndex]);
-                    currentShip.Process(new Vector2f(0,0));    
-                }
                 foreach (StarSystem currentSystem in this.SystemCollection)
                 {
-                    currentSystem.Process();
+                    currentSystem.Process(this.ShipsCollection);
                 }
                 this.playerContainer.Process();
 

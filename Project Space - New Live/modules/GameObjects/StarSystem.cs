@@ -14,6 +14,20 @@ namespace Project_Space___New_Live.modules.GameObjects
     {
 
         /// <summary>
+        /// Номер системы в коллекции
+        /// </summary>
+        private int systemIndex;
+
+        /// <summary>
+        /// Установить номер системы
+        /// </summary>
+        /// <param name="index"></param>
+        public void SetIndex(int index)
+        {
+            this.systemIndex = index;
+        }
+
+        /// <summary>
         /// фон звездной системы
         /// </summary>
         ObjectView background;
@@ -30,7 +44,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             get { return this.background; }
         }
 
-
+        /// <summary>
+        /// Коллекция кораблей, находящихся в данной звездной системе
+        /// </summary>
+        private List<Ship> myShipsCollection; 
 
         /// <summary>
         /// Построить звездную систему
@@ -68,9 +85,22 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Процесс жизни звездной системы
         /// </summary>
-        public void Process()
+        public void Process(List<Ship> shipsCollection)
         {
-            massCenter.Process(new Vector2f(0, 0));//работа со звездной состовляющей
+            this.myShipsCollection = new List<Ship>();//освобождение коллекции
+            foreach (Ship currentShip in shipsCollection)//перезаполнение коллекции
+            {
+                if (currentShip.StarSystemIndex == this.systemIndex)
+                {
+                    this.myShipsCollection.Add(currentShip);
+                }    
+            }
+            massCenter.Process(new Vector2f(0, 0));//работа со звездной составляющей
+            foreach (Ship ship in this.myShipsCollection)//работа кораблей находящихся в данной звездной системе
+            {
+                ship.AnalizeObjectInteraction(this);
+                ship.Process(new Vector2f(0, 0));
+            }
         }
 
         /// <summary>
@@ -93,7 +123,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <returns></returns>
         public List<GameObject> GetObjectsInSystem()
         {
-            return this.massCenter.GetObjects();
+            List<GameObject> objectsCollection = this.massCenter.GetObjects();//получить коллекцию звезд и планет
+            foreach (GameObject ship in myShipsCollection)//сформировать коллекцию кораблей
+            {
+                objectsCollection.Add(ship);
+            }
+            return objectsCollection;
         }
 
         /// <summary>
