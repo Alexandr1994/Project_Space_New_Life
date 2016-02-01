@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
+using Project_Space___New_Live.modules.GameObjects.Shells;
 using SFML.Graphics;
 using SFML.System;
 
@@ -47,7 +48,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Коллекция кораблей, находящихся в данной звездной системе
         /// </summary>
-        private List<Ship> myShipsCollection; 
+        private List<Ship> myShipsCollection;
+
+        /// <summary>
+        /// Коллекция снарядов, находящихся в данной звездной системе
+        /// </summary>
+        private List<Shell> myShellsCollection = new List<Shell>();
+  
 
         /// <summary>
         /// Построить звездную систему
@@ -90,7 +97,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.myShipsCollection = new List<Ship>();//освобождение коллекции
             foreach (Ship currentShip in shipsCollection)//перезаполнение коллекции
             {
-                if (currentShip.StarSystemIndex == this.systemIndex)
+                if (currentShip.StarSystem == this)
                 {
                     this.myShipsCollection.Add(currentShip);
                 }    
@@ -100,6 +107,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 ship.AnalizeObjectInteraction(this);
                 ship.Process(new Vector2f(0, 0));
+            }
+            foreach (Shell shell in this.myShellsCollection)//работа со снарядами в данной звездной системе
+            {
+                shell.Process(new Vector2f(0, 0));
             }
         }
 
@@ -112,8 +123,11 @@ namespace Project_Space___New_Live.modules.GameObjects
             List<ObjectView> systemsViews = new List<ObjectView>();
 
             systemsViews.Add(this.background);//засунуть в возвращаемый массив фон
-            systemsViews.AddRange(massCenter.GetView());//Заполнить массив образов системы образами объектов главного центар масс
-   
+            systemsViews.AddRange(massCenter.GetView());//Заполнить массив образов системы образами объектов главного центра масс
+            foreach (GameObject shell in this.myShellsCollection)//Заполнить массив образов системы образами снарядов, принадлежащих данной системе
+            {
+                systemsViews.AddRange(shell.View);
+            }
             return systemsViews;
         }
 
@@ -124,9 +138,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         public List<GameObject> GetObjectsInSystem()
         {
             List<GameObject> objectsCollection = this.massCenter.GetObjects();//получить коллекцию звезд и планет
-            foreach (GameObject ship in myShipsCollection)//сформировать коллекцию кораблей
+            foreach (GameObject ship in this.myShipsCollection)//сформировать коллекцию кораблей
             {
                 objectsCollection.Add(ship);
+            }
+            foreach (GameObject shell in this.myShellsCollection)//сформировать коллекциб снарядов
+            {
+                objectsCollection.Add(shell);
             }
             return objectsCollection;
         }
@@ -153,6 +171,12 @@ namespace Project_Space___New_Live.modules.GameObjects
             return ret_value;
         }
 
-        
+        /// <summary>
+        /// Добавление снаряда в коллекцию снарядов в данной звездной системе (ВРЕМЕННАЯ РЕАЛИЗАЦИЯ)
+        /// </summary>
+        public void AddNewShell(Shell newShell)
+        {
+            this.myShellsCollection.Add(newShell);
+        }
  }
 }

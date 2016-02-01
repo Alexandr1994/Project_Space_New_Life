@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Controlers;
 using Project_Space___New_Live.modules.Dispatchers;
+using Project_Space___New_Live.modules.GameObjects.Shells;
 using Project_Space___New_Live.modules.GameObjects.ShipModules;
 using SFML.Graphics;
 using SFML.System;
@@ -214,15 +215,15 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Индекс звездной системы, в которой находится корабль
         /// </summary>
-        private int starSystemIndex;
+        private StarSystem starSystem;
 
         /// <summary>
         /// Индекс звездной системы, в которой находится корабль
         /// </summary>
-        public int StarSystemIndex
+        public StarSystem StarSystem
         {
-            get { return this.starSystemIndex; }
-            set { this.starSystemIndex = value; }
+            get { return this.starSystem; }
+            set { this.starSystem = value; }
         }
 
         /// <summary>
@@ -353,8 +354,8 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="coords">Начальные координаты</param>
         /// <param name="textures">Набор текстур</param>
         /// <param name="newPartSize">Начальный размер составных частей</param>
-        /// <param name="startSystemIndex">Индекс стартовой звездной системы</param>
-        public Ship(float mass, Vector2f coords, int maxHealth, Texture[] skin, Vector2f partSize, int startSystemIndex)
+        /// <param name="startSystem">Cтартовая звездная система</param>
+        public Ship(float mass, Vector2f coords, int maxHealth, Texture[] skin, Vector2f partSize, StarSystem startSystem)
         {
             this.mass = mass;
             this.coords = coords;
@@ -363,6 +364,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment = new List<ShipEquipment>();
             this.pilot = PlayerController.GetInstanse(this);
             this.maxHealth = this.health = maxHealth;
+            this.StarSystem = startSystem;
 
             this.shipEquipment.Add(new Engine(100, 1, 100, 100, 10, 8, null));//двигатель
             this.shipEquipment.Add(new Reactor(100, 1, null));//реактор
@@ -458,6 +460,14 @@ namespace Project_Space___New_Live.modules.GameObjects
             return signature;
         }
 
+        /// <summary>
+        /// Выстрелить (ВРЕМЕННАЯ РЕАЛИЗАЦИЯ)
+        /// </summary>
+        public void Shoot()
+        {
+            this.StarSystem.AddNewShell(new Shell(this, 5, 1, 15, new Texture[]{ResurceStorage.rectangleButtonTextures[2]}));
+        }
+        
         /// <summary>
         /// Анализирование взаимодействия корабля с объектами в звездной системе
         /// </summary>

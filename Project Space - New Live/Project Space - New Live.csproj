@@ -111,6 +111,7 @@
     <Compile Include="modules\GameObjects\GameObject.cs" />
     <Compile Include="modules\GameObjects\LocalMassCenter.cs" />
     <Compile Include="modules\GameObjects\ObjectSignature.cs" />
+    <Compile Include="modules\GameObjects\Shell.cs" />
     <Compile Include="modules\GameObjects\Ship.cs" />
     <Compile Include="modules\GameObjects\ShipModules\Battery.cs" />
     <Compile Include="modules\GameObjects\ShipModules\Engine.cs" />
