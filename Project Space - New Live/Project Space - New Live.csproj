@@ -121,6 +121,8 @@
     <Compile Include="modules\GameObjects\ShipModules\ShipEquipment.cs" />
     <Compile Include="modules\GameObjects\ShipModules\ShipMover.cs" />
     <Compile Include="modules\GameObjects\ShipModules\SpeedVector.cs" />
+    <Compile Include="modules\GameObjects\ShipModules\Weapon.cs" />
+    <Compile Include="modules\GameObjects\ShipModules\WeaponSystem.cs" />
     <Compile Include="modules\GameObjects\SphereObject.cs" />
     <Compile Include="modules\GameObjects\Star.cs" />
     <Compile Include="modules\GameObjects\Planet.cs" />

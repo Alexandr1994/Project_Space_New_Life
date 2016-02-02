@@ -465,7 +465,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public void Shoot()
         {
-            this.StarSystem.AddNewShell(new Shell(this, 5, 1, 15, new Texture[]{ResurceStorage.rectangleButtonTextures[2]}));
+            this.StarSystem.AddNewShell(new Shell(this, 5, 1, 10, 15, new Texture[]{ResurceStorage.rectangleButtonTextures[2]}));
         }
         
         /// <summary>
