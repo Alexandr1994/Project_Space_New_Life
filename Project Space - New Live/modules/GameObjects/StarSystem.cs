@@ -13,7 +13,6 @@ namespace Project_Space___New_Live.modules.GameObjects
 {
     public class StarSystem
     {
-
         /// <summary>
         /// Номер системы в коллекции
         /// </summary>
@@ -105,12 +104,18 @@ namespace Project_Space___New_Live.modules.GameObjects
             massCenter.Process(new Vector2f(0, 0));//работа со звездной составляющей
             foreach (Ship ship in this.myShipsCollection)//работа кораблей находящихся в данной звездной системе
             {
-                ship.AnalizeObjectInteraction(this);
+                ship.AnalizeObjectInteraction();
                 ship.Process(new Vector2f(0, 0));
             }
-            foreach (Shell shell in this.myShellsCollection)//работа со снарядами в данной звездной системе
+           // foreach (Shell shell in this.myShellsCollection)
+            for (int i = 0; i < this.myShellsCollection.Count; i++)//работа со снарядами в данной звездной системе
             {
-                shell.Process(new Vector2f(0, 0));
+                this.myShellsCollection[i].Process(new Vector2f(0, 0));
+                if (this.myShellsCollection[i].LifeOver)//если время жизни снаряда вышло
+                {
+                    this.myShellsCollection.Remove(this.myShellsCollection[i]);//удалить его из коллекции
+                    i --;
+                }
             }
         }
 

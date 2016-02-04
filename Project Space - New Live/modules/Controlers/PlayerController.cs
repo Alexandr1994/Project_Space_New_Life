@@ -106,13 +106,11 @@ namespace Project_Space___New_Live.modules.Controlers
                 case Keyboard.Key.LControl:
                     {
                         this.ShieldProcess();
-                    }
-                    ; break;
+                    }; break;
                 case Keyboard.Key.LAlt:
                     {
-                        this.PlayerShip.Shoot();
-                    }
-                    ; break;
+                        this.PlayerShip.OpenFire();
+                    }; break;
                 default: break;   
             }
         }
@@ -153,6 +151,10 @@ namespace Project_Space___New_Live.modules.Controlers
                 case Keyboard.Key.X:
                     {
                         this.StopMoving = false;
+                    }; break;
+                case Keyboard.Key.LAlt:
+                    {
+                        this.PlayerShip.StopFire();
                     }; break;
                 default: break;
             }

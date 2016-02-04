@@ -84,6 +84,27 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
+        /// Оружейная система корабля
+        /// </summary>
+        private WeaponSystem shipWeaponSystem;
+
+        /// <summary>
+        /// Открыть огонь
+        /// </summary>
+        public void OpenFire()
+        {
+            this.shipWeaponSystem.Shooting = true;
+        }
+
+        /// <summary>
+        /// Прекратить огонь
+        /// </summary>
+        public void StopFire()
+        {
+            this.shipWeaponSystem.Shooting = false;
+        }
+
+        /// <summary>
         /// Отображение корабля
         /// </summary>
         public override ObjectView[] View
@@ -213,12 +234,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Индекс звездной системы, в которой находится корабль
+        /// Звездная система, в которой находится корабль
         /// </summary>
         private StarSystem starSystem;
 
         /// <summary>
-        /// Индекс звездной системы, в которой находится корабль
+        /// Звездная система, в которой находится корабль
         /// </summary>
         public StarSystem StarSystem
         {
@@ -371,6 +392,8 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment.Add(new Battery(100, 500, null));//энергобатарея
             this.shipEquipment.Add(new Radar(20, 1500, null));//радар
             this.shipEquipment.Add(new Shield(20, 3, 100, 0, 1, null));//энергощит 
+            this.shipWeaponSystem = new WeaponSystem(3);
+            this.shipWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 2, 0, 1, (float)(10*Math.PI/180), 100, 100, 2000, 15, 5, new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
             // this.shipEquipment.Add(null);//энергощит 
         }
 
@@ -406,9 +429,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="homeCoords"></param>
         public override void Process(Vector2f homeCoords)
         {
+            Shell shell;
             this.pilot.Process();
             this.EnergyProcess();
-
+            if ((shell = this.shipWeaponSystem.Process(this)) != null)//если в ходе работы оружейной системы был получен снаряд
+            {
+                this.starSystem.AddNewShell(shell);//то отправить его в коллекцияю снарядов звездной системы
+            }
             if (this.Health < 1)
             {
                 foreach (ObjectView view in this.View)
@@ -461,22 +488,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Выстрелить (ВРЕМЕННАЯ РЕАЛИЗАЦИЯ)
-        /// </summary>
-        public void Shoot()
-        {
-            this.StarSystem.AddNewShell(new Shell(this, 5, 1, 10, 15, new Texture[]{ResurceStorage.rectangleButtonTextures[2]}));
-        }
-        
-        /// <summary>
         /// Анализирование взаимодействия корабля с объектами в звездной системе
         /// </summary>
-        public void AnalizeObjectInteraction(StarSystem system)
+        public void AnalizeObjectInteraction()
         {
-            List<GameObject> interactiveObjects = system.GetObjectsInSystem();//получить все объекты в звездной системе
+            List<GameObject> interactiveObjects = this.starSystem.GetObjectsInSystem();//получить все объекты в звездной системе
             foreach (GameObject interactObject in interactiveObjects)
             {
-
                 switch (interactObject.GetType().Name)
                 {
                     case "Star"://проверка контакта со звездой
