@@ -63,11 +63,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         private void ConstructWorld()
         {
-            this.SystemCollection.Add(ResurceStorage.initSystem());//сконструировать одну звездную систему
-            for (int i = 0; i < this.SystemCollection.Count; i++)
-            {
-                this.SystemCollection[i].SetIndex(i);
-            }
+            this.SystemCollection.Add(ResurceStorage.InitSystem1());//сконструировать одну звездную систему
         }
 
 
@@ -120,7 +116,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 scaleHea.PercentOfBar = this.playerContainer.GetHealh();
                 scaleDef.PercentOfBar = this.playerContainer.GetShieldPower();
 
-                GraphicModule.RenderProcess(this.playerContainer.ActiveSystem, ShipsCollection);
+                GraphicModule.RenderProcess(this.playerContainer.ActiveSystem);
                 GraphicModule.MainWindow.DispatchEvents();
                 GraphicModule.MainWindow.Display();
             }

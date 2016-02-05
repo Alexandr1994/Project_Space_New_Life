@@ -13,6 +13,9 @@ using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
 {
+    /// <summary>
+    /// Космический корабль (Космолет или Космоплан)
+    /// </summary>
     public class Ship : GameObject
     {
 
@@ -117,7 +120,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                 }
                 ObjectView[] retViews = new ObjectView[4];
                 int index = 0;
-                while (index != (int) (Parts.Shield))
+                while (index != (int)(Parts.Shield))
                 {
                     retViews[index] = this.view[index];
                     index++;
@@ -157,6 +160,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Текущий запас прочности
         /// </summary>
         private int health;
+
         /// <summary>
         /// Текущий запас прочности
         /// </summary>
@@ -169,6 +173,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Максимальный запас прочности
         /// </summary>
         private int maxHealth;
+
         /// <summary>
         /// Максимальный запас прочности
         /// </summary>
@@ -181,6 +186,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Размер части корабля
         /// </summary>
         private Vector2f viewPartSize;
+
         /// <summary>
         /// Размер части корабля
         /// </summary>
@@ -189,7 +195,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             get { return this.viewPartSize; }
             set { this.viewPartSize = value;}
         }
-
 
         /// <summary>
         /// Полная масса корабля 
@@ -223,7 +228,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Текущий поворот корабля в рад.
         /// </summary>
-        private float rotation = (float)(Math.PI/2);
+        private float rotation = (float)(Math.PI / 2);
 
         /// <summary>
         /// Текущий поворот корабля в рад.
@@ -250,9 +255,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Базовое получение урона кораблем
         /// </summary>
-        /// <param name="damage"></param>
-        /// <param name="equipmentDamage"></param>
-        /// <param name="damagedPartIndex"></param>
+        /// <param name="damage">Урон, наносимый кораблю</param>
+        /// <param name="equipmentDamage">Урон, наносимый оборудованию корабля</param>
+        /// <param name="damagedPartIndex">Пораженная часть корабля</param>
         public void GetDamage(int damage, int equipmentDamage, int damagedPartIndex)
         {
             if (!this.ShieldActive)//если щит не активен
@@ -276,8 +281,8 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Наношение урона оборудования
         /// </summary>
-        /// <param name="equipmentDamage"></param>
-        /// <param name="damagedPartIndex"></param>
+        /// <param name="equipmentDamage">Урон наносимый оборудованию</param>
+        /// <param name="damagedPartIndex">Пораженная часть корабля</param>
         private void WearingEquipment(int equipmentDamage, int damagedPartIndex)
         {
             switch (damagedPartIndex)//в зависимости от части, которой было нанесено повреждение нанести урон оборудованию 
@@ -307,12 +312,11 @@ namespace Project_Space___New_Live.modules.GameObjects
                 default: break;
             }
         }
-
-
+        
         /// <summary>
         /// Ремонт корабля
         /// </summary>
-        /// <param name="recovery"></param>
+        /// <param name="recovery">Величина восстановления</param>
         public void Repair(int recovery)
         {
             if (this.health < this.MaxHealth)
@@ -339,6 +343,8 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Элементароне движение корабля
         /// </summary>
+        /// <param name="speed">Скорость движения</param>
+        /// <param name="angle">Угол поворота вектора скорости</param>
         public void ShipAtomMoving(float speed, float angle)
         {
             Vector2f tempCoords = this.coords;
@@ -368,14 +374,24 @@ namespace Project_Space___New_Live.modules.GameObjects
             }
         }
 
+//        /// <summary>
+//        /// 
+//        /// </summary>
+//        /// <param name="mass">Масса</param>
+//        /// <param name="coords">Начальные координаты</param>
+//        /// <param name="textures">Набор текстур</param>
+//        /// <param name="newPartSize">Начальный размер составных частей</param>
+//        /// <param name="startSystem">Cтартовая звездная система</param>
+
         /// <summary>
         /// Постороение корабля
         /// </summary>
         /// <param name="mass">Масса</param>
         /// <param name="coords">Начальные координаты</param>
-        /// <param name="textures">Набор текстур</param>
-        /// <param name="newPartSize">Начальный размер составных частей</param>
-        /// <param name="startSystem">Cтартовая звездная система</param>
+        /// <param name="maxHealth">НАчальная максимальная прочность</param>
+        /// <param name="skin">Массив текстур</param>
+        /// <param name="partSize">Размер составной части корабля</param>
+        /// <param name="startSystem">Звездная система</param>
         public Ship(float mass, Vector2f coords, int maxHealth, Texture[] skin, Vector2f partSize, StarSystem startSystem)
         {
             this.mass = mass;
@@ -426,7 +442,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Процесс жизни корабля
         /// </summary>
-        /// <param name="homeCoords"></param>
+        /// <param name="homeCoords">Координаты начала отсчета</param>
         public override void Process(Vector2f homeCoords)
         {
             Shell shell;
@@ -440,7 +456,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 foreach (ObjectView view in this.View)
                 {
-                    view.Image.FillColor = new Color(0,0,0,0);
+                    view.Image.FillColor = new Color(0, 0, 0, 0);
                 }
             }
 
@@ -456,7 +472,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             Reactor shipReactor = this.shipEquipment[(int)EquipmentNames.Reactor] as Reactor;
             Battery shipBattery = this.shipEquipment[(int)EquipmentNames.Battery] as Battery;
             shipBattery.Charge(shipReactor.EnergyGeneration);
-            for (int i = (int)(EquipmentNames.Radar); i < this.Equipment.Count; i++)
+            for (int i = (int)(EquipmentNames.Radar); i < this.Equipment.Count; i ++)
             {
                 if (shipBattery.Energy >= this.Equipment[i].EnergyNeeds)
                 {
@@ -475,15 +491,15 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Сконструировать сигнатуру цели
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Сигнатура корабля</returns>
         protected override ObjectSignature ConstructSignature()
         {
             ObjectSignature signature = new ObjectSignature();
-            signature.AddCharacteristics(this.mass, typeof(float));
+            signature.AddCharacteristics(this.mass);
 
 
             Vector2f sizes = new Vector2f(this.ViewPartSize.X * 3, this.ViewPartSize.Y * 2);
-            signature.AddCharacteristics(sizes, sizes.GetType());
+            signature.AddCharacteristics(sizes);
             return signature;
         }
 
@@ -568,7 +584,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             }
             
         }
-
 
     }
 }

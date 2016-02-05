@@ -7,6 +7,9 @@ using Project_Space___New_Live.modules.GameObjects;
 
 namespace Project_Space___New_Live.modules.Controlers
 {
+    /// <summary>
+    /// Аьъбстрактная система управления кораблем (контроллер)
+    /// </summary>
     public abstract class AbstractController
     {
         /// <summary>
@@ -27,6 +30,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// Флаг нахождения корабля в зоне обитаемой планеты
         /// </summary>
         private bool nearInhabitedPlanet;
+
         /// <summary>
         /// Флаг нахождения корабля в зоне обитаемой планеты
         /// </summary>
@@ -41,10 +45,13 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         private Ship myShip;
 
+        /// <summary>
+        /// Процесс работы контроллера
+        /// </summary>
         public abstract void Process();
 
         /// <summary>
-        /// Переодическое обнуление флагов
+        /// Переодическое обнуление флагов контроллера
         /// </summary>
         protected void RefreshFlags()
         {

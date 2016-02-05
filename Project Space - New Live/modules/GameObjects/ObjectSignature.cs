@@ -36,6 +36,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Коллекция харатеристик в сигнатуре
         /// </summary>
         private List<object> characteristics = new List<object>();
+
         /// <summary>
         /// Коллекция харатеристик в сигнатуре
         /// </summary>
@@ -59,12 +60,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Добавить характеристику
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="type"></param>
-        public void AddCharacteristics(object value, Type type)
+        /// <param name="value">Значение характеристики</param>
+        public void AddCharacteristics(object value)
         {
             this.characteristics.Add(value);
-            this.characteristicsCount++;
+            this.characteristicsCount ++;
         }
 
 

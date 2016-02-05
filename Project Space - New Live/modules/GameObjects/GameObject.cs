@@ -10,20 +10,24 @@ using SFML.Graphics;
 
 namespace Project_Space___New_Live.modules.GameObjects
 {
+    /// <summary>
+    /// Абстрактный игровой объект
+    /// </summary>
     public abstract class GameObject : GameEntity
     {
 
         /// <summary>
-        /// масса объекта
+        /// Масса объекта
         /// </summary>
         protected float mass;
 
         /// <summary>
-        /// отображение объекта
+        /// Отображение объекта
         /// </summary>
         protected ObjectView[] view;
+
         /// <summary>
-        /// Свойство отображения объекта
+        /// Отображение объекта
         /// </summary>
         public virtual ObjectView[] View 
         {
@@ -31,26 +35,25 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Получить сигнатуру(набор общих характеристик) обекта
+        /// Получить сигнатуру(набор общих характеристик) объекта
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Сигнатура объекта</returns>
         public ObjectSignature GetSignature()
         {
-            return ConstructSignature();//вернеть сконструированную сигнатуру объекта
+            return ConstructSignature();//сконструировать сигнатуру объекта
         }
 
         /// <summary>
         /// Построение сигнатуры конкретного игрового объекта
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Сигнатура</returns>
         protected abstract ObjectSignature ConstructSignature();
 
 
         /// <summary>
-        /// Построить отображение объекта (Х)
+        /// Построить отображение объекта
         /// </summary>
-        /// <param name="skin">Текстура</param>
-        /// <returns></returns>
+        /// <param name="skin">Массив текстур</param>
         protected abstract void ConstructView(Texture[] skin);
 
     }

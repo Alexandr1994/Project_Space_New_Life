@@ -11,26 +11,16 @@ using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
 {
+    /// <summary>
+    /// Звездная система
+    /// </summary>
     public class StarSystem
     {
-        /// <summary>
-        /// Номер системы в коллекции
-        /// </summary>
-        private int systemIndex;
-
-        /// <summary>
-        /// Установить номер системы
-        /// </summary>
-        /// <param name="index"></param>
-        public void SetIndex(int index)
-        {
-            this.systemIndex = index;
-        }
-
-        /// <summary>
-        /// фон звездной системы
+       /// <summary>
+        /// Фон звездной системы
         /// </summary>
         ObjectView background;
+
         /// <summary>
         /// Главный центр масс
         /// </summary>
@@ -52,7 +42,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Коллекция снарядов, находящихся в данной звездной системе
         /// </summary>
-        private List<Shell> myShellsCollection = new List<Shell>();
+        private List<Shell> myShellsCollection;
   
 
         /// <summary>
@@ -64,13 +54,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             this.massCenter = massCenter;//Инициализация компонетов звездной системы
             InitBackgroung(background);//Построение фона звездной системы
+            myShellsCollection = new List<Shell>();
         }
 
 
         /// <summary>
         /// Построить фон звездной системы
         /// </summary>
-        /// <param name="skin"></param>
+        /// <param name="skin">Текстура фона</param>
         private void InitBackgroung(Texture skin)
         {
             background = new ObjectView(new RectangleShape(new Vector2f(2000, 2000)), BlendMode.Alpha);
@@ -81,7 +72,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Изменение позиции фона Звездной системы
         /// </summary>
-        /// <param name="offset"></param>
+        /// <param name="offset">Смещение</param>
         public void OffsetBackground(Vector2f offset)
         {
             this.background.Translate(offset);
@@ -107,8 +98,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                 ship.AnalizeObjectInteraction();
                 ship.Process(new Vector2f(0, 0));
             }
-           // foreach (Shell shell in this.myShellsCollection)
-            for (int i = 0; i < this.myShellsCollection.Count; i++)//работа со снарядами в данной звездной системе
+            for (int i = 0; i < this.myShellsCollection.Count; i ++)//работа со снарядами в данной звездной системе
             {
                 this.myShellsCollection[i].Process(new Vector2f(0, 0));
                 if (this.myShellsCollection[i].LifeOver)//если время жизни снаряда вышло
@@ -120,9 +110,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Вернуть коллекция отображений объектов звездной системы
+        /// Вернуть коллекцию отображений объектов звездной системы
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Коллекция отображений объектов в звездной системе</returns>
         public List<ObjectView> GetView()
         {
             List<ObjectView> systemsViews = new List<ObjectView>();
@@ -133,13 +123,17 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 systemsViews.AddRange(shell.View);
             }
+            foreach (Ship ship in this.myShipsCollection)//Заполнить массив образов системы образами кораблей, принадлежащих данной системе
+            {
+                systemsViews.AddRange(ship.View);
+            }
             return systemsViews;
         }
 
         /// <summary>
         /// Получить коллекцию объектов находящихся в системе (временная реализация)
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Коллекция объектов в звездной системе</returns>
         public List<GameObject> GetObjectsInSystem()
         {
             List<GameObject> objectsCollection = this.massCenter.GetObjects();//получить коллекцию звезд и планет
@@ -155,11 +149,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Получить коллекцию объектов находящихся в сиcтеме в области радиусом radius около точки point (временная реализация)
+        /// Получить коллекцию объектов находящихся в сиcтеме, в области радиусом radius, около точки point
         /// </summary>
-        /// <param name="point"></param>
-        /// <param name="radius"></param>
-        /// <returns></returns>
+        /// <param name="point">Центр круговой области</param>
+        /// <param name="radius">Радиус круговой области</param>
+        /// <returns>Коллекция объектов звездной системы в указанной области</returns>
         public List<GameObject> GetObjectsInSystem(Vector2f point, double radius)
         {
             List<GameObject> ret_value = new List<GameObject>();
@@ -177,7 +171,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Добавление снаряда в коллекцию снарядов в данной звездной системе (ВРЕМЕННАЯ РЕАЛИЗАЦИЯ)
+        /// Добавление снаряда в коллекцию снарядов в данной звездной системе
         /// </summary>
         public void AddNewShell(Shell newShell)
         {

@@ -12,6 +12,9 @@ using SFML.Window;
 
 namespace Project_Space___New_Live.modules.Controlers
 {
+    /// <summary>
+    /// Игровой контроллер
+    /// </summary>
     public class PlayerController : AbstractController
     {
         /// <summary>
@@ -25,7 +28,7 @@ namespace Project_Space___New_Live.modules.Controlers
         static private PlayerController GameController;
 
         /// <summary>
-        /// Ссылка на корабль
+        /// Ссылка на управляемый корабль
         /// </summary>
         private Ship PlayerShip = null;
 
@@ -44,8 +47,8 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Получение экзепляра класса игрового контроллера
         /// </summary>
-        /// <param name="playerShip"></param>
-        /// <returns></returns>
+        /// <param name="playerShip">Корабль игрока</param>
+        /// <returns>Ссылка на экземпляр игрового контроллера</returns>
         public static PlayerController GetInstanse(Ship playerShip)
         {
             if (GameController == null)
@@ -69,8 +72,8 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Обрабочик нажатий на клавиши
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="Args"></param>
+        /// <param name="sender">Объект вызвавший событие</param>
+        /// <param name="Args">Аргументы</param>
         private void OnKey(object sender, KeyEventArgs Args)
         {
             switch (Args.Code)
@@ -118,8 +121,8 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Обработчик отжатий клавиши
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="Args"></param>
+        /// <param name="sender">Объект вызвавший событие</param>
+        /// <param name="Args">Аргументы</param>
         private void FromKey(object sender, KeyEventArgs Args)
         {
             switch (Args.Code)

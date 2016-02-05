@@ -10,32 +10,35 @@ using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
 {
+    /// <summary>
+    /// Абстрактный сферический объект с постоянной круговой орбитой
+    /// </summary>
     public abstract class SphereObject : GameObject
     {
 
         /// <summary>
-        /// радиус объекта
+        /// Радиус объекта
         /// </summary>
         protected int radius;
+
         /// <summary>
-        /// орбита(расстояние от центра масс звездной системы до центра объекта)
+        /// Орбита(расстояние от центра масс звездной системы до центра объекта)
         /// </summary>
         protected int orbit;
+
         /// <summary>
-        /// орбитальный угол объекта
+        /// Орбитальный угол объекта в рад.
         /// </summary>
         protected double orbitalAngle;
+
         /// <summary>
-        /// орбитальная скорость объекта (рад./ед.вр.)
+        /// орбитальная скорость объекта в рад./ед.вр.
         /// </summary>
         protected double orbitalSpeed;
-
 
         /// <summary>
         /// Движение объекта по орбите
         /// </summary>
-        /// <param name="speed">Угловая скорость</param>
-        /// <param name="angle">Текущий орбитальный угол</param>
         protected override void Move()
         {
             orbitalAngle += orbitalSpeed;//Изменение орбитального угла планеты

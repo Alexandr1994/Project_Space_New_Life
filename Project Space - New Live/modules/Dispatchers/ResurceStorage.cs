@@ -45,15 +45,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
             rectangleButtonTextures[0] = new Texture("Norm1.png");
             rectangleButtonTextures[1] = new Texture("Act1.png");
             rectangleButtonTextures[2] = new Texture("Click1.png");
-            rectangleButtonTextures[3] = new Texture("Click21.png");
-            
+            rectangleButtonTextures[3] = new Texture("Click21.png");  
         }
 
         /// <summary>
-        /// инициализацимя звездной системы
+        /// Инициализация тестовой звездной системы 1
         /// </summary>
         /// <returns></returns>
-        static public StarSystem initSystem()
+        static public StarSystem InitSystem1()
         {
             Texture[] texts = new Texture[2];
             texts[0] = starText;
@@ -63,7 +62,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             texts[0] = planetText;
             texts[1] = shadowTexture;
             Planet[] planets = new Planet[3];
-            for (int i = 0; i < planets.Length; i++)
+            for (int i = 0; i < planets.Length; i ++)
             {
 
                 planets[i] = new Planet(10, 50, orbits[i], 0.002 / (1 + i), texts);
@@ -71,6 +70,27 @@ namespace Project_Space___New_Live.modules.Dispatchers
             LocalMassCenter center = new LocalMassCenter(0, 0, 0, stars, planets);
             return new StarSystem(center, backText);
         }
+
+        static public StarSystem InitSystem2()
+        {
+            Texture[] texts = new Texture[2];
+            texts[0] = starText;
+            texts[1] = crownText;
+            Star[] stars = new Star[2];
+            stars[0] = new Star(10000000, 250, 750, Math.PI, (float)(0.1 * Math.PI / 180), texts);
+            stars[1] = new Star(10000000, 250, 750, 0, (float)(0.1 * Math.PI / 180), texts);
+            texts[0] = planetText;
+            texts[1] = shadowTexture;
+            Planet[] planets = new Planet[3];
+            for (int i = 0; i < planets.Length; i++)
+            {
+
+                planets[i] = new Planet(10, 50, orbits[i]*2, 0.002 / (1 + i), texts);
+            }
+            LocalMassCenter center = new LocalMassCenter(0, 0, 0, stars, planets);
+            return new StarSystem(center, backText);
+        }
+
 
     }
 }

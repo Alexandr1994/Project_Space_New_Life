@@ -9,33 +9,49 @@ using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
 {
+    /// <summary>
+    /// Локальный цента масс
+    /// </summary>
     public class LocalMassCenter : GameEntity
     {
         /// <summary>
         /// орбита(расстояние от центра масс звездной системы до локального центра масс)
         /// </summary>
         private int orbit;
+
         /// <summary>
         /// орбитальный угол объекта
         /// </summary>
         private double orbitalAngle;
+
         /// <summary>
-        /// орбитальная скорость объекта (рад./ед.вр.)
+        /// орбитальная скорость объекта в рад./ед.вр.
         /// </summary>
         private double orbitalSpeed;
 
-        private Planet[] planets;//Планеты контролируемые центром масс
-        Star[] stars;//звезды контролируемые центорм масс
-        LocalMassCenter[] massCenters;//локальные центры масс контролируемые данным центром масс
+        /// <summary>
+        /// Планеты контролируемые данным центром масс
+        /// </summary>
+        private Planet[] planets;
 
         /// <summary>
-        /// Создание локального центра масс, управляющего звездами
+        /// Звезды контролируемые данным центорм масс
         /// </summary>
-        /// <param name="orbit">расстояние от центра звездной системы</param>
-        /// <param name="startOrbitalAngle">//начальный орбитальный угол</param>
-        /// <param name="orbitalSpeed">орбитальная угловая скорость</param>
-        /// <param name="stars">Звезды, управляемые центром масс</param>
-        /// <param name="planets">Планеты, управляемые центром масс</param>
+        Star[] stars;
+
+        /// <summary>
+        /// Локальные центры масс контролируемые данным центром масс
+        /// </summary>
+        LocalMassCenter[] massCenters;
+
+        /// <summary>
+        /// Создание локального центра масс, управляющего звездами и планетами
+        /// </summary>
+        /// <param name="orbit">Расстояние от центра звездной системы</param>
+        /// <param name="startOrbitalAngle">Начальный орбитальный угол</param>
+        /// <param name="orbitalSpeed">Орбитальная угловая скорость в рад./ед.вр.</param>
+        /// <param name="stars">Массив звезд, управляемых данным центром масс</param>
+        /// <param name="planets">Массив планет, управляемых данным центром масс</param>
         public LocalMassCenter(int orbit, double startOrbitalAngle, double orbitalSpeed, Star[] stars, Planet[] planets)
         {
             this.orbit = orbit;
@@ -49,10 +65,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Создание локального центра масс, управляющего другими локальными центрами масс
         /// </summary>
-        /// <param name="orbit">расстояние от центра звездной системы</param>
-        /// <param name="startOrbitalAngle">//начальный орбитальный угол</param>
-        /// <param name="orbitalSpeed">орбитальная угловая скорость</param>
-        /// <param name="locMasCenters">Центры масс, кправляемые данным центром масс</param>
+        /// <param name="orbit">Расстояние от центра звездной системы</param>
+        /// <param name="startOrbitalAngle">//Начальный орбитальный угол</param>
+        /// <param name="orbitalSpeed">Орбитальная угловая скорость</param>
+        /// <param name="locMasCenters">Центры масс, управляемые данным</param>
         public LocalMassCenter(int orbit, double startOrbitalAngle, double orbitalSpeed, LocalMassCenter[] locMasCenters)
         {
             this.orbit = orbit;
@@ -65,7 +81,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Движение локального центра масс
         /// </summary>
-        /// <param name="speed">Скорость</param>
         protected override void Move()
         {
             orbitalAngle += orbitalSpeed;//Изменение орбитального угла планеты
@@ -74,8 +89,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Управление подчиненными данного центара масс
+        /// Управление подчиненными сущностями данного центара масс
         /// </summary>
+        /// <param name="companents">Массив подчиненных сущностей</param>
         private void ProcessCompanent(GameEntity[] companents)
         {
             if (companents != null)
@@ -88,9 +104,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Функция "жизни" локального центра масс
+        /// Процесс жизни локального центра масс
         /// </summary>
-        /// <param name="homeCoords">Коордтнаты управляющей сущности</param>
+        /// <param name="homeCoords">Координаты управляющей сущности</param>
         public override void Process(Vector2f homeCoords)
         {
             ProcessCompanent(massCenters);//управление подчиненными центрами масс
@@ -101,16 +117,16 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Получить массив отображений компанента
+        /// Получить массив отображений компанента данного центра масс
         /// </summary>
         /// <param name="companetn"></param>
-        /// <returns></returns>
+        /// <returns>Коллекция отображений</returns>
         private List<ObjectView> GetCompanentViews(GameObject[] companetn)
         {
             List<ObjectView> retViews = new List<ObjectView>();//массив возвращаемых отображений
             if (companetn != null)//если центр масс имеет данные комапненты, передать их отображения в возвращаемый массив
             {
-                for (int i = 0; i < companetn.Length; i++)
+                for (int i = 0; i < companetn.Length; i ++)
                 {
                     foreach (ObjectView view in companetn[i].View)//получить все отображения данного компанента центра масс
                     {
@@ -125,13 +141,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Получить все отображения данного центра масс
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Коллекция отображений</returns>
         public List<ObjectView> GetView()
         {
             List<ObjectView> retViews = new List<ObjectView>();//массив возвращаемых отображений
             if (massCenters != null)//если центр масс имеет подчиненными центры масс, извлечь из них отображения звезд
             {
-                for (int i = 0; i < massCenters.Length; i++)
+                for (int i = 0; i < massCenters.Length; i ++)
                 {//получить все отображения звезд в подчиненном центре масс
                     foreach (ObjectView singleView in massCenters[i].GetView())
                     {//перевести полученные отображения в возвращаемый массив
@@ -145,9 +161,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Получить массив управляемых объектов (временная реализация)
+        /// Получить массив управляемых игровых объектов (временная реализация)
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Коллекция игровых объектов</returns>
         public List<GameObject> GetObjects()
         {
             List<GameObject> retValue = new List<GameObject>();

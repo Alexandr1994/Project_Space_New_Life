@@ -13,7 +13,7 @@ using SFML.Window;
 namespace Project_Space___New_Live.modules.Dispatchers
 {
     /// <summary>
-    /// Графика и отрисовка
+    /// Модуль графика и отрисовки
     /// </summary>
     class RenderModule
     {
@@ -23,6 +23,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         private RenderWindow mainWindow;
 
+        /// <summary>
+        /// Окно программы
+        /// </summary>
         public RenderWindow MainWindow
         {
             get { return this.mainWindow; }
@@ -32,6 +35,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Главная форма (Интерфейс)
         /// </summary>
         private MainForm mainForm;
+
         /// <summary>
         /// Главная форма (Интерфейс)
         /// </summary>
@@ -47,7 +51,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         private static VideoMode windowSize = new VideoMode(800, 600);
 
         /// <summary>
-        /// Экземпляр класса отрисовки
+        /// Экземпляр модуля отрисовки
         /// </summary>
         private static RenderModule graphicModule = null;
 
@@ -86,14 +90,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             this.mainWindow = new RenderWindow(windowSize, windowTitle, currentStyle);//построение главного окна
             this.gameView.Size = (Vector2f)mainWindow.Size;//установка размера вида
-            this.gameView.Center =  new Vector2f(gameView.Size.X/2, gameView.Size.Y/2);//установка центра вида
+            this.gameView.Center =  new Vector2f(gameView.Size.X / 2, gameView.Size.Y / 2);//установка центра вида
             mainForm = MainForm.GetInstance(gameView);
         }
 
         /// <summary>
-        /// Получить экземпляр класса отрисовки
+        /// Получить экземпляр модуля отрисовки
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Ссылка на экземпляр модуля отрисовки</returns>
         public static RenderModule getInstance()
         {
             if (graphicModule == null)
@@ -163,16 +167,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Метод отрисовки (игровых объектов и интерфейса)
         /// </summary>
-        /// <param name="views">Набор игровых объектов</param>
-        public void RenderProcess(StarSystem activeStarSystem, List<Ship> ships)
+        /// <param name="activeStarSystem">Активная звездная система</param>
+        public void RenderProcess(StarSystem activeStarSystem)
         {
             this.ViewControl();
             List<ObjectView> views = new List<ObjectView>();
             views.AddRange(activeStarSystem.GetView());
-            foreach (Ship currentShip in ships)
-            {
-                views.AddRange(currentShip.View);
-            }
             views.AddRange(this.Form.RenderForm());
             foreach (ObjectView view in views)
             {

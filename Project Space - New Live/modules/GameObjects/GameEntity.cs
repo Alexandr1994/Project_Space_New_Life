@@ -7,10 +7,13 @@ using SFML.System;
 
 namespace Project_Space___New_Live
 {
+    /// <summary>
+    /// Абстрактная игровая сущность
+    /// </summary>
     public abstract class GameEntity
     {
         /// <summary>
-        /// координаты объекта
+        /// Координаты объекта
         /// </summary>
         protected Vector2f coords;
         /// <summary>
@@ -24,11 +27,11 @@ namespace Project_Space___New_Live
         /// <summary>
         /// Процесс жизни сущности
         /// </summary>
-        /// <param name="homeCoords"></param>
+        /// <param name="homeCoords">Координаты начала отсчета</param>
         public abstract void Process(Vector2f homeCoords);
 
         /// <summary>
-        /// Скорректировать координаты объекта отностиельно
+        /// Скорректировать координаты сущности
         /// </summary>
         /// <param name="correction">Коррекция</param>
         public void CorrectObjectPoint(Vector2f correction)
@@ -38,7 +41,7 @@ namespace Project_Space___New_Live
         }
 
         /// <summary>
-        /// Функция движения объекта
+        /// Функция движения сущности
         /// </summary>
         protected abstract void Move();
 

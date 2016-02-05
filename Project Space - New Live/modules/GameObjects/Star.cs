@@ -9,15 +9,24 @@ using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
 {
+    /// <summary>
+    /// Звезда
+    /// </summary>
     public class Star : SphereObject
     {
         /// <summary>
-        /// Перечисление индексов
+        /// Перечисление отображений
         /// </summary>
         public enum Views:int
         {
-            Star,//изображения звезды
-            Crown//изображение короны
+            /// <summary>
+            /// Звезда
+            /// </summary>
+            Star,
+            /// <summary>
+            /// Звездная корона
+            /// </summary>
+            Crown
         }
 
 
@@ -26,11 +35,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Сконструировать звезду
         /// </summary>
         /// <param name="mass">Масса</param>
-        /// <param name="radius">Рудиус</param>
-        /// <param name="orbit">Расстояние от центра масс звездной системы</param>
-        /// <param name="startOrbitalAngle">Начальный поворот звезды</param>
-        /// <param name="orbitalSpeed">//Скорость варщениея вокруг центра масс (рад/ед.вр.)</param>
-        /// <param name="Skin">Текстура</param>
+        /// <param name="radius">Радиус</param>
+        /// <param name="orbit">Орбита (расстояние от центра масс звездной системы)</param>
+        /// <param name="startOrbitalAngle">Угол начального поворота звезды в рад.</param>
+        /// <param name="orbitalSpeed">//Скорость вращениея вокруг центра масс в рад/ед.вр.</param>
+        /// <param name="Skin">Массив текстур</param>
         public Star(float mass, int radius, int orbit, double startOrbitalAngle, double orbitalSpeed, SFML.Graphics.Texture[] Skin)
         {
             Random random = new Random();
@@ -46,12 +55,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Сконструировать отображение звезды
         /// </summary>
-        /// <param name="skin">Текстура</param>
-        /// <returns></returns>
+        /// <param name="skin">Массив текстура</param>
         protected override void ConstructView(Texture[] skin)
         {
             this.view = new ObjectView[2];
-            for (int i = 0; i < this.view.Length; i++)
+            for (int i = 0; i < this.view.Length; i ++)
             {
                 this.view[i] = new ObjectView(new CircleShape((float)(radius * ((0.5 * i) + 1))), BlendMode.Alpha);//создание нового ObjectView
                 this.view[i].Image.Position = coords - new Vector2f(radius, radius);//установка позиции отображегния ObjectView
@@ -64,19 +72,19 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Построение сигнатуры звезды
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Сигнатура звезды</returns>
         protected override ObjectSignature ConstructSignature()
         {
             ObjectSignature signature = new ObjectSignature();
-            signature.AddCharacteristics(this.mass, typeof(float));
-            Vector2f sizes = new Vector2f(this.radius*2, this.radius*2);
-            signature.AddCharacteristics(sizes, sizes.GetType());
+            signature.AddCharacteristics(this.mass);
+            Vector2f sizes = new Vector2f(this.radius * 2, this.radius * 2);
+            signature.AddCharacteristics(sizes);
             return signature;
         }
 
 
         /// <summary>
-        /// Жизнь объекта
+        /// Процесс жизни звезды
         /// </summary>
         /// <param name="homeCoords">Коордтнаты управляющей сущности</param>
         public override void Process(Vector2f homeCoords)
@@ -85,16 +93,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Функция перемещения объекта по орбите
+        /// Функция движения звезды по орбите
         /// </summary>
         /// <param name="homeCoords">Координаты управляющей сущности</param>
         protected override void OrbitalMoving(Vector2f homeCoords)
         {
-            Vector2f offsets = this.coords;
-            this.Move();//вычеслить идеальные координтаы
+            this.Move();//вычислить идеальные координтаы
             this.CorrectObjectPoint(homeCoords);//выполнить коррекцию относительно глобальных координт
-            offsets = this.coords - offsets;
-            for(int i = 0; i < view.Length; i++)
+            for(int i = 0; i < view.Length; i ++)
             {
                 view[i].Image.Position = new Vector2f((float)(coords.X - this.radius * ((0.5 * i) + 1)), (float)(coords.Y - this.radius * ((0.5 * i) + 1)));//вычислить координаты отображений объекта
             }
