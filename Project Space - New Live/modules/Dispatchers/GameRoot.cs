@@ -29,7 +29,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Главная форма
         /// </summary>
-        private MainForm GraphicInterface;
+        private PlayerInterfaceContainer GraphicInterfaceContainer;
 
         /// <summary>
         /// Коллекция Звездных систем
@@ -52,57 +52,37 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public GameRoot()
         {
             this.GraphicModule = RenderModule.getInstance();//Полученить указатель на модуль отрисовки
-            this.GraphicInterface = this.GraphicModule.Form;//Получить указатель на главную форму
+           // this.GraphicInterface = this.GraphicModule.Form;//Получить указатель на главную форму
             this.ConstructWorld();//Сконструировать игровой мир
-            this.playerContainer = PlayerContainer.GetInstanse(this.SystemCollection, new PlayerInterfaceContainer(this.GraphicInterface));//Инициализация игрока
+            this.playerContainer = PlayerContainer.GetInstanse(this.SystemCollection);//Инициализация игрока            
+            this.GraphicInterfaceContainer = new PlayerInterfaceContainer(this.GraphicModule.Form, this.playerContainer);//Сконструировать контейнер игрового интерфейса
             this.ShipsCollection.Add(this.playerContainer.PlayerShip);//создание корабля игрока и установка контроллера
+            this.ConstructFleets();//Инициализация кораблей
         }
 
         /// <summary>
-        /// Построение звездных систем (временная реализация
+        /// Построение звездных систем (временная реализация)
         /// </summary>
         private void ConstructWorld()
         {
             this.SystemCollection.Add(ResurceStorage.InitSystem1());//сконструировать одну звездную систему
         }
 
-
-        private void OnClick(object sender, EventArgs e)
+        /// <summary>
+        /// Инициализация кораблей (временная реализация)
+        /// </summary>
+        private void ConstructFleets()
         {
-            cont = false;
-        }
-
-        private bool cont = true;
-
-        public void Main()
-        {
-            
             this.ShipsCollection.Add(new Ship(1000, new Vector2f(-450, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
             this.ShipsCollection.Add(new Ship(900, new Vector2f(-450, -400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
             this.ShipsCollection.Add(new Ship(800, new Vector2f(450, -400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
             this.ShipsCollection.Add(new Ship(500, new Vector2f(450, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
+        }
+        
 
-            LinearBar scaleHea = new LinearBar();
-            scaleHea.Location = new Vector2f(200, 0);
-            scaleHea.SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.healthBar });
-            this.GraphicInterface.AddForm(scaleHea);
-            LinearBar scaleEn = new LinearBar();
-            scaleEn.Location = new Vector2f(200, 20);
-            scaleEn.SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.energyBar });
-            this.GraphicInterface.AddForm(scaleEn);
-            LinearBar scaleDef = new LinearBar();
-            scaleDef.Location = new Vector2f(200, 40);
-            scaleDef.SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.energyBar });
-            this.GraphicInterface.AddForm(scaleDef);
-
-            CircleButton button = new CircleButton();
-            button.MouseClick += OnClick;
-            button.Size = new Vector2f(80, 30);
-            button.Location = new Vector2f(720,0);
-
-            this.GraphicInterface.AddForm(button);
-            
-            while (cont)
+        public void Main()
+        {
+            while (this.GraphicInterfaceContainer.cont)
             {
                 Thread.Sleep(25);
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
@@ -110,12 +90,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 {
                     currentSystem.Process(this.ShipsCollection);
                 }
-                this.playerContainer.Process();
-
-                scaleEn.PercentOfBar = this.playerContainer.GetEnergy();
-                scaleHea.PercentOfBar = this.playerContainer.GetHealh();
-                scaleDef.PercentOfBar = this.playerContainer.GetShieldPower();
-
+                this.GraphicInterfaceContainer.Process();
                 GraphicModule.RenderProcess(this.playerContainer.ActiveSystem);
                 GraphicModule.MainWindow.DispatchEvents();
                 GraphicModule.MainWindow.Display();

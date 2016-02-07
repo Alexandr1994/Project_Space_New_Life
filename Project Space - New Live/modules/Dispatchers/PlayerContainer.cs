@@ -43,12 +43,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Указатель на контейнер интерфейса игрока
-        /// </summary>
-        private PlayerInterfaceContainer playerInterface;
-
-
-        /// <summary>
         /// Активная звездная система
         /// </summary>
         private StarSystem activeSystem = null;
@@ -67,11 +61,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         /// <param name="GameWorld"></param>
         /// <returns></returns>
-        public static PlayerContainer GetInstanse(List<StarSystem> GameWorld, PlayerInterfaceContainer playerInterface)
+        public static PlayerContainer GetInstanse(List<StarSystem> GameWorld)
         {
             if (container == null)
             {
-                container = new PlayerContainer(GameWorld, playerInterface);
+                container = new PlayerContainer(GameWorld);
             }
             return container;
         }
@@ -86,14 +80,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         /// <param name="GameWorld">Коллекция звездных систем</param>
         /// <param name="playerInterface">Ссылка на графический интерфейс игрока</param>
-        private PlayerContainer(List<StarSystem> GameWorld, PlayerInterfaceContainer playerInterface)
+        private PlayerContainer(List<StarSystem> GameWorld)
         {//Временная реализация конструктора корабля
             //Сохранение в контейнере
             this.playerShip = new Ship(800, new Vector2f(400, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), GameWorld[0]);//Корабля игрока
             this.lastPlayerCoords = this.playerShip.Coords;//последних координат корабля игрока
             this.activeSystem = this.playerShip.StarSystem;//Текущей звездной системы
-            this.GameRenderer = RenderModule.getInstance();//ССылки на модуль отрисовки
-            this.playerInterface = playerInterface;
+            this.GameRenderer = RenderModule.getInstance();//Сылки на модуль отрисовки
+            //this.playerInterface = playerInterface;
         }
 
         /// <summary>
@@ -151,8 +145,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
             Vector2f shipOffset = this.lastPlayerCoords - this.playerShip.Coords;//Вычисление смещения игрока
             this.lastPlayerCoords = this.playerShip.Coords;//сохранение новых координат
             this.activeSystem.OffsetBackground(shipOffset*(float)(-0.90));//установить смещение фона активной звездной системы
-
-            this.playerInterface.RadarScr.RadarProcess(this.activeSystem, this.playerShip);
             GameRenderer.GameView.Center = this.PlayerShip.Coords;//Установка камеры
         }
 
