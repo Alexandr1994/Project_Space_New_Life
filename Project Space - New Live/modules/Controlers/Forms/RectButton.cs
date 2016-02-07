@@ -10,6 +10,9 @@ using SFML.Window;
 
 namespace Project_Space___New_Live.modules.Controlers.Forms
 {
+    /// <summary>
+    /// Прямоугольная/квадратная кнопка
+    /// </summary>
     class RectButton : Button
     {
         /// <summary>

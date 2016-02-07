@@ -107,7 +107,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             return graphicModule;
         }
 
-          /// <summary>
+        /// <summary>
         /// Получить окно нового размера
         /// </summary>
         /// <param name="width">Ширина</param>
@@ -131,7 +131,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
             ReconstructWindow();
             return mainWindow;
         }
-
 
         /// <summary>
         /// Перестроение окна

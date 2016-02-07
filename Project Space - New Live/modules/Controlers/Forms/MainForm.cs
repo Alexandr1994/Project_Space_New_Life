@@ -11,9 +11,11 @@ using SFML.Window;
 
 namespace Project_Space___New_Live.modules.Controlers.Forms
 {
+    /// <summary>
+    /// Главная форма
+    /// </summary>
     class MainForm : Form
     {
-
        /// <summary>
        /// Экземпляр формы
        /// </summary>
@@ -38,7 +40,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// Получить экземпляр главной формы (может существовать только в единственном экземпляре)
         /// </summary>
         /// <param name="gameView">Вид, в котором должена находиться главная форма</param>
-        /// <returns></returns>
+        /// <returns>Экземпляр главной формы</returns>
         public static MainForm GetInstance(View gameView)
         {
             if (form == null)
@@ -52,19 +54,19 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// /// Проверка на нахождение точки в области формы
         /// </summary>
-        /// <param name="testingPoint"></param>
-        /// <returns></returns>
+        /// <param name="testingPoint">Координаты проверяемая точка</param>
+        /// <returns>true - если точка находится в области формы, иначе - false</returns>
         protected override bool PointTest(Vector2f testingPoint)
         {
-            if (testingPoint.X > this.Size.X || testingPoint.Y > this.Size.Y || testingPoint.X < 0 || testingPoint.Y < 0)
+            if (testingPoint.X > this.Size.X || testingPoint.Y > this.Size.Y || testingPoint.X < 0 || testingPoint.Y < 0)//Если точка находится за пределами окна
             {
-                return false;
+                return false;//то точка находится вне области формы
             }
-            return true;
+            return true;//иначе точка в области формы
         }
 
         /// <summary>
-        /// Вернуть нулевое смещение относительно начала координат
+        /// Получить физическую позицию формы
         /// </summary>
         /// <returns></returns>
         protected override Vector2f GetPhizicalPosition()
@@ -75,7 +77,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Получить отображения всех форм
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Коллекция отображений форм</returns>
         public List<ObjectView> RenderForm()
         {
             return this.GetChildFormView();

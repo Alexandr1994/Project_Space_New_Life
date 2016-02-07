@@ -52,6 +52,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Активная звездная система
         /// </summary>
         private StarSystem activeSystem = null;
+
         /// <summary>
         /// Активная звездная система
         /// </summary>
@@ -75,10 +76,16 @@ namespace Project_Space___New_Live.modules.Dispatchers
             return container;
         }
 
+//        /// <summary>
+//        /// Конструктор контейнера
+//        /// </summary>
+//        /// <param name="GameWorld"></param>
+
         /// <summary>
         /// Конструктор контейнера
         /// </summary>
-        /// <param name="GameWorld"></param>
+        /// <param name="GameWorld">Коллекция звездных систем</param>
+        /// <param name="playerInterface">Ссылка на графический интерфейс игрока</param>
         private PlayerContainer(List<StarSystem> GameWorld, PlayerInterfaceContainer playerInterface)
         {//Временная реализация конструктора корабля
             //Сохранение в контейнере
@@ -89,19 +96,29 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.playerInterface = playerInterface;
         }
 
-
+        /// <summary>
+        /// Текущий запас прочности корабля игрока  в процентах
+        /// </summary>
+        /// <returns></returns>
         public float GetHealh()
         {
             return this.playerShip.Health * 100 / this.playerShip.MaxHealth;
         }
 
-
+        /// <summary>
+        /// Текущий энергозапас корабля игрока в процентах
+        /// </summary>
+        /// <returns></returns>
         public float GetEnergy()
         {
             Battery battery = playerShip.Equipment[(int) Ship.EquipmentNames.Battery] as Battery;
             return (float)battery.Energy / (float)battery.MaxEnergy *100;
         }
 
+        /// <summary>
+        /// Текущая мощность экрана энергощита в процентах
+        /// </summary>
+        /// <returns></returns>
         public float GetShieldPower()
         {
             if (this.PlayerShip.ShieldActive)
@@ -113,7 +130,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Вернуть радиус действия радара игрока
+        /// Радиус действия радара игрока
         /// </summary>
         /// <returns></returns>
         public float GetRadarRange()
@@ -127,7 +144,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Основаная функция
+        /// Функция работы конетйнера игрока
         /// </summary>
         public void Process()
         {

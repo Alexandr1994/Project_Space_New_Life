@@ -12,10 +12,11 @@ using Project_Space___New_Live.modules.Dispatchers;
 
 namespace Project_Space___New_Live.modules.Controlers.Forms
 {
+    /// <summary>
+    /// Абстрактная форма интерфейса
+    /// </summary>
     public abstract class Form
     {
-
-        
         /// <summary>
         /// Позиция
         /// </summary>
@@ -31,11 +32,12 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Видимость формыи дочерних форм
+        /// Видимость формы и дочерних форм
         /// </summary>
         private bool visible;
+
         /// <summary>
-        /// Видимость формыи дочерних форм
+        /// Видимость формы и дочерних форм
         /// </summary>
         public bool Visible
         {
@@ -47,6 +49,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// Размер
         /// </summary>
         protected Vector2f size;
+
         /// <summary>
         /// Размер
         /// </summary>
@@ -59,8 +62,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 {
                     float Xcoef = value.X / this.size.X;
                     float Ycoef = value.Y / this.size.Y;
-                    //Изменение размеров изображения
-                    this.view.Image.Scale = new Vector2f(Xcoef, Ycoef);
+                    this.view.Image.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
                     this.size = value;//сохранение размеров
                 }
                 else
@@ -71,27 +73,14 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Надпись на форме
-        /// </summary>
-        private String text;
-        /// <summary>
-        /// Надпись на форме
-        /// </summary>
-        public String Text
-        {
-            get {return this.text; }
-            set { this.text = value; }
-        }
-
-        /// <summary>
-        /// Указатель на родительскую форму (если таковая есть)
+        /// Указатель на родительскую форму, при её наличии
         /// </summary>
         protected Form parentForm;
 
         /// <summary>
         /// Установка родителской формы
         /// </summary>
-        /// <param name="parentForm"></param>
+        /// <param name="parentForm">Родительская форма</param>
         protected void SetPatentForm(Form parentForm)
         {
             this.parentForm = parentForm;
@@ -99,12 +88,12 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
 
 
         /// <summary>
-        /// Массив дочерних форм
+        /// Коллекция дочерних форм
         /// </summary>
         private List<Form> childForms = new List<Form>();
 
         /// <summary>
-        /// Массив дочерних форм
+        /// Коллекция дочерних форм
         /// </summary>
         protected List<Form> ChildForms
         {
@@ -114,7 +103,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Добавить дочернюю форму
         /// </summary>
-        /// <param name="newForm"></param>
+        /// <param name="newForm">Новая дочерняя форма</param>
         public void AddForm(Form newForm)
         {
             this.childForms.Add(newForm);
@@ -122,23 +111,23 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Удалить форму
+        /// Удалить дочернюю форму
         /// </summary>
-        /// <param name="targetForm"></param>
+        /// <param name="targetForm">Форма предназначенная к удалению</param>
         public void RemoveForm(Form targetForm)
         {
             this.childForms.Remove(targetForm);
         }
 
         /// <summary>
-        /// отображение
+        /// Отображение
         /// </summary>
-  
         protected ObjectView view = new ObjectView();
+
         /// <summary>
-        /// Отображения текущией и дочерних форм
+        /// Получить отображения текущией и дочерних форм
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Коллекция отображений форм</returns>
         protected List<ObjectView> GetChildFormView()
         {
             List<ObjectView> retValue = new List<ObjectView>();
@@ -146,13 +135,11 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             if (this.Visible)//если форма видимая
             {
                 retValue.Add(this.view); //добавление отображени в массив
-                foreach (Form childForm in this.ChildForms)
-                    //добавление в массив возвращаемых значений дочерних отображений фолрм
+                foreach (Form childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
                 {
                     if (this.ChildFormFallTest(childForm)) //проверка если дочерняя форма не "падает" с текущей
                     {
-//получаем отображение данной дочерней формы
-                        foreach (ObjectView locView in childForm.GetChildFormView())
+                        foreach (ObjectView locView in childForm.GetChildFormView())//получаем отображение данной дочерней формы
                         {
                             retValue.Add(locView);
                         }
@@ -165,32 +152,39 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Анализ формы на "падение" с родительской формы.
-        /// Если за пределами родительской формы лежит болше половины дочерней формы,
-        ///  то дочерняя форма не будет отображаться и отлавливать события
+        /// Анализ формы на нахождение ей в области родительской формы
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true - если хотя бы часть проверяемой формы находится в пределах родительской, иначе false</returns>
         private bool ChildFormFallTest(Form childForm)
         {
             Vector2f centerOfForm = childForm.GetPhizicalPosition() + childForm.Size / 2;//Нахождение центра формы
-            return this.PointTest(centerOfForm);
+            if (this.PointTest(centerOfForm) || this.view.BorderContactAnalize(childForm.view))//если хотя бы часть проверяемой формы находится в пределах родительской
+            {
+                return true;//вернуть true
+            }
+            return false;//иначе вернуть false
         }
+
         /// <summary>
         /// Количество нажатий на форму
         /// </summary>
         private int clicks = 0;
+
         /// <summary>
         /// Флаг клика
         /// </summary>
         private bool click = false; 
+
         /// <summary>
         /// Флаг нахождения курсора на форме
         /// </summary>
-        private bool CursorOnForm = false;
+        private bool cursorOnForm = false;
+
         /// <summary>
         /// Флаг удержания левой кнопки мыши
         /// </summary>
-        private bool ButtonPresed = false;
+        private bool buttonPresed = false;
+
         /// <summary>
         /// Возникает при вхождении курсора в область формы
         /// </summary>
@@ -217,7 +211,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         public event EventHandler MouseClick = null;
 
         /// <summary>
-        /// Отлавливание событий
+        /// Анализ возникновения событий
         /// </summary>
         internal void CatchEvents()
         {
@@ -227,7 +221,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 {//при условии что есть обработчик события
                     this.MouseMove(this, new MouseMoveEventArgs(new MouseMoveEvent()));
                 }
-                if (!this.CursorOnForm)//и до этого он не находился на ней
+                if (!this.cursorOnForm)//и до этого он не находился на ней
                 {
                     if (this.MouseIn != null)
                     {//при условии что есть обработчик события
@@ -243,7 +237,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 }
                 if (!Mouse.IsButtonPressed(Mouse.Button.Left))//если левая кнопка мыши отжата
                 {
-                    if (this.ButtonPresed)//если кнопка была зажата
+                    if (this.buttonPresed)//если кнопка была зажата
                     {
                         if (this.MouseUp != null)
                         {//при условии что есть обработчик события
@@ -254,7 +248,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             }
             else
             {
-                if (this.CursorOnForm)//если курср раннее находился на форме
+                if (this.cursorOnForm)//если курср раннее находился на форме
                 {
                     if (this.MouseOut != null)
                     {//при условии что есть обработчик события
@@ -265,9 +259,9 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Проверка нахождения точнки в областях дочерних форм
+        /// Проверка нахождения точки в областях дочерних форм
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true если курсор находится в области одной из дочерних форм, иначе - false</returns>
         private bool ChildMoveTest(Vector2f point)
         {
             foreach (Form currentForm in this.childForms)
@@ -287,7 +281,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Проверка на нахождение курсора в области формы
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true - если курсор находится в области данной формы, иначе - false</returns>
         private bool MoveTest()
         {
             Vector2i mousePoint = Mouse.GetPosition(RenderModule.getInstance().MainWindow);//Получить позицию мыши в окне
@@ -303,10 +297,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// /// Проверка на нахождение точки в области формы
+        /// Проверка на нахождение точки в области формы
         /// </summary>
-        /// <param name="testingPoint"></param>
-        /// <returns></returns>
+        /// <param name="testingPoint">Координаты проверяемой точки</param>
+        /// <returns>true если точка в области формы, иначе - false</returns>
         protected virtual bool PointTest(Vector2f testingPoint)
         {
             Vector2f center = this.GetPhizicalPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра окружности образующей кнопку
@@ -316,7 +310,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Получение графической позиции формы
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Координаты графической позиции формы</returns>
         protected Vector2f GetGraphicPosition()
         {
             Vector2f point = new Vector2f(0, 0);
@@ -330,7 +324,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Получение физической позиции формы(отличается от графической на смещение камеры)
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Координаты реальной позиции формы</returns>
         protected virtual Vector2f GetPhizicalPosition()
         {
             Vector2f point = new Vector2f(0, 0);
@@ -342,7 +336,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Устванвка базовых реакций формы
+        /// Устванвка базовых реакций формы на события
         /// </summary>
         protected void SetBasicReactions()
         {
@@ -355,23 +349,23 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Элементарная реакция на вхождение курсора в область формы
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Форма, в которой возникло событие</param>
+        /// <param name="e">Аргументы события</param>
         private void InReaction(object sender, EventArgs e)
         {
-            this.CursorOnForm = true;//флаг нахождения курсора на форме устанавливается в true
+            this.cursorOnForm = true;//флаг нахождения курсора на форме устанавливается в true
             this.clicks = 0;//сброс счетчика кликов
         }
 
         /// <summary>
         /// Элементарная реакция на покидание курсора в области формы
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Форма, в которой возникло событие</param>
+        /// <param name="e">Аргументы события</param>
         private void OutReaction(object sender, EventArgs e)
         {
-            this.CursorOnForm = false;//флаг нахождения курсора на форме устанавливается в false
-            this.ButtonPresed = false;//флаг нажатия кнопки на форме устанавливается в false
+            this.cursorOnForm = false;//флаг нахождения курсора на форме устанавливается в false
+            this.buttonPresed = false;//флаг нажатия кнопки на форме устанавливается в false
             this.clicks = 0;//сброс счетчика кликов
             this.click = false;
         }
@@ -379,11 +373,11 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Элементарная реакция на нажатие левой кнопки мыши
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Форма, в которой возникло событие</param>
+        /// <param name="e">Аргументы события</param>
         private void DownReaction(object sender, EventArgs e)
         {
-            this.ButtonPresed = true;//флаг нажатия кнопки на форме устанавливается в true
+            this.buttonPresed = true;//флаг нажатия кнопки на форме устанавливается в true
             if (!this.click)
             {
                 this.click = true;
@@ -393,11 +387,11 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Элементарная реакция на отжатия левой кнопки мыши
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Форма, в которой возникло событие</param>
+        /// <param name="e">Аргументы события</param>
         private void UpReaction(object sender, EventArgs e)
         {
-            this.ButtonPresed = false;//флаг нажатия кнопки на форме устанавливается в true
+            this.buttonPresed = false;//флаг нажатия кнопки на форме устанавливается в true
             if (this.click)
             {
                 if (this.MouseClick != null)

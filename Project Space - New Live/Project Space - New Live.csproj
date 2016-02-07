@@ -96,10 +96,10 @@
     <Compile Include="modules\Controlers\Forms\Form.cs" />
     <Compile Include="modules\Controlers\Forms\MainForm.cs" />
     <Compile Include="modules\Controlers\Forms\Panel.cs" />
+    <Compile Include="modules\Controlers\Forms\RadarScreen.cs" />
     <Compile Include="modules\Controlers\Forms\RectPanel.cs" />
     <Compile Include="modules\Controlers\Forms\RectButton.cs" />
     <Compile Include="modules\Controlers\InterfaceParts\PlayerStateIndicator.cs" />
-    <Compile Include="modules\Controlers\InterfaceParts\RadarScreen.cs" />
     <Compile Include="modules\Dispatchers\GameRoot.cs" />
     <Compile Include="modules\Controlers\PlayerController.cs" />
     <Compile Include="modules\Dispatchers\PlayerContainer.cs" />

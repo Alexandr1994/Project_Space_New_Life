@@ -10,6 +10,9 @@ using SFML.Window;
 
 namespace Project_Space___New_Live.modules.Controlers.Forms
 {
+    /// <summary>
+    /// Прамоугольная панель
+    /// </summary>
     class RectPanel : Panel
     {
         /// <summary>
@@ -28,7 +31,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Конструктор прямоугольной панели/подложки
+        /// Конструктор прямоугольной панели
         /// </summary>
         protected override void CustomConstructor()
         {

@@ -11,6 +11,9 @@ using Project_Space___New_Live.modules.Dispatchers;
 
 namespace Project_Space___New_Live.modules.Controlers.Forms
 {
+    /// <summary>
+    /// Круглая/эллиптическая кнопка
+    /// </summary>
     class CircleButton : Button
     {
 

@@ -7,6 +7,9 @@ using SFML.Graphics;
 
 namespace Project_Space___New_Live.modules.Controlers.Forms
 {
+    /// <summary>
+    /// Абстрактная панель
+    /// </summary>
     abstract class Panel : Form
     {
 

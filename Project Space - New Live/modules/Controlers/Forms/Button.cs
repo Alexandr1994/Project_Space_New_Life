@@ -12,6 +12,9 @@ using SFML.Graphics;
 
 namespace Project_Space___New_Live.modules.Controlers.Forms
 {
+    /// <summary>
+    /// Абстрактная кнопка
+    /// </summary>
     public abstract class Button : Form
     {
         /// <summary>
@@ -40,7 +43,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Флаг нажатия левой кнопки мыши
         /// </summary>
-        private bool LeftPressed = false;
+        private bool leftPressed = false;
 
         /// <summary>
         /// Текстуры состояний отображения формы
@@ -50,7 +53,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Установка набора текстур кнопки
         /// </summary>
-        /// <param name="viewStates"></param>
+        /// <param name="viewStates">Массив текстур состояний</param>
         public void SetViewStates(Texture[] viewStates)
         {
             if (viewStates.Length == 4)
@@ -77,8 +80,8 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Приведение отображения в нормальное состояние
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Форма, в которой возникло событие</param>
+        /// <param name="e">Аргументы события</param>
         private void ViewToNormalState(object sender, EventArgs e)
         {
             this.view.Image.Texture = this.viewStates[(int) (ViewStates.Normal)];
@@ -87,8 +90,8 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Преведение отображения в активное состояние
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Форма, в которой возникло событие</param>
+        /// <param name="e">Аргументы события</param>
         private void ViewToActiveState(object sender, EventArgs e)
         {
             this.view.Image.Texture = this.viewStates[(int)(ViewStates.Active)];
@@ -97,19 +100,19 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Преведение отображения в нажатое состояние
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Форма, в которой возникло событие</param>
+        /// <param name="e">Аргументы события</param>
         private void ViewToPressedState(object sender, EventArgs e)
         {
             this.view.Image.Texture = this.viewStates[(int)(ViewStates.Pressed)];
-            this.LeftPressed = true;
+            this.leftPressed = true;
         }
 
         /// <summary>
         /// Преведение отображения в послекликовое состояние
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Форма, в которой возникло событие</param>
+        /// <param name="e">Аргументы события</param>
         private void ViewToClickedState(object sender, EventArgs e)
         {
             this.view.Image.Texture = this.viewStates[(int)(ViewStates.Clicked)];

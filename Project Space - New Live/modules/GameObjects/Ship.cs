@@ -216,7 +216,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         private ShipMover moveManager = new ShipMover();
 
-
         /// <summary>
         /// Модуль отвечающий за движения корабля
         /// </summary>
@@ -373,15 +372,6 @@ namespace Project_Space___New_Live.modules.GameObjects
                 this.rotation -= (float)(2 * Math.PI);
             }
         }
-
-//        /// <summary>
-//        /// 
-//        /// </summary>
-//        /// <param name="mass">Масса</param>
-//        /// <param name="coords">Начальные координаты</param>
-//        /// <param name="textures">Набор текстур</param>
-//        /// <param name="newPartSize">Начальный размер составных частей</param>
-//        /// <param name="startSystem">Cтартовая звездная система</param>
 
         /// <summary>
         /// Постороение корабля

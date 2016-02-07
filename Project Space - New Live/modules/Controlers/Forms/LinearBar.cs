@@ -88,7 +88,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 }
             }
 
-
             /// <summary>
             /// Полная длина индикатора
             /// </summary>
@@ -125,7 +124,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             /// <summary>
             /// Изменене показаний индикатора
             /// </summary>
-            /// <param name="persent"></param>
+            /// <param name="persent">Новые показания индикатора в процентах</param>
             public void ChangePersent(float persent)
             {
                 this.Size = new Vector2f(this.fullLenght * persent/100, this.size.Y);

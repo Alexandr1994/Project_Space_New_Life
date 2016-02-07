@@ -3,6 +3,9 @@ using Project_Space___New_Live.modules.Controlers.InterfaceParts;
 
 namespace Project_Space___New_Live.modules.Dispatchers
 {
+    /// <summary>
+    /// Контейнер игрового интерфейса
+    /// </summary>
     class PlayerInterfaceContainer
     {
 
