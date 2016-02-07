@@ -34,10 +34,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             this.gameInterface = gameInterface;
             gameInterface.AddForm(this.radarScr = new RadarScreen());
-        }
-
-
-        
+        } 
 
     }
 }
