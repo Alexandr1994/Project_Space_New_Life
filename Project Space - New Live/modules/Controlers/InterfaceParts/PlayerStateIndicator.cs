@@ -10,13 +10,13 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
     /// <summary>
     /// Контейнер форм интерфейса пользователя
     /// </summary>
-    class PlayerStateIndicator
+    class PlayerStateIndicator : Form
     {
 
         /// <summary>
         /// Части интерфейса игрока
         /// </summary>
-        enum InterfaceForms : int
+        public enum InterfaceForms : int
         {
             /// <summary>
             /// Индикатор запаса прочности
@@ -36,28 +36,13 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
             AmmoBar
         }
 
-
         /// <summary>
-        /// Набор форм интерфейса игрока
+        /// Конструктор
         /// </summary>
-        private List<Form> playerInterface = new List<Form>();
-
-        /// <summary>
-        /// Указатель на главную форму
-        /// </summary>
-        private MainForm gameInterface;
-
-        /// <summary>
-        /// Конструктор интерфейса
-        /// </summary>
-        /// <param name="gameInterface"></param>
-        public PlayerStateIndicator(MainForm gameInterface)
+        protected override void CustomConstructor()
         {
-            this.gameInterface = gameInterface;
-
+            ;
         }
-
-
 
     }
 }

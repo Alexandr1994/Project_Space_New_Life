@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Project_Space___New_Live.modules.Controlers.Forms;
 using Project_Space___New_Live.modules.Controlers.InterfaceParts;
 using SFML.Graphics;
@@ -11,82 +13,112 @@ namespace Project_Space___New_Live.modules.Dispatchers
     /// </summary>
     class PlayerInterfaceContainer
     {
+        //Флаги
+
+        /// <summary>
+        /// Флаг продолжения игры
+        /// </summary>
+        private bool gameContinue = true;
+
+        /// <summary>
+        /// Флаг продолжения игры
+        /// </summary>
+        public bool GameContinue
+        {
+            get { return this.gameContinue; }
+        }
 
         /// <summary>
         /// Контейнер игрока
         /// </summary>
         private PlayerContainer playerContainer;
 
-
-        // Набор форм интерфейса игрока
         /// <summary>
-        /// Экран радара
+        /// Коллекция форм
         /// </summary>
-        private RadarScreen radarScr;
-
-        public RadarScreen RadarScr
-        {
-            get { return this.radarScr; }
-        }
-        
-        private LinearBar[] stateBars = new LinearBar[3];
+        Dictionary<String ,Form> formsCollection = new Dictionary<string, Form>();  
 
         /// <summary>
         /// Указатель на главную форму
         /// </summary>
-        private MainForm gameInterface;
+        private MainForm mainForm;
+//
+//        /// <summary>
+//        /// Конструктор интерфейса
+//        /// </summary>
+//        /// <param name="mainForm"></param>
 
         /// <summary>
         /// Конструктор интерфейса
         /// </summary>
-        /// <param name="gameInterface"></param>
-        public PlayerInterfaceContainer(MainForm gameInterface, PlayerContainer playerContainer)
+        /// <param name="mainForm">Главная форма</param>
+        /// <param name="playerContainer">Контейнер игрока</param>
+        public PlayerInterfaceContainer(MainForm mainForm, PlayerContainer playerContainer)
         {
-            this.gameInterface = gameInterface;
-            gameInterface.AddForm(this.radarScr = new RadarScreen());
+            this.mainForm = mainForm;
             this.playerContainer = playerContainer;
-            this.TempInterfaceConstruct();
+            this.InterfaceConstruct();
         }
 
-        private void TempInterfaceConstruct()
+        /// <summary>
+        /// Построение интерфейса
+        /// </summary>
+        private void InterfaceConstruct()
         {
-            stateBars[0] = new LinearBar();
-            stateBars[0].Location = new Vector2f(200, 0);
-            stateBars[0].SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.healthBar });
-            this.gameInterface.AddForm(stateBars[0]);
+            this.formsCollection.Add("RadarScreen", new RadarScreen());//Экран радара
+            
+            this.formsCollection.Add("HealthBar", new LinearBar());//Индиктор прочности
+            this.formsCollection["HealthBar"].Location = new Vector2f(200, 0);
+            (this.formsCollection["HealthBar"] as LinearBar).SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.healthBar });
+            
 
-            stateBars[1] = new LinearBar();
-            stateBars[1].Location = new Vector2f(200, 20);
-            stateBars[1].SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.energyBar });
-            this.gameInterface.AddForm(stateBars[1]);
+            this.formsCollection.Add("EnergyBar", new LinearBar());//Индикатор энергии
+            this.formsCollection["EnergyBar"].Location = new Vector2f(200, 25);
+            (this.formsCollection["EnergyBar"] as LinearBar).SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.energyBar });
 
-            stateBars[2] = new LinearBar();
-            stateBars[2].Location = new Vector2f(200, 40);
-            stateBars[2].SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.energyBar });
-            this.gameInterface.AddForm(stateBars[2]);
+            this.formsCollection.Add("ProtectBar", new LinearBar());//Индикатор защиты
+            this.formsCollection["ProtectBar"].Location = new Vector2f(200, 50);
+            (this.formsCollection["ProtectBar"] as LinearBar).SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.protectBar });
 
-            CircleButton button = new CircleButton();
-            button.MouseClick += OnClick;
-            button.Size = new Vector2f(80, 30);
-            button.Location = new Vector2f(720, 0);
-            this.gameInterface.AddForm(button);
+            this.formsCollection.Add("AmmoBar", new LinearBar());//Индикатор защиты
+            this.formsCollection["AmmoBar"].Location = new Vector2f(200, 75);
+            (this.formsCollection["AmmoBar"] as LinearBar).SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.ammoBar });
+
+            this.formsCollection.Add("EndButton", new CircleButton());//Кнопка окончания
+            this.formsCollection["EndButton"].MouseClick += OnClick;
+            this.formsCollection["EndButton"].Size = new Vector2f(80, 30);
+            this.formsCollection["EndButton"].Location = new Vector2f(720, 0);
+
+            foreach (KeyValuePair<String, Form> form in this.formsCollection)//добавление форм интерфейса на главную форму
+            {
+                this.mainForm.AddForm(form.Value);
+            }
         }
 
+        /// <summary>
+        /// Нажатие на кнопку окончания игры
+        /// </summary>
+        /// <param name="sender">Форма, в которой возникло событие</param>
+        /// <param name="e">Аргументы события</param>
         private void OnClick(object sender, EventArgs e)
         {
-            cont = false;
+            this.gameContinue = false;
         }
 
-        public bool cont = true;
-
+        /// <summary>
+        /// Процесс работы интерфейса игрока
+        /// </summary>
         public void Process()
         {
             this.playerContainer.Process();
-            this.RadarScr.RadarProcess(this.playerContainer.ActiveSystem, this.playerContainer.PlayerShip);
-            stateBars[0].PercentOfBar = this.playerContainer.GetHealh();
-            stateBars[1].PercentOfBar = this.playerContainer.GetEnergy();
-            stateBars[2].PercentOfBar = this.playerContainer.GetShieldPower();
-
+            (this.formsCollection["RadarScreen"] as RadarScreen).RadarProcess(this.playerContainer.ActiveSystem, this.playerContainer.PlayerShip);
+            (this.formsCollection["HealthBar"] as LinearBar).PercentOfBar = this.playerContainer.GetHealh();
+            (this.formsCollection["EnergyBar"] as LinearBar).PercentOfBar = this.playerContainer.GetEnergy();
+            (this.formsCollection["ProtectBar"] as LinearBar).PercentOfBar = this.playerContainer.GetShieldPower();
+            (this.formsCollection["AmmoBar"] as LinearBar).PercentOfBar = this.playerContainer.GetWeaponAmmo();
         }
+
+
+
     }
 }

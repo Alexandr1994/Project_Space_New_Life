@@ -122,6 +122,15 @@ namespace Project_Space___New_Live.modules.Dispatchers
             }
             return 0;
         }
+        
+        /// <summary>
+        /// Текущий боезапас активного оружия в процентах
+        /// </summary>
+        /// <returns></returns>
+        public float GetWeaponAmmo()
+        {
+            return this.PlayerShip.ShipWeaponSystem.GetAmmoPersent();
+        }
 
         /// <summary>
         /// Радиус действия радара игрока

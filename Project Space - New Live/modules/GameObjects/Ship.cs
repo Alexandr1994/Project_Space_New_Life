@@ -92,6 +92,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         private WeaponSystem shipWeaponSystem;
 
         /// <summary>
+        /// Оружейная система корабля
+        /// </summary>
+        public WeaponSystem ShipWeaponSystem
+        {
+            get { return this.shipWeaponSystem; }
+        }
+
+        /// <summary>
         /// Открыть огонь
         /// </summary>
         public void OpenFire()

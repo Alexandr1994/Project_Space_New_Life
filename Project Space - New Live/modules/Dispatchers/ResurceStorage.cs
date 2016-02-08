@@ -19,6 +19,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         static public Texture energyBar = new Texture("energyBar.png");
         static public Texture healthBar = new Texture("healthBar.png");
         static public Texture protectBar = new Texture("protectBar.png");
+        static public Texture ammoBar = new Texture("ammoBar.png");
         static public Texture noise = new Texture("Noize.gif");
         static private Texture backText = new Texture("testBackground.png"); //фон
         static private Texture planetText = new Texture("testPlanetText.jpg"); //загруженная текстура планет 

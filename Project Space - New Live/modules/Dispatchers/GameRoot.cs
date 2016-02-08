@@ -82,7 +82,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
         public void Main()
         {
-            while (this.GraphicInterfaceContainer.cont)
+            while (this.GraphicInterfaceContainer.GameContinue)
             {
                 Thread.Sleep(25);
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
