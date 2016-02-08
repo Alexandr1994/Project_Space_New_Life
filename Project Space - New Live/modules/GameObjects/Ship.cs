@@ -407,7 +407,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment.Add(new Radar(20, 1500, null));//радар
             this.shipEquipment.Add(new Shield(20, 3, 100, 0, 1, null));//энергощит 
             this.shipWeaponSystem = new WeaponSystem(3);
-            this.shipWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 2, 0, 1, (float)(10*Math.PI/180), 100, 100, 2000, 15, 5, new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
+            this.shipWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 2, 0, 1, (float)(5*Math.PI/180), 100, 100, 2000, 15, 5, new Vector2f(15, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
             // this.shipEquipment.Add(null);//энергощит 
         }
 
@@ -564,19 +564,38 @@ namespace Project_Space___New_Live.modules.GameObjects
                         {
                             continue;//то перейти к анализу следующего объекта
                         }
-                        foreach (ObjectView partShipView in this.View)
+                        for (int i = 0; i < this.View.Length; i ++)//проанализировать возможность столкновения каждой части данного корабля
                         {
-                            foreach (ObjectView view in ship.View)
+                            for (int j = 0; j < ship.View.Length; j++)//с каждой частью проверяемого корабля
                             {
-                                if (partShipView.BorderContactAnalize(view))
+                                 if (this.View[i].BorderContactAnalize(ship.View[j]))//и в случае пересечения отображений
                                 {
-                                    float deltaX = this.Coords.X - ship.Coords.X;
+                                    float deltaX = this.Coords.X - ship.Coords.X;//обработать столкновение
                                     float deltaY = this.Coords.Y - ship.Coords.Y;
                                     float contactAngle = (float)(Math.Atan2(deltaY, deltaX));
                                     this.moveManager.CrashMove(ship.moveManager, this.Mass, ship.Mass, contactAngle);
+                                    this.GetDamage(50, 1, i);//и нанести урон как данному
+                                    ship.GetDamage(50, 1, j);//так и проверяемому кораблю
                                 }
                             }
-                        }    
+                        }
+                    };break;
+                    case "Shell":
+                    {
+                        Shell shell = interactObject as Shell;
+                        if (shell.ShooterShip == this)//если снаряд выпущен данным кораблем
+                        {
+                            continue;//то переходим к анализу сдежующего объекта
+                        }
+                        for (int i = 0; i < this.View.Length; i ++)
+                        {
+                            if (this.View[i].BorderContactAnalize(shell.View[(int)(Shell.ShellParts.Core)]))//если произошло пересечение отображений корабля и снаряда
+                            {
+                                this.GetDamage(shell.ShipDamage, shell.EquipmentDamage, i);//то нанести кораблю урон
+                                shell.HitToTarget();//и установить флаг окончания жизни снаряда
+                                break;
+                            }
+                        }
                     };break;
                 }
             }
