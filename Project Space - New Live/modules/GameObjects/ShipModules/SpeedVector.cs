@@ -9,7 +9,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
     /// <summary>
     /// Вектор скорости
     /// </summary>
-    class SpeedVector
+    public class SpeedVector
     {
         /// <summary>
         /// Скорость

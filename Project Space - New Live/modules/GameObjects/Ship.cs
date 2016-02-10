@@ -407,7 +407,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment.Add(new Radar(20, 1500, null));//радар
             this.shipEquipment.Add(new Shield(20, 3, 100, 0, 1, null));//энергощит 
             this.shipWeaponSystem = new WeaponSystem(3);
-            this.shipWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 2, 0, 1, (float)(5*Math.PI/180), 100, 100, 2000, 15, 5, new Vector2f(15, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
+            this.shipWeaponSystem.AddWeapon(new Weapon( 10, 1, 0, 2, 0, 1, (float)(10*Math.PI/180), 500, 0, 2000, 25, 5, new Vector2f(2, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
             // this.shipEquipment.Add(null);//энергощит 
         }
 
@@ -449,6 +449,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             if ((shell = this.shipWeaponSystem.Process(this)) != null)//если в ходе работы оружейной системы был получен снаряд
             {
                 this.starSystem.AddNewShell(shell);//то отправить его в коллекцияю снарядов звездной системы
+                this.MoveManager.OnShellReaction(this, shell.SpeedVector, shell.Mass, -1);//отдача от выстрела
             }
             if (this.Health < 1)
             {
@@ -592,6 +593,10 @@ namespace Project_Space___New_Live.modules.GameObjects
                             if (this.View[i].BorderContactAnalize(shell.View[(int)(Shell.ShellParts.Core)]))//если произошло пересечение отображений корабля и снаряда
                             {
                                 this.GetDamage(shell.ShipDamage, shell.EquipmentDamage, i);//то нанести кораблю урон
+                                float deltaX = this.Coords.X - shell.Coords.X;//обработать столкновение
+                                float deltaY = this.Coords.Y - shell.Coords.Y;
+                                float contactAngle = (float)(Math.Atan2(deltaY, deltaX));
+                                this.MoveManager.OnShellReaction(this, shell.SpeedVector, shell.Mass, 1);//инерция от попадания
                                 shell.HitToTarget();//и установить флаг окончания жизни снаряда
                                 break;
                             }

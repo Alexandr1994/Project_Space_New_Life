@@ -22,6 +22,15 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected float mass;
 
         /// <summary>
+        /// Масса объекта
+        /// </summary>
+        public virtual float Mass
+        {
+            get { return this.mass; }
+        }
+
+
+        /// <summary>
         /// Отображение объекта
         /// </summary>
         protected ObjectView[] view;

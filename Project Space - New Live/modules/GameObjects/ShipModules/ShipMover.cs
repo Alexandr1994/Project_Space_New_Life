@@ -14,7 +14,6 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
     /// </summary>
     public class ShipMover
     {
-
         /// <summary>
         /// Коллекция векторов скоростей прямолинейного движения 
         /// </summary>
@@ -29,12 +28,13 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// Добавить новый вектор скорости
         /// </summary>
         /// <param name="speed">Скорость</param>
-        /// <param name="angle">Угол поворота вектора (в рад.)</param>
+        /// <param name="angle">Угол поворота вектора в рад.</param>
+        /// <param name="maxSpeed">Максимальная скорость</param>
         private void AddNewSpeedVector(float speed, float angle, float maxSpeed)
         {
             foreach (SpeedVector vector in speedVectors)
             {//Если среди существующих векторов присутствует вектор, поворот которого отличается от поворота нового вектора менее чем на 5 градусов
-                if (Math.Abs(vector.Angle - angle) < (Math.PI * 5 )/ 180)
+                if (Math.Abs(vector.Angle - angle) < (Math.PI * 5 ) / 180)
                 {//то вместо создания нового вектора следует, изменить текущий
                     if (maxSpeed > (vector.Speed + speed))
                     {
@@ -61,7 +61,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             Battery battery = ship.Equipment[(int)Ship.EquipmentNames.Battery] as Battery;//получение батареи корабля
             if (battery.Uncharge(engine.EnergyNeeds))
             {
-                float acceleration = (float) (engine.ForwardThrust/ship.Mass);
+                float acceleration = (float) (engine.ForwardThrust / ship.Mass);
                 this.AddNewSpeedVector(acceleration, ship.Rotation, engine.MaxForwardSpeed);
             }
         }
@@ -76,7 +76,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             Battery battery = ship.Equipment[(int)Ship.EquipmentNames.Battery] as Battery;//получение батареи корабля
             if (battery.Uncharge(engine.EnergyNeeds))
             {
-                float acceleration = (float) (engine.ShuntingThrust/ship.Mass);
+                float acceleration = (float)(engine.ShuntingThrust / ship.Mass);
                 this.AddNewSpeedVector(acceleration, ship.Rotation + (float) Math.PI, engine.MaxShuntingSpeed);
             }
         }
@@ -94,15 +94,15 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             {
                 float acceleration = (float) (engine.ShuntingThrust/ship.Mass);
                 directionSign /= Math.Abs(directionSign); //Сохранение только знака числа
-                this.AddNewSpeedVector(acceleration, ship.Rotation + (float) (directionSign*Math.PI/2),engine.MaxShuntingSpeed);
+                this.AddNewSpeedVector(acceleration, ship.Rotation + (float)(directionSign*Math.PI / 2),engine.MaxShuntingSpeed);
             }
         }
 
         /// <summary>
         /// Начать вращательное движение
         /// </summary>
-        /// <param name="ship"></param>
-        /// <param name="Sign"></param>
+        /// <param name="ship">Корабль</param>
+        /// <param name="Sign">Знак направления</param>
         public void GiveRotationThrust(Ship ship, int Sign)
         {
             Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;//Получение двигателя корабля
@@ -117,7 +117,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
                 }
                 else
                 {
-                    this.rotationSpeed += acceleration*2;
+                    this.rotationSpeed += acceleration * 2;
                 }
             }
         }
@@ -125,6 +125,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// <summary>
         /// Инмульс экстренного прекращения движения
         /// </summary>
+        /// <param name="ship">Корабль</param>
         public void FullStop(Ship ship)
         {//Ликвидация всех векторов движения
             Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;//Получение двигателя корабля
@@ -133,17 +134,16 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             {
              if (battery.Uncharge(engine.EnergyNeeds))
                 {
-                    float acceleration = (float) (engine.ShuntingThrust/ship.Mass);
+                    float acceleration = (float) (engine.ShuntingThrust / ship.Mass);
                     vector.SpeedAcceleration(-acceleration);
                 }
             }
         }
 
-
         /// <summary>
         /// Вращение корабля
         /// </summary>
-        /// <param name="Sign"></param>
+        /// <param name="Sign">Корабль</param>
         public void Rotate(Ship ship)
         {
             if (this.rotationSpeed > 0)//стабилизация вращения
@@ -161,7 +161,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// <summary>
         /// Процесс движения корабля
         /// </summary>
-        /// <param name="ship"></param>
+        /// <param name="ship">Корабль</param>
         public void Process(Ship ship)
         {
             this.Rotate(ship);//Вразение
@@ -175,9 +175,9 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         }
 
         /// <summary>
-        /// Сконструировать разультирующий вектор скорости корабля
+        /// Сконструировать результирующий вектор скорости корабля
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Результирующий вектор скорости корабля</returns>
         private SpeedVector ConstructResultVector()
         {
             SpeedVector resultVector = null;//создаем "пустой" результирующий вектор скорости
@@ -204,12 +204,12 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         }
 
         /// <summary>
-        /// Обработка столкновения
+        /// Обработка столкновения между кораблями
         /// </summary>
-        /// <param name="contacterNoveManager"></param>
-        /// <param name="ownMass"></param>
-        /// <param name="contacterMass"></param>
-        /// <param name="angle"></param>
+        /// <param name="contacterNoveManager">Модуль движений конатктирующего корабля</param>
+        /// <param name="ownMass">Масса данного корабля</param>
+        /// <param name="contacterMass">Масса контактирующего корабля</param>
+        /// <param name="angle">Угол соударения</param>
         public void CrashMove(ShipMover contacterNoveManager, float ownMass, float contacterMass, float angle)
         {
             SpeedVector ownSpeedVector = this.ConstructResultVector();
@@ -218,17 +218,30 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             this.ConstructAfterCrashSpeedVector(ownSpeedVector, contacterSpeedVector, ownMass, contacterMass, angle);
             contacterNoveManager.speedVectors.Clear();//работа с векторами контактирующего
             contacterNoveManager.ConstructAfterCrashSpeedVector(contacterSpeedVector, ownSpeedVector, contacterMass, ownMass, angle);
+        }
 
+        /// <summary>
+        /// Движение корабля после выстрела/попадания снаряда
+        /// </summary>
+        /// <param name="ship">Корабль</param>
+        /// <param name="shellSpeedVector">Вектор скорости снаряда</param>
+        /// <param name="shellMass">Масса снаряда</param>
+        /// <param name="sign">Знак направления корабля</param>
+        public void OnShellReaction(Ship ship, SpeedVector shellSpeedVector, float shellMass, int sign)
+        {
+            Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;//Получение двигателя корабля
+            this.speedVectors.Clear();//работа с векторами контактирующего
+            this.AddNewSpeedVector((float)((sign * shellMass * shellSpeedVector.Speed)/ ship.Mass), shellSpeedVector.Angle, engine.MaxForwardSpeed);
         }
 
         /// <summary>
         /// Сконструировать вектор скорости после столкновения
         /// </summary>
-        /// <param name="ownSpeedVector"></param>
-        /// <param name="contacterSpeedVector"></param>
-        /// <param name="ownMass"></param>
-        /// <param name="contacterMass"></param>
-        /// <param name="angle"></param>
+        /// <param name="ownSpeedVector">Собственный вектор скорости</param>
+        /// <param name="contacterSpeedVector">Вектор скорости конатктирующего</param>
+        /// <param name="ownMass">Собственная масса</param>
+        /// <param name="contacterMass">Масса контактирующего</param>
+        /// <param name="angle">Угол соударения</param>
         private void ConstructAfterCrashSpeedVector(SpeedVector ownSpeedVector, SpeedVector contacterSpeedVector, float ownMass, float contacterMass, float angle)
         {
             double coefA = (ownSpeedVector.Speed * Math.Cos(ownSpeedVector.Angle - angle) * (ownMass - contacterMass)
