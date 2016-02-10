@@ -221,17 +221,38 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         }
 
         /// <summary>
+        /// Движение корабля после попадания
+        /// </summary>
+        /// <param name="ship">Корабль</param>
+        /// <param name="shellSpeedVector">Вектор скорости снаряда</param>
+        /// <param name="shellMass">Масса снаряда</param>
+        public void ShellHit(Ship ship, SpeedVector shellSpeedVector, float shellMass)
+        {
+            this.OnShellReaction(ship, shellSpeedVector, shellMass);
+        }
+
+        /// <summary>
+        /// Движение корабля после выстрела
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <param name="shellSpeedVector"></param>
+        /// <param name="shellMass"></param>
+        public void ShellShoot(Ship ship, SpeedVector shellSpeedVector, float shellMass)
+        {
+            SpeedVector newSpeedVector = new SpeedVector(shellSpeedVector.Speed, (float)(shellSpeedVector.Angle + Math.PI));
+            this.OnShellReaction(ship, newSpeedVector, shellMass);
+        }
+
+        /// <summary>
         /// Движение корабля после выстрела/попадания снаряда
         /// </summary>
         /// <param name="ship">Корабль</param>
         /// <param name="shellSpeedVector">Вектор скорости снаряда</param>
         /// <param name="shellMass">Масса снаряда</param>
-        /// <param name="sign">Знак направления корабля</param>
-        public void OnShellReaction(Ship ship, SpeedVector shellSpeedVector, float shellMass, int sign)
+        private void OnShellReaction(Ship ship, SpeedVector shellSpeedVector, float shellMass)
         {
             Engine engine = ship.Equipment[(int)Ship.EquipmentNames.Engine] as Engine;//Получение двигателя корабля
-            this.speedVectors.Clear();//работа с векторами контактирующего
-            this.AddNewSpeedVector((float)((sign * shellMass * shellSpeedVector.Speed)/ ship.Mass), shellSpeedVector.Angle, engine.MaxForwardSpeed);
+            this.AddNewSpeedVector((float)((shellMass * shellSpeedVector.Speed) / ship.Mass), shellSpeedVector.Angle, engine.MaxForwardSpeed);
         }
 
         /// <summary>

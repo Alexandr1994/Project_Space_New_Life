@@ -407,7 +407,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment.Add(new Radar(20, 1500, null));//радар
             this.shipEquipment.Add(new Shield(20, 3, 100, 0, 1, null));//энергощит 
             this.shipWeaponSystem = new WeaponSystem(3);
-            this.shipWeaponSystem.AddWeapon(new Weapon( 10, 1, 0, 2, 0, 1, (float)(10*Math.PI/180), 500, 0, 2000, 25, 5, new Vector2f(2, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
+            this.shipWeaponSystem.AddWeapon(new Weapon( 25, 1, 0, 2, 0, 1, (float)(10*Math.PI/180), 500, 0, 2000, 15, 5, new Vector2f(2, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
             // this.shipEquipment.Add(null);//энергощит 
         }
 
@@ -449,7 +449,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             if ((shell = this.shipWeaponSystem.Process(this)) != null)//если в ходе работы оружейной системы был получен снаряд
             {
                 this.starSystem.AddNewShell(shell);//то отправить его в коллекцияю снарядов звездной системы
-                this.MoveManager.OnShellReaction(this, shell.SpeedVector, shell.Mass, -1);//отдача от выстрела
+                this.MoveManager.ShellShoot(this, shell.SpeedVector, shell.Mass);//отдача от выстрела
             }
             if (this.Health < 1)
             {
@@ -512,7 +512,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 switch (interactObject.GetType().Name)
                 {
-                    case "Star"://проверка контакта со звездой
+                    case "Star"://обработка контакта со звездой
                     {
                         Star star = interactObject as Star;
                         if (!ShieldActive)//если энергощит не активен
@@ -547,7 +547,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                             }
                         }
                     };break;
-                    case "Planet":
+                    case "Planet"://обработка контакта с планетой
                     {
                         Planet planet = interactObject as Planet;
                         foreach (ObjectView partShipView in this.View)
@@ -558,7 +558,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                             }
                         }
                     };break;
-                    case "Ship":
+                    case "Ship"://обработка контакта с кораблем
                     {
                         Ship ship = interactObject as Ship;
                         if (ship == this)//если анализируемый корабли является данным кораблем
@@ -575,13 +575,14 @@ namespace Project_Space___New_Live.modules.GameObjects
                                     float deltaY = this.Coords.Y - ship.Coords.Y;
                                     float contactAngle = (float)(Math.Atan2(deltaY, deltaX));
                                     this.moveManager.CrashMove(ship.moveManager, this.Mass, ship.Mass, contactAngle);
+                                    //нанесение урона временная реализация
                                     this.GetDamage(50, 1, i);//и нанести урон как данному
                                     ship.GetDamage(50, 1, j);//так и проверяемому кораблю
                                 }
                             }
                         }
                     };break;
-                    case "Shell":
+                    case "Shell"://обработка контакта со снарядом
                     {
                         Shell shell = interactObject as Shell;
                         if (shell.ShooterShip == this)//если снаряд выпущен данным кораблем
@@ -596,7 +597,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                                 float deltaX = this.Coords.X - shell.Coords.X;//обработать столкновение
                                 float deltaY = this.Coords.Y - shell.Coords.Y;
                                 float contactAngle = (float)(Math.Atan2(deltaY, deltaX));
-                                this.MoveManager.OnShellReaction(this, shell.SpeedVector, shell.Mass, 1);//инерция от попадания
+                                this.MoveManager.ShellHit(this, shell.SpeedVector, shell.Mass);//инерция от попадания
                                 shell.HitToTarget();//и установить флаг окончания жизни снаряда
                                 break;
                             }
