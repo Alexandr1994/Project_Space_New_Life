@@ -141,6 +141,19 @@ namespace Project_Space___New_Live.modules.GameObjects
         //Флаги корабля
 
         /// <summary>
+        /// Флаг уничтожения корабля
+        /// </summary>
+        private bool destroyed = false;
+
+        /// <summary>
+        /// Флаг уничтожения корабля
+        /// </summary>
+        public bool Destroyed
+        {
+            get { return this.destroyed; }
+        }
+
+        /// <summary>
         /// Текущее состояние энергощита 
         /// </summary>
         public bool ShieldActive
@@ -207,7 +220,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Полная масса корабля 
         /// </summary>
-        public float Mass
+        public override float Mass
         {//Скоро полное описание
             get { return this.mass; }
         }
@@ -407,7 +420,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment.Add(new Radar(20, 1500, null));//радар
             this.shipEquipment.Add(new Shield(20, 3, 100, 0, 1, null));//энергощит 
             this.shipWeaponSystem = new WeaponSystem(3);
-            this.shipWeaponSystem.AddWeapon(new Weapon( 25, 1, 0, 2, 0, 1, (float)(10*Math.PI/180), 500, 0, 2000, 15, 5, new Vector2f(2, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
+            this.shipWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 2, 0, 1, (float)(10*Math.PI/180), 500, 0, 2000, 15, 5, new Vector2f(2, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
             // this.shipEquipment.Add(null);//энергощит 
         }
 
@@ -443,6 +456,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="homeCoords">Координаты начала отсчета</param>
         public override void Process(Vector2f homeCoords)
         {
+            if (this.Health < 1)
+            {
+                this.destroyed = true;
+                return;
+            }
             Shell shell;
             this.pilot.Process();
             this.EnergyProcess();
@@ -451,13 +469,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                 this.starSystem.AddNewShell(shell);//то отправить его в коллекцияю снарядов звездной системы
                 this.MoveManager.ShellShoot(this, shell.SpeedVector, shell.Mass);//отдача от выстрела
             }
-            if (this.Health < 1)
-            {
-                foreach (ObjectView view in this.View)
-                {
-                    view.Image.FillColor = new Color(0, 0, 0, 0);
-                }
-            }
+            
 
             
             this.Move();

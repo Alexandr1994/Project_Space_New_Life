@@ -88,12 +88,20 @@ namespace Project_Space___New_Live.modules.Dispatchers
             {
                 Thread.Sleep(25);
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
-                foreach (StarSystem currentSystem in this.SystemCollection)
+                foreach (StarSystem currentSystem in this.SystemCollection)//Отработка игрового мира
                 {
                     currentSystem.Process(this.ShipsCollection);
                 }
+                for (int i = 0; i < this.ShipsCollection.Count; i ++)//отчистка уничтоженных кораблей
+                {
+                    if (this.ShipsCollection[i].Destroyed)//Если найден корабль перешедший в уничтоженное состояние
+                    {
+                        this.ShipsCollection.Remove(this.ShipsCollection[i]);//то удаление его из общей коллекции кораблей
+                        i --;
+                    }
+                }
                 this.GraphicInterfaceContainer.Process();
-                GraphicModule.RenderProcess(this.playerContainer.ActiveSystem);
+                this.GraphicModule.RenderProcess(this.playerContainer.ActiveSystem);
                 GraphicModule.MainWindow.DispatchEvents();
                 GraphicModule.MainWindow.Display();
             }

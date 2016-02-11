@@ -43,7 +43,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Коллекция снарядов, находящихся в данной звездной системе
         /// </summary>
         private List<Shell> myShellsCollection;
-  
+
+        /// <summary>
+        /// Коллекция взрывов (визуальных эффектов)
+        /// </summary>
+        private List<VisualEffect> myExplosionsCollection; 
 
         /// <summary>
         /// Построить звездную систему
@@ -54,7 +58,8 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             this.massCenter = massCenter;//Инициализация компонетов звездной системы
             InitBackgroung(background);//Построение фона звездной системы
-            myShellsCollection = new List<Shell>();
+            this.myShellsCollection = new List<Shell>();
+            this.myExplosionsCollection = new List<VisualEffect>();
         }
 
 
@@ -64,9 +69,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin">Текстура фона</param>
         private void InitBackgroung(Texture skin)
         {
-            background = new ObjectView(new RectangleShape(new Vector2f(2000, 2000)), BlendMode.Alpha);
-            background.Image.Texture = skin;
-            background.Image.Position = new Vector2f(-1000, -1000);
+            this.background = new ObjectView(new RectangleShape(new Vector2f(2000, 2000)), BlendMode.Alpha);
+            this.background.Image.Texture = skin;
+            this.background.Image.Position = new Vector2f(-1000, -1000);
         }
 
         /// <summary>
@@ -97,7 +102,12 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 ship.AnalizeObjectInteraction();
                 ship.Process(new Vector2f(0, 0));
+                if (ship.Destroyed)
+                {
+                    this.myExplosionsCollection.Add(new VisualEffect(ship.Coords, new Vector2f(144, 144), 1500, ResurceStorage.shipExplosion));
+                }
             }
+
             for (int i = 0; i < this.myShellsCollection.Count; i ++)//работа со снарядами в данной звездной системе
             {
                 this.myShellsCollection[i].Process(new Vector2f(0, 0));
@@ -106,6 +116,16 @@ namespace Project_Space___New_Live.modules.GameObjects
                     this.myShellsCollection.Remove(this.myShellsCollection[i]);//удалить его из коллекции
                     i --;
                 }
+            }
+            for (int i = 0; i < this.myExplosionsCollection.Count; i ++)//работа с визуальными эффектами
+            {
+                this.myExplosionsCollection[i].Process();
+                if (this.myExplosionsCollection[i].LifeOver)//если время жизни визуального эффекта вышло
+                {
+                    this.myExplosionsCollection.Remove(this.myExplosionsCollection[i]);//удалить его из коллекции
+                    i --;
+                }
+
             }
         }
 
@@ -126,6 +146,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             foreach (Ship ship in this.myShipsCollection)//Заполнить массив образов системы образами кораблей, принадлежащих данной системе
             {
                 systemsViews.AddRange(ship.View);
+            }
+            foreach (VisualEffect explosion in this.myExplosionsCollection)
+            {
+                systemsViews.Add(explosion.View);
             }
             return systemsViews;
         }
