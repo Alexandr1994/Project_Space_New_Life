@@ -39,9 +39,11 @@ namespace Project_Space___New_Live.modules.Controlers
         private PlayerController(Ship playerShip)
         {
             this.PlayerShip = playerShip;
-            GameRenderer = RenderModule.getInstance();//Получение класса отрисовщика
-            GameRenderer.MainWindow.KeyPressed += OnKey;
-            GameRenderer.MainWindow.KeyReleased += FromKey;
+            this.GameRenderer = RenderModule.getInstance();//Получение класса отрисовщика
+            this.GameRenderer.MainWindow.KeyPressed += this.OnKey;
+            this.GameRenderer.MainWindow.KeyReleased += this.FromKey;
+            this.GameRenderer.Form.MouseDown += this.OnButton;
+            this.GameRenderer.Form.MouseUp += this.FromButton;
         }
 
         /// <summary>
@@ -110,11 +112,6 @@ namespace Project_Space___New_Live.modules.Controlers
                     {
                         this.ShieldProcess();
                     }; break;
-                case Keyboard.Key.LAlt:
-                    {
-                        this.PlayerShip.OpenFire();
-                    }; break;
-                default: break;   
             }
         }
 
@@ -155,13 +152,44 @@ namespace Project_Space___New_Live.modules.Controlers
                     {
                         this.StopMoving = false;
                     }; break;
-                case Keyboard.Key.LAlt:
-                    {
-                        this.PlayerShip.StopFire();
-                    }; break;
                 default: break;
             }
         }
+
+        /// <summary>
+        /// Обработка нажатий на кнопки мыши
+        /// </summary>
+        /// <param name="sender">Объект вызвавший событие</param>
+        /// <param name="Args">Аргументы</param>
+        private void OnButton(object sender, MouseButtonEventArgs Args)
+        {
+            switch (Args.Button)
+            {
+                case Mouse.Button.Left:
+                {
+                    this.PlayerShip.OpenFire();
+                }; break;
+                default: break;
+            }
+        }
+
+        /// <summary>
+        /// Обработка отжатий кнопки мыши
+        /// </summary>
+        /// <param name="sender">Объект вызвавший событие</param>
+        /// <param name="Args">Аргументы</param>
+        private void FromButton(object sender, MouseButtonEventArgs Args)
+        {
+            switch (Args.Button)
+            {
+                case Mouse.Button.Left:
+                {
+                    this.PlayerShip.StopFire();
+                }; break;
+                default: break;
+            }
+        }
+
 
         /// <summary>
         /// Обработка движений корабля

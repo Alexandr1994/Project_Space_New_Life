@@ -188,27 +188,27 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Возникает при вхождении курсора в область формы
         /// </summary>
-        public event EventHandler MouseIn = null;
+        public event EventHandler<MouseMoveEventArgs> MouseIn = null;
         /// <summary>
         /// Возникает при покидании курсором области формы
         /// </summary>
-        public event EventHandler MouseOut = null;
+        public event EventHandler<MouseMoveEventArgs> MouseOut = null;
         /// <summary>
         /// Возникает при нахождении курсора в области формы
         /// </summary>
-        public event EventHandler MouseMove = null;
+        public event EventHandler<MouseMoveEventArgs> MouseMove = null;
         /// <summary>
         /// Возникает при отжатии левой кнопки мыши
         /// </summary>
-        public event EventHandler MouseUp = null;
+        public event EventHandler<MouseButtonEventArgs> MouseUp = null;
         /// <summary>
         /// Возникает при нажатии на левую кнопку мыши
         /// </summary>
-        public event EventHandler MouseDown = null;
+        public event EventHandler<MouseButtonEventArgs> MouseDown = null;
         /// <summary>
         /// Событие клика кнопки
         /// </summary>
-        public event EventHandler MouseClick = null;
+        public event EventHandler<MouseButtonEventArgs> MouseClick = null;
 
         /// <summary>
         /// Анализ возникновения событий
@@ -351,7 +351,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         /// <param name="sender">Форма, в которой возникло событие</param>
         /// <param name="e">Аргументы события</param>
-        private void InReaction(object sender, EventArgs e)
+        private void InReaction(object sender, MouseMoveEventArgs e)
         {
             this.cursorOnForm = true;//флаг нахождения курсора на форме устанавливается в true
             this.clicks = 0;//сброс счетчика кликов
@@ -362,7 +362,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         /// <param name="sender">Форма, в которой возникло событие</param>
         /// <param name="e">Аргументы события</param>
-        private void OutReaction(object sender, EventArgs e)
+        private void OutReaction(object sender, MouseMoveEventArgs e)
         {
             this.cursorOnForm = false;//флаг нахождения курсора на форме устанавливается в false
             this.buttonPresed = false;//флаг нажатия кнопки на форме устанавливается в false
@@ -375,7 +375,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         /// <param name="sender">Форма, в которой возникло событие</param>
         /// <param name="e">Аргументы события</param>
-        private void DownReaction(object sender, EventArgs e)
+        private void DownReaction(object sender, MouseButtonEventArgs e)
         {
             this.buttonPresed = true;//флаг нажатия кнопки на форме устанавливается в true
             if (!this.click)
@@ -389,7 +389,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         /// <param name="sender">Форма, в которой возникло событие</param>
         /// <param name="e">Аргументы события</param>
-        private void UpReaction(object sender, EventArgs e)
+        private void UpReaction(object sender, MouseButtonEventArgs e)
         {
             this.buttonPresed = false;//флаг нажатия кнопки на форме устанавливается в true
             if (this.click)

@@ -82,7 +82,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         /// <param name="sender">Форма, в которой возникло событие</param>
         /// <param name="e">Аргументы события</param>
-        private void ViewToNormalState(object sender, EventArgs e)
+        private void ViewToNormalState(object sender, MouseMoveEventArgs e)
         {
             this.view.Image.Texture = this.viewStates[(int) (ViewStates.Normal)];
         }
@@ -92,7 +92,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         /// <param name="sender">Форма, в которой возникло событие</param>
         /// <param name="e">Аргументы события</param>
-        private void ViewToActiveState(object sender, EventArgs e)
+        private void ViewToActiveState(object sender, MouseMoveEventArgs e)
         {
             this.view.Image.Texture = this.viewStates[(int)(ViewStates.Active)];
         }
@@ -102,7 +102,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         /// <param name="sender">Форма, в которой возникло событие</param>
         /// <param name="e">Аргументы события</param>
-        private void ViewToPressedState(object sender, EventArgs e)
+        private void ViewToPressedState(object sender, MouseButtonEventArgs e)
         {
             this.view.Image.Texture = this.viewStates[(int)(ViewStates.Pressed)];
             this.leftPressed = true;
@@ -113,7 +113,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         /// <param name="sender">Форма, в которой возникло событие</param>
         /// <param name="e">Аргументы события</param>
-        private void ViewToClickedState(object sender, EventArgs e)
+        private void ViewToClickedState(object sender, MouseButtonEventArgs e)
         {
             this.view.Image.Texture = this.viewStates[(int)(ViewStates.Clicked)];
         }
