@@ -47,7 +47,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Коллекция взрывов (визуальных эффектов)
         /// </summary>
-        private List<VisualEffect> myExplosionsCollection; 
+        private List<VisualEffect> myEffectsCollection; 
 
         /// <summary>
         /// Построить звездную систему
@@ -59,7 +59,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.massCenter = massCenter;//Инициализация компонетов звездной системы
             InitBackgroung(background);//Построение фона звездной системы
             this.myShellsCollection = new List<Shell>();
-            this.myExplosionsCollection = new List<VisualEffect>();
+            this.myEffectsCollection = new List<VisualEffect>();
         }
 
 
@@ -104,25 +104,25 @@ namespace Project_Space___New_Live.modules.GameObjects
                 ship.Process(new Vector2f(0, 0));
                 if (ship.Destroyed)
                 {
-                    this.myExplosionsCollection.Add(new VisualEffect(ship.Coords, new Vector2f(144, 144), 1500, ResurceStorage.shipExplosion));
+                    this.myEffectsCollection.Add(new VisualEffect(ship.Coords, new Vector2f(144, 144), 52, ResurceStorage.shipExplosion));
                 }
             }
-
             for (int i = 0; i < this.myShellsCollection.Count; i ++)//работа со снарядами в данной звездной системе
             {
                 this.myShellsCollection[i].Process(new Vector2f(0, 0));
                 if (this.myShellsCollection[i].LifeOver)//если время жизни снаряда вышло
                 {
+                    this.myEffectsCollection.Add(new VisualEffect(this.myShellsCollection[i].Coords, new Vector2f(32, 32), 19, ResurceStorage.shellHitting));
                     this.myShellsCollection.Remove(this.myShellsCollection[i]);//удалить его из коллекции
                     i --;
                 }
             }
-            for (int i = 0; i < this.myExplosionsCollection.Count; i ++)//работа с визуальными эффектами
+            for (int i = 0; i < this.myEffectsCollection.Count; i ++)//работа с визуальными эффектами
             {
-                this.myExplosionsCollection[i].Process();
-                if (this.myExplosionsCollection[i].LifeOver)//если время жизни визуального эффекта вышло
+                this.myEffectsCollection[i].Process();
+                if (this.myEffectsCollection[i].LifeOver)//если время жизни визуального эффекта вышло
                 {
-                    this.myExplosionsCollection.Remove(this.myExplosionsCollection[i]);//удалить его из коллекции
+                    this.myEffectsCollection.Remove(this.myEffectsCollection[i]);//удалить его из коллекции
                     i --;
                 }
 
@@ -147,7 +147,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 systemsViews.AddRange(ship.View);
             }
-            foreach (VisualEffect explosion in this.myExplosionsCollection)
+            foreach (VisualEffect explosion in this.myEffectsCollection)
             {
                 systemsViews.Add(explosion.View);
             }

@@ -24,6 +24,19 @@ namespace Project_Space___New_Live.modules.Dispatchers
     {
 
         /// <summary>
+        /// Временная задержка
+        /// </summary>
+        private static int sleepTime = 25;
+
+        /// <summary>
+        /// Временная задержка
+        /// </summary>
+        public static int SleepTime
+        {
+            get { return sleepTime; }
+        }
+
+        /// <summary>
         /// Модуль отрисовки
         /// </summary>
         private RenderModule GraphicModule;
@@ -86,7 +99,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             while (this.GraphicInterfaceContainer.GameContinue)
             {
-                Thread.Sleep(25);
+                Thread.Sleep(sleepTime);
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
                 foreach (StarSystem currentSystem in this.SystemCollection)//Отработка игрового мира
                 {

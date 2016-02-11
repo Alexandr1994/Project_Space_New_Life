@@ -420,7 +420,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment.Add(new Radar(20, 1500, null));//радар
             this.shipEquipment.Add(new Shield(20, 3, 100, 0, 1, null));//энергощит 
             this.shipWeaponSystem = new WeaponSystem(3);
-            this.shipWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 2, 0, 1, (float)(10*Math.PI/180), 500, 0, 2000, 15, 5, new Vector2f(2, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
+            this.shipWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(1*Math.PI/180), 200, 50, 1000, 25, 1, new Vector2f(25, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[2]}, null));
             // this.shipEquipment.Add(null);//энергощит 
         }
 

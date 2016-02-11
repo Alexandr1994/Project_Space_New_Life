@@ -28,6 +28,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         static private Texture crownText = new Texture("crown.png");//звездная корона
         static public Texture PanelText = new Texture("Panel.png");//звездная корона
         static public Texture shipExplosion = new Texture("SuperExp.png");//Взрыв корабля
+        static public Texture shellHitting = new Texture("Hitting.png");//Взрыв снаряда
         static private int[] orbits = { 600, 1000, 1700 }; //орибиты планет 
 
         /// <summary>
