@@ -416,7 +416,7 @@ namespace Project_Space___New_Live.modules.GameObjects
 
             this.shipEquipment.Add(new Engine(100, 1, 100, 100, 10, 8, null));//двигатель
             this.shipEquipment.Add(new Reactor(100, 1, null));//реактор
-            this.shipEquipment.Add(new Battery(100, 500, null));//энергобатарея
+            this.shipEquipment.Add(new Battery(100, 1500, null));//энергобатарея
             this.shipEquipment.Add(new Radar(20, 1500, null));//радар
             this.shipEquipment.Add(new Shield(20, 3, 100, 0, 1, null));//энергощит 
             this.shipWeaponSystem = new WeaponSystem(3);
@@ -463,13 +463,12 @@ namespace Project_Space___New_Live.modules.GameObjects
             }
             Shell shell;
             this.pilot.Process();
-            this.EnergyProcess();
             if ((shell = this.shipWeaponSystem.Process(this)) != null)//если в ходе работы оружейной системы был получен снаряд
             {
                 this.starSystem.AddNewShell(shell);//то отправить его в коллекцияю снарядов звездной системы
                 this.MoveManager.ShellShoot(this, shell.SpeedVector, shell.Mass);//отдача от выстрела
             }
-            
+            this.EnergyProcess();
 
             
             this.Move();

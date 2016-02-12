@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -14,14 +15,20 @@ using SFML.Window;
 
 namespace Project_Space___New_Live
 {
+    /// <summary>
+    /// Точка запуска
+    /// </summary>
     internal class Program
     {
-
+        /// <summary>
+        /// Главная функция
+        /// </summary>
+        /// <param name="args"></param>
         private static void Main(string[] args)
         {
             GameRoot Game = new GameRoot();
             Game.Main();
-        } 
+        }
     }
 
 }
