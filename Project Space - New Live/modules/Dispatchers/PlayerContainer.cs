@@ -129,7 +129,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetWeaponAmmo()
         {
-            return this.PlayerShip.ShipWeaponSystem.GetAmmoPersent();
+            //return this.PlayerShip.ShipWeaponSystem.GetAmmoPersent();
+            return 0;
         }
 
         /// <summary>
