@@ -103,7 +103,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public void OpenFire()
         {
-            //this.shipWeaponSystem.Shooting = true;
+            this.shipWeaponSystem.Shooting = true;
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public void StopFire()
         {
-            //this.shipWeaponSystem.Shooting = false;
+            this.shipWeaponSystem.Shooting = false;
         }
 
         /// <summary>
@@ -418,8 +418,9 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment.Add(new Battery(100, 500, null));//энергобатарея
             this.shipEquipment.Add(new Radar(20, 1500, null));//радар
             this.shipEquipment.Add(new Shield(20, 3, 100, 0, 1, null));//энергощит 
-            //this.shipWeaponSystem = new WeaponSystem(3);
-            //this.shipWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(1*Math.PI/180), 200, 50, 1000, 25, 1, new Vector2f(25, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[2]}, null));
+            this.shipWeaponSystem = new WeaponSystem(3);
+            //this.ShipWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0]}, null));
+            this.shipWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(1*Math.PI/180), 100, 50, 1000, 25, 1, new Vector2f(25, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[2]}, null));
             
             // this.shipEquipment.Add(null);//энергощит 
         }
@@ -464,11 +465,11 @@ namespace Project_Space___New_Live.modules.GameObjects
             Shell shell;
             this.pilot.Process();
             this.EnergyProcess();
-           /* if ((shell = this.shipWeaponSystem.Process(this)) != null)//если в ходе работы оружейной системы был получен снаряд
+            if ((shell = this.shipWeaponSystem.Process(this)) != null)//если в ходе работы оружейной системы был получен снаряд
             {
                 this.starSystem.AddNewShell(shell);//то отправить его в коллекцияю снарядов звездной системы
                 this.MoveManager.ShellShoot(this, shell.SpeedVector, shell.Mass);//отдача от выстрела
-            }*/
+            }
             this.EnergyProcess();
 
             

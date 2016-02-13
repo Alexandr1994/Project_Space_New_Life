@@ -42,11 +42,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Указатель на главную форму
         /// </summary>
         private MainForm mainForm;
-//
-//        /// <summary>
-//        /// Конструктор интерфейса
-//        /// </summary>
-//        /// <param name="mainForm"></param>
 
         /// <summary>
         /// Конструктор интерфейса

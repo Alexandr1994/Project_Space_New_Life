@@ -108,7 +108,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             this.SetCommonCharacteristics(mass, energyNeeds, image);//сохранение общих характеристик
             //установка текущих характеристик двигательной установки и сохранение базовых характеристик
             this.baseMaxShieldPower = this.maxShieldPower = maxShieldPower;
-            this.shieldRegeneration = this.shieldRegeneration;
+            this.shieldRegeneration = shieldRegeneration;
             this.baseShieldRegeneration = baseShieldRegeneration;
             this.state = false;
         }

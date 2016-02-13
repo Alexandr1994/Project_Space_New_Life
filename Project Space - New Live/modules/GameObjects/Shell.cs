@@ -112,8 +112,9 @@ namespace Project_Space___New_Live.modules.GameObjects
             return null;
         }
 
-        public Shell(float mass, Vector2f coords, Vector2f size, int shipDamage, int equipmentDamage, float speed, float angle, int lifeTime, Texture[] skin)
+        public Shell(Ship shooter, float mass, Vector2f coords, Vector2f size, int shipDamage, int equipmentDamage, float speed, float angle, int lifeTime, Texture[] skin)
         {
+            this.shooterShip = shooter;
             this.mass = mass;
             this.coords = coords;
             this.size = size;
