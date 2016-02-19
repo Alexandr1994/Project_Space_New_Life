@@ -416,7 +416,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Анализирование взаимодействия корабля с объектами в звездной системе
         /// </summary>
-        public void AnalizeObjectInteraction()
+        public override void AnalizeObjectInteraction()
         {
             List<GameObject> interactiveObjects = this.starSystem.GetObjectsInSystem();//получить все объекты в звездной системе
             foreach (GameObject interactObject in interactiveObjects)

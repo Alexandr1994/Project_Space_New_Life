@@ -108,6 +108,7 @@
     <Compile Include="modules\Dispatchers\ObjectView.cs" />
     <Compile Include="modules\Dispatchers\ResurceStorage.cs" />
     <Compile Include="modules\GameObjects\ActiveObject.cs" />
+    <Compile Include="modules\GameObjects\BaseEnvironment.cs" />
     <Compile Include="modules\GameObjects\VisualEffect.cs" />
     <Compile Include="modules\GameObjects\GameEntity.cs" />
     <Compile Include="modules\GameObjects\GameObject.cs" />

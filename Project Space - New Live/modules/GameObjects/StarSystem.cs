@@ -13,41 +13,14 @@ namespace Project_Space___New_Live.modules.GameObjects
     /// <summary>
     /// Звездная система
     /// </summary>
-    public class StarSystem
+    public class StarSystem : BaseEnvironment
     {
-       /// <summary>
-        /// Фон звездной системы
-        /// </summary>
-        ObjectView background;
-
+        
         /// <summary>
         /// Главный центр масс
         /// </summary>
         LocalMassCenter massCenter;
-
-        /// <summary>
-        /// Управление позицией фона звездной системы
-        /// </summary>
-        public ObjectView Background
-        {
-            get { return this.background; }
-        }
-
-        /// <summary>
-        /// Коллекция кораблей, находящихся в данной звездной системе
-        /// </summary>
-        private List<Ship> myShipsCollection;
-
-        /// <summary>
-        /// Коллекция снарядов, находящихся в данной звездной системе
-        /// </summary>
-        private List<Shell> myShellsCollection;
-
-        /// <summary>
-        /// Коллекция взрывов (визуальных эффектов)
-        /// </summary>
-        private List<VisualEffect> myEffectsCollection; 
-
+        
         /// <summary>
         /// Построить звездную систему
         /// </summary>
@@ -82,50 +55,13 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.background.Translate(offset);
         }
 
-
         /// <summary>
         /// Процесс жизни звездной системы
         /// </summary>
-        public void Process(List<Ship> shipsCollection)
+        protected override void CustomProcess()
         {
-            this.myShipsCollection = new List<Ship>();//освобождение коллекции
-            foreach (Ship currentShip in shipsCollection)//перезаполнение коллекции
-            {
-                if (currentShip.StarSystem == this)
-                {
-                    this.myShipsCollection.Add(currentShip);
-                }    
-            }
+            this.myActiveObjectsCollection = new List<ActiveObject>();//освобождение коллекции
             massCenter.Process(new Vector2f(0, 0));//работа со звездной составляющей
-            foreach (Ship ship in this.myShipsCollection)//работа кораблей находящихся в данной звездной системе
-            {
-                ship.AnalizeObjectInteraction();
-                ship.Process(new Vector2f(0, 0));
-                if (ship.Destroyed)
-                {
-                    this.myEffectsCollection.Add(new VisualEffect(ship.Coords, new Vector2f(144, 144), 52, ResurceStorage.shipExplosion));
-                }
-            }
-            for (int i = 0; i < this.myShellsCollection.Count; i ++)//работа со снарядами в данной звездной системе
-            {
-                this.myShellsCollection[i].Process(new Vector2f(0, 0));
-                if (this.myShellsCollection[i].LifeOver)//если время жизни снаряда вышло
-                {
-                    this.myEffectsCollection.Add(new VisualEffect(this.myShellsCollection[i].Coords, new Vector2f(32, 32), 19, ResurceStorage.shellHitting));
-                    this.myShellsCollection.Remove(this.myShellsCollection[i]);//удалить его из коллекции
-                    i --;
-                }
-            }
-            for (int i = 0; i < this.myEffectsCollection.Count; i ++)//работа с визуальными эффектами
-            {
-                this.myEffectsCollection[i].Process();
-                if (this.myEffectsCollection[i].LifeOver)//если время жизни визуального эффекта вышло
-                {
-                    this.myEffectsCollection.Remove(this.myEffectsCollection[i]);//удалить его из коллекции
-                    i --;
-                }
-
-            }
         }
 
         /// <summary>
@@ -142,7 +78,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 systemsViews.AddRange(shell.View);
             }
-            foreach (Ship ship in this.myShipsCollection)//Заполнить массив образов системы образами кораблей, принадлежащих данной системе
+            foreach (Ship ship in this.myActiveObjectsCollection)//Заполнить массив образов системы образами кораблей, принадлежащих данной системе
             {
                 systemsViews.AddRange(ship.View);
             }
@@ -160,7 +96,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         public List<GameObject> GetObjectsInSystem()
         {
             List<GameObject> objectsCollection = this.massCenter.GetObjects();//получить коллекцию звезд и планет
-            foreach (GameObject ship in this.myShipsCollection)//сформировать коллекцию кораблей
+            foreach (GameObject ship in this.myActiveObjectsCollection)//сформировать коллекцию кораблей
             {
                 objectsCollection.Add(ship);
             }
@@ -191,14 +127,6 @@ namespace Project_Space___New_Live.modules.GameObjects
                 }
             }
             return ret_value;
-        }
-
-        /// <summary>
-        /// Добавление снаряда в коллекцию снарядов в данной звездной системе
-        /// </summary>
-        public void AddNewShell(Shell newShell)
-        {
-            this.myShellsCollection.Add(newShell);
         }
  }
 }
