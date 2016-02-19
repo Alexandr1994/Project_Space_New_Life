@@ -15,7 +15,7 @@ namespace Project_Space___New_Live.modules.GameObjects
     /// <summary>
     /// Космический корабль (Космолет или Космоплан)
     /// </summary>
-    public class Ship : GameObject
+    public class Ship : ActiveObject
     {
 
         /// <summary>
@@ -84,36 +84,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             get { return this.shipEquipment; }
         }
-
-        /// <summary>
-        /// Оружейная система корабля
-        /// </summary>
-        private WeaponSystem shipWeaponSystem;
-
-        /// <summary>
-        /// Оружейная система корабля
-        /// </summary>
-        public WeaponSystem ShipWeaponSystem
-        {
-            get { return this.shipWeaponSystem; }
-        }
-
-        /// <summary>
-        /// Открыть огонь
-        /// </summary>
-        public void OpenFire()
-        {
-            this.shipWeaponSystem.Shooting = true;
-        }
-
-        /// <summary>
-        /// Прекратить огонь
-        /// </summary>
-        public void StopFire()
-        {
-            this.shipWeaponSystem.Shooting = false;
-        }
-
+    
         /// <summary>
         /// Отображение корабля
         /// </summary>
@@ -177,32 +148,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         //Параметры корабля
 
         /// <summary>
-        /// Текущий запас прочности
-        /// </summary>
-        private int health;
-
-        /// <summary>
-        /// Текущий запас прочности
-        /// </summary>
-        public int Health
-        {
-            get { return this.health; }
-        }
-
-        /// <summary>
-        /// Максимальный запас прочности
-        /// </summary>
-        private int maxHealth;
-
-        /// <summary>
-        /// Максимальный запас прочности
-        /// </summary>
-        public int MaxHealth
-        {
-            get { return this.maxHealth; }
-        }
-
-        /// <summary>
         /// Размер части корабля
         /// </summary>
         private Vector2f viewPartSize;
@@ -242,19 +187,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         public ShipMover MoveManager
         {
             get { return this.moveManager; }
-        }
-
-        /// <summary>
-        /// Текущий поворот корабля в рад.
-        /// </summary>
-        private float rotation = (float)(Math.PI / 2);
-
-        /// <summary>
-        /// Текущий поворот корабля в рад.
-        /// </summary>
-        public float Rotation
-        {
-            get { return this.rotation; }
         }
 
         /// <summary>
@@ -360,40 +292,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Элементароне движение корабля
-        /// </summary>
-        /// <param name="speed">Скорость движения</param>
-        /// <param name="angle">Угол поворота вектора скорости</param>
-        public void ShipAtomMoving(float speed, float angle)
-        {
-            Vector2f tempCoords = this.coords;
-            this.coords.X += (float)(speed * Math.Cos(angle));
-            this.coords.Y += (float)(speed * Math.Sin(angle));
-            Vector2f delta = this.coords - tempCoords;//Изменение по координатам Х и Y
-            foreach (ObjectView partView in this.view)
-            {
-                partView.Translate(delta);
-            }
-        }
-
-        /// <summary>
-        /// Изменение поворота корабля
-        /// </summary>
-        /// <param name="angle">Угол на который происходит изменение</param>
-        public void ChangeRotation(float angle)
-        {
-            this.rotation += angle;//изменение текущего поворота корабля
-            foreach (ObjectView partView in this.view)
-            {
-                partView.Rotate(this.coords, angle);//изменение каждой части отображения
-            }
-            if (this.rotation > 2 * Math.PI)
-            {
-                this.rotation -= (float)(2 * Math.PI);
-            }
-        }
-
-        /// <summary>
         /// Постороение корабля
         /// </summary>
         /// <param name="mass">Масса</param>
@@ -418,9 +316,9 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment.Add(new Battery(100, 500, null));//энергобатарея
             this.shipEquipment.Add(new Radar(20, 1500, null));//радар
             this.shipEquipment.Add(new Shield(20, 3, 100, 0, 1, null));//энергощит 
-            this.shipWeaponSystem = new WeaponSystem(3);
-            //this.ShipWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0]}, null));
-            this.shipWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(1*Math.PI/180), 100, 50, 5000, 25, 1, new Vector2f(25, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[2]}, null));
+            this.objectWeaponSystem = new WeaponSystem(3);
+            //this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0]}, null));
+            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(1*Math.PI/180), 100, 50, 5000, 25, 1, new Vector2f(25, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[2]}, null));
             
             // this.shipEquipment.Add(null);//энергощит 
         }
@@ -465,7 +363,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             Shell shell;
             this.pilot.Process();
             this.EnergyProcess();
-            if ((shell = this.shipWeaponSystem.Process(this)) != null)//если в ходе работы оружейной системы был получен снаряд
+            if ((shell = this.objectWeaponSystem.Process(this)) != null)//если в ходе работы оружейной системы был получен снаряд
             {
                 this.starSystem.AddNewShell(shell);//то отправить его в коллекцияю снарядов звездной системы
                 this.MoveManager.ShellShoot(this, shell.SpeedVector, shell.Mass);//отдача от выстрела
