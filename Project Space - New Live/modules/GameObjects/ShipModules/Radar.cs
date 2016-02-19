@@ -14,6 +14,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// Текущий радиус зоны видимости
         /// </summary>
         private float visibleRadius;
+
         /// <summary>
         /// Текущий радиус зоны видимости
         /// </summary>

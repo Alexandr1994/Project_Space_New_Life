@@ -162,17 +162,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 {
                     return RectanglePointTest(point, center);//прямоугольник
                 }
-                    ;break;
                 case "CircleShape":
                 {
                     return this.EllipsePointTest(point, center);//круг/эллипс
                 }
-                    ;break;
              /*   case "ConvexShape":
                 {
                     return this.ConvexPointTest(point, center);//произвольный многоугольник
-                }
-                    ;break;*/
+                }*/
             }
             return false;
         }
@@ -360,12 +357,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
                         {//проверка прямоугольник и прямоугольник
                             return this.RectangleAndRectangleContactAnalize(targetView);
                         }
-                           break;
                         case "CircleShape":
                         {//проверка эллипс и прямоугольник
                                return this.RectangleAndEllipceContactAnalize(targetView);
-                        }
-                           break;      
+                        }    
                     }
                 }
                     break;
@@ -377,12 +372,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
                             {
                                 return targetView.RectangleAndEllipceContactAnalize(this);
                             }
-                            break;
                         case "CircleShape":
                             {//проверка эллипс и эллипс
                                 return this.EllipseAndEllipseContactAnalize(targetView);
                             }
-                            break;
                     }
                 }
                     break;

@@ -15,22 +15,21 @@ using SFML.System;
 
 namespace Project_Space___New_Live.modules.Controlers.Forms
 {
+    /// <summary>
+    /// Экран радара
+    /// </summary>
     class RadarScreen : Form
     {
-
         /// <summary>
         /// Размер видимой области
         /// </summary>
         Vector2f viewSize;
+
         /// <summary>
         /// Центр экрана радара
         /// </summary>
         private Vector2f radarCenter;
-        
-        /// <summary>
-        /// Форма зоны видимости
-        /// </summary>
-        private VisibleRegion visReg;
+       
         /// <summary>
         /// Форма шума
         /// </summary>
@@ -55,7 +54,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             this.viewSize = RenderModule.getInstance().GameView.Size;
             this.radarCenter = this.Size/2;
             this.NoiseConstruct();
-            this.visReg = new VisibleRegion();
         }
 
         /// <summary>
@@ -69,10 +67,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Найти сотношение размеров на радаре и в игровой зоне  
+        /// Найти сотношение размера объекта на экране радара и его реального размера   
         /// </summary>
-        /// <param name="visibleRadius"></param>
-        /// <returns></returns>
+        /// <param name="visibleRadius">Радиус зоны видимости радара</param>
+        /// <returns>Масштабирующий коэффициент</returns>
         private double GetSizeCoeffic(double visibleRadius)
         {
             return this.Size.X/2 / visibleRadius;    
@@ -80,9 +78,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
 
 
         /// <summary>
-        /// Работа радара (временная реализация)
+        /// Процесс работы экрана радара
         /// </summary>
-        /// <param name="activeStarSystem"></param>
+        /// <param name="activeStarSystem">Текущая звездная система</param>
+        /// <param name="playerShip">Корабль игрока</param>
         public void RadarProcess(StarSystem activeStarSystem, Ship playerShip)
         {
             float radarCoeffic = 0;
@@ -90,33 +89,26 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             this.ChildForms.Clear();//Отчистить коллекцию объектов на радаре
             if (playerRadar != null && playerRadar.State)//Если радар имеется и функционирует
             {//то начать посторение отображения
-                this.noise.Visible = false;
+                this.noise.Visible = false;//Спрятать радарный шум
                 radarCoeffic = (float) this.GetSizeCoeffic(playerRadar.VisibleRadius);
-                this.rerenderBasicSymbols(radarCoeffic);
-
                 this.RenderPlayerOnRadar(playerShip, radarCoeffic);
                 foreach (GameObject currentObject in activeStarSystem.GetObjectsInSystem(playerShip.Coords, playerRadar.VisibleRadius))
                 {
-                    
                     ObjectSignature currentSignature = currentObject.GetSignature();
                     if (currentSignature != null)
                     {
-                        float mass = (float) currentSignature.Characteristics[(int) ObjectSignature.CharactsKeys.Mass];
-                            //Масса объекта
-                        Vector2f size = (Vector2f) currentSignature.Characteristics[(int) ObjectSignature.CharactsKeys.Size];
-                            //Размер объекта
+                        Vector2f size = (Vector2f) currentSignature.Characteristics[(int) ObjectSignature.CharactsKeys.Size]; //Размер объекта
                         RadarEntity newObject = new RadarEntity();
-
                         newObject.Size = size*radarCoeffic;
                         newObject.Location = this.radarCenter - newObject.Size + (currentObject.Coords - playerShip.Coords) * radarCoeffic;
                         this.AddForm(newObject);
                     }
                 }
-                
+                this.rerenderBasicSymbols(radarCoeffic);
             }
             else
-            {//иначе вывести шум
-                this.noise.NoiseProcess();
+            {
+                this.noise.NoiseProcess();//иначе вывести радарный шум
                 this.noise.Visible = true;
                 this.AddForm(this.noise);
             }
@@ -125,51 +117,51 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Отрисовка базовых символов на радаре
         /// </summary>
-        /// <param name="radarCoeffic"></param>
+        /// <param name="radarCoeffic">Масштабирубщий коэффициент</param>
         private void rerenderBasicSymbols(float radarCoeffic)
         {
-            VisibleRegion visReg = new VisibleRegion();
-            visReg.Size = this.viewSize * radarCoeffic;
-            visReg.Location = radarCenter - visReg.Size / 2;
-            this.AddForm(visReg);//Вывести область видимости
+            VisibleRegion visibleRegion = new VisibleRegion();
+            visibleRegion.Size = this.viewSize * radarCoeffic;
+            visibleRegion.Location = radarCenter - visibleRegion.Size / 2;
+            this.AddForm(visibleRegion);//Вывести область видимости
+            RadarRing radarRing = new RadarRing();
+            radarRing.Size = this.size / 4;
+            radarRing.Location = this.radarCenter - radarRing.Size;
+            this.AddForm(radarRing);//Вывести радарное кольцо
+            radarRing = new RadarRing();
+            radarRing.Size = new Vector2f((float)(this.Size.X / 2.7), (float)(this.Size.Y / 2.7));
+            radarRing.Location = this.radarCenter - radarRing.Size;
+            this.AddForm(radarRing);
+            RadarLine radarLine = new RadarLine();
+            radarLine.Location = new Vector2f(0, this.radarCenter.Y);
+            radarLine.Size = new Vector2f(this.radarCenter.X - (visibleRegion.Size.X / 2), 2);
+            this.AddForm(radarLine);
+            radarLine = new RadarLine();
+            radarLine.Location = new Vector2f(this.radarCenter.X + (visibleRegion.Size.X / 2), this.radarCenter.Y);
+            radarLine.Size = new Vector2f(this.radarCenter.X - (visibleRegion.Size.X / 2), 2);
+            this.AddForm(radarLine);
+            radarLine = new RadarLine();
+            radarLine.Location = new Vector2f(this.radarCenter.X, 0);
+            radarLine.Size = new Vector2f(2, this.radarCenter.Y - (visibleRegion.Size.Y / 2));
+            this.AddForm(radarLine);
+            radarLine = new RadarLine();
+            radarLine.Location = new Vector2f(this.radarCenter.X, this.radarCenter.Y + (visibleRegion.Size.Y / 2));
+            radarLine.Size = new Vector2f(2, this.radarCenter.Y - (visibleRegion.Size.Y / 2));
+            this.AddForm(radarLine);
         }
 
-        
+        /// <summary>
+        /// Отрисовка игрока на экране радара
+        /// </summary>
+        /// <param name="player">Корабль игрока</param>
+        /// <param name="radarCoeffic">Масщтабирующий коэффициент</param>
         private void RenderPlayerOnRadar(Ship player, float radarCoeffic)
         { 
-
             RadarEntity ship = new RadarEntity();
             ObjectSignature playerSignature = player.GetSignature();
             ship.Size = (Vector2f)playerSignature.Characteristics[(int)ObjectSignature.CharactsKeys.Size] * radarCoeffic;
             ship.Location = this.radarCenter - ship.Size/2;
             this.AddForm(ship);
-        }
-
-
-
-
-        /// <summary>
-        /// /// Проверка на нахождение точки в области формы
-        /// </summary>
-        /// <param name="testingPoint"></param>
-        /// <returns></returns>
-        protected override bool PointTest(Vector2f testingPoint)
-        {
-            this.SetBasicReactions();
-            Vector2f center = this.GetPhizicalPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра окружности образующей кнопку
-            float dX = testingPoint.X - center.X;
-            float dY = testingPoint.Y - center.Y;
-            float distanse = (float)Math.Sqrt(Math.Pow(dX, 2) + Math.Pow(dY, 2));//нахождение расстояния от точки до центра кнопки
-            if (distanse == 0)//Если расстояние от центра до точки равно 0
-            {
-                return true;//то true
-            }
-            float radius = (this.view.Image as CircleShape).Radius;
-            if (distanse < radius)//если это расстояние меньше радиуса
-            {
-                return true;//то true
-            }
-            return false;//иначе false
         }
 
         /// <summary>
@@ -204,7 +196,11 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 this.view.Image.FillColor = Color.Green;
             }
 
-
+            /// <summary>
+            /// Сущность на радаре никогда не проходит проверку на нахождение точки в её области
+            /// </summary>
+            /// <param name="testingPoint">Проверяемая точка</param>
+            /// <returns>false</returns>
             protected override bool PointTest(Vector2f testingPoint)
             {
                 return false;
@@ -212,16 +208,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Шум радара
+        /// Радарный шум
         /// </summary>
         private class RadarNoise : Form
         {
-
-            /// <summary>
-            /// Текущий знак изменения текстуры
-            /// </summary>
-            private int currentSign = 1;
-            
             /// <summary>
             /// Конструктор радарного шума
             /// </summary>
@@ -236,10 +226,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             }
 
             /// <summary>
-            /// Шум радара никогда непроходит проверку на нахождение точки в его области
+            /// Радарный шум никогда не проходит проверку на нахождение точки в её области
             /// </summary>
-            /// <param name="testingPoint"></param>
-            /// <returns></returns>
+            /// <param name="testingPoint">Проверяемая точка</param>
+            /// <returns>false</returns>
             protected override bool PointTest(Vector2f testingPoint)
             {
                 return false;
@@ -250,16 +240,19 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             /// </summary>
             public void NoiseProcess()
             {
-                Random rand = new Random();
-                int sign = this.currentSign/Math.Abs(this.currentSign);
-                this.view.Image.TextureRect =
-                    new IntRect(this.view.Image.TextureRect.Left + 150, this.view.Image.TextureRect.Top,
-                        this.view.Image.TextureRect.Width, this.view.Image.TextureRect.Height);
-                
+                Random random = new Random();
+                int sign = 0;
+                while (sign == 0)
+                {
+                    sign = random.Next(-1, 1);
+                }
+                IntRect tempRect = this.view.Image.TextureRect;
+                tempRect.Left += random.Next((int)this.size.X) * sign;
+                tempRect.Top += random.Next((int)this.size.Y) * sign;
+                this.view.Image.TextureRect = tempRect;
             }
 
         }
-
 
         /// <summary>
         /// Видимая заона на экране радара
@@ -267,39 +260,84 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         private class VisibleRegion : Form
         {
             
-
+            /// <summary>
+            /// Конструктор видимой области
+            /// </summary>
             protected override void CustomConstructor()
             {
                 this.Size = new Vector2f(40, 30);
                 view = new ObjectView(new RectangleShape(this.Size), BlendMode.Alpha);
                 this.view.Image.OutlineThickness = 2;
-                this.view.Image.OutlineColor = Color.Green;
+                this.view.Image.OutlineColor = new Color(0, 150, 0, 150);
                 this.view.Image.FillColor = new Color(0,0,0,0);
             }
 
             /// <summary>
-            /// Зона видимости никогда не проходит проверку на нахождение курсора в её области
+            /// Зона видимости никогда не проходит проверку на нахождение точки в её области
             /// </summary>
-            /// <param name="testingPoint"></param>
-            /// <returns></returns>
+            /// <param name="testingPoint">Проверяемая точка</param>
+            /// <returns>false</returns>
             protected override bool PointTest(Vector2f testingPoint)
             {
                 return false;
             }
         }
 
+        /// <summary>
+        /// Кольцо радарной зоны
+        /// </summary>
         private class RadarRing : Form
         {
+
+            /// <summary>
+            /// Конструктор радарного кольца
+            /// </summary>
             protected override void CustomConstructor()
             {
-                
+                this.Size = new Vector2f(100, 100);
+                this.view =  new ObjectView(new CircleShape(this.size.X), BlendMode.Alpha);
+                this.view.Image.OutlineThickness = 4;
+                this.view.Image.OutlineColor = new Color(0, 150, 0, 150);
+                this.view.Image.FillColor = new Color(0, 0, 0, 0);
             }
 
+            /// <summary>
+            /// Радарное кольцо никогда не проходит проверку на нахождение точки в её области
+            /// </summary>
+            /// <param name="testingPoint">Проверяемая точка</param>
+            /// <returns>false</returns>
             protected override bool PointTest(Vector2f testingPoint)
             {
                 return false;
             }
         }
+
+        /// <summary>
+        /// Радарная линия
+        /// </summary>
+        private class RadarLine : Form
+        {
+            /// <summary>
+            /// Конструктор радарной линии
+            /// </summary>
+            protected override void CustomConstructor()
+            {
+                this.Size = new Vector2f(100, 4);
+                this.view = new ObjectView(new RectangleShape(this.size), BlendMode.Alpha);
+                this.view.Image.FillColor = new Color(0, 150, 0, 150);
+            }
+
+            /// <summary>
+            /// Радарная оиния никогда не проходит проверку на нахождение точки в её области
+            /// </summary>
+            /// <param name="testingPoint">Проверяемая точка</param>
+            /// <returns>false</returns>
+            protected override bool PointTest(Vector2f testingPoint)
+            {
+                return false;
+            }
+        }
+
 
     }
 }

@@ -28,7 +28,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         public virtual Vector2f Location
         {
             get { return this.location; }
-            set { this.location = value;}
+            set
+            {
+                this.location = value;
+            }
         }
 
         /// <summary>
@@ -303,7 +306,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <returns>true если точка в области формы, иначе - false</returns>
         protected virtual bool PointTest(Vector2f testingPoint)
         {
-            Vector2f center = this.GetPhizicalPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра окружности образующей кнопку
+            Vector2f center = this.GetPhizicalPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра формы
             return this.view.PointAnalize(testingPoint, center);
         }
 
