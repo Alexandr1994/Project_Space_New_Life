@@ -105,7 +105,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetEnergy()
         {
-            Battery battery = playerShip.Equipment[(int) Ship.EquipmentNames.Battery] as Battery;
+            Battery battery = this.playerShip.Equipment[(int)(Ship.EquipmentNames.Battery)] as Battery;
             return (float)battery.Energy / (float)battery.MaxEnergy *100;
         }
 

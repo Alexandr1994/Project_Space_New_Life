@@ -7,7 +7,7 @@ using SFML.Graphics;
 
 namespace Project_Space___New_Live.modules.GameObjects.ShipModules
 {
-    class Radar : Equipment
+    public class Radar : Equipment
     {
 
         /// <summary>

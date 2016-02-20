@@ -16,10 +16,30 @@ namespace Project_Space___New_Live.modules.GameObjects
     {
 
 
-        //ОБЩЕЕ ОБОРУДОВАНИЕ АКТИВНЫХ ОБЪЕКТОВ
+        //ОБЩЕЕ ОБОРУДОВАНИЕ/СНАРЯЖЕНИЕ АКТИВНЫХ ОБЪЕКТОВ
 
         /// <summary>
-        /// Энергощит активного объекта
+        /// Коллекция оборудования/снаряжения активного объекта
+        /// </summary>
+        public abstract List<Equipment> Equipment { get; }  
+
+        /// <summary>
+        /// Реактор/Генератор активного объекта
+        /// </summary>
+        protected Reactor objectReactor;
+
+        /// <summary>
+        /// Энергобатарея активного объекта
+        /// </summary>
+        protected Battery objectBattery;
+
+        /// <summary>
+        /// Радар/сканер активного объекта
+        /// </summary>
+        protected Radar objectRadar;
+
+        /// <summary>
+        /// Энергощит/персональный энергощит активного объекта
         /// </summary>
         protected Shield objectShield;
 
@@ -225,6 +245,29 @@ namespace Project_Space___New_Live.modules.GameObjects
                 else
                 {
                     this.health = this.MaxHealth;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Управление энергией активного объекта
+        /// </summary>
+        protected void EnergyProcess()
+        {
+            this.objectBattery.Charge(this.objectReactor.EnergyGeneration);//Работа реактора
+            foreach (Equipment device in this.Equipment)//перебрать коллекцию оборудования/снаряжения
+            {
+                if (device != null)//если данное оборудование имеется
+                {
+                    if (this.objectBattery.Energy >= device.EnergyNeeds && device.State)//если оно активированно и энергобатарея может обеспечить его потребность в энергии 
+                    {
+                        this.objectBattery.Uncharge(device.EnergyNeeds);//то уменьшить заряд батареи на нужную величину
+                    }
+                    else//иначе деактивировать его
+                    {
+                        device.Deactivate();
+                    }
                 }
             }
         }

@@ -10,7 +10,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
     /// <summary>
     /// Реактор
     /// </summary>
-    class Reactor : Equipment
+    public class Reactor : Equipment
     {
 
         /// <summary>

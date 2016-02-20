@@ -72,26 +72,28 @@ namespace Project_Space___New_Live.modules.GameObjects
             Shield
         }
 
-        /// <summary>
-        /// Оборудование корабля
-        /// </summary>
-        private List<Equipment> shipEquipment;
+        
+        // ОБОРУДОВАНИЕ КОРАБЛЯ
 
         /// <summary>
-        /// Оборудование корабля
+        /// Двигатель корабля
         /// </summary>
-        public List<Equipment> Equipment
+        private Engine shipEngine;
+
+        /// <summary>
+        /// Коллекция оборудования корабля
+        /// </summary>
+        public override List<Equipment> Equipment
         {
             get
             {
-                //return this.shipEquipment;
-                List<Equipment> retValue = new List<Equipment>();
-                foreach (Equipment device in shipEquipment)
-                {
-                    retValue.Add(device);
-                }
-                retValue.Add(this.objectShield);
-                return retValue;
+                List<Equipment> shipEquipment = new List<Equipment>();
+                shipEquipment.Add(this.shipEngine);
+                shipEquipment.Add(this.objectReactor);
+                shipEquipment.Add(this.objectBattery);
+                shipEquipment.Add(this.objectRadar);
+                shipEquipment.Add(this.objectShield);
+                return shipEquipment;
             }
         }
     
@@ -190,7 +192,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                 case (int)Parts.FrontPart://Носовая часть
                     {
                         this.Equipment[(int)(EquipmentNames.Battery)].Wearing(equipmentDamage);//Износ энергобатареи
-                        this.Equipment[(int)(EquipmentNames.Radar)].Wearing(equipmentDamage);//Износ радара
+                        this.objectRadar.Wearing(equipmentDamage);//Износ радара
                     }
                     ; break;
                 case (int)Parts.FeedPart://Кормовая часть
@@ -236,15 +238,14 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.coords = coords;
             this.viewPartSize = partSize;
             this.ConstructView(skin);
-            this.shipEquipment = new List<Equipment>();
             this.pilot = PlayerController.GetInstanse(this);
             this.maxHealth = this.health = maxHealth;
             this.StarSystem = startSystem;
 
-            this.shipEquipment.Add(new Engine(100, 1, 100, 100, 10, 8, null));//двигатель
-            this.shipEquipment.Add(new Reactor(100, 1, null));//реактор
-            this.shipEquipment.Add(new Battery(100, 500, null));//энергобатарея
-            this.shipEquipment.Add(new Radar(20, 1500, null));//радар
+            this.shipEngine = new Engine(100, 1, 100, 100, 10, 8, null);//двигатель
+            this.objectReactor = new Reactor(100, 1, null);//реактор
+            this.objectBattery = new Battery(100, 500, null);//энергобатарея
+            this.objectRadar  = new Radar(20, 1500, null);//радар
             this.objectShield = new Shield(20, 3, 100, 0, 1, null);//энергощит 
             this.objectWeaponSystem = new WeaponSystem(3);
             //this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0]}, null));
@@ -305,30 +306,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Управление энергией корабля
-        /// </summary>
-        private void EnergyProcess()
-        {
-            Reactor shipReactor = this.shipEquipment[(int)EquipmentNames.Reactor] as Reactor;
-            Battery shipBattery = this.shipEquipment[(int)EquipmentNames.Battery] as Battery;
-            shipBattery.Charge(shipReactor.EnergyGeneration);
-            for (int i = (int)(EquipmentNames.Radar); i < this.Equipment.Count; i ++)
-            {
-                if (shipBattery.Energy >= this.Equipment[i].EnergyNeeds)
-                {
-                    if (this.Equipment[i].State)
-                    {
-                        shipBattery.Uncharge(this.Equipment[i].EnergyNeeds);
-                    }
-                }
-                else
-                {
-                    this.Equipment[i].Deactivate();
-                }              
-            }
-        }
-
-        /// <summary>
         /// Сконструировать сигнатуру цели
         /// </summary>
         /// <returns>Сигнатура корабля</returns>
@@ -379,7 +356,6 @@ namespace Project_Space___New_Live.modules.GameObjects
                             //с самой звездой
                             {
                                 this.GetDamage(this.MaxHealth, 100, (int)Parts.Shield); //нанести максимальный урон кораблю
-                                break;
                             }
                             if (View[(int)Parts.Shield].BorderContactAnalize(interactObject.View[(int)Star.Views.Crown]))
                             //со звездной короной

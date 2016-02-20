@@ -15,6 +15,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// Состояние (активно-неактивно)
         /// </summary>
         protected bool state;
+
         /// <summary>
         /// Состояние (активно-неактивно)
         /// </summary>

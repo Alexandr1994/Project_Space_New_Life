@@ -10,7 +10,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
     /// <summary>
     /// Энергобатарея
     /// </summary>
-    class Battery : Equipment
+    public class Battery : Equipment
     {
         /// <summary>
         /// Базовая емкость
