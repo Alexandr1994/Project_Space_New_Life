@@ -15,12 +15,12 @@ namespace Project_Space___New_Live.modules.GameObjects
     /// </summary>
     public class StarSystem : BaseEnvironment
     {
-        
+
         /// <summary>
         /// Главный центр масс
         /// </summary>
-        LocalMassCenter massCenter;
-        
+        private LocalMassCenter massCenter;
+
         /// <summary>
         /// Построить звездную систему
         /// </summary>
@@ -28,8 +28,8 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="background"></param>
         public StarSystem(LocalMassCenter massCenter, Texture background)
         {
-            this.massCenter = massCenter;//Инициализация компонетов звездной системы
-            InitBackgroung(background);//Построение фона звездной системы
+            this.massCenter = massCenter; //Инициализация компонетов звездной системы
+            InitBackgroung(background); //Построение фона звездной системы
             this.myShellsCollection = new List<Shell>();
             this.myEffectsCollection = new List<VisualEffect>();
         }
@@ -60,8 +60,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         protected override void CustomProcess()
         {
-            this.myActiveObjectsCollection = new List<ActiveObject>();//освобождение коллекции
-            massCenter.Process(new Vector2f(0, 0));//работа со звездной составляющей
+            massCenter.Process(new Vector2f(0, 0)); //работа со звездной составляющей
         }
 
         /// <summary>
@@ -72,13 +71,16 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             List<ObjectView> systemsViews = new List<ObjectView>();
 
-            systemsViews.Add(this.background);//засунуть в возвращаемый массив фон
-            systemsViews.AddRange(massCenter.GetView());//Заполнить массив образов системы образами объектов главного центра масс
-            foreach (GameObject shell in this.myShellsCollection)//Заполнить массив образов системы образами снарядов, принадлежащих данной системе
+            systemsViews.Add(this.background); //засунуть в возвращаемый массив фон
+            systemsViews.AddRange(massCenter.GetView());
+                //Заполнить массив образов системы образами объектов главного центра масс
+            foreach (GameObject shell in this.myShellsCollection)
+                //Заполнить массив образов системы образами снарядов, принадлежащих данной системе
             {
                 systemsViews.AddRange(shell.View);
             }
-            foreach (Ship ship in this.myActiveObjectsCollection)//Заполнить массив образов системы образами кораблей, принадлежащих данной системе
+            foreach (Ship ship in this.myActiveObjectsCollection)
+                //Заполнить массив образов системы образами кораблей, принадлежащих данной системе
             {
                 systemsViews.AddRange(ship.View);
             }
@@ -95,12 +97,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <returns>Коллекция объектов в звездной системе</returns>
         public List<GameObject> GetObjectsInSystem()
         {
-            List<GameObject> objectsCollection = this.massCenter.GetObjects();//получить коллекцию звезд и планет
-            foreach (GameObject ship in this.myActiveObjectsCollection)//сформировать коллекцию кораблей
+            List<GameObject> objectsCollection = this.massCenter.GetObjects(); //получить коллекцию звезд и планет
+            foreach (GameObject ship in this.myActiveObjectsCollection) //сформировать коллекцию кораблей
             {
                 objectsCollection.Add(ship);
             }
-            foreach (GameObject shell in this.myShellsCollection)//сформировать коллекциб снарядов
+            foreach (GameObject shell in this.myShellsCollection) //сформировать коллекциб снарядов
             {
                 objectsCollection.Add(shell);
             }
@@ -120,13 +122,32 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 //Получить расстояние до кандидата в возвращаемые объекты
                 float distanse =
-                    (float)Math.Sqrt(Math.Pow(candidat.Coords.X - point.X, 2) + Math.Pow(candidat.Coords.Y - point.Y, 2));
-                if (distanse < radius)//если кандидат находится в указанной области
+                    (float)
+                        Math.Sqrt(Math.Pow(candidat.Coords.X - point.X, 2) + Math.Pow(candidat.Coords.Y - point.Y, 2));
+                if (distanse < radius) //если кандидат находится в указанной области
                 {
-                    ret_value.Add(candidat);//то добавить его в коллекцию возвращаемых объектов
+                    ret_value.Add(candidat); //то добавить его в коллекцию возвращаемых объектов
                 }
             }
             return ret_value;
         }
- }
+
+        /// <summary>
+        /// Установить или обновить коллекцию кораблей в звездной системе
+        /// </summary>
+        /// <param name="activeObjectsCollection">Новая коллекция кораблей</param>
+        public override void RefreshActiveObjectsCollection(List<ActiveObject> activeObjectsCollection)
+        {
+            this.myActiveObjectsCollection = new List<ActiveObject>(); //освобождение коллекции
+            foreach (Ship currentShip in activeObjectsCollection) //перезаполнение коллекции
+            {
+                if (currentShip.StarSystem == this)
+                {
+                    this.myActiveObjectsCollection.Add(currentShip);
+
+                }
+            }
+        }
+
+    }
 }

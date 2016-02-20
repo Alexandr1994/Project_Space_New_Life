@@ -8,7 +8,7 @@ using SFML.Graphics;
 
 namespace Project_Space___New_Live.modules.GameObjects.ShipModules
 {
-    public abstract class ShipEquipment
+    public abstract class Equipment
     {
 
         /// <summary>
@@ -21,7 +21,6 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         public virtual bool State
         {//неактивное оборудование не потребляет энергии 
             get { return this.state; }
-            set { this.state = value; }
         }
 
         /// <summary>
@@ -165,6 +164,28 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             this.Repair();//установка состояния и износа
             this.version = 0;//Установка версии оборудования в 0
             this.upgrateDirectionsHistory.Add(0);//сохранение базовой модификации
+        }
+
+        /// <summary>
+        /// Активация оборудования
+        /// </summary>
+        /// <returns>true - удалось активировать, false - не удалось</returns>
+        public virtual bool Activate()
+        {
+            if (!this.emergensyState)//если оборудование не в аварийном состоянии
+            {//то установить состояние в активное
+                this.state = true;
+                return true;//вернуть true
+            }
+            return false;//иначе активироать оборудование не удалось, вернуть false
+        }
+
+        /// <summary>
+        /// Деактивация оборудования
+        /// </summary>
+        public virtual void Deactivate()
+        {
+            this.state = false;//то установить состояние в неактивное
         }
 
     }

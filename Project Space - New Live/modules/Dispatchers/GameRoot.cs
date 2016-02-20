@@ -59,7 +59,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Коллекция космических кораблей
         /// </summary>
-        List<Ship> ShipsCollection = new List<Ship>();
+        List<ActiveObject> ShipsCollection = new List<ActiveObject>();
+        //List<Ship> ShipsCollection = new List<Ship>();
 
         /// <summary>
         /// Построение игры
@@ -103,7 +104,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
                 foreach (StarSystem currentSystem in this.SystemCollection)//Отработка игрового мира
                 {
-                    currentSystem.Process(this.ShipsCollection);
+                    currentSystem.RefreshActiveObjectsCollection(this.ShipsCollection as List<ActiveObject>);
+                    currentSystem.Process();
                 }
                 for (int i = 0; i < this.ShipsCollection.Count; i ++)//отчистка уничтоженных кораблей
                 {

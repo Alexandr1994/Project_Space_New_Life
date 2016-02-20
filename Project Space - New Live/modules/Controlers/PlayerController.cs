@@ -240,13 +240,13 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         private void ShieldProcess()
         {
-            if (this.PlayerShip.ShieldActive)
+            if (this.PlayerShip.ShieldActive)//Если энергощит активен
             {
-                this.PlayerShip.ShieldActive = false;
+                this.PlayerShip.DeactivateShield();//деактивировать его
             }
             else
             {
-                this.PlayerShip.ShieldActive = true;
+                this.PlayerShip.ActivateShield();//иначе активировать
             }
         }
     }

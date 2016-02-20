@@ -15,6 +15,28 @@ namespace Project_Space___New_Live.modules.GameObjects
     public abstract class ActiveObject : GameObject
     {
 
+
+        //ОБЩЕЕ ОБОРУДОВАНИЕ АКТИВНЫХ ОБЪЕКТОВ
+
+        /// <summary>
+        /// Энергощит активного объекта
+        /// </summary>
+        protected Shield objectShield;
+
+
+        /// <summary>
+        /// Флаг уничтожения активного объекта
+        /// </summary>
+        protected bool destroyed = false;
+
+        /// <summary>
+        /// Флаг уничтожения  активного объекта
+        /// </summary>
+        public bool Destroyed
+        {
+            get { return this.destroyed; }
+        }
+
         /// <summary>
         /// Текущий поворот активного объекта в рад.
         /// </summary>
@@ -54,6 +76,42 @@ namespace Project_Space___New_Live.modules.GameObjects
             get { return this.maxHealth; }
         }
 
+
+        /// <summary>
+        /// Текущее состояние энергощита 
+        /// </summary>
+        public bool ShieldActive
+        {
+            get
+            {
+                if (this.objectShield != null)//если щит установлен
+                {
+                    return this.objectShield.State;//то опросить его состояние
+                }
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Активировать энергощит
+        /// </summary>
+        /// <returns>true - удалось активировать, false - не удалось</returns>
+        public bool ActivateShield()
+        {
+            if (this.objectShield != null)//Если энергощит есть
+            {
+                return this.objectShield.Activate();
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Деактивировать щит
+        /// </summary>
+        public void DeactivateShield()
+        {
+           this.objectShield.Deactivate();
+        }
 
         /// <summary>
         /// Оружейная система активного объекта
@@ -115,6 +173,59 @@ namespace Project_Space___New_Live.modules.GameObjects
             if (this.rotation > 2 * Math.PI)
             {
                 this.rotation -= (float)(2 * Math.PI);
+            }
+        }
+
+
+        /// <summary>
+        /// Базовое получение урона активного объекта
+        /// </summary>
+        /// <param name="damage">Урон, наносимый объекту</param>
+        /// <param name="equipmentDamage">Урон, наносимый оборудованию</param>
+        /// <param name="damagedPartIndex">Пораженная часть объекта</param>
+        public void GetDamage(int damage, int equipmentDamage, int damagedPartIndex)
+        {
+            if (!this.ShieldActive)//если щит не активен
+            {//то нанести урон объекту
+                this.WearingEquipment(equipmentDamage, damagedPartIndex);//Нанести повреждения оборудованию
+                if (this.health > damage)
+                {
+                    this.health -= damage;
+                }
+                else
+                {
+                    this.health = 0;
+                }
+            }
+            else
+            {//иначе нанести урон экрану щита
+                objectShield.GetDamageOnShield(damage, equipmentDamage / 5);
+            }
+        }
+
+        /// <summary>
+        /// Наношение урона оборудованию
+        /// </summary>
+        /// <param name="equipmentDamage">Урон наносимый оборудованию</param>
+        /// <param name="damagedPartIndex">Пораженная часть активного объекта</param>
+        protected abstract void WearingEquipment(int equipmentDamage, int damagedPartIndex);
+
+        /// <summary>
+        /// Восстановление активного объекта
+        /// </summary>
+        /// <param name="recovery">Величина восстановления</param>
+        public void Recovery(int recovery)
+        {
+            if (this.health < this.MaxHealth)
+            {
+                if (Math.Abs(this.health - this.MaxHealth) > recovery)
+                {
+                    this.health += recovery;
+                }
+                else
+                {
+                    this.health = this.MaxHealth;
+                }
             }
         }
 

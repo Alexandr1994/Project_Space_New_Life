@@ -45,24 +45,18 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Процесс жизни игровой среды
         /// </summary>
-        public void Process(List<Ship> shipsCollection)
+        public void Process()
         {
             this.CustomProcess();
-            foreach (Ship currentShip in shipsCollection)//перезаполнение коллекции
-            {
-                if (currentShip.StarSystem == this)
-                {
-                    this.myActiveObjectsCollection.Add(currentShip);
-                }
-            }
+            
 
-            foreach (Ship ship in this.myActiveObjectsCollection)//работа кораблей находящихся в данной звездной системе
+            foreach (ActiveObject activeObject in this.myActiveObjectsCollection)//работа кораблей находящихся в данной звездной системе
             {
-                ship.AnalizeObjectInteraction();
-                ship.Process(new Vector2f(0, 0));
-                if (ship.Destroyed)
+                activeObject.AnalizeObjectInteraction();
+                activeObject.Process(new Vector2f(0, 0));
+                if (activeObject.Destroyed)
                 {
-                    this.myEffectsCollection.Add(new VisualEffect(ship.Coords, new Vector2f(144, 144), 52, ResurceStorage.shipExplosion));
+                    this.myEffectsCollection.Add(new VisualEffect(activeObject.Coords, new Vector2f(144, 144), 52, ResurceStorage.shipExplosion));
                 }
             }
             for (int i = 0; i < this.myShellsCollection.Count; i++)//работа со снарядами в данной звездной системе
@@ -91,6 +85,15 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         protected abstract void CustomProcess();
 
+        /// <summary>
+        /// Установить или обновить коллекцию активных объектов в середе
+        /// </summary>
+        /// <param name="activeObjectsCollection">Новая коллекция активных объектов</param>
+        public virtual void RefreshActiveObjectsCollection(List<ActiveObject> activeObjectsCollection)
+        {
+            this.myActiveObjectsCollection = activeObjectsCollection;
+        }
+    
         /// <summary>
         /// Добавление снаряда в коллекцию снарядов в данной звездной системе
         /// </summary>

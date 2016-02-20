@@ -10,7 +10,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
     /// <summary>
     /// Энергобатарея
     /// </summary>
-    class Battery : ShipEquipment
+    class Battery : Equipment
     {
         /// <summary>
         /// Базовая емкость
@@ -84,10 +84,8 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         {
             this.SetCommonCharacteristics(mass, 0, image);//установка общих характеристик (энергопотребление = 0)
             this.baseMaxEnergy = this.maxEnergy = maxEnergy;
-
             this.FullCharge();
-
-            this.State = true;
+            this.Activate();
         }
 
         protected override void CustomModification()

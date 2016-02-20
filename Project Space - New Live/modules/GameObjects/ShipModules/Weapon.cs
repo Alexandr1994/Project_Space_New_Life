@@ -12,7 +12,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
     /// <summary>
     /// Оружие
     /// </summary>
-    public class Weapon : ShipEquipment
+    public class Weapon : Equipment
     {
 
         //ХАРАКТЕРИСТИКИ ОРУЖИЯ

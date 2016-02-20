@@ -75,14 +75,24 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Оборудование корабля
         /// </summary>
-        private List<ShipEquipment> shipEquipment;
+        private List<Equipment> shipEquipment;
 
         /// <summary>
         /// Оборудование корабля
         /// </summary>
-        public List<ShipEquipment> Equipment
+        public List<Equipment> Equipment
         {
-            get { return this.shipEquipment; }
+            get
+            {
+                //return this.shipEquipment;
+                List<Equipment> retValue = new List<Equipment>();
+                foreach (Equipment device in shipEquipment)
+                {
+                    retValue.Add(device);
+                }
+                retValue.Add(this.objectShield);
+                return retValue;
+            }
         }
     
         /// <summary>
@@ -104,46 +114,11 @@ namespace Project_Space___New_Live.modules.GameObjects
                     index++;
                 }
                 return retViews;
-            }
-            
+            } 
         }
 
         //Флаги корабля
 
-        /// <summary>
-        /// Флаг уничтожения корабля
-        /// </summary>
-        private bool destroyed = false;
-
-        /// <summary>
-        /// Флаг уничтожения корабля
-        /// </summary>
-        public bool Destroyed
-        {
-            get { return this.destroyed; }
-        }
-
-        /// <summary>
-        /// Текущее состояние энергощита 
-        /// </summary>
-        public bool ShieldActive
-        {
-            get
-            {
-                if (this.Equipment[(int) (EquipmentNames.Shield)] != null)//если щит установлен
-                {
-                    return this.Equipment[(int) (EquipmentNames.Shield)].State;//то опросить его состояние
-                }
-                return false;
-            }
-            set
-            {
-                if (this.Equipment[(int) (EquipmentNames.Shield)] != null)//если щит установлен
-                {//изменить свойстово
-                    (this.Equipment[(int)(EquipmentNames.Shield)] as Shield).State = value;
-                }    
-            }
-        }
 
         //Параметры корабля
 
@@ -204,37 +179,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Базовое получение урона кораблем
-        /// </summary>
-        /// <param name="damage">Урон, наносимый кораблю</param>
-        /// <param name="equipmentDamage">Урон, наносимый оборудованию корабля</param>
-        /// <param name="damagedPartIndex">Пораженная часть корабля</param>
-        public void GetDamage(int damage, int equipmentDamage, int damagedPartIndex)
-        {
-            if (!this.ShieldActive)//если щит не активен
-            {//то нанести урон кораблю
-                this.WearingEquipment(equipmentDamage, damagedPartIndex);//Нанести повреждения оборудованию
-                if (this.health > damage)
-                {
-                    this.health -= damage;
-                }
-                else
-                {
-                    this.health = 0;
-                }
-            }
-            else
-            {//иначе нанести урон экрану щита
-                (this.Equipment[(int)(EquipmentNames.Shield)] as Shield).GetDamageOnShield(damage, equipmentDamage/5);
-            }
-        }
-
-        /// <summary>
         /// Наношение урона оборудования
         /// </summary>
         /// <param name="equipmentDamage">Урон наносимый оборудованию</param>
         /// <param name="damagedPartIndex">Пораженная часть корабля</param>
-        private void WearingEquipment(int equipmentDamage, int damagedPartIndex)
+        protected override void WearingEquipment(int equipmentDamage, int damagedPartIndex)
         {
             switch (damagedPartIndex)//в зависимости от части, которой было нанесено повреждение нанести урон оборудованию 
             {
@@ -265,25 +214,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
         
         /// <summary>
-        /// Ремонт корабля
-        /// </summary>
-        /// <param name="recovery">Величина восстановления</param>
-        public void Repair(int recovery)
-        {
-            if (this.health < this.MaxHealth)
-            {
-                if (Math.Abs(this.health - this.MaxHealth) > recovery)
-                {
-                    this.health += recovery;
-                }
-                else
-                {
-                    this.health = this.MaxHealth;
-                }
-            }
-        }
-
-        /// <summary>
         /// Постоянное перемещение корабля
         /// </summary>
         protected override void Move()
@@ -306,7 +236,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.coords = coords;
             this.viewPartSize = partSize;
             this.ConstructView(skin);
-            this.shipEquipment = new List<ShipEquipment>();
+            this.shipEquipment = new List<Equipment>();
             this.pilot = PlayerController.GetInstanse(this);
             this.maxHealth = this.health = maxHealth;
             this.StarSystem = startSystem;
@@ -315,7 +245,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.shipEquipment.Add(new Reactor(100, 1, null));//реактор
             this.shipEquipment.Add(new Battery(100, 500, null));//энергобатарея
             this.shipEquipment.Add(new Radar(20, 1500, null));//радар
-            this.shipEquipment.Add(new Shield(20, 3, 100, 0, 1, null));//энергощит 
+            this.objectShield = new Shield(20, 3, 100, 0, 1, null);//энергощит 
             this.objectWeaponSystem = new WeaponSystem(3);
             //this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0]}, null));
             this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(1*Math.PI/180), 100, 50, 5000, 25, 1, new Vector2f(25, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[2]}, null));
@@ -393,7 +323,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                 }
                 else
                 {
-                    this.Equipment[i].State = false;
+                    this.Equipment[i].Deactivate();
                 }              
             }
         }
@@ -465,7 +395,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                         {
                             if (partShipView.BorderContactAnalize(interactObject.View[0]))
                             {
-                                this.Repair(1);
+                                this.Recovery(1);
                             }
                         }
                     };break;

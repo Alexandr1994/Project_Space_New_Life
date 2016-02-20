@@ -13,7 +13,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
     /// <summary>
     /// Двигательная установка
     /// </summary>
-    class Engine : ShipEquipment
+    class Engine : Equipment
     {
         /// <summary>
         /// Направления модификации двигательной установки
@@ -142,7 +142,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             this.baseShuntingThrust = this.shuntingThrust = shuntingThrust;
             this.baseMaxForwardSpeed = this.maxForwardSpeed = maxForwardSpeed;
             this.baseMaxShuntingSpeed = this.maxShuntingSpeed = maxShuntingSpeed;
-            this.State = false;
+            this.Deactivate();
         }
 
 
