@@ -81,8 +81,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             }
         }
 
-        //
-
         /// <summary>
         /// Модуль управления движением транспортного средства
         /// </summary>

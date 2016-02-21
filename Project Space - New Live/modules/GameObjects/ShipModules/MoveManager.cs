@@ -32,9 +32,17 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// <param name="maxSpeed">Максимальная скорость</param>
         private void AddNewSpeedVector(float speed, float angle, float maxSpeed)
         {
+            if (angle > Math.PI)//если угол поворота вектора больше чем 360 градусов
+            {
+                angle -= (float)(2 * Math.PI);//вернуть его в пределы от 0 до 360 градусов
+            }
+            if (angle < -Math.PI)
+            {
+                angle += (float)(2 * Math.PI);//вернуть его в пределы от 0 до 360 градусов
+            }
             foreach (SpeedVector vector in speedVectors)
-            {//Если среди существующих векторов присутствует вектор, поворот которого отличается от поворота нового вектора менее чем на 5 градусов
-                if (Math.Abs(vector.Angle - angle) < (Math.PI * 5 ) / 180)
+            {//Если среди существующих векторов присутствует вектор, поворот которого отличается от поворота нового вектора менее чем на 15 градусов
+                if (Math.Abs(vector.Angle - angle) < (Math.PI * 15) / 180)
                 {//то вместо создания нового вектора следует, изменить текущий
                     if (maxSpeed > (vector.Speed + speed))
                     {
@@ -42,11 +50,15 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
                     }
                     vector.VectorRotation(angle - vector.Angle);
                     return;
-                }//Или вектор угол которого отличается на 180 градусов (PI)
-                if ((Math.Abs(vector.Angle - (angle - (float)Math.PI)) < (2 * Math.PI / 180)) || (Math.Abs(angle - (vector.Angle - (float)Math.PI)) < (2 * Math.PI / 180)))
-                {//то скорость данного вектора уменьшится
+                }
+                if (vector.Angle > angle + (Math.PI / 2) || vector.Angle < (angle - Math.PI / 2))//Или вектор угол которого отличается на 180 градусов (PI)
+                {
                     vector.SpeedAcceleration(-speed);
                 }
+                /*if ((Math.Abs(vector.Angle - (angle - (float)Math.PI)) < (1.5 * Math.PI / 180)) || (Math.Abs(angle - (vector.Angle - (float)Math.PI)) < (2 * Math.PI / 180)))
+                {//то скорость данного вектора уменьшится
+                    vector.SpeedAcceleration(-speed);
+                }*/
             }//В противном случае требуется добавить новый вектор
             speedVectors.Add(new SpeedVector(speed, angle));
         }
@@ -61,7 +73,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             Battery battery = transport.Equipment[(int)(Transport.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
             if (battery.Uncharge(engine.EnergyNeeds))
             {
-                float acceleration = (float) (engine.ForwardThrust / transport.Mass);
+                float acceleration = (float)(engine.ForwardThrust / transport.Mass);
                 this.AddNewSpeedVector(acceleration, transport.Rotation, engine.MaxForwardSpeed);
             }
         }
@@ -92,7 +104,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             Battery battery = transport.Equipment[(int)(Transport.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
             if (battery.Uncharge(engine.EnergyNeeds))
             {
-                float acceleration = (float)(engine.ShuntingThrust/transport.Mass);
+                float acceleration = (float)(engine.ShuntingThrust / transport.Mass);
                 directionSign /= Math.Abs(directionSign); //Сохранение только знака числа
                 this.AddNewSpeedVector(acceleration, transport.Rotation + (float)(directionSign*Math.PI / 2),engine.MaxShuntingSpeed);
             }
@@ -109,15 +121,26 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             Battery battery = transport.Equipment[(int)(Transport.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
             if (battery.Uncharge(engine.EnergyNeeds))
             {
-                float acceleration = Sign / Math.Abs(Sign) * engine.ShuntingThrust / transport.Mass;
-                acceleration /= (float)Math.Sqrt(Math.Pow(transport.ViewPartSize.X / 4, 2) + Math.Pow(transport.ViewPartSize.Y / 4, 2));//вычисление угловой скорости
-                if (this.rotationSpeed * acceleration > 0)
+                Sign = (Sign / Math.Abs(Sign));
+                float acceleration = Sign * engine.ShuntingThrust / transport.Mass;
+                acceleration /= (float)Math.Sqrt(Math.Pow(transport.ViewPartSize.X, 2) + Math.Pow(transport.ViewPartSize.Y, 2));//вычисление угловой скорости
+                if (this.rotationSpeed * acceleration < 0)
                 {
-                    this.rotationSpeed = acceleration;
+                    if (Math.Abs(this.rotationSpeed) > Math.Abs(acceleration))
+                    {
+                        this.rotationSpeed += acceleration;    
+                    }
+                    else
+                    {
+                        this.rotationSpeed = 0;
+                    }
                 }
                 else
                 {
-                    this.rotationSpeed += acceleration * 2;
+                    if (Math.Abs(this.rotationSpeed) < (3 * Math.PI) / 180)
+                    {
+                        this.rotationSpeed += acceleration;
+                    } 
                 }
             }
         }
@@ -130,12 +153,31 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         {//Ликвидация всех векторов движения
             Engine engine = transport.Equipment[(int)(Transport.EquipmentNames.Engine)] as Engine;//Получение двигателя транспортного средства
             Battery battery = transport.Equipment[(int)(Transport.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
-            foreach (SpeedVector vector in speedVectors)
+            float acceleration = (float)(engine.ShuntingThrust / transport.Mass);//Прямолинейное торможение
+            if (this.speedVectors.Count > 0)
             {
-             if (battery.Uncharge(engine.EnergyNeeds))
+                if (battery.Uncharge(engine.EnergyNeeds))
                 {
-                    float acceleration = (float)(engine.ShuntingThrust / transport.Mass);
-                    vector.SpeedAcceleration(-acceleration);
+                    foreach (SpeedVector vector in this.speedVectors)
+                    {
+                        vector.SpeedAcceleration(-acceleration);
+                    }
+                } 
+            }         
+            acceleration /= (float)Math.Sqrt(Math.Pow(transport.ViewPartSize.X, 2) + Math.Pow(transport.ViewPartSize.Y, 2));//Вращательное торнможение
+            if (Math.Abs(acceleration) > Math.Abs(this.rotationSpeed))
+            {
+                this.rotationSpeed = 0;
+            }
+            else
+            {
+                if (this.rotationSpeed > 0)
+                {
+                    this.rotationSpeed -= acceleration;
+                }
+                else
+                {
+                    this.rotationSpeed += acceleration;
                 }
             }
         }
@@ -146,13 +188,18 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// <param name="Sign">Транспортное средство</param>
         public void Rotate(Transport transport)
         {
-            if (this.rotationSpeed > 0)//стабилизация вращения
+            double acceleration = Math.Sqrt(transport.Environment.MovingResistance) * Math.PI / 180;
+            if (Math.Abs(this.rotationSpeed) < acceleration)//стабилизация вращения
             {
-                this.rotationSpeed -= (float)(0.04 * Math.PI / 180);
+                this.rotationSpeed = 0;
+            }
+            if (this.rotationSpeed > 0)
+            {
+                this.rotationSpeed -= (float)(acceleration);
             }
             else if (this.rotationSpeed < 0)
             {
-                this.rotationSpeed += (float)(0.04 * Math.PI / 180);
+                this.rotationSpeed += (float)(acceleration);
             }
             transport.ChangeRotation(this.rotationSpeed);//Изменение угла поворота
         }
@@ -170,7 +217,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             transport.ShipAtomMoving(movingVector.Speed, movingVector.Angle);//вычисление координат по текущему вектору
             foreach (SpeedVector vector in speedVectors)//Прямолинейное смещение
             {
-                vector.SpeedAcceleration((float)-0.04);//уменьшение скорости на константу
+                vector.SpeedAcceleration((float)- transport.Environment.MovingResistance);//уменьшение скорости на константу
             }
             this.speedVectors.RemoveAll(vector => vector.Speed < 0);//Удаление векторов с нулевой скоростью
         }

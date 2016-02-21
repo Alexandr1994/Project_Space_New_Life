@@ -48,7 +48,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Доступные видеорежимы
         /// </summary>
-        private static VideoMode windowSize = new VideoMode(800, 600);
+        private static VideoMode windowSize = new VideoMode(1280, 720);
 
         /// <summary>
         /// Экземпляр модуля отрисовки
@@ -58,7 +58,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Текущий стиль отображения окна
         /// </summary>
-        private Styles currentStyle = Styles.Titlebar;
+        private Styles currentStyle = Styles.Fullscreen;
 
         /// <summary>
         /// Заголовок окна

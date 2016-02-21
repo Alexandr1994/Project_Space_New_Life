@@ -28,12 +28,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="background"></param>
         public StarSystem(LocalMassCenter massCenter, Texture background)
         {
+            this.MovingResistance = 0.001;
             this.massCenter = massCenter; //Инициализация компонетов звездной системы
             InitBackgroung(background); //Построение фона звездной системы
             this.myShellsCollection = new List<Shell>();
             this.myEffectsCollection = new List<VisualEffect>();
         }
-
 
         /// <summary>
         /// Построить фон звездной системы

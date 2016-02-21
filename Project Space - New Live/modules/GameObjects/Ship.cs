@@ -138,9 +138,9 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.Environment = startSystem;
 
             this.transportEngine = new Engine(100, 1, 100, 100, 10, 8, null);//двигатель
-            this.objectReactor = new Reactor(100, 1, null);//реактор
+            this.objectReactor = new Reactor(100, 5, null);//реактор
             this.objectBattery = new Battery(100, 500, null);//энергобатарея
-            this.objectRadar  = new Radar(20, 1500, null);//радар
+            this.objectRadar  = new Radar(20, 2500, null);//радар
             this.objectShield = new Shield(20, 3, 100, 0, 1, null);//энергощит 
             this.objectWeaponSystem = new WeaponSystem(3);
             //this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0]}, null));

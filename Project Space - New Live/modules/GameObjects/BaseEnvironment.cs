@@ -13,6 +13,16 @@ namespace Project_Space___New_Live.modules.GameObjects
     /// </summary>
     public abstract class BaseEnvironment
     {
+        /// <summary>
+        /// Сопротивление среды перемещению объектов в ней
+        /// </summary>
+        private double movingResistance;
+
+        public double MovingResistance
+        {
+            get { return this.movingResistance; }
+            set { this.movingResistance = value; }
+        }
 
         /// <summary>
         /// Фон звездной системы
