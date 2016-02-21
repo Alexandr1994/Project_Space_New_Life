@@ -85,7 +85,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             //Сохранение в контейнере
             this.playerShip = new Ship(500, new Vector2f(400, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), GameWorld[0]);//Корабля игрока
             this.lastPlayerCoords = this.playerShip.Coords;//последних координат корабля игрока
-            this.activeSystem = this.playerShip.StarSystem;//Текущей звездной системы
+            this.activeSystem = this.playerShip.ShipStarSystem;//Текущей звездной системы
             this.GameRenderer = RenderModule.getInstance();//Сылки на модуль отрисовки
             //this.playerInterface = playerInterface;
         }

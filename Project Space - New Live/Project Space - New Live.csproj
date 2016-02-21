@@ -109,6 +109,7 @@
     <Compile Include="modules\Dispatchers\ResurceStorage.cs" />
     <Compile Include="modules\GameObjects\ActiveObject.cs" />
     <Compile Include="modules\GameObjects\BaseEnvironment.cs" />
+    <Compile Include="modules\GameObjects\Transport.cs" />
     <Compile Include="modules\GameObjects\VisualEffect.cs" />
     <Compile Include="modules\GameObjects\GameEntity.cs" />
     <Compile Include="modules\GameObjects\GameObject.cs" />
@@ -122,7 +123,7 @@
     <Compile Include="modules\GameObjects\ShipModules\Reactor.cs" />
     <Compile Include="modules\GameObjects\ShipModules\Shield.cs" />
     <Compile Include="modules\GameObjects\ShipModules\Equipment.cs" />
-    <Compile Include="modules\GameObjects\ShipModules\ShipMover.cs" />
+    <Compile Include="modules\GameObjects\ShipModules\MoveManager.cs" />
     <Compile Include="modules\GameObjects\ShipModules\SpeedVector.cs" />
     <Compile Include="modules\GameObjects\ShipModules\Weapon.cs" />
     <Compile Include="modules\GameObjects\ShipModules\WeaponSystem.cs" />

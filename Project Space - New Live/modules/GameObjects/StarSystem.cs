@@ -141,7 +141,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.myActiveObjectsCollection = new List<ActiveObject>(); //освобождение коллекции
             foreach (Ship currentShip in activeObjectsCollection) //перезаполнение коллекции
             {
-                if (currentShip.StarSystem == this)
+                if (currentShip.Environment == this)
                 {
                     this.myActiveObjectsCollection.Add(currentShip);
 

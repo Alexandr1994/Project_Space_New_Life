@@ -145,7 +145,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             radarLine.Size = new Vector2f(2, this.radarCenter.Y - (visibleRegion.Size.Y / 2));
             this.AddForm(radarLine);
             radarLine = new RadarLine();
-            radarLine.Location = new Vector2f(this.radarCenter.X, this.radarCenter.Y - (visibleRegion.Size.Y / 2));
+            radarLine.Location = new Vector2f(this.radarCenter.X, this.radarCenter.Y + (visibleRegion.Size.Y / 2));
             radarLine.Size = new Vector2f(2, this.radarCenter.Y - (visibleRegion.Size.Y / 2));
             this.AddForm(radarLine);
         }

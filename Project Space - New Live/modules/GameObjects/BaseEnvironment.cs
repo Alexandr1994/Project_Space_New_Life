@@ -48,12 +48,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         public void Process()
         {
             this.CustomProcess();
-            
-
             foreach (ActiveObject activeObject in this.myActiveObjectsCollection)//работа кораблей находящихся в данной звездной системе
             {
-                activeObject.AnalizeObjectInteraction();
                 activeObject.Process(new Vector2f(0, 0));
+                activeObject.AnalizeObjectInteraction();
                 if (activeObject.Destroyed)
                 {
                     this.myEffectsCollection.Add(new VisualEffect(activeObject.Coords, new Vector2f(144, 144), 52, ResurceStorage.shipExplosion));

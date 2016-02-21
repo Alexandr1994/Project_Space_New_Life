@@ -15,7 +15,7 @@ namespace Project_Space___New_Live.modules.GameObjects
     /// <summary>
     /// Космический корабль (Космолет или Космоплан)
     /// </summary>
-    public class Ship : ActiveObject
+    public class Ship : Transport
     {
 
         /// <summary>
@@ -44,59 +44,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             /// </summary>
             Shield
         }
-
-        /// <summary>
-        /// Идентификаторы оборудования корабля
-        /// </summary>
-        public enum EquipmentNames : int
-        {
-            /// <summary>
-            /// Двигатель
-            /// </summary>
-            Engine = 0, 
-            /// <summary>
-            /// Реактор
-            /// </summary>
-            Reactor,
-            /// <summary>
-            /// Энергобатеря
-            /// </summary>
-            Battery,
-            /// <summary>
-            /// Радар
-            /// </summary>
-            Radar,
-            /// <summary>
-            /// Щит
-            /// </summary>
-            Shield
-        }
-
-        
-        // ОБОРУДОВАНИЕ КОРАБЛЯ
-
-        /// <summary>
-        /// Двигатель корабля
-        /// </summary>
-        private Engine shipEngine;
-
-        /// <summary>
-        /// Коллекция оборудования корабля
-        /// </summary>
-        public override List<Equipment> Equipment
-        {
-            get
-            {
-                List<Equipment> shipEquipment = new List<Equipment>();
-                shipEquipment.Add(this.shipEngine);
-                shipEquipment.Add(this.objectReactor);
-                shipEquipment.Add(this.objectBattery);
-                shipEquipment.Add(this.objectRadar);
-                shipEquipment.Add(this.objectShield);
-                return shipEquipment;
-            }
-        }
-    
+ 
         /// <summary>
         /// Отображение корабля
         /// </summary>
@@ -119,65 +67,12 @@ namespace Project_Space___New_Live.modules.GameObjects
             } 
         }
 
-        //Флаги корабля
-
-
-        //Параметры корабля
-
-        /// <summary>
-        /// Размер части корабля
-        /// </summary>
-        private Vector2f viewPartSize;
-
-        /// <summary>
-        /// Размер части корабля
-        /// </summary>
-        public Vector2f ViewPartSize
-        {
-            get { return this.viewPartSize; }
-            set { this.viewPartSize = value;}
-        }
-
-        /// <summary>
-        /// Полная масса корабля 
-        /// </summary>
-        public override float Mass
-        {//Скоро полное описание
-            get { return this.mass; }
-        }
-
-        /// <summary>
-        /// Конторллер корабля
-        /// </summary>
-        private AbstractController pilot; 
-
-        //Данные и методы элементарного движения корабля (смещение и вращение)
-        
-        /// <summary>
-        /// Модуль отвечающий за движения корабля
-        /// </summary>
-        private ShipMover moveManager = new ShipMover();
-
-        /// <summary>
-        /// Модуль отвечающий за движения корабля
-        /// </summary>
-        public ShipMover MoveManager
-        {
-            get { return this.moveManager; }
-        }
-
         /// <summary>
         /// Звездная система, в которой находится корабль
         /// </summary>
-        private StarSystem starSystem;
-
-        /// <summary>
-        /// Звездная система, в которой находится корабль
-        /// </summary>
-        public StarSystem StarSystem
+        public StarSystem ShipStarSystem
         {
-            get { return this.starSystem; }
-            set { this.starSystem = value; }
+            get { return this.Environment as StarSystem; }
         }
 
         /// <summary>
@@ -191,24 +86,24 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 case (int)Parts.FrontPart://Носовая часть
                     {
-                        this.Equipment[(int)(EquipmentNames.Battery)].Wearing(equipmentDamage);//Износ энергобатареи
+                        this.objectBattery.Wearing(equipmentDamage);//Износ энергобатареи
                         this.objectRadar.Wearing(equipmentDamage);//Износ радара
                     }
                     ; break;
                 case (int)Parts.FeedPart://Кормовая часть
                     {
-                        this.Equipment[(int)(EquipmentNames.Reactor)].Wearing(equipmentDamage);//Износ реактора
-                        this.Equipment[(int)(EquipmentNames.Engine)].Wearing(equipmentDamage);//Износ двигателя
+                        this.objectReactor.Wearing(equipmentDamage);//Износ реактора
+                        this.transportEngine.Wearing(equipmentDamage);//Износ двигателя
                     }
                     ; break;
                 case (int)Parts.LeftWing://Левое крыло
                     {
-                        this.Equipment[(int)(EquipmentNames.Engine)].Wearing(equipmentDamage);//Износ двигателя
+                        this.transportEngine.Wearing(equipmentDamage);//Износ двигателя
                     }
                     ; break;
                 case (int)(Parts.RightWing)://Правое крыло
                     {
-                        this.Equipment[(int)(EquipmentNames.Engine)].Wearing(equipmentDamage);//Износ двигателя
+                        this.transportEngine.Wearing(equipmentDamage);//Износ двигателя
                     }
                     ; break;
                 default: break;
@@ -236,13 +131,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             this.mass = mass;
             this.coords = coords;
-            this.viewPartSize = partSize;
+            this.ViewPartSize = partSize;
             this.ConstructView(skin);
-            this.pilot = PlayerController.GetInstanse(this);
+            this.brains = PlayerController.GetInstanse(this);
             this.maxHealth = this.health = maxHealth;
-            this.StarSystem = startSystem;
+            this.Environment = startSystem;
 
-            this.shipEngine = new Engine(100, 1, 100, 100, 10, 8, null);//двигатель
+            this.transportEngine = new Engine(100, 1, 100, 100, 10, 8, null);//двигатель
             this.objectReactor = new Reactor(100, 1, null);//реактор
             this.objectBattery = new Battery(100, 500, null);//энергобатарея
             this.objectRadar  = new Radar(20, 1500, null);//радар
@@ -266,18 +161,18 @@ namespace Project_Space___New_Live.modules.GameObjects
             while (index != (int)(Parts.Shield))
             {
                 this.view[index] = new ObjectView(BlendMode.Alpha);
-                this.view[index].Image = new RectangleShape(this.viewPartSize);
+                this.view[index].Image = new RectangleShape(this.ViewPartSize);
                 this.view[index].Image.Texture = skin[index];
                 index++;
             }
             this.view[(int)Parts.Shield] = new ObjectView(BlendMode.Alpha);
-            this.view[(int)Parts.Shield].Image = new CircleShape(this.viewPartSize.Y);
+            this.view[(int)Parts.Shield].Image = new CircleShape(this.ViewPartSize.Y);
             this.view[(int)Parts.Shield].Image.Texture = skin[(int) Parts.Shield];
-            this.view[(int)Parts.Shield].Image.Position = this.Coords - new Vector2f(this.viewPartSize.Y, this.viewPartSize.Y);//Энергощит
-            this.view[(int)Parts.FrontPart].Image.Position = this.Coords + new Vector2f(-this.viewPartSize.X / 2, 0);//Носовя часть
-            this.view[(int)Parts.FeedPart].Image.Position = this.Coords + new Vector2f(-this.viewPartSize.X / 2, -this.viewPartSize.Y);//Кормовая часть
-            this.view[(int)Parts.RightWing].Image.Position = this.Coords + new Vector2f(this.viewPartSize.X / 2, -this.viewPartSize.Y * 3 / 4);//Левое "крыло"
-            this.view[(int)Parts.LeftWing].Image.Position = this.Coords + new Vector2f(-this.viewPartSize.X * 3 / 2, -this.viewPartSize.Y * 3 / 4);//Правое "крыло"
+            this.view[(int)Parts.Shield].Image.Position = this.Coords - new Vector2f(this.ViewPartSize.Y, this.ViewPartSize.Y);//Энергощит
+            this.view[(int)Parts.FrontPart].Image.Position = this.Coords + new Vector2f(-this.ViewPartSize.X / 2, 0);//Носовя часть
+            this.view[(int)Parts.FeedPart].Image.Position = this.Coords + new Vector2f(-this.ViewPartSize.X / 2, -this.ViewPartSize.Y);//Кормовая часть
+            this.view[(int)Parts.RightWing].Image.Position = this.Coords + new Vector2f(this.ViewPartSize.X / 2, -this.ViewPartSize.Y * 3 / 4);//Левое "крыло"
+            this.view[(int)Parts.LeftWing].Image.Position = this.Coords + new Vector2f(-this.ViewPartSize.X * 3 / 2, -this.ViewPartSize.Y * 3 / 4);//Правое "крыло"
         }
 
         /// <summary>
@@ -286,23 +181,20 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="homeCoords">Координаты начала отсчета</param>
         public override void Process(Vector2f homeCoords)
         {
-            if (this.Health < 1)
+            if (this.Health < 1)//Если оставшийся запас прочности упал до 0
             {
-                this.destroyed = true;
+                this.destroyed = true;//то установить флаг уничтожения корабля
                 return;
             }
             Shell shell;
-            this.pilot.Process();
-            this.EnergyProcess();
+            this.brains.Process();//отработка управляющей системы
+            this.EnergyProcess();//отработка энергосистемы
             if ((shell = this.objectWeaponSystem.Process(this)) != null)//если в ходе работы оружейной системы был получен снаряд
             {
-                this.starSystem.AddNewShell(shell);//то отправить его в коллекцияю снарядов звездной системы
+                this.environment.AddNewShell(shell);//то отправить его в коллекцияю снарядов звездной системы
                 this.MoveManager.ShellShoot(this, shell.SpeedVector, shell.Mass);//отдача от выстрела
             }
-            this.EnergyProcess();
-
-            
-            this.Move();
+            this.Move();//отработка системы движений
         }
 
         /// <summary>
@@ -325,7 +217,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public override void AnalizeObjectInteraction()
         {
-            List<GameObject> interactiveObjects = this.starSystem.GetObjectsInSystem();//получить все объекты в звездной системе
+            List<GameObject> interactiveObjects = this.ShipStarSystem.GetObjectsInSystem();//получить все объекты в звездной системе
             foreach (GameObject interactObject in interactiveObjects)
             {
                 switch (interactObject.GetType().Name)
@@ -341,7 +233,6 @@ namespace Project_Space___New_Live.modules.GameObjects
                                 //с самой звездой
                                 {
                                     this.GetDamage(this.MaxHealth, 100, i); //нанести максимальный урон кораблю
-                                    break;
                                 }
                                 if (View[i].BorderContactAnalize(interactObject.View[(int) Star.Views.Crown]))
                                 //со звездной короной
@@ -391,7 +282,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                                     float deltaX = this.Coords.X - ship.Coords.X;//обработать столкновение
                                     float deltaY = this.Coords.Y - ship.Coords.Y;
                                     float contactAngle = (float)(Math.Atan2(deltaY, deltaX));
-                                    this.moveManager.CrashMove(ship.moveManager, this.Mass, ship.Mass, contactAngle);
+                                    this.MoveManager.CrashMove(ship.MoveManager, this.Mass, ship.Mass, contactAngle);
                                     //нанесение урона временная реализация
                                     this.GetDamage(50, 1, i);//и нанести урон как данному
                                     ship.GetDamage(50, 1, j);//так и проверяемому кораблю

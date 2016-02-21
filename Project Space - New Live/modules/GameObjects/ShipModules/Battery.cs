@@ -88,6 +88,17 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             this.Activate();
         }
 
+        /// <summary>
+        /// Сброс излишков энергии
+        /// </summary>
+        public void ThrowExcessEnergy()
+        {
+            if (this.Energy > this.MaxEnergy)
+            {
+                this.energy = this.MaxEnergy;
+            }
+        }
+
         protected override void CustomModification()
         {//Характеристики улучшаются на 50% на каждое улучшение
             this.maxEnergy = baseMaxEnergy + (this.Version*(baseMaxEnergy/2));

@@ -13,7 +13,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
     /// <summary>
     /// Двигательная установка
     /// </summary>
-    class Engine : Equipment
+    public class Engine : Equipment
     {
         /// <summary>
         /// Направления модификации двигательной установки

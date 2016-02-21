@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Project_Space___New_Live.modules.Controlers;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects.ShipModules;
 using SFML.System;
@@ -15,6 +16,23 @@ namespace Project_Space___New_Live.modules.GameObjects
     public abstract class ActiveObject : GameObject
     {
 
+        //КОНТРОЛЛЕР И СРЕДА ОБЪЕКТА
+        
+        /// <summary>
+        /// Конторллер активного объекта 
+        /// </summary>
+        protected AbstractController brains;
+
+        /// <summary>
+        /// Экземпляр среды, в которой находится данный объект
+        /// </summary>
+        protected BaseEnvironment environment;
+
+        public BaseEnvironment Environment
+        {
+            get { return this.environment; }
+            set { this.environment = value; }
+        }
 
         //ОБЩЕЕ ОБОРУДОВАНИЕ/СНАРЯЖЕНИЕ АКТИВНЫХ ОБЪЕКТОВ
 
@@ -44,6 +62,8 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected Shield objectShield;
 
 
+        //ФЛАГИ ОБЪЕКТА
+
         /// <summary>
         /// Флаг уничтожения активного объекта
         /// </summary>
@@ -57,6 +77,8 @@ namespace Project_Space___New_Live.modules.GameObjects
             get { return this.destroyed; }
         }
 
+        //ПОЛЯ И МЕТОДЫ ДИВЖЕНИЯ ОБЪЕКТА
+
         /// <summary>
         /// Текущий поворот активного объекта в рад.
         /// </summary>
@@ -69,6 +91,42 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             get { return this.rotation; }
         }
+
+        /// <summary>
+        /// Элементарное движение активного объекта
+        /// </summary>
+        /// <param name="speed">Скорость движения</param>
+        /// <param name="angle">Угол поворота вектора скорости</param>
+        public void ShipAtomMoving(float speed, float angle)
+        {
+            Vector2f tempCoords = this.coords;
+            this.coords.X += (float)(speed * Math.Cos(angle));
+            this.coords.Y += (float)(speed * Math.Sin(angle));
+            Vector2f delta = this.coords - tempCoords;//Изменение по координатам Х и Y
+            foreach (ObjectView partView in this.view)
+            {
+                partView.Translate(delta);
+            }
+        }
+
+        /// <summary>
+        /// Изменение поворота активного объекта
+        /// </summary>
+        /// <param name="angle">Угол на который происходит изменение</param>
+        public void ChangeRotation(float angle)
+        {
+            this.rotation += angle;//изменение текущего поворота корабля
+            foreach (ObjectView partView in this.view)
+            {
+                partView.Rotate(this.coords, angle);//изменение каждой части отображения
+            }
+            if (this.rotation > 2 * Math.PI)
+            {
+                this.rotation -= (float)(2 * Math.PI);
+            }
+        }
+
+        //СОСТОЯНИЕ ОБЪЕКТА
 
         /// <summary>
         /// Текущий запас прочности
@@ -96,6 +154,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             get { return this.maxHealth; }
         }
 
+        //ЗАЩИТНАЯ СИСТЕМА
 
         /// <summary>
         /// Текущее состояние энергощита 
@@ -133,6 +192,8 @@ namespace Project_Space___New_Live.modules.GameObjects
            this.objectShield.Deactivate();
         }
 
+        //БОЕВАЯ СИСТЕМА
+
         /// <summary>
         /// Оружейная система активного объекта
         /// </summary>
@@ -161,41 +222,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             this.objectWeaponSystem.Shooting = false;
         }
-
-        /// <summary>
-        /// Элементарное движение активного объекта
-        /// </summary>
-        /// <param name="speed">Скорость движения</param>
-        /// <param name="angle">Угол поворота вектора скорости</param>
-        public void ShipAtomMoving(float speed, float angle)
-        {
-            Vector2f tempCoords = this.coords;
-            this.coords.X += (float)(speed * Math.Cos(angle));
-            this.coords.Y += (float)(speed * Math.Sin(angle));
-            Vector2f delta = this.coords - tempCoords;//Изменение по координатам Х и Y
-            foreach (ObjectView partView in this.view)
-            {
-                partView.Translate(delta);
-            }
-        }
-
-        /// <summary>
-        /// Изменение поворота активного объекта
-        /// </summary>
-        /// <param name="angle">Угол на который происходит изменение</param>
-        public void ChangeRotation(float angle)
-        {
-            this.rotation += angle;//изменение текущего поворота корабля
-            foreach (ObjectView partView in this.view)
-            {
-                partView.Rotate(this.coords, angle);//изменение каждой части отображения
-            }
-            if (this.rotation > 2 * Math.PI)
-            {
-                this.rotation -= (float)(2 * Math.PI);
-            }
-        }
-
 
         /// <summary>
         /// Базовое получение урона активного объекта
@@ -255,6 +281,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         protected void EnergyProcess()
         {
+            this.objectBattery.ThrowExcessEnergy();//Сбросить избыточную энергию
             this.objectBattery.Charge(this.objectReactor.EnergyGeneration);//Работа реактора
             foreach (Equipment device in this.Equipment)//перебрать коллекцию оборудования/снаряжения
             {
