@@ -35,7 +35,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.background.Image.Position = new Vector2f(0, 0);
             this.background.Image.Texture = skin;
             this.background.Image.Texture.Repeated = true;
-            this.background.Image.Texture.Smooth = true;
+            //this.background.Image.Texture.Smooth = true;
             Vector2i textureSize = new Vector2i((int)(this.background.Image.Texture.Size.X), (int)(this.background.Image.Texture.Size.Y));
             this.background.Image.TextureRect = new IntRect(new Vector2i(0, 0), textureSize);
         }
@@ -44,9 +44,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Смещение фона
         /// </summary>
         /// <param name="offset">Смещение</param>
-        public override void OffsetBackground(Vector2f offset)
+        public override void OffsetBackground(Vector2f currentCoords, Vector2f lastCoords)
         {
-            this.background.Translate(offset);
+            this.background.Translate((currentCoords - lastCoords));
+            this.background.Image.TextureRect = new IntRect((int)currentCoords.X, (int)currentCoords.Y, 10000, 10000);
         }
 
         /// <summary>

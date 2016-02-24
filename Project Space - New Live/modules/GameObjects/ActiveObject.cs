@@ -105,12 +105,17 @@ namespace Project_Space___New_Live.modules.GameObjects
             get { return this.rotation; }
         }
 
+        public virtual float AttackAngle
+        {
+            get { return this.rotation; }
+        }
+
         /// <summary>
         /// Элементарное движение активного объекта
         /// </summary>
         /// <param name="speed">Скорость движения</param>
         /// <param name="angle">Угол поворота вектора скорости</param>
-        public void ShipAtomMoving(float speed, float angle)
+        public virtual void ShipAtomMoving(float speed, float angle)
         {
             Vector2f tempCoords = this.coords;
             this.coords.X += (float)(speed * Math.Cos(angle));
@@ -126,7 +131,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Изменение поворота активного объекта
         /// </summary>
         /// <param name="angle">Угол на который происходит изменение</param>
-        public void ChangeRotation(float angle)
+        public virtual void ChangeRotation(float angle)
         {
             this.rotation += angle;//изменение текущего поворота корабля
             foreach (ObjectView partView in this.view)

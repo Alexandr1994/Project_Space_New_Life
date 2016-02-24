@@ -142,6 +142,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         public void OnPlanetLanding()
         {
+            this.lastPlayerCoords = this.PlayerTank.Coords;
             this.currentMode = Mode.TankMode;
             this.activeEnvironment = this.PlayerTank.Environment = new BattleField(ResurceStorage.RockTexture);
             List<ActiveObject> unitsCollection = new List<ActiveObject>();
@@ -176,7 +177,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetHealh()
         {
-            return this.playerShip.Health * 100 / this.playerShip.MaxHealth;
+            return this.ActiveTransport.Health * 100 / this.ActiveTransport.MaxHealth;
         }
 
         /// <summary>
@@ -185,7 +186,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetEnergy()
         {
-            Battery battery = this.playerShip.Equipment[(int)(Ship.EquipmentNames.Battery)] as Battery;
+            Battery battery = this.ActiveTransport.Equipment[(int)(Transport.EquipmentNames.Battery)] as Battery;
             return (float)battery.Energy / (float)battery.MaxEnergy * 100;
         }
 
@@ -195,9 +196,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetShieldPower()
         {
-            if (this.PlayerShip.ShieldActive)
+            if (this.ActiveTransport.ShieldActive)
             {
-                Shield shield = PlayerShip.Equipment[(int)Ship.EquipmentNames.Shield] as Shield;
+                Shield shield = ActiveTransport.Equipment[(int)Transport.EquipmentNames.Shield] as Shield;
                 return (float)shield.ShieldPower / (float)shield.MaxShieldPower * 100;
             }
             return 0;
@@ -209,7 +210,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetWeaponAmmo()
         {
-            return this.PlayerShip.ObjectWeaponSystem.GetAmmoPersent();
+            return this.ActiveTransport.ObjectWeaponSystem.GetAmmoPersent();
         }
 
         /// <summary>
@@ -218,11 +219,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetRadarRange()
         {
-            if (this.PlayerShip.Equipment[(int) Ship.EquipmentNames.Radar] == null)
+            if (this.ActiveTransport.Equipment[(int)Transport.EquipmentNames.Radar] == null)
             {//если радар отстутствует вернуть 0
                 return 0;
             }
-            Radar radar = this.PlayerShip.Equipment[(int) Ship.EquipmentNames.Radar] as Radar;
+            Radar radar = this.ActiveTransport.Equipment[(int)Transport.EquipmentNames.Radar] as Radar;
             return radar.VisibleRadius;//вернуть радиус заны видимости радара
         }
 
@@ -231,9 +232,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         public void Process()
         {
-            Vector2f shipOffset = this.lastPlayerCoords - this.ActiveTransport.Coords;//Вычисление смещения игрока
+            this.activeEnvironment.OffsetBackground(this.ActiveTransport.Coords, this.lastPlayerCoords);//установить смещение фона активной звездной системы
             this.lastPlayerCoords = this.ActiveTransport.Coords;//сохранение новых координат
-            this.activeEnvironment.OffsetBackground(shipOffset * (float)(-0.9));//установить смещение фона активной звездной системы
             GameRenderer.GameView.Center = this.ActiveTransport.Coords;//Установка камеры
         }
 

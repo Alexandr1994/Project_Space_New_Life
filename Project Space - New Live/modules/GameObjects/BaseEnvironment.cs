@@ -169,7 +169,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Изменение позиции фона среды
         /// </summary>
         /// <param name="offset">Смещение</param>
-        public abstract void OffsetBackground(Vector2f offset);
+        public abstract void OffsetBackground(Vector2f currentCoords, Vector2f lastCoords);
 
         /// <summary>
         /// Получить отображения уникальных объектов среды

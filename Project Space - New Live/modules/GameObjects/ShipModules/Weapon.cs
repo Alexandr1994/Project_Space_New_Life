@@ -232,7 +232,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             {//то произвести выстрел
                 int shipDamage = this.CalculateCharacteristic(this.ShipDamageMin, this.shipDamageRange);//вычисление параметров снаряда
                 int equipmentDamage = this.CalculateCharacteristic(this.equipmentDamageMin, this.equipmentDamageRange);
-                float angle = this.CalculateCharacteristic(shooter.Rotation, this.dispersion);
+                float angle = this.CalculateCharacteristic(shooter.AttackAngle, this.dispersion);
                 this.ammo -= this.shootingAmmoNeeds;//уменьшение боезапаса
                 return new Shell(shooter, this.shellMass, shooter.Coords, this.shellSize, shipDamage, equipmentDamage, this.shellSpeed, angle, this.shellLifeTime, this.shellTextures);
             }

@@ -73,6 +73,52 @@ namespace Project_Space___New_Live.modules.GameObjects
             get { return this.environment as BattleField; }
         }
 
+        /// <summary>
+        /// Угол поворота башни танка
+        /// </summary>
+        private float turretRotation = (float)(Math.PI / 2);
+
+        /// <summary>
+        /// Угол поворота башни танка
+        /// </summary>
+        public float TurretRotation
+        {
+            get { return turretRotation; }
+        }
+
+        public override float AttackAngle
+        {
+            get {return (float)(this.turretRotation + 2 * Math.PI);}
+        }
+
+        public override void ChangeRotation(float angle)
+        {
+            this.rotation += angle;//изменение текущего поворота корабля
+            int index = 0;
+            while (index != (int)(Parts.Turret))
+            {
+                this.view[index].Rotate(this.coords, angle);//изменение каждой части отображения
+                index ++;
+            }
+            if (this.rotation > 2 * Math.PI)
+            {
+                this.rotation -= (float)(2 * Math.PI);
+            }
+        }
+
+        public void RotateTurret(float angle)
+        {
+            if (angle > Math.PI)//если угол поворота вектора больше чем 360 градусов
+            {
+                angle -= (float)(2 * Math.PI);//вернуть его в пределы от 0 до 360 градусов
+            }
+            if (angle < -Math.PI)
+            {
+                angle += (float)(2 * Math.PI);//вернуть его в пределы от 0 до 360 градусов
+            }
+            this.View[(int)(Parts.Turret)].Rotate(this.View[(int)(Parts.Turret)].ImageCenter, angle - this.TurretRotation);
+            this.turretRotation = angle;
+        }
 
         public Tank(float mass, Vector2f coords, int maxHealth, Texture[] skin, Vector2f partSize)
         {
@@ -89,7 +135,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.objectShield = new Shield(20, 3, 100, 0, 1, null);//энергощит 
             this.objectWeaponSystem = new WeaponSystem(3);
             //this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0]}, null));
-            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(5*Math.PI/180), 100, 250, 5000, 25, 1, new Vector2f(15, 2), new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
+            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(5*Math.PI/180), 100, 2000, 5000, 25, 1, new Vector2f(15, 2), new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
             
             // this.shipEquipment.Add(null);//энергощит 
         }

@@ -50,10 +50,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Изменение позиции фона Звездной системы
         /// </summary>
         /// <param name="offset">Смещение</param>
-        public override void OffsetBackground(Vector2f offset)
+        public override void OffsetBackground(Vector2f currentCoords, Vector2f lastCoords)
         {
-            this.background.Translate(offset);
+            Vector2f offset = lastCoords - currentCoords;
+            this.background.Translate(new Vector2f((float)(offset.X * (-0.9)), (float)(offset.Y * (-0.9))));
         }
+
 
         /// <summary>
         /// Процесс жизни звездной системы
