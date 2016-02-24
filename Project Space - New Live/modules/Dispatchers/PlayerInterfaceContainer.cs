@@ -106,7 +106,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void Process()
         {
             this.playerContainer.Process();
-            (this.formsCollection["RadarScreen"] as RadarScreen).RadarProcess(this.playerContainer.ActiveEnvironment, this.playerContainer.PlayerShip);
+            (this.formsCollection["RadarScreen"] as RadarScreen).RadarProcess(this.playerContainer.ActiveEnvironment, this.playerContainer.ActiveTransport);
             (this.formsCollection["HealthBar"] as LinearBar).PercentOfBar = this.playerContainer.GetHealh();
             (this.formsCollection["EnergyBar"] as LinearBar).PercentOfBar = this.playerContainer.GetEnergy();
             (this.formsCollection["ProtectBar"] as LinearBar).PercentOfBar = this.playerContainer.GetShieldPower();

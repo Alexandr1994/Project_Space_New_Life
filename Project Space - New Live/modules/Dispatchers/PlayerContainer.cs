@@ -143,7 +143,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void OnPlanetLanding()
         {
             this.currentMode = Mode.TankMode;
-            this.activeEnvironment = this.PlayerTank.Environment = new BattleField(ResurceStorage.planetText);
+            this.activeEnvironment = this.PlayerTank.Environment = new BattleField(ResurceStorage.RockTexture);
             List<ActiveObject> unitsCollection = new List<ActiveObject>();
             unitsCollection.Add(this.PlayerTank);
             this.activeEnvironment.RefreshActiveObjectsCollection(unitsCollection);
@@ -157,10 +157,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
         private PlayerContainer(List<StarSystem> GameWorld)
         {//Временная реализация конструктора корабля
             //Сохранение в контейнере
+            PlayerController controller = PlayerController.GetInstanse(this);
             this.currentMode = (int) Mode.SpaceMode;
             this.playerShip = new Ship(500, new Vector2f(400, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), GameWorld[0]);//Корабля игрока
-            this.playerShip.SetBrains(PlayerController.GetInstanse(this));
+            this.playerShip.SetBrains(controller);
             this.playerTank = new Tank(150, new Vector2f(1000, 1000), 150,  ResurceStorage.TankTextures, new Vector2f(15, 30));
+            this.PlayerTank.SetBrains(controller);
             this.lastPlayerCoords = this.playerShip.Coords;//последних координат корабля игрока
             this.activeEnvironment = this.playerShip.ShipStarSystem;//Текущей звездной системы
             this.GameRenderer = RenderModule.getInstance();//Сылки на модуль отрисовки
@@ -229,9 +231,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         public void Process()
         {
-            Vector2f shipOffset = this.lastPlayerCoords - this.playerShip.Coords;//Вычисление смещения игрока
-            this.lastPlayerCoords = this.playerShip.Coords;//сохранение новых координат
-            this.activeEnvironment.OffsetBackground(shipOffset*(float)(-0.90));//установить смещение фона активной звездной системы
+            Vector2f shipOffset = this.lastPlayerCoords - this.ActiveTransport.Coords;//Вычисление смещения игрока
+            this.lastPlayerCoords = this.ActiveTransport.Coords;//сохранение новых координат
+            this.activeEnvironment.OffsetBackground(shipOffset * (float)(-0.9));//установить смещение фона активной звездной системы
             GameRenderer.GameView.Center = this.ActiveTransport.Coords;//Установка камеры
         }
 

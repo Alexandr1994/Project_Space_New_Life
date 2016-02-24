@@ -46,9 +46,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="offset">Смещение</param>
         public override void OffsetBackground(Vector2f offset)
         {
-            Vector2i textureOffset =  new Vector2i((int)offset.X, (int)offset.Y);
-            Vector2i textureSize = new Vector2i((int)(this.background.Image.Texture.Size.X), (int)(this.background.Image.Texture.Size.Y));
-            this.background.Image.TextureRect = new IntRect(textureOffset, textureSize);
+            this.background.Translate(offset);
         }
 
         /// <summary>

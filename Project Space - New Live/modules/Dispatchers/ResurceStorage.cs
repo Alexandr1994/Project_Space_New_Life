@@ -23,14 +23,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
         static public Texture ammoBar = new Texture("Resources/ammoBar.png");
         static public Texture noise = new Texture("Resources/Noize.gif");
         static private Texture backText = new Texture("Resources/testBackground.png"); //фон
-        static public Texture planetText = new Texture("Resources/testPlanetText.jpg"); //загруженная текстура планет 
+        static private Texture planetText = new Texture("Resources/testPlanetText.jpg"); //загруженная текстура планет 
         static private Texture starText = new Texture("Resources/testStarText.jpg"); //загруженная текстура звезды
         static private Texture shadowTexture = new Texture("Resources/shadow.png");//тень
         static private Texture crownText = new Texture("Resources/crown.png");//звездная корона
         static public Texture PanelText = new Texture("Resources/Panel.png");//звездная корона
         static public Texture shipExplosion = new Texture("Resources/SuperExp.png");//Взрыв корабля
         static public Texture shellHitting = new Texture("Resources/Hitting.png");//Взрыв снаряда
-        //static public Texture RockTexture = new Texture("Resources/rock.jpg");//текстура камня
+        static public Texture RockTexture = new Texture("Resources/land.png");//текстура камня
         static private int[] orbits = { 600, 1000, 1700 }; //орибиты планет 
 
         /// <summary>
