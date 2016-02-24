@@ -44,7 +44,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             /// </summary>
             Shield
         }
- 
+
         /// <summary>
         /// Отображение корабля
         /// </summary>
@@ -64,7 +64,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                     index++;
                 }
                 return retViews;
-            } 
+            }
         }
 
         /// <summary>
@@ -111,14 +111,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
         
         /// <summary>
-        /// Постоянное перемещение корабля
-        /// </summary>
-        protected override void Move()
-        {
-            this.MoveManager.Process(this); 
-        }
-
-        /// <summary>
         /// Постороение корабля
         /// </summary>
         /// <param name="mass">Масса</param>
@@ -133,7 +125,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.coords = coords;
             this.ViewPartSize = partSize;
             this.ConstructView(skin);
-            this.brains = PlayerController.GetInstanse(this);
+            this.brains = brains;
             this.maxHealth = this.health = maxHealth;
             this.Environment = startSystem;
 
@@ -176,28 +168,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Процесс жизни корабля
-        /// </summary>
-        /// <param name="homeCoords">Координаты начала отсчета</param>
-        public override void Process(Vector2f homeCoords)
-        {
-            if (this.Health < 1)//Если оставшийся запас прочности упал до 0
-            {
-                this.destroyed = true;//то установить флаг уничтожения корабля
-                return;
-            }
-            Shell shell;
-            this.brains.Process();//отработка управляющей системы
-            this.EnergyProcess();//отработка энергосистемы
-            if ((shell = this.objectWeaponSystem.Process(this)) != null)//если в ходе работы оружейной системы был получен снаряд
-            {
-                this.environment.AddNewShell(shell);//то отправить его в коллекцияю снарядов звездной системы
-                this.MoveManager.ShellShoot(this, shell.SpeedVector, shell.Mass);//отдача от выстрела
-            }
-            this.Move();//отработка системы движений
-        }
-
-        /// <summary>
         /// Сконструировать сигнатуру цели
         /// </summary>
         /// <returns>Сигнатура корабля</returns>
@@ -217,7 +187,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public override void AnalizeObjectInteraction()
         {
-            List<GameObject> interactiveObjects = this.ShipStarSystem.GetObjectsInSystem();//получить все объекты в звездной системе
+            List<GameObject> interactiveObjects = this.ShipStarSystem.GetObjectsInEnvironment();//получить все объекты в звездной системе
             foreach (GameObject interactObject in interactiveObjects)
             {
                 switch (interactObject.GetType().Name)
@@ -260,10 +230,11 @@ namespace Project_Space___New_Live.modules.GameObjects
                         Planet planet = interactObject as Planet;
                         foreach (ObjectView partShipView in this.View)
                         {
-                            if (partShipView.BorderContactAnalize(interactObject.View[0]))
+                            this.brains.NearPlanet = true;
+                            /*if (partShipView.BorderContactAnalize(interactObject.View[0]))
                             {
                                 this.Recovery(1);
-                            }
+                            }*/
                         }
                     };break;
                     case "Ship"://обработка контакта с кораблем
@@ -293,7 +264,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                     case "Shell"://обработка контакта со снарядом
                     {
                         Shell shell = interactObject as Shell;
-                        if (shell.ShooterShip == this)//если снаряд выпущен данным кораблем
+                        if (shell.ShooterObject == this)//если снаряд выпущен данным кораблем
                         {
                             continue;//то переходим к анализу сдежующего объекта
                         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
+using SFML.Graphics;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
@@ -18,6 +19,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         private double movingResistance;
 
+        /// <summary>
+        /// Сопротивление среды перемещению объектов в ней
+        /// </summary>
         public double MovingResistance
         {
             get { return this.movingResistance; }
@@ -25,12 +29,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Фон звездной системы
+        /// Фон среды
         /// </summary>
         protected ObjectView background;
 
         /// <summary>
-        /// Управление позицией фона звездной системы
+        /// Фон среды
         /// </summary>
         public ObjectView Background
         {
@@ -38,7 +42,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Коллекция кораблей, находящихся в данной звездной системе
+        /// Коллекция активных объектов, находящихся в данной звездной системе
         /// </summary>
         protected List<ActiveObject> myActiveObjectsCollection;
 
@@ -48,7 +52,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected List<Shell> myShellsCollection;
 
         /// <summary>
-        /// Коллекция взрывов (визуальных эффектов)
+        /// Коллекция визуальных эффектов
         /// </summary>
         protected List<VisualEffect> myEffectsCollection;
 
@@ -108,6 +112,93 @@ namespace Project_Space___New_Live.modules.GameObjects
         public void AddNewShell(Shell newShell)
         {
             this.myShellsCollection.Add(newShell);
+        }
+
+        /// <summary>
+        /// Получить уникальные объекты конкретной среды
+        /// </summary>
+        /// <returns>Коллекция уникальных объектов среды</returns>
+        protected abstract List<GameObject> GetCustomEnvironmentObjects();
+
+        /// <summary>
+        /// Получить коллекцию объектов находящихся в среде
+        /// </summary>
+        /// <returns>Коллекция объектов в звездной системе</returns>
+        public List<GameObject> GetObjectsInEnvironment()
+        {
+            List<GameObject> objectsCollection = this.GetCustomEnvironmentObjects();//получить коллекцию уникальных объектов
+            foreach (GameObject activeObject in this.myActiveObjectsCollection) //сформировать коллекцию активных объектов
+            {
+                objectsCollection.Add(activeObject);
+            }
+            foreach (GameObject shell in this.myShellsCollection) //сформировать коллекцию снарядов
+            {
+                objectsCollection.Add(shell);
+            }
+            return objectsCollection;//вернуть общую коллекцию
+        }
+
+        /// <summary>
+        /// Получить коллекцию объектов находящихся в среде, в области радиусом radius, около точки point
+        /// </summary>
+        /// <param name="point">Центр круговой области</param>
+        /// <param name="radius">Радиус круговой области</param>
+        /// <returns>Коллекция объектов звездной системы в указанной области</returns>
+        public List<GameObject> GetObjectsInEnvironment(Vector2f point, double radius)
+        {
+            List<GameObject> ret_value = new List<GameObject>();
+            foreach (GameObject candidat in this.GetObjectsInEnvironment())//получить все возвращаемые объекты
+            {
+                //Получить расстояние до кандидата в возвращаемые объекты
+                float distanse = (float)(Math.Sqrt(Math.Pow(candidat.Coords.X - point.X, 2) + Math.Pow(candidat.Coords.Y - point.Y, 2)));
+                if (distanse < radius) //если кандидат находится в указанной области
+                {
+                    ret_value.Add(candidat); //то добавить его в коллекцию возвращаемых объектов
+                }
+            }
+            return ret_value;
+        }
+
+        /// <summary>
+        /// Построить фон среды
+        /// </summary>
+        /// <param name="skin">Текстура фона</param>
+        protected abstract void InitBackgroung(Texture skin);
+
+        /// <summary>
+        /// Изменение позиции фона среды
+        /// </summary>
+        /// <param name="offset">Смещение</param>
+        public abstract void OffsetBackground(Vector2f offset);
+
+        /// <summary>
+        /// Получить отображения уникальных объектов среды
+        /// </summary>
+        /// <returns></returns>
+        protected abstract List<ObjectView> GetCustomViews();
+
+        /// <summary>
+        /// Вернуть коллекцию отображений объектов звездной системы
+        /// </summary>
+        /// <returns>Коллекция отображений объектов в звездной системе</returns>
+        public List<ObjectView> GetView()
+        {
+            List<ObjectView> environmentViews = new List<ObjectView>();
+            environmentViews.Add(this.background);
+            environmentViews.AddRange(this.GetCustomViews());
+            foreach (GameObject shell in this.myShellsCollection)
+            {
+                environmentViews.AddRange(shell.View);
+            }
+            foreach (ActiveObject activeObject in this.myActiveObjectsCollection)
+            {
+                environmentViews.AddRange(activeObject.View);
+            }
+            foreach (VisualEffect effect in this.myEffectsCollection)
+            {
+                environmentViews.Add(effect.View);
+            }
+            return environmentViews;
         }
 
     }

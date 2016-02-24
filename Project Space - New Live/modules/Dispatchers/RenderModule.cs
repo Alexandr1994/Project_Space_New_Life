@@ -58,7 +58,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Текущий стиль отображения окна
         /// </summary>
-        private Styles currentStyle = Styles.Fullscreen;
+        private Styles currentStyle = Styles.Titlebar;
 
         /// <summary>
         /// Заголовок окна
@@ -166,12 +166,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Метод отрисовки (игровых объектов и интерфейса)
         /// </summary>
-        /// <param name="activeStarSystem">Активная звездная система</param>
-        public void RenderProcess(StarSystem activeStarSystem)
+        /// <param name="activeEnvironment">Активная звездная система</param>
+        public void RenderProcess(BaseEnvironment activeEnvironment)
         {
             this.ViewControl();
             List<ObjectView> views = new List<ObjectView>();
-            views.AddRange(activeStarSystem.GetView());
+            views.AddRange(activeEnvironment.GetView());
             views.AddRange(this.Form.RenderForm());
             foreach (ObjectView view in views)
             {

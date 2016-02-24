@@ -226,7 +226,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// </summary>
         /// <param name="shooter">Стреляющий корабль</param>
         /// <returns>Новый снаряд или null, если оружие в аварийном состоянии или исчерпас боезапас</returns>
-        public Shell Shoot(Ship shooter)
+        public Shell Shoot(ActiveObject shooter)
         {
             if (!this.emergensyState && this.Ammo > 0)//если оружие в рабочем состоянии и его боезапас не исчерпан
             {//то произвести выстрел

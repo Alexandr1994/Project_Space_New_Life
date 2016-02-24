@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects.ShipModules;
 using SFML.System;
 
@@ -92,6 +93,36 @@ namespace Project_Space___New_Live.modules.GameObjects
         public MoveManager MoveManager
         {
             get { return this.moveManager; }
+        }
+
+        /// <summary>
+        /// Постоянное перемещение корабля
+        /// </summary>
+        protected override void Move()
+        {
+            this.MoveManager.Process(this);
+        }
+
+        /// <summary>
+        /// Процесс жизни корабля
+        /// </summary>
+        /// <param name="homeCoords">Координаты начала отсчета</param>
+        public override void Process(Vector2f homeCoords)
+        {
+            if (this.Health < 1)//Если оставшийся запас прочности упал до 0
+            {
+                this.destroyed = true;//то установить флаг уничтожения корабля
+                return;
+            }
+            Shell shell;
+            this.brains.Process();//отработка управляющей системы
+            this.EnergyProcess();//отработка энергосистемы
+            if ((shell = this.objectWeaponSystem.Process(this)) != null)//если в ходе работы оружейной системы был получен снаряд
+            {
+                this.environment.AddNewShell(shell);//то отправить его в коллекцияю снарядов звездной системы
+                this.MoveManager.ShellShoot(this, shell.SpeedVector, shell.Mass);//отдача от выстрела
+            }
+            this.Move();//отработка системы движений
         }
 
     }

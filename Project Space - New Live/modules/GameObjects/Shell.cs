@@ -28,16 +28,16 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
         
         /// <summary>
-        /// Корабль, выстреливший данный снаряд
+        /// Объект, выстреливший данный снаряд
         /// </summary>
-        private Ship shooterShip;
+        private ActiveObject shooterObject;
 
         /// <summary>
-        /// Корабль, выстреливший данный снаряд
+        /// Объект, выстреливший данный снаряд
         /// </summary>
-        public Ship ShooterShip
+        public ActiveObject ShooterObject
         {
-            get { return this.shooterShip; }
+            get { return this.shooterObject; }
         }
 
         /// <summary>
@@ -112,9 +112,9 @@ namespace Project_Space___New_Live.modules.GameObjects
             return null;
         }
 
-        public Shell(Ship shooter, float mass, Vector2f coords, Vector2f size, int shipDamage, int equipmentDamage, float speed, float angle, int lifeTime, Texture[] skin)
+        public Shell(ActiveObject shooter, float mass, Vector2f coords, Vector2f size, int shipDamage, int equipmentDamage, float speed, float angle, int lifeTime, Texture[] skin)
         {
-            this.shooterShip = shooter;
+            this.shooterObject = shooter;
             this.mass = mass;
             this.coords = coords;
             this.size = size;

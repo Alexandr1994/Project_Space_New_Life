@@ -13,7 +13,7 @@ using SFML.Window;
 namespace Project_Space___New_Live.modules.Controlers
 {
     /// <summary>
-    /// Игровой контроллер
+    /// Игровой контроллер непосредственного управления объектом 
     /// </summary>
     public class PlayerController : AbstractController
     {
@@ -28,17 +28,17 @@ namespace Project_Space___New_Live.modules.Controlers
         static private PlayerController GameController;
 
         /// <summary>
-        /// Ссылка на управляемый корабль
+        /// Ссылка на хранилище управляемых объектов
         /// </summary>
-        private Ship PlayerShip = null;
+        private PlayerContainer playerContainer = null;
 
         /// <summary>
         /// Конструктор
         /// </summary>
-        /// <param name="playerShip">Корабль игрока</param>
-        private PlayerController(Ship playerShip)
+        /// <param name="playerObject">Корабль игрока</param>
+        private PlayerController(PlayerContainer playerContainer)
         {
-            this.PlayerShip = playerShip;
+            this.playerContainer = playerContainer;
             this.GameRenderer = RenderModule.getInstance();//Получение класса отрисовщика
             this.GameRenderer.MainWindow.KeyPressed += this.OnKey;
             this.GameRenderer.MainWindow.KeyReleased += this.FromKey;
@@ -51,11 +51,11 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         /// <param name="playerShip">Корабль игрока</param>
         /// <returns>Ссылка на экземпляр игрового контроллера</returns>
-        public static PlayerController GetInstanse(Ship playerShip)
+        public static PlayerController GetInstanse(PlayerContainer playerContainer)
         {
             if (GameController == null)
             {
-                GameController = new PlayerController(playerShip);
+                GameController = new PlayerController(playerContainer);
             }
             return GameController;
         }
@@ -81,37 +81,45 @@ namespace Project_Space___New_Live.modules.Controlers
             switch (Args.Code)
             {//(Модификация в скором времени)
                 case Keyboard.Key.W:
-                    {
-                        this.Forward = true;
-                    }; break;
+                {
+                    this.Forward = true;
+                }; break;
                 case Keyboard.Key.S:
-                    {
-                        this.Reverse = true;
-                    }; break;
+                {
+                    this.Reverse = true;
+                }; break;
                 case Keyboard.Key.A :
-                    {
-                        this.LeftRotate = true;
-                    }; break;
+                {
+                    this.LeftRotate = true;
+                }; break;
                 case Keyboard.Key.D:
-                    {
-                        this.RightRotate = true;
-                    }; break;
+                {
+                    this.RightRotate = true;
+                }; break;
                 case Keyboard.Key.Z:
-                    {
-                        this.LeftFly = true;
-                    }; break;
+                {
+                    this.LeftFly = true;
+                }; break;
                 case Keyboard.Key.C:
-                    {
-                        this.RightFly = true;
-                    }; break;
+                {
+                    this.RightFly = true;
+                }; break;
                 case  Keyboard.Key.X:
-                    {
-                        this.StopMoving = true;
-                    }; break;
+                {
+                    this.StopMoving = true;
+                }; break;
                 case Keyboard.Key.LControl:
+                {
+                    this.ShieldProcess();
+                }; break;
+                case Keyboard.Key.Space:
+                {
+                    if (this.NearPlanet)
                     {
-                        this.ShieldProcess();
-                    }; break;
+                        this.playerContainer.OnPlanetLanding();
+                    }
+                }; break;
+                default: break;
             }
         }
 
@@ -125,33 +133,33 @@ namespace Project_Space___New_Live.modules.Controlers
             switch (Args.Code)
             {//(Модификация в скором времени)
                 case Keyboard.Key.W:
-                    {
-                        this.Forward = false;
-                    }; break;
+                {
+                    this.Forward = false;
+                }; break;
                 case Keyboard.Key.S:
-                    {
-                        this.Reverse = false;
-                    }; break;
+                {
+                    this.Reverse = false;
+                }; break;
                 case Keyboard.Key.A:
-                    {
-                        this.LeftRotate = false;
-                    }; break;
+                {
+                    this.LeftRotate = false;
+                }; break;
                 case Keyboard.Key.D:
-                    {
-                        this.RightRotate = false;
-                    }; break;
+                {
+                    this.RightRotate = false;
+                }; break;
                 case Keyboard.Key.Z:
-                    {
-                        this.LeftFly = false;
-                    }; break;
+                {
+                    this.LeftFly = false;
+                }; break;
                 case Keyboard.Key.C:
-                    {
-                        this.RightFly = false;
-                    }; break;
+                {
+                    this.RightFly = false;
+                }; break;
                 case Keyboard.Key.X:
-                    {
-                        this.StopMoving = false;
-                    }; break;
+                {
+                    this.StopMoving = false;
+                }; break;
                 default: break;
             }
         }
@@ -167,7 +175,7 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 case Mouse.Button.Left:
                 {
-                    this.PlayerShip.OpenFire();
+                    this.playerContainer.ActiveTransport.OpenFire();
                 }; break;
                 default: break;
             }
@@ -184,7 +192,7 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 case Mouse.Button.Left:
                 {
-                    this.PlayerShip.StopFire();
+                    this.playerContainer.ActiveTransport.StopFire();
                 }; break;
                 default: break;
             }
@@ -198,31 +206,31 @@ namespace Project_Space___New_Live.modules.Controlers
         {
             if (Forward)
             {
-                this.PlayerShip.MoveManager.GiveForwardThrust(this.PlayerShip);
+                this.playerContainer.ActiveTransport.MoveManager.GiveForwardThrust(this.playerContainer.ActiveTransport);
             }
             if (Reverse)
             {
-                this.PlayerShip.MoveManager.GiveReversThrust(this.PlayerShip);
+                this.playerContainer.ActiveTransport.MoveManager.GiveReversThrust(this.playerContainer.ActiveTransport);
             }
             if (LeftFly)
             {
-                this.PlayerShip.MoveManager.GiveSideThrust(this.PlayerShip, -1);
+                this.playerContainer.ActiveTransport.MoveManager.GiveSideThrust(this.playerContainer.ActiveTransport, -1);
             }
             if (RightFly)
             {
-                this.PlayerShip.MoveManager.GiveSideThrust(this.PlayerShip, 1);
+                this.playerContainer.ActiveTransport.MoveManager.GiveSideThrust(this.playerContainer.ActiveTransport, 1);
             }
             if (LeftRotate)
             {
-                this.PlayerShip.MoveManager.GiveRotationThrust(this.PlayerShip, -1);
+                this.playerContainer.ActiveTransport.MoveManager.GiveRotationThrust(this.playerContainer.ActiveTransport, -1);
             }
             if (RightRotate)
             {
-                this.PlayerShip.MoveManager.GiveRotationThrust(this.PlayerShip, 1);
+                this.playerContainer.ActiveTransport.MoveManager.GiveRotationThrust(this.playerContainer.ActiveTransport, 1);
             }
             if (StopMoving)
             {
-                this.PlayerShip.MoveManager.FullStop(this.PlayerShip);
+                this.playerContainer.ActiveTransport.MoveManager.FullStop(this.playerContainer.ActiveTransport);
             }           
         }
 
@@ -240,13 +248,13 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         private void ShieldProcess()
         {
-            if (this.PlayerShip.ShieldActive)//Если энергощит активен
+            if (this.playerContainer.ActiveTransport.ShieldActive)//Если энергощит активен
             {
-                this.PlayerShip.DeactivateShield();//деактивировать его
+                this.playerContainer.ActiveTransport.DeactivateShield();//деактивировать его
             }
             else
             {
-                this.PlayerShip.ActivateShield();//иначе активировать
+                this.playerContainer.ActiveTransport.ActivateShield();//иначе активировать
             }
         }
     }

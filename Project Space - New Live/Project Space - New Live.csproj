@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="modules\Controlers\AbstractController.cs" />
+    <Compile Include="modules\Controlers\ComputerController.cs" />
     <Compile Include="modules\Controlers\Forms\LinearBar.cs" />
     <Compile Include="modules\Controlers\Forms\Button.cs" />
     <Compile Include="modules\Controlers\Forms\CircleButton.cs" />
@@ -109,6 +110,8 @@
     <Compile Include="modules\Dispatchers\ResurceStorage.cs" />
     <Compile Include="modules\GameObjects\ActiveObject.cs" />
     <Compile Include="modules\GameObjects\BaseEnvironment.cs" />
+    <Compile Include="modules\GameObjects\BattleField.cs" />
+    <Compile Include="modules\GameObjects\Tank.cs" />
     <Compile Include="modules\GameObjects\Transport.cs" />
     <Compile Include="modules\GameObjects\VisualEffect.cs" />
     <Compile Include="modules\GameObjects\GameEntity.cs" />

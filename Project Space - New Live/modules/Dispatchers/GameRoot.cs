@@ -93,30 +93,63 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.ShipsCollection.Add(new Ship(900, new Vector2f(-450, -400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
             this.ShipsCollection.Add(new Ship(800, new Vector2f(450, -400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
             this.ShipsCollection.Add(new Ship(500, new Vector2f(450, 450), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
+            foreach (ActiveObject ship in this.ShipsCollection)
+            {
+                ship.SetBrains(new ComputerController());
+            }
         }
-        
 
+        /// <summary>
+        /// Процесс игры в космосе
+        /// </summary>
+        private void SpaceGameProcess()
+        {
+            foreach (StarSystem currentSystem in this.SystemCollection) //Отработка игрового мира
+            {
+                currentSystem.RefreshActiveObjectsCollection(this.ShipsCollection as List<ActiveObject>);
+                currentSystem.Process();
+            }
+            for (int i = 0; i < this.ShipsCollection.Count; i ++) //отчистка уничтоженных кораблей
+            {
+                if (this.ShipsCollection[i].Destroyed) //Если найден корабль перешедший в уничтоженное состояние
+                {
+                    this.ShipsCollection.Remove(this.ShipsCollection[i]);
+                    //то удаление его из общей коллекции кораблей
+                    i --;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Процесс игры на танковом поле боя
+        /// </summary>
+        private void BattleFieldGameProcess()
+        {
+            this.playerContainer.PlayerTank.TankBattleField.Process();
+        }
+
+        /// <summary>
+        /// Главная функция корня игры
+        /// </summary>
         public void Main()
         {
             while (this.GraphicInterfaceContainer.GameContinue)
             {
                 Thread.Sleep(sleepTime);
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
-                foreach (StarSystem currentSystem in this.SystemCollection)//Отработка игрового мира
+                switch (this.playerContainer.CurrentMode)//в зависимости от текущего игрового режима
                 {
-                    currentSystem.RefreshActiveObjectsCollection(this.ShipsCollection as List<ActiveObject>);
-                    currentSystem.Process();
-                }
-                for (int i = 0; i < this.ShipsCollection.Count; i ++)//отчистка уничтоженных кораблей
-                {
-                    if (this.ShipsCollection[i].Destroyed)//Если найден корабль перешедший в уничтоженное состояние
+                    case PlayerContainer.Mode.SpaceMode://выполнить итерационный процесс игры в космосе
                     {
-                        this.ShipsCollection.Remove(this.ShipsCollection[i]);//то удаление его из общей коллекции кораблей
-                        i --;
-                    }
+                        this.SpaceGameProcess();
+                    }; break;
+                    case PlayerContainer.Mode.TankMode://выполнить итерационный процесс игры на танковом поле боя
+                    {
+                        this.BattleFieldGameProcess();
+                    }; break;
                 }
                 this.GraphicInterfaceContainer.Process();
-                this.GraphicModule.RenderProcess(this.playerContainer.ActiveSystem);
+                this.GraphicModule.RenderProcess(this.playerContainer.ActiveEnvironment);
                 GraphicModule.MainWindow.DispatchEvents();
                 GraphicModule.MainWindow.Display();
             }

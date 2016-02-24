@@ -24,6 +24,19 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected AbstractController brains;
 
         /// <summary>
+        /// Умтановка контроллера объекта
+        /// </summary>
+        /// <param name="newBrains">Контроллер</param>
+        public void SetBrains(AbstractController newBrains)
+        {
+            if (this.brains == null)
+            {
+                this.brains = newBrains;
+            }
+        }
+
+
+        /// <summary>
         /// Экземпляр среды, в которой находится данный объект
         /// </summary>
         protected BaseEnvironment environment;
@@ -298,7 +311,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                 }
             }
         }
-
+        
         /// <summary>
         /// Анализирование взаимодействия данного объекта с другими объектами в среде
         /// </summary>
