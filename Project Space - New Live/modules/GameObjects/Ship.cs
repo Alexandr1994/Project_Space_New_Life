@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Controlers;
 using Project_Space___New_Live.modules.Dispatchers;
-using Project_Space___New_Live.modules.GameObjects.ShipModules;
+using Project_Space___New_Live.modules.GameObjects;
 using SFML.Graphics;
 using SFML.System;
 
@@ -17,7 +17,6 @@ namespace Project_Space___New_Live.modules.GameObjects
     /// </summary>
     public class Ship : Transport
     {
-
         /// <summary>
         /// Индексы частей корабля
         /// </summary>
@@ -43,6 +42,21 @@ namespace Project_Space___New_Live.modules.GameObjects
             /// Энергощит
             /// </summary>
             Shield
+        }
+
+        //ФЛАГИ КОРАБЛЯ
+
+        /// <summary>
+        /// Флаг нахождения радом с планетой
+        /// </summary>
+        private bool nearPlanet = false;
+
+        /// <summary>
+        /// Флаг нахождения радом с планетой
+        /// </summary>
+        public bool NearPlanet
+        {
+            get { return this.nearPlanet; }
         }
 
         /// <summary>
@@ -85,27 +99,23 @@ namespace Project_Space___New_Live.modules.GameObjects
             switch (damagedPartIndex)//в зависимости от части, которой было нанесено повреждение нанести урон оборудованию 
             {
                 case (int)Parts.FrontPart://Носовая часть
-                    {
-                        this.objectBattery.Wearing(equipmentDamage);//Износ энергобатареи
-                        this.objectRadar.Wearing(equipmentDamage);//Износ радара
-                    }
-                    ; break;
+                {
+                    this.WearingCustomEquipment(this.objectBattery, equipmentDamage);//Износ энергобатареи
+                    this.WearingCustomEquipment(this.objectRadar, equipmentDamage);//Износ радара
+                }; break;
                 case (int)Parts.FeedPart://Кормовая часть
-                    {
-                        this.objectReactor.Wearing(equipmentDamage);//Износ реактора
-                        this.transportEngine.Wearing(equipmentDamage);//Износ двигателя
-                    }
-                    ; break;
+                {
+                    this.WearingCustomEquipment(this.objectReactor, equipmentDamage);//Износ реактора
+                    this.WearingCustomEquipment(this.transportEngine, equipmentDamage);//Износ двигателя
+                }; break;
                 case (int)Parts.LeftWing://Левое крыло
-                    {
-                        this.transportEngine.Wearing(equipmentDamage);//Износ двигателя
-                    }
-                    ; break;
+                {
+                    this.WearingCustomEquipment(this.transportEngine, equipmentDamage);//Износ двигателя
+                }; break;
                 case (int)(Parts.RightWing)://Правое крыло
-                    {
-                        this.transportEngine.Wearing(equipmentDamage);//Износ двигателя
-                    }
-                    ; break;
+                {
+                    this.WearingCustomEquipment(this.transportEngine, equipmentDamage);//Износ двигателя
+                }; break;
                 default: break;
             }
         }
@@ -125,7 +135,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.coords = coords;
             this.ViewPartSize = partSize;
             this.ConstructView(skin);
-            this.brains = brains;
             this.maxHealth = this.health = maxHealth;
             this.Environment = startSystem;
 
@@ -135,10 +144,8 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.objectRadar  = new Radar(20, 2500, null);//радар
             this.objectShield = new Shield(20, 3, 100, 0, 1, null);//энергощит 
             this.objectWeaponSystem = new WeaponSystem(3);
-            //this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0]}, null));
+            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0]}, null));
             this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(1*Math.PI/180), 100, 50, 5000, 25, 1, new Vector2f(25, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[2]}, null));
-            
-            // this.shipEquipment.Add(null);//энергощит 
         }
 
         /// <summary>
@@ -175,8 +182,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             ObjectSignature signature = new ObjectSignature();
             signature.AddCharacteristics(this.mass);
-
-
             Vector2f sizes = new Vector2f(this.ViewPartSize.X * 3, this.ViewPartSize.Y * 2);
             signature.AddCharacteristics(sizes);
             return signature;
@@ -187,6 +192,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public override void AnalizeObjectInteraction()
         {
+            this.nearPlanet = false;
             List<GameObject> interactiveObjects = this.ShipStarSystem.GetObjectsInEnvironment();//получить все объекты в звездной системе
             foreach (GameObject interactObject in interactiveObjects)
             {
@@ -230,11 +236,10 @@ namespace Project_Space___New_Live.modules.GameObjects
                         Planet planet = interactObject as Planet;
                         foreach (ObjectView partShipView in this.View)
                         {
-                            this.brains.NearPlanet = true;
-                            /*if (partShipView.BorderContactAnalize(interactObject.View[0]))
+                            if (partShipView.BorderContactAnalize(interactObject.View[0]))
                             {
-                                this.Recovery(1);
-                            }*/
+                                this.nearPlanet = true;
+                            }
                         }
                     };break;
                     case "Ship"://обработка контакта с кораблем
@@ -246,7 +251,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                         }
                         for (int i = 0; i < this.View.Length; i ++)//проанализировать возможность столкновения каждой части данного корабля
                         {
-                            for (int j = 0; j < ship.View.Length; j++)//с каждой частью проверяемого корабля
+                            for (int j = 0; j < ship.View.Length; j ++)//с каждой частью проверяемого корабля
                             {
                                  if (this.View[i].BorderContactAnalize(ship.View[j]))//и в случае пересечения отображений
                                 {
@@ -272,10 +277,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                         {
                             if (this.View[i].BorderContactAnalize(shell.View[(int)(Shell.ShellParts.Core)]))//если произошло пересечение отображений корабля и снаряда
                             {
-                                this.GetDamage(shell.ShipDamage, shell.EquipmentDamage, i);//то нанести кораблю урон
-                                float deltaX = this.Coords.X - shell.Coords.X;//обработать столкновение
-                                float deltaY = this.Coords.Y - shell.Coords.Y;
-                                float contactAngle = (float)(Math.Atan2(deltaY, deltaX));
+                                this.GetDamage(shell.ObjectDamage, shell.EquipmentDamage, i);//то нанести кораблю урон
                                 this.MoveManager.ShellHit(this, shell.SpeedVector, shell.Mass);//инерция от попадания
                                 shell.HitToTarget();//и установить флаг окончания жизни снаряда
                                 break;

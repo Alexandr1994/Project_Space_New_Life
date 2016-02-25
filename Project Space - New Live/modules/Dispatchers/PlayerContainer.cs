@@ -8,7 +8,6 @@ using Project_Space___New_Live.modules.Controlers;
 using Project_Space___New_Live.modules.Controlers.Forms;
 using Project_Space___New_Live.modules.Controlers.InterfaceParts;
 using Project_Space___New_Live.modules.GameObjects;
-using Project_Space___New_Live.modules.GameObjects.ShipModules;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.Dispatchers

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
 using SFML.System;
 
-namespace Project_Space___New_Live.modules.GameObjects.ShipModules
+namespace Project_Space___New_Live.modules.GameObjects
 {
     /// <summary>
     /// Модуль движений объекта

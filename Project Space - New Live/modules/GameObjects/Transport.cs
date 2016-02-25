@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
-using Project_Space___New_Live.modules.GameObjects.ShipModules;
+using Project_Space___New_Live.modules.GameObjects;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects

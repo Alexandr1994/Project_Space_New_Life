@@ -49,7 +49,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <returns>Сигнатура объекта</returns>
         public ObjectSignature GetSignature()
         {
-            return ConstructSignature();//сконструировать сигнатуру объекта
+            return this.ConstructSignature();//сконструировать сигнатуру объекта
         }
 
         /// <summary>

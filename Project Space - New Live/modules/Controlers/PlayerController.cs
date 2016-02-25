@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
-using Project_Space___New_Live.modules.GameObjects.ShipModules;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -62,7 +61,7 @@ namespace Project_Space___New_Live.modules.Controlers
             return GameController;
         }
 
-        //Флаги управления
+        //Общие флаги управления
 
         //Управление движением
         private bool Forward = false;
@@ -116,7 +115,7 @@ namespace Project_Space___New_Live.modules.Controlers
                 }; break;
                 case Keyboard.Key.Space:
                 {
-                    if (this.NearPlanet)
+                    if (this.playerContainer.PlayerShip.NearPlanet)
                     {
                         this.playerContainer.OnPlanetLanding();
                     }
@@ -260,8 +259,8 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         public override void Process()
         {
-            this.RefreshFlags();
             this.Moving();
+            this.RefreshFlags();
         }
 
         /// <summary>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Project_Space___New_Live.modules.GameObjects.ShipModules;
+using Project_Space___New_Live.modules.GameObjects;
 using SFML.Graphics;
 using SFML.System;
 using Project_Space___New_Live.modules.Dispatchers;
@@ -54,16 +54,16 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Урон, наносимый данным снарядом кораблю
+        /// Урон, наносимый данным снарядом объекту
         /// </summary>
-        private int shipDamage;
+        private int objectDamage;
 
         /// <summary>
-        /// Урон, наносимый, данным снарядом кораблю
+        /// Урон, наносимый, данным снарядом объекту
         /// </summary>
-        public int ShipDamage
+        public int ObjectDamage
         {
-            get { return this.shipDamage; }
+            get { return this.objectDamage; }
         }
 
         /// <summary>
@@ -112,13 +112,26 @@ namespace Project_Space___New_Live.modules.GameObjects
             return null;
         }
 
-        public Shell(ActiveObject shooter, float mass, Vector2f coords, Vector2f size, int shipDamage, int equipmentDamage, float speed, float angle, int lifeTime, Texture[] skin)
+        /// <summary>
+        /// Конструктор снаряда
+        /// </summary>
+        /// <param name="shooter">Объект-стрелок</param>
+        /// <param name="mass">Масса снаряда</param>
+        /// <param name="coords">Начальные координаты</param>
+        /// <param name="size">Размеры</param>
+        /// <param name="objectDamage">Урон наносимый объекту</param>
+        /// <param name="equipmentDamage">Урон наносимый оборудоваию</param>
+        /// <param name="speed">Скорость</param>
+        /// <param name="angle">Угол поворота вектора направления</param>
+        /// <param name="lifeTime">Время жизни</param>
+        /// <param name="skin">Массив текстур</param>
+        public Shell(ActiveObject shooter, float mass, Vector2f coords, Vector2f size, int objectDamage, int equipmentDamage, float speed, float angle, int lifeTime, Texture[] skin)
         {
             this.shooterObject = shooter;
             this.mass = mass;
             this.coords = coords;
             this.size = size;
-            this.shipDamage = shipDamage;
+            this.objectDamage = objectDamage;
             this.equipmentDamage = equipmentDamage;
             this.speedVector = new SpeedVector(speed, angle);
             this.lifeTime = lifeTime;

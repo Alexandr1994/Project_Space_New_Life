@@ -14,8 +14,10 @@ namespace Project_Space___New_Live.modules.GameObjects
     /// </summary>
     public class BattleField : BaseEnvironment
     {
-
-
+        /// <summary>
+        /// Конструктор поля боя
+        /// </summary>
+        /// <param name="background">Текстура фона</param>
         public BattleField(Texture background)
         {
             this.MovingResistance = 0.5;
@@ -26,7 +28,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Фон поля боя
+        /// Построить фон поля боя
         /// </summary>
         /// <param name="skin">Текстура фона</param>
         protected override void InitBackgroung(Texture skin)
@@ -35,7 +37,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.background.Image.Position = new Vector2f(0, 0);
             this.background.Image.Texture = skin;
             this.background.Image.Texture.Repeated = true;
-            //this.background.Image.Texture.Smooth = true;
+            this.background.Image.Texture.Smooth = true;
             Vector2i textureSize = new Vector2i((int)(this.background.Image.Texture.Size.X), (int)(this.background.Image.Texture.Size.Y));
             this.background.Image.TextureRect = new IntRect(new Vector2i(0, 0), textureSize);
         }

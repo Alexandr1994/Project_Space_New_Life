@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Controlers;
 using Project_Space___New_Live.modules.Dispatchers;
-using Project_Space___New_Live.modules.GameObjects.ShipModules;
+using Project_Space___New_Live.modules.GameObjects;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
@@ -35,12 +35,14 @@ namespace Project_Space___New_Live.modules.GameObjects
             }
         }
 
-
         /// <summary>
         /// Экземпляр среды, в которой находится данный объект
         /// </summary>
         protected BaseEnvironment environment;
 
+        /// <summary>
+        /// Экземпляр среды, в которой находится данный объект
+        /// </summary>
         public BaseEnvironment Environment
         {
             get { return this.environment; }
@@ -105,6 +107,9 @@ namespace Project_Space___New_Live.modules.GameObjects
             get { return this.rotation; }
         }
 
+        /// <summary>
+        /// Угол атаки активного объекта
+        /// </summary>
         public virtual float AttackAngle
         {
             get { return this.rotation; }
@@ -128,9 +133,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Изменение поворота активного объекта
+        /// Изменение угла поворота активного объекта
         /// </summary>
-        /// <param name="angle">Угол на который происходит изменение</param>
+        /// <param name="angle">Угол на который происходит изменение в рад.</param>
         public virtual void ChangeRotation(float angle)
         {
             this.rotation += angle;//изменение текущего поворота корабля
@@ -207,7 +212,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public void DeactivateShield()
         {
-           this.objectShield.Deactivate();
+            this.objectShield.Deactivate();
         }
 
         //БОЕВАЯ СИСТЕМА
@@ -275,6 +280,19 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected abstract void WearingEquipment(int equipmentDamage, int damagedPartIndex);
 
         /// <summary>
+        /// Нанести урон конкретному оборудованию
+        /// </summary>
+        /// <param name="equipment">Оборудование</param>
+        /// <param name="damage">Величина урона</param>
+        protected void WearingCustomEquipment(Equipment equipment, int damage)
+        {
+            if (equipment != null)
+            {
+                equipment.Wearing(damage);
+            }
+        }
+
+        /// <summary>
         /// Восстановление активного объекта
         /// </summary>
         /// <param name="recovery">Величина восстановления</param>
@@ -292,7 +310,6 @@ namespace Project_Space___New_Live.modules.GameObjects
                 }
             }
         }
-
 
         /// <summary>
         /// Управление энергией активного объекта

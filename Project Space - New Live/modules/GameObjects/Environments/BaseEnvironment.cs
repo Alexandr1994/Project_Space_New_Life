@@ -62,32 +62,33 @@ namespace Project_Space___New_Live.modules.GameObjects
         public void Process()
         {
             this.CustomProcess();
-            foreach (ActiveObject activeObject in this.myActiveObjectsCollection)//работа кораблей находящихся в данной звездной системе
+            for(int i = 0; i < this.myActiveObjectsCollection.Count; i ++)//работа активных объектоа находящихся в данной звездной системе
             {
-                activeObject.Process(new Vector2f(0, 0));
-                activeObject.AnalizeObjectInteraction();
-                if (activeObject.Destroyed)
+                this.myActiveObjectsCollection[i].Process(new Vector2f(0, 0));
+                this.myActiveObjectsCollection[i].AnalizeObjectInteraction();
+                if (this.myActiveObjectsCollection[i].Destroyed)//если установлен флаг уничтожения активногог объекта
                 {
-                    this.myEffectsCollection.Add(new VisualEffect(activeObject.Coords, new Vector2f(144, 144), 52, ResurceStorage.shipExplosion));
+                    this.myEffectsCollection.Add(new VisualEffect(this.myActiveObjectsCollection[i].Coords, new Vector2f(144, 144), 52, ResurceStorage.shipExplosion));
+                    this.myActiveObjectsCollection.Remove(this.myActiveObjectsCollection[i]);//удалить его из коллекции
                 }
             }
-            for (int i = 0; i < this.myShellsCollection.Count; i++)//работа со снарядами в данной звездной системе
+            for (int i = 0; i < this.myShellsCollection.Count; i ++)//работа со снарядами в данной звездной системе
             {
                 this.myShellsCollection[i].Process(new Vector2f(0, 0));
                 if (this.myShellsCollection[i].LifeOver)//если время жизни снаряда вышло
                 {
                     this.myEffectsCollection.Add(new VisualEffect(this.myShellsCollection[i].Coords, new Vector2f(32, 32), 19, ResurceStorage.shellHitting));
                     this.myShellsCollection.Remove(this.myShellsCollection[i]);//удалить его из коллекции
-                    i--;
+                    i --;
                 }
             }
-            for (int i = 0; i < this.myEffectsCollection.Count; i++)//работа с визуальными эффектами
+            for (int i = 0; i < this.myEffectsCollection.Count; i ++)//работа с визуальными эффектами
             {
                 this.myEffectsCollection[i].Process();
                 if (this.myEffectsCollection[i].LifeOver)//если время жизни визуального эффекта вышло
                 {
                     this.myEffectsCollection.Remove(this.myEffectsCollection[i]);//удалить его из коллекции
-                    i--;
+                    i --;
                 }
             }
         }

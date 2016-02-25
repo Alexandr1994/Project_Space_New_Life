@@ -66,8 +66,8 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Создание локального центра масс, управляющего другими локальными центрами масс
         /// </summary>
         /// <param name="orbit">Расстояние от центра звездной системы</param>
-        /// <param name="startOrbitalAngle">//Начальный орбитальный угол</param>
-        /// <param name="orbitalSpeed">Орбитальная угловая скорость</param>
+        /// <param name="startOrbitalAngle">Начальный орбитальный угол в рад.</param>
+        /// <param name="orbitalSpeed">Орбитальная угловая скорость в рад. / ед. вр.</param>
         /// <param name="locMasCenters">Центры масс, управляемые данным</param>
         public LocalMassCenter(int orbit, double startOrbitalAngle, double orbitalSpeed, LocalMassCenter[] locMasCenters)
         {
@@ -83,7 +83,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         protected override void Move()
         {
-            orbitalAngle += orbitalSpeed;//Изменение орбитального угла планеты
+            this.orbitalAngle += orbitalSpeed;//Изменение орбитального угла планеты
             this.coords.X = (float)((orbit * Math.Cos(orbitalAngle)));//вычисление новой кординаты X
             this.coords.Y = (float)((orbit * Math.Sin(orbitalAngle)));//вычисление новой координаты У
         }
@@ -109,9 +109,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="homeCoords">Координаты управляющей сущности</param>
         public override void Process(Vector2f homeCoords)
         {
-            ProcessCompanent(massCenters);//управление подчиненными центрами масс
-            ProcessCompanent(stars);//управление подчиненными звездами
-            ProcessCompanent(planets);//управление подчиненными планетами
+            this.ProcessCompanent(massCenters);//управление подчиненными центрами масс
+            this.ProcessCompanent(stars);//управление подчиненными звездами
+            this.ProcessCompanent(planets);//управление подчиненными планетами
             this.Move();//вычислить идеальные координтаы
             this.CorrectObjectPoint(homeCoords);//выполнить коррекцию относительно глобальных координт
         }
@@ -119,7 +119,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Получить массив отображений компанента данного центра масс
         /// </summary>
-        /// <param name="companetn"></param>
+        /// <param name="companetn">Компанент, чьи отображения нужно получить</param>
         /// <returns>Коллекция отображений</returns>
         private List<ObjectView> GetCompanentViews(GameObject[] companetn)
         {
@@ -145,11 +145,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         public List<ObjectView> GetView()
         {
             List<ObjectView> retViews = new List<ObjectView>();//массив возвращаемых отображений
-            if (massCenters != null)//если центр масс имеет подчиненными центры масс, извлечь из них отображения звезд
+            if (this.massCenters != null)//если центр масс имеет подчиненными центры масс, извлечь из них отображения звезд
             {
-                for (int i = 0; i < massCenters.Length; i ++)
+                for (int i = 0; i < this.massCenters.Length; i++)
                 {//получить все отображения звезд в подчиненном центре масс
-                    foreach (ObjectView singleView in massCenters[i].GetView())
+                    foreach (ObjectView singleView in this.massCenters[i].GetView())
                     {//перевести полученные отображения в возвращаемый массив
                         retViews.Add(singleView);
                     }

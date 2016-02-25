@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
-using Project_Space___New_Live.modules.GameObjects.ShipModules;
+using Project_Space___New_Live.modules.GameObjects;
 using SFML.Graphics;
 using SFML.System;
 
@@ -68,6 +68,9 @@ namespace Project_Space___New_Live.modules.GameObjects
             }
         }
 
+        /// <summary>
+        /// Поле боя, на котором находится танк
+        /// </summary>
         public BattleField TankBattleField
         {
             get { return this.environment as BattleField; }
@@ -86,11 +89,18 @@ namespace Project_Space___New_Live.modules.GameObjects
             get { return turretRotation; }
         }
 
+        /// <summary>
+        /// Угол атаки
+        /// </summary>
         public override float AttackAngle
         {
             get {return (float)(this.turretRotation + 2 * Math.PI);}
         }
 
+        /// <summary>
+        /// Изменение угла поворота танка
+        /// </summary>
+        /// <param name="angle">Угол на который происходит изменение в рад.</param>
         public override void ChangeRotation(float angle)
         {
             this.rotation += angle;//изменение текущего поворота корабля
@@ -106,6 +116,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             }
         }
 
+        /// <summary>
+        /// Изменение угла поворота башни танка
+        /// </summary>
+        /// <param name="angle">Новый угол поворота</param>
         public void RotateTurret(float angle)
         {
             if (angle > Math.PI)//если угол поворота вектора больше чем 360 градусов
@@ -120,13 +134,20 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.turretRotation = angle;
         }
 
+        /// <summary>
+        /// Конструктор танка
+        /// </summary>
+        /// <param name="mass">Масса</param>
+        /// <param name="coords">Начальные координаты</param>
+        /// <param name="maxHealth">Максимальный запас прочности</param>
+        /// <param name="skin">Набор текстур</param>
+        /// <param name="partSize">Размер основных частей отображения</param>
         public Tank(float mass, Vector2f coords, int maxHealth, Texture[] skin, Vector2f partSize)
         {
             this.mass = mass;
             this.coords = coords;
             this.ViewPartSize = partSize;
             this.ConstructView(skin);
-            this.brains = brains;
             this.maxHealth = this.health = maxHealth;
             this.transportEngine = new Engine(100, 1, 100, 100, 10, 8, null);//двигатель
             this.objectReactor = new Reactor(100, 5, null);//реактор
@@ -136,8 +157,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.objectWeaponSystem = new WeaponSystem(3);
             //this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0]}, null));
             this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(5*Math.PI/180), 100, 2000, 5000, 25, 1, new Vector2f(15, 2), new Texture[]{ResurceStorage.rectangleButtonTextures[3]}, null));
-            
-            // this.shipEquipment.Add(null);//энергощит 
         }
 
         /// <summary>
@@ -167,6 +186,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.view[(int)Parts.Turret].Image.Position = this.Coords + new Vector2f(-this.ViewPartSize.X / 2, -this.ViewPartSize.Y * 2 / 3);//Башня;
         }
 
+        /// <summary>
+        /// Вернуть сигнатуру танка
+        /// </summary>
+        /// <returns>Сигнатура танка</returns>
         protected override ObjectSignature ConstructSignature()
         {
             ObjectSignature signature = new ObjectSignature();
