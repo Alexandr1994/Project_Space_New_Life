@@ -13,10 +13,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
     /// </summary>
     static class ResurceStorage
     {
-        static public Texture[] shipTextures = new Texture[5];
+        static public Font font = new Font("Resources/times.ttf");
+        static public Texture[] shipTextures = new Texture[6];
         static public Texture[] circuleButtonTextures = new Texture[4];
         static public Texture[] rectangleButtonTextures = new Texture[4];
-        static public Texture[] TankTextures = new Texture[6];
+        static public Texture[] TankTextures = new Texture[7];
         static public Texture energyBar = new Texture("Resources/energyBar.png");
         static public Texture healthBar = new Texture("Resources/healthBar.png");
         static public Texture protectBar = new Texture("Resources/protectBar.png");
@@ -43,12 +44,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
             shipTextures[2] = new Texture("Resources/textPlayer2.png");
             shipTextures[3] = new Texture("Resources/textPlayer1.png");
             shipTextures[4] = new Texture("Resources/Shield.png");
+            shipTextures[5] = new Texture("Resources/SuperExp.png");
             TankTextures[0] = new Texture("Resources/tank0.png");
             TankTextures[1] = new Texture("Resources/tank1.png");
             TankTextures[2] = new Texture("Resources/tank2.png");
             TankTextures[3] = new Texture("Resources/tank3.png");
             TankTextures[4] = new Texture("Resources/tank4.png");
             TankTextures[5] = new Texture("Resources/Shield.png");
+            TankTextures[6] = new Texture("Resources/SuperExp.png");
             circuleButtonTextures[0] = new Texture("Resources/Norm.png");
             circuleButtonTextures[1] = new Texture("Resources/Act.png");
             circuleButtonTextures[2] = new Texture("Resources/Click.png");

@@ -26,7 +26,23 @@ namespace Project_Space___New_Live.modules.GameObjects
             /// </summary>
             Core = 0
         }
-        
+
+        /// <summary>
+        /// Текстурная лента визуального эффекта подрыва снаряда
+        /// </summary>
+        private Texture visualEffectSkin;
+
+        /// <summary>
+        /// Сконструировать визуальный эффект подрыва снаряда
+        /// </summary>
+        /// <param name="effectSize">Размер кадра</param>
+        /// <param name="effectTapeLenght">Количество кадров</param>
+        /// <returns>Визуальный эффект подрыва снаряда</returns>
+        public virtual VisualEffect ConstructDeathVisualEffect(Vector2f effectSize, int effectTapeLenght)
+        {
+            return new VisualEffect(this.Coords, effectSize, effectTapeLenght, visualEffectSkin);
+        }
+
         /// <summary>
         /// Объект, выстреливший данный снаряд
         /// </summary>
@@ -151,6 +167,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.View[(int) ShellParts.Core].Image.Position = this.Coords - new Vector2f(this.size.X, this.size.Y);
             this.view[(int) ShellParts.Core].Image.Texture = skin[0];
             this.view[(int) ShellParts.Core].Rotate(this.Coords, this.SpeedVector.Angle);
+            this.visualEffectSkin = skin[skin.Length - 1];
         }
 
         /// <summary>

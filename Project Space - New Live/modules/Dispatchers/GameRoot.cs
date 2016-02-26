@@ -68,7 +68,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public GameRoot()
         {
             this.GraphicModule = RenderModule.getInstance();//Полученить указатель на модуль отрисовки
-           // this.GraphicInterface = this.GraphicModule.Form;//Получить указатель на главную форму
             this.ConstructWorld();//Сконструировать игровой мир
             this.playerContainer = PlayerContainer.GetInstanse(this.SystemCollection);//Инициализация игрока            
             this.GraphicInterfaceContainer = new PlayerInterfaceContainer(this.GraphicModule.Form, this.playerContainer);//Сконструировать контейнер игрового интерфейса
@@ -95,7 +94,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.ShipsCollection.Add(new Ship(500, new Vector2f(450, 450), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
             foreach (ActiveObject ship in this.ShipsCollection)
             {
-                ship.SetBrains(new ComputerController());
+                ship.SetBrains(new ComputerController(ship as Transport));
             }
         }
 

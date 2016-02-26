@@ -14,12 +14,17 @@ namespace Project_Space___New_Live.modules.GameObjects
     /// </summary>
     public class BattleField : BaseEnvironment
     {
+
+        List<Wall> myWallsCollection; 
+
         /// <summary>
         /// Конструктор поля боя
         /// </summary>
         /// <param name="background">Текстура фона</param>
-        public BattleField(Texture background)
+        public BattleField(List<Wall> walls, Texture background)
         {
+            this.myWallsCollection = new List<Wall>();
+            this.myWallsCollection.AddRange(walls);
             this.MovingResistance = 0.5;
             this.InitBackgroung(background);
             this.myActiveObjectsCollection = new List<ActiveObject>();
@@ -33,11 +38,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin">Текстура фона</param>
         protected override void InitBackgroung(Texture skin)
         {
-            this.background = new ObjectView(new RectangleShape(new Vector2f(2000, 2000)), BlendMode.Add);
-            this.background.Image.Position = new Vector2f(0, 0);
+            this.background = new ObjectView(new RectangleShape(new Vector2f(10000, 10000)), BlendMode.Add);
+            this.background.Image.Position = new Vector2f(-5000, -5000);
             this.background.Image.Texture = skin;
             this.background.Image.Texture.Repeated = true;
             this.background.Image.Texture.Smooth = true;
+            this.background.Image.TextureRect = new IntRect(0, 0, 100, 10);
             Vector2i textureSize = new Vector2i((int)(this.background.Image.Texture.Size.X), (int)(this.background.Image.Texture.Size.Y));
             this.background.Image.TextureRect = new IntRect(new Vector2i(0, 0), textureSize);
         }
@@ -48,8 +54,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="offset">Смещение</param>
         public override void OffsetBackground(Vector2f currentCoords, Vector2f lastCoords)
         {
-            this.background.Translate((currentCoords - lastCoords));
-            this.background.Image.TextureRect = new IntRect((int)currentCoords.X, (int)currentCoords.Y, 10000, 10000);
+            ;
         }
 
         /// <summary>
@@ -65,7 +70,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         protected override List<ObjectView> GetCustomViews()
         {
-            return new List<ObjectView>();
+            List<ObjectView> retViews = new List<ObjectView>();
+            foreach (Wall wall in this.myWallsCollection)
+            {
+                retViews.AddRange(wall.View);
+            }
+            return retViews;
         }
 
         /// <summary>
@@ -73,7 +83,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         protected override List<GameObject> GetCustomEnvironmentObjects()
         {
-            return new List<GameObject>();
+            List<GameObject> retObjects = new List<GameObject>();
+            retObjects.AddRange(this.myWallsCollection);
+            return retObjects;
         }
         
     }

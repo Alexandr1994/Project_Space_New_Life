@@ -134,6 +134,7 @@
     <Compile Include="modules\GameObjects\Star.cs" />
     <Compile Include="modules\GameObjects\Planet.cs" />
     <Compile Include="modules\GameObjects\Environments\StarSystem.cs" />
+    <Compile Include="modules\GameObjects\Wall.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

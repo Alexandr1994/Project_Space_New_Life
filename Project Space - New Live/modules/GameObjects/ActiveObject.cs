@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Controlers;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
+using SFML.Graphics;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
@@ -15,6 +16,21 @@ namespace Project_Space___New_Live.modules.GameObjects
     /// </summary>
     public abstract class ActiveObject : GameObject
     {
+        /// <summary>
+        /// Текстурная лента визуального эффекта гибели объекта
+        /// </summary>
+        protected Texture visualEffectSkin;
+
+        /// <summary>
+        /// Сконструировать визуальный эффект гибели объекта
+        /// </summary>
+        /// <param name="effectSize">Размер кадра</param>
+        /// <param name="effectTapeLenght">Количество кадров</param>
+        /// <returns>Визуальный эффект гибели объекта</returns>
+        public virtual VisualEffect ConstructDeathVisualEffect(Vector2f effectSize, int effectTapeLenght)
+        {
+            return new VisualEffect(this.Coords, effectSize, effectTapeLenght, visualEffectSkin);
+        }
 
         //КОНТРОЛЛЕР И СРЕДА ОБЪЕКТА
         

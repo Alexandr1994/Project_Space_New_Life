@@ -8,6 +8,7 @@ using Project_Space___New_Live.modules.Controlers;
 using Project_Space___New_Live.modules.Controlers.Forms;
 using Project_Space___New_Live.modules.Controlers.InterfaceParts;
 using Project_Space___New_Live.modules.GameObjects;
+using SFML.Graphics;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.Dispatchers
@@ -106,8 +107,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
             }
         }
 
-
-
         /// <summary>
         /// Активная звездная система
         /// </summary>
@@ -125,8 +124,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Поучить экземпляр контейнера
         /// </summary>
-        /// <param name="GameWorld"></param>
-        /// <returns></returns>
+        /// <param name="GameWorld">Коллекция звездных систем</param>
+        /// <returns>Экземпляр контейнера игрока</returns>
         public static PlayerContainer GetInstanse(List<StarSystem> GameWorld)
         {
             if (container == null)
@@ -143,9 +142,24 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             this.lastPlayerCoords = this.PlayerTank.Coords;
             this.currentMode = Mode.TankMode;
-            this.activeEnvironment = this.PlayerTank.Environment = new BattleField(ResurceStorage.RockTexture);
+
+            List<Wall> wallsSystem = new List<Wall>();
+            wallsSystem.Add(new Wall(new Vector2f(300, 450), new Vector2f(150, 20), new Texture[] { ResurceStorage.PanelText }, false));
+            wallsSystem.Add(new Wall(new Vector2f(450, 450), new Vector2f(20, 100), new Texture[] { ResurceStorage.PanelText }, false));
+            wallsSystem.Add(new Wall(new Vector2f(470, 550), new Vector2f(150, 20), new Texture[] { ResurceStorage.PanelText }, false));
+            wallsSystem.Add(new Wall(new Vector2f(530, 450), new Vector2f(20, 100), new Texture[] { ResurceStorage.PanelText }, false));
+
+            this.activeEnvironment = this.PlayerTank.Environment = new BattleField(wallsSystem, ResurceStorage.RockTexture);
             List<ActiveObject> unitsCollection = new List<ActiveObject>();
             unitsCollection.Add(this.PlayerTank);
+            Tank testTank = new Tank(50, new Vector2f(1300, 1300), 150,  ResurceStorage.TankTextures, new Vector2f(15, 30));
+            testTank.SetBrains(new ComputerController(testTank));
+            testTank.Environment = this.activeEnvironment;
+            unitsCollection.Add(testTank);
+            testTank = new Tank(150, new Vector2f(700, 700), 150, ResurceStorage.TankTextures, new Vector2f(15, 30));
+            testTank.SetBrains(new ComputerController(testTank));
+            testTank.Environment = this.activeEnvironment;
+            unitsCollection.Add(testTank);
             this.activeEnvironment.RefreshActiveObjectsCollection(unitsCollection);
         }
 
@@ -233,7 +247,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             this.activeEnvironment.OffsetBackground(this.ActiveTransport.Coords, this.lastPlayerCoords);//установить смещение фона активной звездной системы
             this.lastPlayerCoords = this.ActiveTransport.Coords;//сохранение новых координат
-            GameRenderer.GameView.Center = this.ActiveTransport.Coords;//Установка камеры
+            this.GameRenderer.GameView.Center = this.ActiveTransport.Coords;//Установка камеры
         }
 
 

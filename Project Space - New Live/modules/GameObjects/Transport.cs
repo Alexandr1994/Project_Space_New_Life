@@ -85,7 +85,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Модуль управления движением транспортного средства
         /// </summary>
-        private MoveManager moveManager = new MoveManager();
+        protected MoveManager moveManager = new MoveManager();
 
         /// <summary>
         /// Модуль управления движением транспортного средства
@@ -104,7 +104,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Процесс жизни корабля
+        /// Процесс жизни корабля+
         /// </summary>
         /// <param name="homeCoords">Координаты начала отсчета</param>
         public override void Process(Vector2f homeCoords)

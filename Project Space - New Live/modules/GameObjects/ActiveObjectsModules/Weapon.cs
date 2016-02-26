@@ -169,7 +169,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="shellSpeed">Скорость выстреливаемого снаряда</param>
         /// <param name="shellMass">Масса выстреливаемого снаряда</param>
         /// <param name="shellSize">Размер выстреливаемого снаряда</param>
-        /// <param name="shellSkin">Набор текстуо  выстреливаемого снаряда</param>
+        /// <param name="shellSkin">Набор текстуо выстреливаемого снаряда</param>
         /// <param name="image">Отображение оружия</param>
         /// <param name="shootingAmmoNeeds">Затраты боезапаса на выстрел 1 снаряда</param>
         public Weapon(int mass, int energyNeeds, int objectDamageMin, int objectDamageRange, int equipmentDamageMin, int equipmentDamageRange, float dispersion, int maxAmmo, int shootingTimeDelay, int shellLifeTime, float shellSpeed, int shellMass, Vector2f shellSize, Texture[] shellSkin, Shape image, int shootingAmmoNeeds = 1)

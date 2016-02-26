@@ -68,7 +68,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                 this.myActiveObjectsCollection[i].AnalizeObjectInteraction();
                 if (this.myActiveObjectsCollection[i].Destroyed)//если установлен флаг уничтожения активногог объекта
                 {
-                    this.myEffectsCollection.Add(new VisualEffect(this.myActiveObjectsCollection[i].Coords, new Vector2f(144, 144), 52, ResurceStorage.shipExplosion));
+                    this.myEffectsCollection.Add(this.myActiveObjectsCollection[i].ConstructDeathVisualEffect(new Vector2f(144, 144), 52));
                     this.myActiveObjectsCollection.Remove(this.myActiveObjectsCollection[i]);//удалить его из коллекции
                 }
             }
@@ -77,7 +77,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                 this.myShellsCollection[i].Process(new Vector2f(0, 0));
                 if (this.myShellsCollection[i].LifeOver)//если время жизни снаряда вышло
                 {
-                    this.myEffectsCollection.Add(new VisualEffect(this.myShellsCollection[i].Coords, new Vector2f(32, 32), 19, ResurceStorage.shellHitting));
+                    this.myEffectsCollection.Add(this.myShellsCollection[i].ConstructDeathVisualEffect(new Vector2f(30, 30), 19));
                     this.myShellsCollection.Remove(this.myShellsCollection[i]);//удалить его из коллекции
                     i --;
                 }

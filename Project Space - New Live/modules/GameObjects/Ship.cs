@@ -138,14 +138,14 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.maxHealth = this.health = maxHealth;
             this.Environment = startSystem;
 
-            this.transportEngine = new Engine(100, 1, 100, 100, 10, 8, null);//двигатель
+            this.transportEngine = new Engine(100, 1, 200, 150, 10, 8, null);//двигатель
             this.objectReactor = new Reactor(100, 5, null);//реактор
             this.objectBattery = new Battery(100, 500, null);//энергобатарея
             this.objectRadar  = new Radar(20, 2500, null);//радар
             this.objectShield = new Shield(20, 3, 100, 0, 1, null);//энергощит 
             this.objectWeaponSystem = new WeaponSystem(3);
-            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0]}, null));
-            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(1*Math.PI/180), 100, 50, 5000, 25, 1, new Vector2f(25, 1), new Texture[]{ResurceStorage.rectangleButtonTextures[2]}, null));
+            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0], ResurceStorage.shellHitting}, null));
+            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(1 * Math.PI / 180), 100, 50, 5000, 25, 1, new Vector2f(25, 1), new Texture[] { ResurceStorage.rectangleButtonTextures[2], ResurceStorage.shellHitting}, null));
         }
 
         /// <summary>
@@ -172,6 +172,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.view[(int)Parts.FeedPart].Image.Position = this.Coords + new Vector2f(-this.ViewPartSize.X / 2, -this.ViewPartSize.Y);//Кормовая часть
             this.view[(int)Parts.RightWing].Image.Position = this.Coords + new Vector2f(this.ViewPartSize.X / 2, -this.ViewPartSize.Y * 3 / 4);//Левое "крыло"
             this.view[(int)Parts.LeftWing].Image.Position = this.Coords + new Vector2f(-this.ViewPartSize.X * 3 / 2, -this.ViewPartSize.Y * 3 / 4);//Правое "крыло"
+            this.visualEffectSkin = skin[skin.Length - 1];
         }
 
         /// <summary>

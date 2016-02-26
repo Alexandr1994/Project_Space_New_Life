@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 using Project_Space___New_Live.modules.Dispatchers;
 using SFML.System;
 
@@ -60,7 +61,40 @@ namespace Project_Space___New_Live.modules.GameObjects
                     vector.SpeedAcceleration(-speed);
                 }*/
             }//В противном случае требуется добавить новый вектор
-            speedVectors.Add(new SpeedVector(speed, angle));
+            speedVectors.Add(new SpeedVector(speed, angle));    
+        }
+
+        /// <summary>
+        /// Получить векторы угол поворота, которых отличается от angle менее чем на 45 градусов из коллекции
+        /// </summary>
+        /// <param name="angle">Угол поворота</param>
+        /// <returns>Искомые вектора</returns>
+        private List<SpeedVector> GetCodirectVectors(float angle)
+        {
+            List<SpeedVector> retVectors = new List<SpeedVector>();
+            foreach (SpeedVector vector in this.speedVectors)
+            {
+                float divAngle = (float)(vector.Angle - angle);
+                if (Math.Abs(divAngle) > -20 * Math.PI / 180 && Math.Abs(divAngle) < 20 * Math.PI / 180)
+                {
+                    retVectors.Add(vector);
+                }
+            }
+            return retVectors;
+        }
+
+        private List<SpeedVector> GetContrdirectVectors(float angle)
+        {
+            List<SpeedVector> retVectors = new List<SpeedVector>();
+            foreach (SpeedVector vector in this.speedVectors)
+            {
+                float divAngle = vector.Angle - angle;
+                if (Math.Abs(divAngle) > 160 * Math.PI / 180 && Math.Abs(divAngle) < 200 * Math.PI / 180)
+                {
+                    retVectors.Add(vector);
+                }
+            }
+            return retVectors;
         }
 
         /// <summary>
@@ -219,14 +253,14 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 vector.SpeedAcceleration((float)- transport.Environment.MovingResistance);//уменьшение скорости на константу
             }
-            this.speedVectors.RemoveAll(vector => vector.Speed < 0);//Удаление векторов с нулевой скоростью
+            this.speedVectors.RemoveAll(vector => vector.Speed < 0.1);//Удаление векторов с нулевой скоростью
         }
 
         /// <summary>
         /// Сконструировать результирующий вектор скорости корабля
         /// </summary>
         /// <returns>Результирующий вектор скорости корабля</returns>
-        private SpeedVector ConstructResultVector()
+        public SpeedVector ConstructResultVector()
         {
             SpeedVector resultVector = null;//создаем "пустой" результирующий вектор скорости
             foreach (SpeedVector currentVector in this.speedVectors)//поочередно складываем все вектора скоростей с результирующим вектором

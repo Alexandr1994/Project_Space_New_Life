@@ -75,10 +75,11 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.sizes = sizes;
             this.view.Image.Texture = skinTape;
             this.tapeLenght = tapeLenght;
-            this.lifeTime = tapeLenght * GameRoot.SleepTime;//вычисление времени жизни эффекта
+            this.lifeTime = 1 + tapeLenght * GameRoot.SleepTime;//вычисление времени жизни эффекта
             this.view.Image.TextureRect = new IntRect(new Vector2i(0, 0), new Vector2i((int)sizes.X, (int)sizes.Y));
             this.lifeTimer = new Clock();//запуск таймера
             this.lifeTimer.Restart();
+            
         }
 
         /// <summary>

@@ -109,6 +109,18 @@ namespace Project_Space___New_Live.modules.Controlers
                 {
                     this.StopMoving = true;
                 }; break;
+                case Keyboard.Key.Num1:
+                {
+                    this.playerContainer.ActiveTransport.ObjectWeaponSystem.SetActiveWeaponIndex(0);
+                }; break;
+                case Keyboard.Key.Num2:
+                {
+                    this.playerContainer.ActiveTransport.ObjectWeaponSystem.SetActiveWeaponIndex(1);
+                }; break;
+                case Keyboard.Key.Num3:
+                {
+                    this.playerContainer.ActiveTransport.ObjectWeaponSystem.SetActiveWeaponIndex(2);
+                }; break;
                 case Keyboard.Key.LControl:
                 {
                     this.ShieldProcess();
