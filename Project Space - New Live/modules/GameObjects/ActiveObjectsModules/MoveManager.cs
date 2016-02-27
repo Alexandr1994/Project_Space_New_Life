@@ -65,7 +65,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Получить векторы угол поворота, которых отличается от angle менее чем на 45 градусов из коллекции
+        /// Получить векторы угол поворота, которых отличается от angle менее чем на 20 градусов из коллекции
         /// </summary>
         /// <param name="angle">Угол поворота</param>
         /// <returns>Искомые вектора</returns>
@@ -83,6 +83,11 @@ namespace Project_Space___New_Live.modules.GameObjects
             return retVectors;
         }
 
+        /// <summary>
+        /// Получить векторы угол поворота, которых отличается от противолположенного angle угла менее чем на 20 градусов из коллекции
+        /// </summary>
+        /// <param name="angle">Угол поворота</param>
+        /// <returns>Искомые вектора</returns>
         private List<SpeedVector> GetContrdirectVectors(float angle)
         {
             List<SpeedVector> retVectors = new List<SpeedVector>();
