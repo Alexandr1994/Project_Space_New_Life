@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.System;
 
-namespace Project_Space___New_Live.modules.GameObjects.ShipModules
+namespace Project_Space___New_Live.modules.GameObjects
 {
     public class WeaponSystem
     {
@@ -100,9 +100,9 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// <summary>
         /// Процесс работы оружейной системы
         /// </summary>
-        /// <param name="shooter">Корабль стрелок</param>
+        /// <param name="shooter">Объект стрелок</param>
         /// <returns>Снаряд или null, если огонь не ведется или не может быть открыт</returns>
-        public Shell Process(Ship shooter)
+        public Shell Process(ActiveObject shooter)
         {
             if (this.shooting)//если ведется огонь
             {

@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="modules\Controlers\AbstractController.cs" />
+    <Compile Include="modules\Controlers\ComputerController.cs" />
     <Compile Include="modules\Controlers\Forms\LinearBar.cs" />
     <Compile Include="modules\Controlers\Forms\Button.cs" />
     <Compile Include="modules\Controlers\Forms\CircleButton.cs" />
@@ -107,6 +108,11 @@
     <Compile Include="modules\Dispatchers\RenderModule.cs" />
     <Compile Include="modules\Dispatchers\ObjectView.cs" />
     <Compile Include="modules\Dispatchers\ResurceStorage.cs" />
+    <Compile Include="modules\GameObjects\ActiveObject.cs" />
+    <Compile Include="modules\GameObjects\Environments\BaseEnvironment.cs" />
+    <Compile Include="modules\GameObjects\Environments\BattleField.cs" />
+    <Compile Include="modules\GameObjects\Tank.cs" />
+    <Compile Include="modules\GameObjects\Transport.cs" />
     <Compile Include="modules\GameObjects\VisualEffect.cs" />
     <Compile Include="modules\GameObjects\GameEntity.cs" />
     <Compile Include="modules\GameObjects\GameObject.cs" />
@@ -114,20 +120,21 @@
     <Compile Include="modules\GameObjects\ObjectSignature.cs" />
     <Compile Include="modules\GameObjects\Shell.cs" />
     <Compile Include="modules\GameObjects\Ship.cs" />
-    <Compile Include="modules\GameObjects\ShipModules\Battery.cs" />
-    <Compile Include="modules\GameObjects\ShipModules\Engine.cs" />
-    <Compile Include="modules\GameObjects\ShipModules\Radar.cs" />
-    <Compile Include="modules\GameObjects\ShipModules\Reactor.cs" />
-    <Compile Include="modules\GameObjects\ShipModules\Shield.cs" />
-    <Compile Include="modules\GameObjects\ShipModules\ShipEquipment.cs" />
-    <Compile Include="modules\GameObjects\ShipModules\ShipMover.cs" />
-    <Compile Include="modules\GameObjects\ShipModules\SpeedVector.cs" />
-    <Compile Include="modules\GameObjects\ShipModules\Weapon.cs" />
-    <Compile Include="modules\GameObjects\ShipModules\WeaponSystem.cs" />
+    <Compile Include="modules\GameObjects\ActiveObjectsModules\Battery.cs" />
+    <Compile Include="modules\GameObjects\ActiveObjectsModules\Engine.cs" />
+    <Compile Include="modules\GameObjects\ActiveObjectsModules\Radar.cs" />
+    <Compile Include="modules\GameObjects\ActiveObjectsModules\Reactor.cs" />
+    <Compile Include="modules\GameObjects\ActiveObjectsModules\Shield.cs" />
+    <Compile Include="modules\GameObjects\ActiveObjectsModules\Equipment.cs" />
+    <Compile Include="modules\GameObjects\ActiveObjectsModules\MoveManager.cs" />
+    <Compile Include="modules\GameObjects\ActiveObjectsModules\SpeedVector.cs" />
+    <Compile Include="modules\GameObjects\ActiveObjectsModules\Weapon.cs" />
+    <Compile Include="modules\GameObjects\ActiveObjectsModules\WeaponSystem.cs" />
     <Compile Include="modules\GameObjects\SphereObject.cs" />
     <Compile Include="modules\GameObjects\Star.cs" />
     <Compile Include="modules\GameObjects\Planet.cs" />
-    <Compile Include="modules\GameObjects\StarSystem.cs" />
+    <Compile Include="modules\GameObjects\Environments\StarSystem.cs" />
+    <Compile Include="modules\GameObjects\Wall.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

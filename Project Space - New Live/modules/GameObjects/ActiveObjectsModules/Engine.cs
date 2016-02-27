@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 using SFML.Graphics;
 using SFML.System;
 
-namespace Project_Space___New_Live.modules.GameObjects.ShipModules
+namespace Project_Space___New_Live.modules.GameObjects
 {
     /// <summary>
     /// Двигательная установка
     /// </summary>
-    class Engine : ShipEquipment
+    public class Engine : Equipment
     {
         /// <summary>
         /// Направления модификации двигательной установки
@@ -142,7 +142,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             this.baseShuntingThrust = this.shuntingThrust = shuntingThrust;
             this.baseMaxForwardSpeed = this.maxForwardSpeed = maxForwardSpeed;
             this.baseMaxShuntingSpeed = this.maxShuntingSpeed = maxShuntingSpeed;
-            this.State = false;
+            this.Deactivate();
         }
 
 

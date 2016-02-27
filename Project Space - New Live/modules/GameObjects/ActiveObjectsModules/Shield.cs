@@ -5,25 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
 
-namespace Project_Space___New_Live.modules.GameObjects.ShipModules
+namespace Project_Space___New_Live.modules.GameObjects
 {
-    class Shield : ShipEquipment
+    public class Shield : Equipment
     {
 
         public override bool State
         { 
             get { return this.state; }
-            set
-            {
-                if (value)
-                {
-                    this.ActiveShield();
-                }
-                else
-                {   
-                    this.DeactiveShield();
-                }
-            }
         }
 
         /// <summary>
@@ -116,19 +105,22 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// <summary>
         /// Активация щита
         /// </summary>
-        private void ActiveShield()
+        /// <returns>true - удалось активировать, false - не удалось</returns>
+        public override bool Activate()
         {
             if (!this.emergensyState)//если щит не в аварийном состоянии
             {//то установить текущую мощность экрана в максимальную и установить состояние в активное
                 this.shieldPower = this.maxShieldPower;
                 this.state = true;
+                return true;//вернуть true
             }
+            return false;//иначе активироать щит не удалось, вернуть false
         }
 
         /// <summary>
         /// Деактивация щита
         /// </summary>
-        private void DeactiveShield()
+        public override void Deactivate()
         {
             this.shieldPower = 0;
             this.state = false;
@@ -147,12 +139,12 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
             }
             else
             {
-                this.DeactiveShield();
+                this.Deactivate();
             }
             this.Wearing(equipmentDamage);
             if (emergensyState)
             {
-                this.DeactiveShield();
+                this.Deactivate();
             }
         }
 

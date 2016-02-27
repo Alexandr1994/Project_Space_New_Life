@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Controlers.Forms;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
-using Project_Space___New_Live.modules.GameObjects.ShipModules;
 using SFML.Graphics;
 using SFML.System;
 
@@ -80,19 +79,19 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Процесс работы экрана радара
         /// </summary>
-        /// <param name="activeStarSystem">Текущая звездная система</param>
-        /// <param name="playerShip">Корабль игрока</param>
-        public void RadarProcess(StarSystem activeStarSystem, Ship playerShip)
+        /// <param name="activeEnvironment">Текущая звездная система</param>
+        /// <param name="player">Корабль игрока</param>
+        public void RadarProcess(BaseEnvironment activeEnvironment, ActiveObject player)
         {
             float radarCoeffic = 0;
-            Radar playerRadar = playerShip.Equipment[(int) Ship.EquipmentNames.Radar] as Radar;
+            Radar playerRadar = player.Equipment[(int) Transport.EquipmentNames.Radar] as Radar;
             this.ChildForms.Clear();//Отчистить коллекцию объектов на радаре
             if (playerRadar != null && playerRadar.State)//Если радар имеется и функционирует
             {//то начать посторение отображения
                 this.noise.Visible = false;//Спрятать радарный шум
                 radarCoeffic = (float) this.GetSizeCoeffic(playerRadar.VisibleRadius);
-                this.RenderPlayerOnRadar(playerShip, radarCoeffic);
-                foreach (GameObject currentObject in activeStarSystem.GetObjectsInSystem(playerShip.Coords, playerRadar.VisibleRadius))
+                this.RenderPlayerOnRadar(player, radarCoeffic);
+                foreach (GameObject currentObject in activeEnvironment.GetObjectsInEnvironment(player.Coords, playerRadar.VisibleRadius))
                 {
                     ObjectSignature currentSignature = currentObject.GetSignature();
                     if (currentSignature != null)
@@ -100,7 +99,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                         Vector2f size = (Vector2f) currentSignature.Characteristics[(int) ObjectSignature.CharactsKeys.Size]; //Размер объекта
                         RadarEntity newObject = new RadarEntity();
                         newObject.Size = size*radarCoeffic;
-                        newObject.Location = this.radarCenter - newObject.Size + (currentObject.Coords - playerShip.Coords) * radarCoeffic;
+                        newObject.Location = this.radarCenter - newObject.Size + (currentObject.Coords - player.Coords) * radarCoeffic;
                         this.AddForm(newObject);
                     }
                 }
@@ -155,7 +154,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         /// <param name="player">Корабль игрока</param>
         /// <param name="radarCoeffic">Масщтабирующий коэффициент</param>
-        private void RenderPlayerOnRadar(Ship player, float radarCoeffic)
+        private void RenderPlayerOnRadar(ActiveObject player, float radarCoeffic)
         { 
             RadarEntity ship = new RadarEntity();
             ObjectSignature playerSignature = player.GetSignature();

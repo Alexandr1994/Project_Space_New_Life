@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
 
-namespace Project_Space___New_Live.modules.GameObjects.ShipModules
+namespace Project_Space___New_Live.modules.GameObjects
 {
     /// <summary>
     /// Реактор
     /// </summary>
-    class Reactor : ShipEquipment
+    public class Reactor : Equipment
     {
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         {
             this.SetCommonCharacteristics(mass, 0, image);//установка общих характеристик (энергопотребление = 0, реактор производит, а не потребляет энергию)
             this.baseGeneration = this.energyGeneration = energyGeneration;//установка текущей и базовой генерируемой энергии\
-            this.State = true;
+            this.Activate();
         }
 
 

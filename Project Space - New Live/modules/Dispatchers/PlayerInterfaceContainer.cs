@@ -82,7 +82,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.formsCollection.Add("EndButton", new CircleButton());//Кнопка окончания
             this.formsCollection["EndButton"].MouseClick += OnClick;
             this.formsCollection["EndButton"].Size = new Vector2f(80, 30);
-            this.formsCollection["EndButton"].Location = new Vector2f(720, 0);
+            this.formsCollection["EndButton"].Location = new Vector2f(this.mainForm.Size.X - 80, 0);
 
             foreach (KeyValuePair<String, Form> form in this.formsCollection)//добавление форм интерфейса на главную форму
             {
@@ -106,7 +106,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void Process()
         {
             this.playerContainer.Process();
-            (this.formsCollection["RadarScreen"] as RadarScreen).RadarProcess(this.playerContainer.ActiveSystem, this.playerContainer.PlayerShip);
+            (this.formsCollection["RadarScreen"] as RadarScreen).RadarProcess(this.playerContainer.ActiveEnvironment, this.playerContainer.ActiveTransport);
             (this.formsCollection["HealthBar"] as LinearBar).PercentOfBar = this.playerContainer.GetHealh();
             (this.formsCollection["EnergyBar"] as LinearBar).PercentOfBar = this.playerContainer.GetEnergy();
             (this.formsCollection["ProtectBar"] as LinearBar).PercentOfBar = this.playerContainer.GetShieldPower();

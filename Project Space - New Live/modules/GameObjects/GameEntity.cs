@@ -36,8 +36,8 @@ namespace Project_Space___New_Live
         /// <param name="correction">Коррекция</param>
         public void CorrectObjectPoint(Vector2f correction)
         {
-            coords.X += correction.X;
-            coords.Y += correction.Y;
+            this.coords.X += correction.X;
+            this.coords.Y += correction.Y;
         }
 
         /// <summary>

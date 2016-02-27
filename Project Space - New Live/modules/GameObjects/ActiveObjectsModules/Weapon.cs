@@ -7,40 +7,40 @@ using Project_Space___New_Live.modules.Dispatchers;
 using SFML.Graphics;
 using SFML.System;
 
-namespace Project_Space___New_Live.modules.GameObjects.ShipModules
+namespace Project_Space___New_Live.modules.GameObjects
 {
     /// <summary>
     /// Оружие
     /// </summary>
-    public class Weapon : ShipEquipment
+    public class Weapon : Equipment
     {
 
         //ХАРАКТЕРИСТИКИ ОРУЖИЯ
 
         /// <summary>
-        /// Минимальный урон, наносимый кораблю
+        /// Минимальный урон, наносимый объекту
         /// </summary>
-        private int shipDamageMin;
+        private int objectDamageMin;
 
         /// <summary>
-        /// Минимальный урон, наносимый кораблю
+        /// Минимальный урон, наносимый объекту
         /// </summary>
-        public int ShipDamageMin
+        public int ObjectDamageMin
         {
-            get { return this.shipDamageMin; }
+            get { return this.objectDamageMin; }
         }
 
         /// <summary>
-        /// Разброс урона, наносимого кораблю
+        /// Разброс урона, наносимого объекту
         /// </summary>
-        private int shipDamageRange;
+        private int objectDamageRange;
 
         /// <summary>
-        /// Разброс урона, наносимого кораблю
+        /// Разброс урона, наносимого объекту
         /// </summary>
-        public int ShipDamageRange
+        public int ObjectDamageRange
         {
-            get { return this.shipDamageRange; }
+            get { return this.objectDamageRange; }
         }
 
         /// <summary>
@@ -158,8 +158,8 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// </summary>
         /// <param name="mass">Базовая масса</param>
         /// <param name="energyNeeds">Энергопотребление</param>
-        /// <param name="shipDamageMin">Минимальный урон, наносимый кораблю</param>
-        /// <param name="shipDamageRange">Разброс урона, наносимого кораблю</param>
+        /// <param name="objectDamageMin">Минимальный урон, наносимый объекту</param>
+        /// <param name="objectDamageRange">Разброс урона, наносимого объекту</param>
         /// <param name="equipmentDamageMin">Минимальный урон, наносимый оборудованию</param>
         /// <param name="equipmentDamageRange">Разброс урона, наносимого оборудованию</param>
         /// <param name="dispersion">Угол рассеивания снарядов в рад.</param>
@@ -169,15 +169,15 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// <param name="shellSpeed">Скорость выстреливаемого снаряда</param>
         /// <param name="shellMass">Масса выстреливаемого снаряда</param>
         /// <param name="shellSize">Размер выстреливаемого снаряда</param>
-        /// <param name="shellSkin">Набор текстуо  выстреливаемого снаряда</param>
+        /// <param name="shellSkin">Набор текстуо выстреливаемого снаряда</param>
         /// <param name="image">Отображение оружия</param>
         /// <param name="shootingAmmoNeeds">Затраты боезапаса на выстрел 1 снаряда</param>
-        public Weapon(int mass, int energyNeeds, int shipDamageMin, int shipDamageRange, int equipmentDamageMin, int equipmentDamageRange, float dispersion, int maxAmmo, int shootingTimeDelay, int shellLifeTime, float shellSpeed, int shellMass, Vector2f shellSize, Texture[] shellSkin, Shape image, int shootingAmmoNeeds = 1)
+        public Weapon(int mass, int energyNeeds, int objectDamageMin, int objectDamageRange, int equipmentDamageMin, int equipmentDamageRange, float dispersion, int maxAmmo, int shootingTimeDelay, int shellLifeTime, float shellSpeed, int shellMass, Vector2f shellSize, Texture[] shellSkin, Shape image, int shootingAmmoNeeds = 1)
         {
             this.SetCommonCharacteristics(mass, energyNeeds, image);//общие характеристики всех видов оборудования
             //Сохранение параметров оружия
-            this.shipDamageMin = shipDamageMin;
-            this.shipDamageRange = shipDamageRange;
+            this.objectDamageMin = objectDamageMin;
+            this.objectDamageRange = objectDamageRange;
             this.equipmentDamageMin = equipmentDamageMin;
             this.equipmentDamageRange = equipmentDamageRange;
             this.dispersion = dispersion;
@@ -224,17 +224,17 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         /// <summary>
         /// Выстрелить из оружия (вернуть снаряд)
         /// </summary>
-        /// <param name="shooter">Стреляющий корабль</param>
+        /// <param name="shooter">Стреляющий объект</param>
         /// <returns>Новый снаряд или null, если оружие в аварийном состоянии или исчерпас боезапас</returns>
-        public Shell Shoot(Ship shooter)
+        public Shell Shoot(ActiveObject shooter)
         {
             if (!this.emergensyState && this.Ammo > 0)//если оружие в рабочем состоянии и его боезапас не исчерпан
             {//то произвести выстрел
-                int shipDamage = this.CalculateCharacteristic(this.ShipDamageMin, this.shipDamageRange);//вычисление параметров снаряда
+                int objectDamage = this.CalculateCharacteristic(this.ObjectDamageMin, this.objectDamageRange);//вычисление параметров снаряда
                 int equipmentDamage = this.CalculateCharacteristic(this.equipmentDamageMin, this.equipmentDamageRange);
-                float angle = this.CalculateCharacteristic(shooter.Rotation, this.dispersion);
+                float angle = this.CalculateCharacteristic(shooter.AttackAngle, this.dispersion);
                 this.ammo -= this.shootingAmmoNeeds;//уменьшение боезапаса
-                return new Shell(shooter, this.shellMass, shooter.Coords, this.shellSize, shipDamage, equipmentDamage, this.shellSpeed, angle, this.shellLifeTime, this.shellTextures);
+                return new Shell(shooter, this.shellMass, shooter.Coords, this.shellSize, objectDamage, equipmentDamage, this.shellSpeed, angle, this.shellLifeTime, this.shellTextures);
             }
             return null;//иначе выстрел не может быть произведен
         }

@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
 
-namespace Project_Space___New_Live.modules.GameObjects.ShipModules
+namespace Project_Space___New_Live.modules.GameObjects
 {
     /// <summary>
     /// Энергобатарея
     /// </summary>
-    class Battery : ShipEquipment
+    public class Battery : Equipment
     {
         /// <summary>
         /// Базовая емкость
@@ -84,10 +84,19 @@ namespace Project_Space___New_Live.modules.GameObjects.ShipModules
         {
             this.SetCommonCharacteristics(mass, 0, image);//установка общих характеристик (энергопотребление = 0)
             this.baseMaxEnergy = this.maxEnergy = maxEnergy;
-
             this.FullCharge();
+            this.Activate();
+        }
 
-            this.State = true;
+        /// <summary>
+        /// Сброс излишков энергии
+        /// </summary>
+        public void ThrowExcessEnergy()
+        {
+            if (this.Energy > this.MaxEnergy)
+            {
+                this.energy = this.MaxEnergy;
+            }
         }
 
         protected override void CustomModification()

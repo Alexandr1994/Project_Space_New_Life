@@ -48,7 +48,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Доступные видеорежимы
         /// </summary>
-        private static VideoMode windowSize = new VideoMode(800, 600);
+        private static VideoMode windowSize = new VideoMode(1280, 720);
 
         /// <summary>
         /// Экземпляр модуля отрисовки
@@ -166,12 +166,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Метод отрисовки (игровых объектов и интерфейса)
         /// </summary>
-        /// <param name="activeStarSystem">Активная звездная система</param>
-        public void RenderProcess(StarSystem activeStarSystem)
+        /// <param name="activeEnvironment">Активная звездная система</param>
+        public void RenderProcess(BaseEnvironment activeEnvironment)
         {
             this.ViewControl();
             List<ObjectView> views = new List<ObjectView>();
-            views.AddRange(activeStarSystem.GetView());
+            views.AddRange(activeEnvironment.GetView());
             views.AddRange(this.Form.RenderForm());
             foreach (ObjectView view in views)
             {
