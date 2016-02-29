@@ -166,12 +166,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Метод отрисовки (игровых объектов и интерфейса)
         /// </summary>
-        /// <param name="activeEnvironment">Активная звездная система</param>
-        public void RenderProcess(BaseEnvironment activeEnvironment)
+        /// <param name="activeBaseEnvironmentтивная звездная система</param>
+        public void RenderProcess(BaseEnvironment activeBaseEnvironment)
         {
             this.ViewControl();
             List<ObjectView> views = new List<ObjectView>();
-            views.AddRange(activeEnvironment.GetView());
+            views.AddRange(activeBaseEnvironment.GetView());
             views.AddRange(this.Form.RenderForm());
             foreach (ObjectView view in views)
             {

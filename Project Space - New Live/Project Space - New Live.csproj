@@ -110,16 +110,12 @@
     <Compile Include="modules\Dispatchers\ResurceStorage.cs" />
     <Compile Include="modules\GameObjects\ActiveObject.cs" />
     <Compile Include="modules\GameObjects\Environments\BaseEnvironment.cs" />
-    <Compile Include="modules\GameObjects\Environments\BattleField.cs" />
-    <Compile Include="modules\GameObjects\Tank.cs" />
-    <Compile Include="modules\GameObjects\Transport.cs" />
     <Compile Include="modules\GameObjects\VisualEffect.cs" />
     <Compile Include="modules\GameObjects\GameEntity.cs" />
     <Compile Include="modules\GameObjects\GameObject.cs" />
     <Compile Include="modules\GameObjects\LocalMassCenter.cs" />
     <Compile Include="modules\GameObjects\ObjectSignature.cs" />
     <Compile Include="modules\GameObjects\Shell.cs" />
-    <Compile Include="modules\GameObjects\Ship.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\Battery.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\Engine.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\Radar.cs" />
@@ -133,7 +129,6 @@
     <Compile Include="modules\GameObjects\SphereObject.cs" />
     <Compile Include="modules\GameObjects\Star.cs" />
     <Compile Include="modules\GameObjects\Planet.cs" />
-    <Compile Include="modules\GameObjects\Environments\StarSystem.cs" />
     <Compile Include="modules\GameObjects\Wall.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

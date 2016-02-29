@@ -11,10 +11,10 @@ namespace Project_Space___New_Live.modules.Controlers
     public class ComputerController : AbstractController
     {
 
-        private Transport controlledObject;
+        private ActiveObject controlledObject;
 
 
-        public ComputerController(Transport controlledObject)
+        public ComputerController(ActiveObject controlledObject)
         {
             this.controlledObject = controlledObject;
         }

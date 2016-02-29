@@ -49,7 +49,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Коллекция Звездных систем
         /// </summary>
-        List<StarSystem> SystemCollection = new List<StarSystem>();
+        List<BaseEnvironment> SystemCollection = new List<BaseEnvironment>();
 
         /// <summary>
         /// Хранилище информации об игроке и активной звездной системе
@@ -88,13 +88,13 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         private void ConstructFleets()
         {
-            this.ShipsCollection.Add(new Ship(1000, new Vector2f(-450, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
-            this.ShipsCollection.Add(new Ship(900, new Vector2f(-450, -400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
-            this.ShipsCollection.Add(new Ship(800, new Vector2f(450, -400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
-            this.ShipsCollection.Add(new Ship(500, new Vector2f(450, 450), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
+            this.ShipsCollection.Add(new ActiveObject(1000, new Vector2f(-450, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
+            this.ShipsCollection.Add(new ActiveObject(900, new Vector2f(-450, -400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
+            this.ShipsCollection.Add(new ActiveObject(800, new Vector2f(450, -400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
+            this.ShipsCollection.Add(new ActiveObject(500, new Vector2f(450, 450), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
             foreach (ActiveObject ship in this.ShipsCollection)
             {
-                ship.SetBrains(new ComputerController(ship as Transport));
+                ship.SetBrains(new ComputerController(ship as ActiveObject));
             }
         }
 
@@ -103,7 +103,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         private void SpaceGameProcess()
         {
-            foreach (StarSystem currentSystem in this.SystemCollection) //Отработка игрового мира
+            foreach (BaseEnvironment currentSystem in this.SystemCollection) //Отработка игрового мира
             {
                 currentSystem.RefreshActiveObjectsCollection(this.ShipsCollection as List<ActiveObject>);
                 currentSystem.Process();
@@ -124,7 +124,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         private void BattleFieldGameProcess()
         {
-            this.playerContainer.PlayerTank.TankBattleField.Process();
+            this.playerContainer.PlayerShip.Environment.Process();
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                     }; break;
                 }
                 this.GraphicInterfaceContainer.Process();
-                this.GraphicModule.RenderProcess(this.playerContainer.ActiveEnvironment);
+                this.GraphicModule.RenderProcess(this.playerContainer.ActiveBaseEnvironment);
                 GraphicModule.MainWindow.DispatchEvents();
                 GraphicModule.MainWindow.Display();
             }

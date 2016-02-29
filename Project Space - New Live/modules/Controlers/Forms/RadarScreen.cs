@@ -79,19 +79,19 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Процесс работы экрана радара
         /// </summary>
-        /// <param name="activeEnvironment">Текущая звездная система</param>
+        /// <param name="activeBaseEnvironmentкущая звездная система</param>
         /// <param name="player">Корабль игрока</param>
-        public void RadarProcess(BaseEnvironment activeEnvironment, ActiveObject player)
+        public void RadarProcess(BaseEnvironment activeBaseEnvironment, ActiveObject player)
         {
             float radarCoeffic = 0;
-            Radar playerRadar = player.Equipment[(int) Transport.EquipmentNames.Radar] as Radar;
+            Radar playerRadar = player.Equipment[(int) ActiveObject.EquipmentNames.Radar] as Radar;
             this.ChildForms.Clear();//Отчистить коллекцию объектов на радаре
             if (playerRadar != null && playerRadar.State)//Если радар имеется и функционирует
             {//то начать посторение отображения
                 this.noise.Visible = false;//Спрятать радарный шум
                 radarCoeffic = (float) this.GetSizeCoeffic(playerRadar.VisibleRadius);
                 this.RenderPlayerOnRadar(player, radarCoeffic);
-                foreach (GameObject currentObject in activeEnvironment.GetObjectsInEnvironment(player.Coords, playerRadar.VisibleRadius))
+                foreach (GameObject currentObject in activeBaseEnvironment.GetObjectsInEnvironment(player.Coords, playerRadar.VisibleRadius))
                 {
                     ObjectSignature currentSignature = currentObject.GetSignature();
                     if (currentSignature != null)

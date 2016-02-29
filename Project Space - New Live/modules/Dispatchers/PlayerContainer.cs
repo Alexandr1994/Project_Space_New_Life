@@ -62,30 +62,17 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Корабль игрока
         /// </summary>
-        private Ship playerShip = null;
+        private ActiveObject playerShip = null;
 
         /// <summary>
         /// Корабль игрока
         /// </summary>
-        public Ship PlayerShip
+        public ActiveObject PlayerShip
         {
             get { return this.playerShip; }
         }
 
-        /// <summary>
-        /// Танк игрока
-        /// </summary>
-        private Tank playerTank;
-
-        /// <summary>
-        /// Танк игрока
-        /// </summary>
-        public Tank PlayerTank
-        {
-            get { return this.playerTank; }
-        }
-
-        public Transport ActiveTransport
+        public ActiveObject ActiveTransport
         {
             get
             {
@@ -97,7 +84,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                     }
                     case Mode.TankMode:
                     {
-                        return this.PlayerTank;
+                        return this.PlayerShip;
                     }
                     default:
                     {
@@ -110,15 +97,15 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Активная звездная система
         /// </summary>
-        private BaseEnvironment activeEnvironment = null;
+        private BaseEnvironment activeBaseEnvironment = null;
 
         /// <summary>
         /// Активная звездная система
         /// </summary>
-        public BaseEnvironment ActiveEnvironment
+        public BaseEnvironment ActiveBaseEnvironment
         {
-            get { return this.activeEnvironment; }
-            set { this.activeEnvironment = value; }//(временно)
+            get { return this.activeBaseEnvironment; }
+            set { this.activeBaseEnvironment = value; }//(временно)
         }
 
         /// <summary>
@@ -126,7 +113,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         /// <param name="GameWorld">Коллекция звездных систем</param>
         /// <returns>Экземпляр контейнера игрока</returns>
-        public static PlayerContainer GetInstanse(List<StarSystem> GameWorld)
+        public static PlayerContainer GetInstanse(List<BaseEnvironment> GameWorld)
         {
             if (container == null)
             {
@@ -140,7 +127,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         public void OnPlanetLanding()
         {
-            this.lastPlayerCoords = this.PlayerTank.Coords;
+            this.lastPlayerCoords = this.PlayerShip.Coords;
             this.currentMode = Mode.TankMode;
 
             List<Wall> wallsSystem = new List<Wall>();
@@ -149,18 +136,18 @@ namespace Project_Space___New_Live.modules.Dispatchers
             wallsSystem.Add(new Wall(new Vector2f(470, 550), new Vector2f(150, 20), new Texture[] { ResurceStorage.PanelText }, false));
             wallsSystem.Add(new Wall(new Vector2f(530, 450), new Vector2f(20, 100), new Texture[] { ResurceStorage.PanelText }, false));
 
-            this.activeEnvironment = this.PlayerTank.Environment = new BattleField(wallsSystem, ResurceStorage.RockTexture);
+            this.activeBaseEnvironment = this.PlayerShip.Environment = new BaseEnvironment(ResurceStorage.RockTexture, (float)0.5);
             List<ActiveObject> unitsCollection = new List<ActiveObject>();
-            unitsCollection.Add(this.PlayerTank);
-            Tank testTank = new Tank(50, new Vector2f(1300, 1300), 150,  ResurceStorage.TankTextures, new Vector2f(15, 30));
+            unitsCollection.Add(this.PlayerShip);
+            ActiveObject testTank = new ActiveObject(50, new Vector2f(1300, 1300), 150, ResurceStorage.TankTextures, new Vector2f(15, 30), activeBaseEnvironment);
             testTank.SetBrains(new ComputerController(testTank));
-            testTank.Environment = this.activeEnvironment;
+            testTank.Environment = this.activeBaseEnvironment;
             unitsCollection.Add(testTank);
-            testTank = new Tank(150, new Vector2f(700, 700), 150, ResurceStorage.TankTextures, new Vector2f(15, 30));
+            testTank = new ActiveObject(150, new Vector2f(700, 700), 150, ResurceStorage.TankTextures, new Vector2f(15, 30), activeBaseEnvironment);
             testTank.SetBrains(new ComputerController(testTank));
-            testTank.Environment = this.activeEnvironment;
+            testTank.Environment = this.activeBaseEnvironment;
             unitsCollection.Add(testTank);
-            this.activeEnvironment.RefreshActiveObjectsCollection(unitsCollection);
+            this.activeBaseEnvironment.RefreshActiveObjectsCollection(unitsCollection);
         }
 
         /// <summary>
@@ -168,17 +155,15 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         /// <param name="GameWorld">Коллекция звездных систем</param>
         /// <param name="playerInterface">Ссылка на графический интерфейс игрока</param>
-        private PlayerContainer(List<StarSystem> GameWorld)
+        private PlayerContainer(List<BaseEnvironment> GameWorld)
         {//Временная реализация конструктора корабля
             //Сохранение в контейнере
             PlayerController controller = PlayerController.GetInstanse(this);
             this.currentMode = (int) Mode.SpaceMode;
-            this.playerShip = new Ship(500, new Vector2f(400, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), GameWorld[0]);//Корабля игрока
+            this.playerShip = new ActiveObject(100, new Vector2f(400, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), GameWorld[0]);//Корабля игрока
             this.playerShip.SetBrains(controller);
-            this.playerTank = new Tank(150, new Vector2f(1000, 1000), 150,  ResurceStorage.TankTextures, new Vector2f(15, 30));
-            this.PlayerTank.SetBrains(controller);
             this.lastPlayerCoords = this.playerShip.Coords;//последних координат корабля игрока
-            this.activeEnvironment = this.playerShip.ShipStarSystem;//Текущей звездной системы
+            this.activeBaseEnvironment = this.playerShip.Environment;//Текущей звездной системы
             this.GameRenderer = RenderModule.getInstance();//Сылки на модуль отрисовки
             //this.playerInterface = playerInterface;
 
@@ -199,7 +184,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetEnergy()
         {
-            Battery battery = this.ActiveTransport.Equipment[(int)(Transport.EquipmentNames.Battery)] as Battery;
+            Battery battery = this.ActiveTransport.Equipment[(int)(ActiveObject.EquipmentNames.Battery)] as Battery;
             return (float)battery.Energy / (float)battery.MaxEnergy * 100;
         }
 
@@ -211,7 +196,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             if (this.ActiveTransport.ShieldActive)
             {
-                Shield shield = ActiveTransport.Equipment[(int)Transport.EquipmentNames.Shield] as Shield;
+                Shield shield = ActiveTransport.Equipment[(int)ActiveObject.EquipmentNames.Shield] as Shield;
                 return (float)shield.ShieldPower / (float)shield.MaxShieldPower * 100;
             }
             return 0;
@@ -232,11 +217,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetRadarRange()
         {
-            if (this.ActiveTransport.Equipment[(int)Transport.EquipmentNames.Radar] == null)
+            if (this.ActiveTransport.Equipment[(int)ActiveObject.EquipmentNames.Radar] == null)
             {//если радар отстутствует вернуть 0
                 return 0;
             }
-            Radar radar = this.ActiveTransport.Equipment[(int)Transport.EquipmentNames.Radar] as Radar;
+            Radar radar = this.ActiveTransport.Equipment[(int)ActiveObject.EquipmentNames.Radar] as Radar;
             return radar.VisibleRadius;//вернуть радиус заны видимости радара
         }
 
@@ -245,7 +230,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         public void Process()
         {
-            this.activeEnvironment.OffsetBackground(this.ActiveTransport.Coords, this.lastPlayerCoords);//установить смещение фона активной звездной системы
+            this.activeBaseEnvironment.OffsetBackground(this.ActiveTransport.Coords, this.lastPlayerCoords);//установить смещение фона активной звездной системы
             this.lastPlayerCoords = this.ActiveTransport.Coords;//сохранение новых координат
             this.GameRenderer.GameView.Center = this.ActiveTransport.Coords;//Установка камеры
         }

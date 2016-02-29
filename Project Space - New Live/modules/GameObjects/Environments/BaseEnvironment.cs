@@ -12,7 +12,7 @@ namespace Project_Space___New_Live.modules.GameObjects
     /// <summary>
     /// Абстрактная игровая среда
     /// </summary>
-    public abstract class BaseEnvironment
+    public class BaseEnvironment
     {
         /// <summary>
         /// Сопротивление среды перемещению объектов в ней
@@ -56,6 +56,20 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         protected List<VisualEffect> myEffectsCollection;
 
+
+                /// <summary>
+        /// Построить звездную систему
+        /// </summary>
+        /// <param name="massCenter">Готовый центр масс</param>
+        /// <param name="background">Текстура фона</param>
+        public BaseEnvironment(Texture background, float moveResistance)
+        {
+            this.MovingResistance = moveResistance;
+            this.InitBackgroung(background); //Построение фона звездной системы
+            this.myShellsCollection = new List<Shell>();
+            this.myEffectsCollection = new List<VisualEffect>();
+        }
+
         /// <summary>
         /// Процесс жизни игровой среды
         /// </summary>
@@ -96,7 +110,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Процесс жизни конкретной игровой среды
         /// </summary>
-        protected abstract void CustomProcess();
+        protected void CustomProcess()
+        {
+            ;
+        }
 
         /// <summary>
         /// Установить или обновить коллекцию активных объектов в середе
@@ -119,7 +136,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Получить уникальные объекты конкретной среды
         /// </summary>
         /// <returns>Коллекция уникальных объектов среды</returns>
-        protected abstract List<GameObject> GetCustomEnvironmentObjects();
+        protected List<GameObject> GetCustomEnvironmentObjects()
+        {
+            return new List<GameObject>();
+        }
 
         /// <summary>
         /// Получить коллекцию объектов находящихся в среде
@@ -160,23 +180,31 @@ namespace Project_Space___New_Live.modules.GameObjects
             return ret_value;
         }
 
-        /// <summary>
-        /// Построить фон среды
-        /// </summary>
-        /// <param name="skin">Текстура фона</param>
-        protected abstract void InitBackgroung(Texture skin);
+        protected void InitBackgroung(Texture skin)
+        {
+            this.background = new ObjectView(new RectangleShape(new Vector2f(2000, 2000)), BlendMode.Alpha);
+            this.background.Image.Texture = skin;
+            this.background.Image.Position = new Vector2f(-500, -1000);
+        }
 
         /// <summary>
-        /// Изменение позиции фона среды
+        /// Изменение позиции фона Звездной системы
         /// </summary>
         /// <param name="offset">Смещение</param>
-        public abstract void OffsetBackground(Vector2f currentCoords, Vector2f lastCoords);
+        public void OffsetBackground(Vector2f currentCoords, Vector2f lastCoords)
+        {
+            Vector2f offset = lastCoords - currentCoords;
+            this.background.Translate(new Vector2f((float)(offset.X * (-0.9)), (float)(offset.Y * (-0.9))));
+        }
 
         /// <summary>
         /// Получить отображения уникальных объектов среды
         /// </summary>
         /// <returns></returns>
-        protected abstract List<ObjectView> GetCustomViews();
+        protected List<ObjectView> GetCustomViews()
+        {
+            return new List<ObjectView>();
+        }
 
         /// <summary>
         /// Вернуть коллекцию отображений объектов звездной системы
