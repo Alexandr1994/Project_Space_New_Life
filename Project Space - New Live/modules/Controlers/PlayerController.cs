@@ -110,26 +110,19 @@ namespace Project_Space___New_Live.modules.Controlers
                 }; break;
                 case Keyboard.Key.Num1:
                 {
-                    this.playerContainer.ActiveTransport.ObjectWeaponSystem.SetActiveWeaponIndex(0);
+                    this.playerContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);
                 }; break;
                 case Keyboard.Key.Num2:
                 {
-                    this.playerContainer.ActiveTransport.ObjectWeaponSystem.SetActiveWeaponIndex(1);
+                    this.playerContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(1);
                 }; break;
                 case Keyboard.Key.Num3:
                 {
-                    this.playerContainer.ActiveTransport.ObjectWeaponSystem.SetActiveWeaponIndex(2);
+                    this.playerContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(2);
                 }; break;
                 case Keyboard.Key.LControl:
                 {
                     this.ShieldProcess();
-                }; break;
-                case Keyboard.Key.Space:
-                {
-                    if (this.playerContainer.PlayerShip.NearPlanet)
-                    {
-                        this.playerContainer.OnPlanetLanding();
-                    }
                 }; break;
                 default: break;
             }
@@ -187,7 +180,7 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 case Mouse.Button.Left:
                 {
-                    this.playerContainer.ActiveTransport.OpenFire();
+                    this.playerContainer.ControllingObject.OpenFire();
                 }; break;
                 default: break;
             }
@@ -204,7 +197,7 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 case Mouse.Button.Left:
                 {
-                    this.playerContainer.ActiveTransport.StopFire();
+                    this.playerContainer.ControllingObject.StopFire();
                 }; break;
                 default: break;
             }
@@ -227,7 +220,7 @@ namespace Project_Space___New_Live.modules.Controlers
 
         private void OnMouseOut(object sender, MouseMoveEventArgs Args)
         {
-            this.playerContainer.ActiveTransport.StopFire();
+            this.playerContainer.ControllingObject.StopFire();
         }
 
         /// <summary>
@@ -237,31 +230,31 @@ namespace Project_Space___New_Live.modules.Controlers
         {
             if (Forward)
             {
-                this.playerContainer.ActiveTransport.MoveManager.GiveForwardThrust(this.playerContainer.ActiveTransport);
+                this.playerContainer.ControllingObject.MoveManager.GiveForwardThrust(this.playerContainer.ControllingObject);
             }
             if (Reverse)
             {
-                this.playerContainer.ActiveTransport.MoveManager.GiveReversThrust(this.playerContainer.ActiveTransport);
+                this.playerContainer.ControllingObject.MoveManager.GiveReversThrust(this.playerContainer.ControllingObject);
             }
             if (LeftFly)
             {
-                this.playerContainer.ActiveTransport.MoveManager.GiveSideThrust(this.playerContainer.ActiveTransport, -1);
+                this.playerContainer.ControllingObject.MoveManager.GiveSideThrust(this.playerContainer.ControllingObject, -1);
             }
             if (RightFly)
             {
-                this.playerContainer.ActiveTransport.MoveManager.GiveSideThrust(this.playerContainer.ActiveTransport, 1);
+                this.playerContainer.ControllingObject.MoveManager.GiveSideThrust(this.playerContainer.ControllingObject, 1);
             }
             if (LeftRotate)
             {
-                this.playerContainer.ActiveTransport.MoveManager.GiveRotationThrust(this.playerContainer.ActiveTransport, -1);
+                this.playerContainer.ControllingObject.MoveManager.GiveRotationThrust(this.playerContainer.ControllingObject, -1);
             }
             if (RightRotate)
             {
-                this.playerContainer.ActiveTransport.MoveManager.GiveRotationThrust(this.playerContainer.ActiveTransport, 1);
+                this.playerContainer.ControllingObject.MoveManager.GiveRotationThrust(this.playerContainer.ControllingObject, 1);
             }
             if (StopMoving)
             {
-                this.playerContainer.ActiveTransport.MoveManager.FullStop(this.playerContainer.ActiveTransport);
+                this.playerContainer.ControllingObject.MoveManager.FullStop(this.playerContainer.ControllingObject);
             }           
         }
 
@@ -279,13 +272,13 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         private void ShieldProcess()
         {
-            if (this.playerContainer.ActiveTransport.ShieldActive)//Если энергощит активен
+            if (this.playerContainer.ControllingObject.ShieldActive)//Если энергощит активен
             {
-                this.playerContainer.ActiveTransport.DeactivateShield();//деактивировать его
+                this.playerContainer.ControllingObject.DeactivateShield();//деактивировать его
             }
             else
             {
-                this.playerContainer.ActiveTransport.ActivateShield();//иначе активировать
+                this.playerContainer.ControllingObject.ActivateShield();//иначе активировать
             }
         }
     }

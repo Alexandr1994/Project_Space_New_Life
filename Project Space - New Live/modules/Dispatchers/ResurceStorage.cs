@@ -68,7 +68,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         static public BaseEnvironment InitSystem1()
         {
-            return new BaseEnvironment(backText, (float)0.5);
+            return new BaseEnvironment(noise, (float)0.5);
         }
     
     }

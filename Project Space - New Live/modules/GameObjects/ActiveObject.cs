@@ -44,29 +44,64 @@ namespace Project_Space___New_Live.modules.GameObjects
             Shield
         }
 
+        /// <summary>
+        /// Части объекта
+        /// </summary>
         public enum Parts : int
         {
             /// <summary>
-            /// носовая часть
+            /// Передняя часть
             /// </summary>
             FrontPart = 0,
             /// <summary>
-            /// кормовая часть
+            /// Задняя часть
             /// </summary>
             FeedPart,
             /// <summary>
-            /// правое крыло
+            /// Правый борт
             /// </summary>
             RightWing,
             /// <summary>
-            /// левое крыло
+            /// Левый борт
             /// </summary>
             LeftWing,
             /// <summary>
-            /// Энергощит
+            /// Защита
             /// </summary>
             Shield
         }
+
+        //КОНТРОЛЛЕР И СРЕДА ОБЪЕКТА
+
+        /// <summary>
+        /// Конторллер активного объекта 
+        /// </summary>
+        protected AbstractController brains;
+
+        /// <summary>
+        /// Умтановка контроллера объекта
+        /// </summary>
+        /// <param name="newBrains">Контроллер</param>
+        public void SetBrains(AbstractController newBrains)
+        {
+            this.brains = newBrains;
+        }
+
+        /// <summary>
+        /// Экземпляр среды, в которой находится данный объект
+        /// </summary>
+        protected BaseEnvironment environment;
+
+        /// <summary>
+        /// Экземпляр среды, в которой находится данный объект
+        /// </summary>
+        public BaseEnvironment Environment
+        {
+            get { return this.environment; }
+            set { this.environment = value; }
+        }
+
+        //ОТОБРАЖЕНИЕ ОБЪЕКТА
 
         /// <summary>
         /// Текстурная лента визуального эффекта гибели объекта
@@ -120,43 +155,12 @@ namespace Project_Space___New_Live.modules.GameObjects
             }
         }
 
-
-        //КОНТРОЛЛЕР И СРЕДА ОБЪЕКТА
-        
-        /// <summary>
-        /// Конторллер активного объекта 
-        /// </summary>
-        protected AbstractController brains;
-
-        /// <summary>
-        /// Умтановка контроллера объекта
-        /// </summary>
-        /// <param name="newBrains">Контроллер</param>
-        public void SetBrains(AbstractController newBrains)
-        {
-            if (this.brains == null)
-            {
-                this.brains = newBrains;
-            }
-        }
-
-
-
-        /// <summary>
-        /// Экземпляр среды, в которой находится данный объект
-        /// </summary>
-        protected BaseEnvironment environment;
-
-        /// <summary>
-        /// Экземпляр среды, в которой находится данный объект
-        /// </summary>
-        public BaseEnvironment Environment
-        {
-            get { return this.environment; }
-            set { this.environment = value; }
-        }
-
         //ОБЩЕЕ ОБОРУДОВАНИЕ/СНАРЯЖЕНИЕ АКТИВНЫХ ОБЪЕКТОВ
+
+        /// <summary>
+        /// Двигатель транспортного средства
+        /// </summary>
+        protected Engine objectEngine;
 
         /// <summary>
         /// Реактор/Генератор активного объекта
@@ -174,14 +178,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected Radar objectRadar;
 
         /// <summary>
-        /// Энергощит/персональный энергощит активного объекта
+        /// Защитная система активного объекта
         /// </summary>
         protected Shield objectShield;
-
-        /// <summary>
-        /// Двигатель транспортного средства
-        /// </summary>
-        protected Engine transportEngine;
 
         /// <summary>
         /// Коллекция оборудования корабля
@@ -191,7 +190,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             get
             {
                 List<Equipment> shipEquipment = new List<Equipment>();
-                shipEquipment.Add(this.transportEngine);
+                shipEquipment.Add(this.objectEngine);
                 shipEquipment.Add(this.objectReactor);
                 shipEquipment.Add(this.objectBattery);
                 shipEquipment.Add(this.objectRadar);
@@ -200,7 +199,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             }
         }
 
-        //ФЛАГИ ОБЪЕКТА
+        //СОСТОЯНИЕ ОБЪЕКТА
 
         /// <summary>
         /// Флаг уничтожения активного объекта
@@ -216,17 +215,31 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Флаг нахождения радом с планетой
+        /// Текущий запас прочности
         /// </summary>
-        private bool nearPlanet = false;
+        protected int health;
 
         /// <summary>
-        /// Флаг нахождения радом с планетой
+        /// Текущий запас прочности
         /// </summary>
-        public bool NearPlanet
+        public int Health
         {
-            get { return this.nearPlanet; }
+            get { return this.health; }
         }
+
+        /// <summary>
+        /// Максимальный запас прочности
+        /// </summary>
+        protected int maxHealth;
+
+        /// <summary>
+        /// Максимальный запас прочности
+        /// </summary>
+        public int MaxHealth
+        {
+            get { return this.maxHealth; }
+        }
+
 
         //ПОЛЯ И МЕТОДЫ ДИВЖЕНИЯ ОБЪЕКТА
 
@@ -298,44 +311,16 @@ namespace Project_Space___New_Live.modules.GameObjects
             }
         }
 
-        //СОСТОЯНИЕ ОБЪЕКТА
-
-        /// <summary>
-        /// Текущий запас прочности
-        /// </summary>
-        protected int health;
-
-        /// <summary>
-        /// Текущий запас прочности
-        /// </summary>
-        public int Health
-        {
-            get { return this.health; }
-        }
-
-        /// <summary>
-        /// Максимальный запас прочности
-        /// </summary>
-        protected int maxHealth;
-
-        /// <summary>
-        /// Максимальный запас прочности
-        /// </summary>
-        public int MaxHealth
-        {
-            get { return this.maxHealth; }
-        }
-
         //ЗАЩИТНАЯ СИСТЕМА
 
         /// <summary>
-        /// Текущее состояние энергощита 
+        /// Текущее состояние защитной системы 
         /// </summary>
         public bool ShieldActive
         {
             get
             {
-                if (this.objectShield != null)//если щит установлен
+                if (this.objectShield != null)//если защита установлена
                 {
                     return this.objectShield.State;//то опросить его состояние
                 }
@@ -344,12 +329,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Активировать энергощит
+        /// Активировать защитную систему
         /// </summary>
         /// <returns>true - удалось активировать, false - не удалось</returns>
         public bool ActivateShield()
         {
-            if (this.objectShield != null)//Если энергощит есть
+            if (this.objectShield != null)//Если защита установленна
             {
                 return this.objectShield.Activate();
             }
@@ -357,7 +342,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Деактивировать щит
+        /// Деактивировать защитную систему
         /// </summary>
         public void DeactivateShield()
         {
@@ -403,7 +388,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="damagedPartIndex">Пораженная часть объекта</param>
         public void GetDamage(int damage, int equipmentDamage, int damagedPartIndex)
         {
-            if (!this.ShieldActive)//если щит не активен
+            if (!this.ShieldActive)//если защита не активна
             {//то нанести урон объекту
                 this.WearingEquipment(equipmentDamage, damagedPartIndex);//Нанести повреждения оборудованию
                 if (this.health > damage)
@@ -416,13 +401,13 @@ namespace Project_Space___New_Live.modules.GameObjects
                 }
             }
             else
-            {//иначе нанести урон экрану щита
+            {//расход ресурса защитной системы
                 objectShield.GetDamageOnShield(damage, equipmentDamage / 5);
             }
         }
 
         /// <summary>
-        /// Наношение урона оборудования
+        /// Наношение урона оборудованию
         /// </summary>
         /// <param name="equipmentDamage">Урон наносимый оборудованию</param>
         /// <param name="damagedPartIndex">Пораженная часть корабля</param>
@@ -438,15 +423,15 @@ namespace Project_Space___New_Live.modules.GameObjects
                 case (int)Parts.FeedPart://Кормовая часть
                     {
                         this.WearingCustomEquipment(this.objectReactor, equipmentDamage);//Износ реактора
-                        this.WearingCustomEquipment(this.transportEngine, equipmentDamage);//Износ двигателя
+                        this.WearingCustomEquipment(this.objectEngine, equipmentDamage);//Износ двигателя
                     }; break;
                 case (int)Parts.LeftWing://Левое крыло
                     {
-                        this.WearingCustomEquipment(this.transportEngine, equipmentDamage);//Износ двигателя
+                        this.WearingCustomEquipment(this.objectEngine, equipmentDamage);//Износ двигателя
                     }; break;
                 case (int)(Parts.RightWing)://Правое крыло
                     {
-                        this.WearingCustomEquipment(this.transportEngine, equipmentDamage);//Износ двигателя
+                        this.WearingCustomEquipment(this.objectEngine, equipmentDamage);//Износ двигателя
                     }; break;
                 default: break;
             }
@@ -508,7 +493,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Постоянное перемещение корабля
+        /// Движение корабля
         /// </summary>
         protected override void Move()
         {
@@ -540,13 +525,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Анализирование взаимодействия данного объекта с другими объектами в среде
         /// </summary>
-        /// <summary>
-        /// Анализирование взаимодействия корабля с объектами в звездной системе
-        /// </summary>
         public void AnalizeObjectInteraction()
         {
-            this.nearPlanet = false;
-            List<GameObject> interactiveObjects = this.Environment.GetObjectsInEnvironment();//получить все объекты в звездной системе
+            List<GameObject> interactiveObjects = this.Environment.GetObjectsInEnvironment();//получить все объекты в среде
             foreach (GameObject interactObject in interactiveObjects)
             {
                 switch (interactObject.GetType().Name)
@@ -584,14 +565,17 @@ namespace Project_Space___New_Live.modules.GameObjects
                                 }
                             }
                         }; break;
-                    case "Planet"://обработка контакта с планетой
+                    case "Wall"://обработка контакта с препядствием
                         {
-                            Planet planet = interactObject as Planet;
+                            Wall wall = interactObject as Wall;
                             foreach (ObjectView partShipView in this.View)
                             {
-                                if (partShipView.BorderContactAnalize(interactObject.View[0]))
+                                if (partShipView.BorderContactAnalize(wall.View[0]))
                                 {
-                                    this.nearPlanet = true;
+                                    float deltaX = this.Coords.X - wall.Coords.X;//обработать столкновение
+                                    float deltaY = this.Coords.Y - wall.Coords.Y;
+                                    float contactAngle = (float)(Math.Atan2(deltaY, deltaX));
+                                    this.MoveManager.CrashMove(this.Mass, wall.Mass, contactAngle);
                                 }
                             }
                         }; break;
@@ -613,8 +597,8 @@ namespace Project_Space___New_Live.modules.GameObjects
                                         float contactAngle = (float)(Math.Atan2(deltaY, deltaX));
                                         this.MoveManager.CrashMove(ship.MoveManager, this.Mass, ship.Mass, contactAngle);
                                         //нанесение урона временная реализация
-                                        this.GetDamage(50, 1, i);//и нанести урон как данному
-                                        ship.GetDamage(50, 1, j);//так и проверяемому кораблю
+                                       // this.GetDamage(50, 1, i);//и нанести урон как данному
+                                       // ship.GetDamage(50, 1, j);//так и проверяемому кораблю
                                     }
                                 }
                             }
@@ -643,7 +627,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Постороение корабля
+        /// Постороение активного объекта
         /// </summary>
         /// <param name="mass">Масса</param>
         /// <param name="coords">Начальные координаты</param>
@@ -651,16 +635,15 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin">Массив текстур</param>
         /// <param name="partSize">Размер составной части корабля</param>
         /// <param name="startSystem">Звездная система</param>
-        public ActiveObject(float mass, Vector2f coords, int maxHealth, Texture[] skin, Vector2f partSize, BaseEnvironment startSystem)
+        public ActiveObject(float mass, Vector2f coords, int maxHealth, Texture[] skin, Vector2f partSize)
         {
             this.mass = mass;
             this.coords = coords;
             this.ViewPartSize = partSize;
             this.ConstructView(skin);
             this.maxHealth = this.health = maxHealth;
-            this.Environment = startSystem;
 
-            this.transportEngine = new Engine(100, 1, 200, 150, 10, 8, null);//двигатель
+            this.objectEngine = new Engine(100, 1, 2000, 1500, 10, 8, null);//двигатель
             this.objectReactor = new Reactor(100, 5, null);//реактор
             this.objectBattery = new Battery(100, 500, null);//энергобатарея
             this.objectRadar  = new Radar(20, 2500, null);//радар
@@ -700,7 +683,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Сконструировать сигнатуру цели
         /// </summary>
-        /// <returns>Сигнатура корабля</returns>
+        /// <returns>Сигнатура активного объекта</returns>
         protected override ObjectSignature ConstructSignature()
         {
             ObjectSignature signature = new ObjectSignature();
@@ -709,39 +692,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             signature.AddCharacteristics(sizes);
             return signature;
         }
-
-        //ПАРАМЕТРЫ ТРАНСПОРТНОГО СРЕДСТВА
-
-   /*   
-
-        // ОБОРУДОВАНИЕ ТРАНСПОРТНОГО СРЕДСТВА
-
-
-
-
-
-
-
-
-
-        //ФЛАГИ КОРАБЛЯ
-
-
-        /// <summary>
-        /// Звездная система, в которой находится корабль
-        /// </summary>
-        public StarSystem ShipStarSystem
-        {
-            get { return this.Environment as StarSystem; }
-        }
-
-
-        
-
-
-
-
-*/
 
     }
 }

@@ -307,6 +307,15 @@ namespace Project_Space___New_Live.modules.GameObjects
             contacterNoveManager.ConstructAfterCrashSpeedVector(contacterSpeedVector, ownSpeedVector, contacterMass, ownMass, angle);
         }
 
+
+        public void CrashMove(float ownMass, float contacterMass, float angle)
+        {
+            SpeedVector ownSpeedVector = this.ConstructResultVector();
+            SpeedVector contacterSpeedVector = new SpeedVector(0, 0);
+            this.speedVectors.Clear();//работа с собственными векторами
+            this.ConstructAfterCrashSpeedVector(ownSpeedVector, contacterSpeedVector, ownMass, contacterMass, angle);
+        }
+
         /// <summary>
         /// Движение объекта после попадания
         /// </summary>

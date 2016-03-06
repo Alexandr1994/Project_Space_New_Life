@@ -17,34 +17,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
     {
 
         /// <summary>
-        /// Режимы работы контейнер 
-        /// </summary>
-        public enum Mode : int
-        {
-            /// <summary>
-            /// Космический режим
-            /// </summary>
-            SpaceMode = 0,
-            /// <summary>
-            /// Танковый режим
-            /// </summary>
-            TankMode
-        }
-
-        /// <summary>
-        /// Текущий режим
-        /// </summary>
-        private Mode currentMode;
-
-        /// <summary>
-        /// Текущий режим
-        /// </summary>
-        public Mode CurrentMode
-        {
-            get { return this.currentMode; }
-        }
-
-        /// <summary>
         /// Ссылка на графический модуль
         /// </summary>
         private RenderModule GameRenderer;
@@ -62,50 +34,28 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Корабль игрока
         /// </summary>
-        private ActiveObject playerShip = null;
+        private ActiveObject controllingObject = null;
 
         /// <summary>
         /// Корабль игрока
         /// </summary>
-        public ActiveObject PlayerShip
+        public ActiveObject ControllingObject
         {
-            get { return this.playerShip; }
-        }
-
-        public ActiveObject ActiveTransport
-        {
-            get
-            {
-                switch (this.currentMode)
-                {
-                    case Mode.SpaceMode:
-                    {
-                        return this.PlayerShip;
-                    }
-                    case Mode.TankMode:
-                    {
-                        return this.PlayerShip;
-                    }
-                    default:
-                    {
-                        return null;
-                    }
-                }
-            }
+            get { return this.controllingObject; }
         }
 
         /// <summary>
         /// Активная звездная система
         /// </summary>
-        private BaseEnvironment activeBaseEnvironment = null;
+        private BaseEnvironment environment = null;
 
         /// <summary>
         /// Активная звездная система
         /// </summary>
-        public BaseEnvironment ActiveBaseEnvironment
+        public BaseEnvironment Environment
         {
-            get { return this.activeBaseEnvironment; }
-            set { this.activeBaseEnvironment = value; }//(временно)
+            get { return this.environment; }
+            set { this.environment = value; }//(временно)
         }
 
         /// <summary>
@@ -113,11 +63,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         /// <param name="GameWorld">Коллекция звездных систем</param>
         /// <returns>Экземпляр контейнера игрока</returns>
-        public static PlayerContainer GetInstanse(List<BaseEnvironment> GameWorld)
+        public static PlayerContainer GetInstanse(BaseEnvironment environment)
         {
             if (container == null)
             {
-                container = new PlayerContainer(GameWorld);
+                container = new PlayerContainer(environment);
             }
             return container;
         }
@@ -127,46 +77,25 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         public void OnPlanetLanding()
         {
-            this.lastPlayerCoords = this.PlayerShip.Coords;
-            this.currentMode = Mode.TankMode;
-
-            List<Wall> wallsSystem = new List<Wall>();
-            wallsSystem.Add(new Wall(new Vector2f(300, 450), new Vector2f(150, 20), new Texture[] { ResurceStorage.PanelText }, false));
-            wallsSystem.Add(new Wall(new Vector2f(450, 450), new Vector2f(20, 100), new Texture[] { ResurceStorage.PanelText }, false));
-            wallsSystem.Add(new Wall(new Vector2f(470, 550), new Vector2f(150, 20), new Texture[] { ResurceStorage.PanelText }, false));
-            wallsSystem.Add(new Wall(new Vector2f(530, 450), new Vector2f(20, 100), new Texture[] { ResurceStorage.PanelText }, false));
-
-            this.activeBaseEnvironment = this.PlayerShip.Environment = new BaseEnvironment(ResurceStorage.RockTexture, (float)0.5);
-            List<ActiveObject> unitsCollection = new List<ActiveObject>();
-            unitsCollection.Add(this.PlayerShip);
-            ActiveObject testTank = new ActiveObject(50, new Vector2f(1300, 1300), 150, ResurceStorage.TankTextures, new Vector2f(15, 30), activeBaseEnvironment);
-            testTank.SetBrains(new ComputerController(testTank));
-            testTank.Environment = this.activeBaseEnvironment;
-            unitsCollection.Add(testTank);
-            testTank = new ActiveObject(150, new Vector2f(700, 700), 150, ResurceStorage.TankTextures, new Vector2f(15, 30), activeBaseEnvironment);
-            testTank.SetBrains(new ComputerController(testTank));
-            testTank.Environment = this.activeBaseEnvironment;
-            unitsCollection.Add(testTank);
-            this.activeBaseEnvironment.RefreshActiveObjectsCollection(unitsCollection);
+            ;
         }
 
         /// <summary>
         /// Конструктор контейнера
         /// </summary>
         /// <param name="GameWorld">Коллекция звездных систем</param>
-        /// <param name="playerInterface">Ссылка на графический интерфейс игрока</param>
-        private PlayerContainer(List<BaseEnvironment> GameWorld)
-        {//Временная реализация конструктора корабля
-            //Сохранение в контейнере
-            PlayerController controller = PlayerController.GetInstanse(this);
-            this.currentMode = (int) Mode.SpaceMode;
-            this.playerShip = new ActiveObject(100, new Vector2f(400, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), GameWorld[0]);//Корабля игрока
-            this.playerShip.SetBrains(controller);
-            this.lastPlayerCoords = this.playerShip.Coords;//последних координат корабля игрока
-            this.activeBaseEnvironment = this.playerShip.Environment;//Текущей звездной системы
+        private PlayerContainer(BaseEnvironment environment)
+        {
+            this.environment = environment;
             this.GameRenderer = RenderModule.getInstance();//Сылки на модуль отрисовки
-            //this.playerInterface = playerInterface;
+        }
 
+        public void SetControllingActiveObject(ActiveObject activeObject)
+        {
+            this.controllingObject = activeObject;
+            PlayerController controller = PlayerController.GetInstanse(this);
+            this.controllingObject.SetBrains(controller);
+            this.lastPlayerCoords = this.controllingObject.Coords;//последних координат корабля игрока
         }
 
         /// <summary>
@@ -175,7 +104,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetHealh()
         {
-            return this.ActiveTransport.Health * 100 / this.ActiveTransport.MaxHealth;
+            return this.controllingObject.Health * 100 / this.controllingObject.MaxHealth;
         }
 
         /// <summary>
@@ -184,7 +113,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetEnergy()
         {
-            Battery battery = this.ActiveTransport.Equipment[(int)(ActiveObject.EquipmentNames.Battery)] as Battery;
+            Battery battery = this.controllingObject.Equipment[(int)(ActiveObject.EquipmentNames.Battery)] as Battery;
             return (float)battery.Energy / (float)battery.MaxEnergy * 100;
         }
 
@@ -194,9 +123,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetShieldPower()
         {
-            if (this.ActiveTransport.ShieldActive)
+            if (this.controllingObject.ShieldActive)
             {
-                Shield shield = ActiveTransport.Equipment[(int)ActiveObject.EquipmentNames.Shield] as Shield;
+                Shield shield = controllingObject.Equipment[(int)ActiveObject.EquipmentNames.Shield] as Shield;
                 return (float)shield.ShieldPower / (float)shield.MaxShieldPower * 100;
             }
             return 0;
@@ -208,7 +137,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetWeaponAmmo()
         {
-            return this.ActiveTransport.ObjectWeaponSystem.GetAmmoPersent();
+            return this.controllingObject.ObjectWeaponSystem.GetAmmoPersent();
         }
 
         /// <summary>
@@ -217,11 +146,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetRadarRange()
         {
-            if (this.ActiveTransport.Equipment[(int)ActiveObject.EquipmentNames.Radar] == null)
+            if (this.controllingObject.Equipment[(int)ActiveObject.EquipmentNames.Radar] == null)
             {//если радар отстутствует вернуть 0
                 return 0;
             }
-            Radar radar = this.ActiveTransport.Equipment[(int)ActiveObject.EquipmentNames.Radar] as Radar;
+            Radar radar = this.controllingObject.Equipment[(int)ActiveObject.EquipmentNames.Radar] as Radar;
             return radar.VisibleRadius;//вернуть радиус заны видимости радара
         }
 
@@ -230,9 +159,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         public void Process()
         {
-            this.activeBaseEnvironment.OffsetBackground(this.ActiveTransport.Coords, this.lastPlayerCoords);//установить смещение фона активной звездной системы
-            this.lastPlayerCoords = this.ActiveTransport.Coords;//сохранение новых координат
-            this.GameRenderer.GameView.Center = this.ActiveTransport.Coords;//Установка камеры
+            this.lastPlayerCoords = this.controllingObject.Coords;//сохранение новых координат
+            this.GameRenderer.GameView.Center = this.controllingObject.Coords;//Установка камеры
         }
 
 

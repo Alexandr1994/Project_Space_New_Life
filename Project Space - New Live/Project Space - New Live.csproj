@@ -101,7 +101,7 @@
     <Compile Include="modules\Controlers\Forms\RectPanel.cs" />
     <Compile Include="modules\Controlers\Forms\RectButton.cs" />
     <Compile Include="modules\Controlers\InterfaceParts\PlayerStateIndicator.cs" />
-    <Compile Include="modules\Dispatchers\GameRoot.cs" />
+    <Compile Include="modules\Dispatchers\SystemRoot.cs" />
     <Compile Include="modules\Controlers\PlayerController.cs" />
     <Compile Include="modules\Dispatchers\PlayerContainer.cs" />
     <Compile Include="modules\Dispatchers\PlayerInterfaceContainer.cs" />

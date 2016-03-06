@@ -41,7 +41,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin">Массив текстур препядствия</param>
         /// <param name="shellTrancparansy">Прозрачность для снарядов</param>
         /// <param name="mass">Масса препядствия</param>
-        public Wall(Vector2f coords, Vector2f size, Texture[] skin, bool shellTrancparansy, int mass = 0)
+        public Wall(Vector2f coords, Vector2f size, Texture[] skin, bool shellTrancparansy, int mass = 10000)
         {
             this.mass = mass;
             this.shellTransparancy = shellTrancparansy;
