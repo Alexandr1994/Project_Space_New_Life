@@ -86,7 +86,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.background.Image.Texture = skin;
             this.background.Image.Texture.Repeated = true;
             this.background.Image.Texture.Smooth = true;
-            this.background.Image.TextureRect = new IntRect(5000, 5000, 100, 100);
+            this.background.Image.TextureRect = new IntRect(100, 100, 2000, 2000);
             this.background.Image.Position = new Vector2f(-5000, -5000);
         }
 
@@ -110,7 +110,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                 this.shellsCollection[i].Process(new Vector2f(0, 0));
                 if (this.shellsCollection[i].LifeOver)//если время жизни снаряда вышло
                 {
-                    this.effectsCollection.Add(this.shellsCollection[i].ConstructDeathVisualEffect(new Vector2f(30, 30), 19));
+                    this.effectsCollection.Add(this.shellsCollection[i].ConstructDeathVisualEffect(new Vector2f(32, 32), 19));
                     this.shellsCollection.Remove(this.shellsCollection[i]);//удалить его из коллекции
                     i --;
                 }

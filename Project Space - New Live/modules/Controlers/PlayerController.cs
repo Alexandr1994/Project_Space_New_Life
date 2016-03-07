@@ -204,20 +204,6 @@ namespace Project_Space___New_Live.modules.Controlers
         }
 
 
-        /*private void OnMouseMove(object sender, MouseMoveEventArgs Args)
-        {
-            if (this.playerContainer.CurrentMode == PlayerContainer.Mode.TankMode)
-            {
-                Vector2f coords = this.GameRenderer.GameView.Center - this.GameRenderer.GameView.Size / 2;
-                
-                float coordsDifX = -(this.playerContainer.ActiveTransport.Coords.X - coords.X) + (float)(Mouse.GetPosition().X);
-                float coordsDifY = -(this.playerContainer.ActiveTransport.Coords.Y - coords.Y) + (float)(Mouse.GetPosition().Y);
-                float newAngle = (float)(Math.Atan2(coordsDifY, coordsDifX));
-                this.playerContainer.PlayerTank.RotateTurret(newAngle);
-            }
-        }*/
-
-
         private void OnMouseOut(object sender, MouseMoveEventArgs Args)
         {
             this.playerContainer.ControllingObject.StopFire();

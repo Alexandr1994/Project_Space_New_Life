@@ -103,6 +103,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         public void Main()
         {
+            Text text = new Text();
+            text.Font = ResurceStorage.font;
+            text.Color = Color.Green;
+            ;
+
             this.playerContainer.SetControllingActiveObject(this.activeObjectsCollection[0]);
             while (this.GraphicInterfaceContainer.GameContinue)
             {
@@ -111,6 +116,13 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 this.environment.Process();
                 this.GraphicInterfaceContainer.Process();
                 this.GraphicModule.RenderProcess(this.playerContainer.Environment);
+
+
+                text.Position = this.GraphicModule.GameView.Center;
+                text.DisplayedString =
+                    this.activeObjectsCollection[0].MoveManager.ConstructResultVector().Speed.ToString();
+                GraphicModule.MainWindow.Draw(text);
+
                 GraphicModule.MainWindow.DispatchEvents();
                 GraphicModule.MainWindow.Display();
             }

@@ -41,26 +41,44 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 angle += (float)(2 * Math.PI);//вернуть его в пределы от 0 до 360 градусов
             }
-            foreach (SpeedVector vector in speedVectors)
-            {//Если среди существующих векторов присутствует вектор, поворот которого отличается от поворота нового вектора менее чем на 15 градусов
-                if (Math.Abs(vector.Angle - angle) < (Math.PI * 15) / 180)
-                {//то вместо создания нового вектора следует, изменить текущий
-                    if (maxSpeed > (vector.Speed + speed))
+            List<SpeedVector> codirectVectors = this.GetCodirectVectors(angle);
+            List<SpeedVector> counterdirectVectors = this.GetCounterdirectVectors(angle);
+            if (counterdirectVectors.Count != 0)
+            {
+                foreach (SpeedVector vector in counterdirectVectors)
+                {
+                    Vector2f oldVector = new Vector2f();
+                    oldVector.X = (float)(vector.Speed * Math.Cos(vector.Angle));
+                    oldVector.Y = (float)(vector.Speed * Math.Sin(vector.Angle));
+                    Vector2f newVector = new Vector2f();
+                    newVector.X = (float)(speed * Math.Cos(angle));
+                    newVector.Y = (float)(speed * Math.Sin(angle));
+                    float vectorProection = (float)((oldVector.X * newVector.X + oldVector.Y * newVector.Y) / vector.Speed);
+                    vector.SpeedAcceleration(vectorProection);
+                    //vector.SpeedAcceleration(-speed);
+                }
+                return;
+            }
+            if (codirectVectors.Count != 0)
+            {
+                foreach (SpeedVector vector in codirectVectors)
+                {
+                    if (this.ConstructResultVector().Speed < maxSpeed)
                     {
-                        vector.SpeedAcceleration(speed);
+                        Vector2f oldVector = new Vector2f();
+                        oldVector.X = (float)(vector.Speed * Math.Cos(vector.Angle));
+                        oldVector.Y = (float)(vector.Speed * Math.Sin(vector.Angle));
+                        Vector2f newVector = new Vector2f();
+                        newVector.X = (float)(speed * Math.Cos(angle));
+                        newVector.Y = (float)(speed * Math.Sin(angle));
+                        float vectorProection = (float)((oldVector.X * newVector.X + oldVector.Y * newVector.Y) / vector.Speed);
+                        vector.SpeedAcceleration(vectorProection);
+                        //vector.SpeedAcceleration(speed);
                     }
                     vector.VectorRotation(angle - vector.Angle);
-                    return;
-                }
-                if (vector.Angle > angle + (Math.PI / 2) || vector.Angle < (angle - Math.PI / 2))//Или вектор угол которого отличается на 180 градусов (PI)
-                {
-                    vector.SpeedAcceleration(-speed);
-                }
-                /*if ((Math.Abs(vector.Angle - (angle - (float)Math.PI)) < (1.5 * Math.PI / 180)) || (Math.Abs(angle - (vector.Angle - (float)Math.PI)) < (2 * Math.PI / 180)))
-                {//то скорость данного вектора уменьшится
-                    vector.SpeedAcceleration(-speed);
-                }*/
-            }//В противном случае требуется добавить новый вектор
+                } 
+                return;
+            }
             speedVectors.Add(new SpeedVector(speed, angle));    
         }
 
@@ -75,7 +93,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             foreach (SpeedVector vector in this.speedVectors)
             {
                 float divAngle = (float)(vector.Angle - angle);
-                if (Math.Abs(divAngle) > -20 * Math.PI / 180 && Math.Abs(divAngle) < 20 * Math.PI / 180)
+                if (Math.Abs(divAngle) > -90 * Math.PI / 180 && Math.Abs(divAngle) < 90 * Math.PI / 180)
                 {
                     retVectors.Add(vector);
                 }
@@ -88,13 +106,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="angle">Угол поворота</param>
         /// <returns>Искомые вектора</returns>
-        private List<SpeedVector> GetContrdirectVectors(float angle)
+        private List<SpeedVector> GetCounterdirectVectors(float angle)
         {
             List<SpeedVector> retVectors = new List<SpeedVector>();
             foreach (SpeedVector vector in this.speedVectors)
             {
                 float divAngle = vector.Angle - angle;
-                if (Math.Abs(divAngle) > 160 * Math.PI / 180 && Math.Abs(divAngle) < 200 * Math.PI / 180)
+                if (Math.Abs(divAngle) > 90 * Math.PI / 180 && Math.Abs(divAngle) < 270 * Math.PI / 180)
                 {
                     retVectors.Add(vector);
                 }
