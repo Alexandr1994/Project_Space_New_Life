@@ -58,10 +58,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin">Массив текстура</param>
         protected override void ConstructView(Texture[] skin)
         {
-            this.view = new ObjectView[2];
+            this.view = new ImageView[2];
             for (int i = 0; i < this.view.Length; i ++)
             {
-                this.view[i] = new ObjectView(new CircleShape((float)(radius * ((0.5 * i) + 1))), BlendMode.Alpha);//создание нового ObjectView
+                this.view[i] = new ImageView(new CircleShape((float)(radius * ((0.5 * i) + 1))), BlendMode.Alpha);//создание нового ObjectView
                 this.view[i].Image.Position = coords - new Vector2f(radius, radius);//установка позиции отображегния ObjectView
                 this.view[i].Image.Texture = skin[i];//установка текстуры отображения ObjectMode
             }

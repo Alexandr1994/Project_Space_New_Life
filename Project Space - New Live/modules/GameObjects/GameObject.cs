@@ -33,12 +33,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Отображение объекта
         /// </summary>
-        protected ObjectView[] view;
+        protected ImageView[] view;
 
         /// <summary>
         /// Отображение объекта
         /// </summary>
-        public virtual ObjectView[] View 
+        public virtual ImageView[] View 
         {
             get { return this.view;}           
         }

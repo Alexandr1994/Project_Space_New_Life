@@ -12,32 +12,21 @@ using SFML.Window;
 namespace Project_Space___New_Live.modules.Dispatchers
 {
     /// <summary>
-    /// Графическое отображение
+    /// Графическое отображение фигуры
     /// </summary>
-    public class ObjectView
+    public class ImageView : RenderView
     {
 
-     /*   /// <summary>
-        /// Расположение объекта отображения
-        /// </summary>
-        private Vector2f location;
-
         /// <summary>
-        /// Расположение объекта отображения
+        /// Внутренне свойство
         /// </summary>
-        public Vector2f Location
+        protected override Drawable InsideView 
         {
-            get { return this.location; }
-            set
-            {
-                this.image.Position -= this.location;
-                this.location = value;
-                this.image.Position += this.location;
-            }
-        }*/
+            get {return this.image as Drawable;}
+            set {this.image = value as Shape;}
+        }
 
-        /// <summary>
-        /// Отображение
+        /// Отображение фигуры
         /// </summary>
         private Shape image = null;
 
@@ -48,41 +37,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             get { return this.image; }
             set { this.image = value; }
-        }
-
-        /// <summary>
-        /// Состояние отображения
-        /// </summary>
-        private RenderStates state;
-        /// <summary>
-        /// Свойство состояния отображения
-        /// </summary>
-        public RenderStates State
-        {
-            get { return this.state;}
-            set { this.state = value; }
-        }
-
-        /// <summary>
-        /// Центр объекта отображения
-        /// </summary>
-        /// <returns></returns>
-        public Vector2f ImageCenter
-        {
-            get
-            {
-                Vector2f center = new Vector2f();
-                FloatRect imageParams = this.Image.GetGlobalBounds();
-                center.X = imageParams.Left + imageParams.Width / 2;
-                center.Y = imageParams.Top + imageParams.Height / 2;
-                return center;
-            }
-        }
+        }   
 
         /// <summary>
         /// Создание пустого отображения
         /// </summary>
-        public ObjectView()
+        public ImageView()
         {
 
         }
@@ -91,64 +51,33 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Создание отображения
         /// </summary>
         /// <param name="mode">Режим отрисовки</param>
-        public ObjectView(BlendMode mode)
+        public ImageView(BlendMode mode)
         {
             this.State = new RenderStates(mode);
         }
-
-
-
 
         /// <summary>
         /// Создание отображения
         /// </summary>
         /// <param name="image">Отображение</param>
         /// <param name="mode">Режим отрисовки</param>
-        public ObjectView(Shape image, BlendMode mode)
+        public ImageView(Shape image, BlendMode mode)
         {
             this.Image = image;
             this.State = new RenderStates(mode);
         }
 
         /// <summary>
-        /// Создание  отображения
+        /// Создание отображения
         /// </summary>
         /// <param name="image">Отображение</param>
         /// <param name="imageState">Состояние отображения</param>
-        public ObjectView(Shape image, RenderStates imageState)
+        public ImageView(Shape image, RenderStates imageState)
         {
             this.Image = image;
             this.State = imageState;
         }
 
-        /// <summary>
-        /// Повернуть изображение на угол относительно точки
-        /// </summary>
-        /// <param name="rotationCenter">Центр вращения</param>
-        /// <param name="angle">Угол, на который будет произведен поворот (в радианах)</param>
-        public void Rotate(Vector2f rotationCenter, float angle)
-        {
-            //вычсление новых координат 
-            float newX = (float)(rotationCenter.X + ((image.Position.X - rotationCenter.X) * (Math.Cos(angle)) - ((image.Position.Y - rotationCenter.Y) * (Math.Sin(angle)))));
-            float newY = (float)(rotationCenter.Y + ((image.Position.X - rotationCenter.X) * (Math.Sin(angle)) + ((image.Position.Y - rotationCenter.Y) * (Math.Cos(angle)))));
-            this.image.Rotation += (float)(angle * (180 / Math.PI));//поворот изображения
-            if (this.Image.Rotation > 360)
-            {
-                this.Image.Rotation -= 360;
-            }
-            this.image.Position = new Vector2f(newX, newY);//Установка скорректированной позиции объекта
-        }
-
-        /// <summary>
-        /// Переместить изображение
-        /// </summary>
-        /// <param name="offsets">Смещение по осям Х и Y</param>
-        public void Translate(Vector2f offsets)
-        {
-       //     this.Location = new Vector2f(this.Location.X + offsets.X, this.Location.Y + offsets.Y);
-            this.image.Position = new Vector2f(this.image.Position.X + offsets.X, this.image.Position.Y + offsets.Y); 
-        }
-      
         /// <summary>
         /// Анализ нахождения точки в области объекта
         /// </summary>
@@ -340,10 +269,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Анализ пересечения границ объектов
         /// </summary>
         /// <returns></returns>
-        public bool BorderContactAnalize(ObjectView targetView)
+        public bool BorderContactAnalize(ImageView targetView)
         {
             //в независимости от типов отображений, если центр одного из отображений находится в области другого 
-            if (this.PointAnalize(targetView.ImageCenter, this.ImageCenter) || targetView.PointAnalize(this.ImageCenter, targetView.ImageCenter))
+            if (this.PointAnalize(targetView.ViewCenter, this.ViewCenter) || targetView.PointAnalize(this.ViewCenter, targetView.ViewCenter))
             {//то объекты пересекаются
                 return true;    
             }
@@ -389,16 +318,16 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="targetView"></param>
         /// <param name="center"></param>
         /// <returns></returns>
-        private bool RectangleAndEllipceContactAnalize(ObjectView targetView)
+        private bool RectangleAndEllipceContactAnalize(ImageView targetView)
         {
-            Vector2f center = this.ImageCenter;
+            Vector2f center = this.ViewCenter;
             List<Vector2f> vertexesCoords = this.FindRectangleVertexes(center);//Поиск координат вершин
             List<Vector3f> linesCollection = this.FindPoligonBorder(vertexesCoords);//Поиск параметров функций прямых составляющих многоугольник
             //targetView - эллипс
             Vector2f halfAxises = new Vector2f();//полуоси
             halfAxises.X = (targetView.Image as CircleShape).Radius * targetView.Image.Scale.X;//нахождение полуоси Х
             halfAxises.Y = (targetView.Image as CircleShape).Radius * targetView.Image.Scale.Y;//нахождение полуоси Y
-            Vector2f targetCenter = targetView.ImageCenter;
+            Vector2f targetCenter = targetView.ViewCenter;
             float targetAngle = (float) (targetView.Image.Rotation*Math.PI/180);
             for (int i = 0; i < linesCollection.Count; i++)
             {
@@ -505,13 +434,13 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="targetView"></param>
         /// <param name="center"></param>
         /// <returns></returns>
-        private bool RectangleAndRectangleContactAnalize(ObjectView targetView)
+        private bool RectangleAndRectangleContactAnalize(ImageView targetView)
         {
             //поиск собственных вершин и границы
-            List<Vector2f> selfVertexes = this.FindRectangleVertexes(this.ImageCenter);
+            List<Vector2f> selfVertexes = this.FindRectangleVertexes(this.ViewCenter);
             List<Vector3f> selfLines = this.FindPoligonBorder(selfVertexes);
             //поиск вершин и границы целевой фигуры
-            List<Vector2f> targetVertexes = targetView.FindRectangleVertexes(targetView.ImageCenter);
+            List<Vector2f> targetVertexes = targetView.FindRectangleVertexes(targetView.ViewCenter);
             List<Vector3f> targetLines = targetView.FindPoligonBorder(targetVertexes);
 
             for (int i = 0; i < selfLines.Count; i ++)
@@ -550,10 +479,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
             return false;
         }
 
-        private bool EllipseAndEllipseContactAnalize(ObjectView targetView)
+        private bool EllipseAndEllipseContactAnalize(ImageView targetView)
         {
-            Vector2f targetCenter = targetView.ImageCenter;
-            Vector2f center = this.ImageCenter;
+            Vector2f targetCenter = targetView.ViewCenter;
+            Vector2f center = this.ViewCenter;
             Vector2f delta = center - targetCenter;
             double distance = Math.Sqrt(Math.Pow(delta.X, 2) + Math.Pow(delta.Y, 2));//расстояние между центарми отображений
             float betweenAngle = (float)(Math.Acos(delta.X / distance));

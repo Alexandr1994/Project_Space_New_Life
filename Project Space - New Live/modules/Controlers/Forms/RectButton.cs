@@ -22,7 +22,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         {
             this.Size = new Vector2f(80, 20);
             this.Location = new Vector2f(0, 0);
-            this.view = new ObjectView(new RectangleShape(this.Size), BlendMode.Alpha);  
+            this.view = new ImageView(new RectangleShape(this.Size), BlendMode.Alpha);  
             this.SetViewStates(ResurceStorage.rectangleButtonTextures); 
             this.view.Image.Texture = this.viewStates[0];
             this.ButtonViewEventReaction();

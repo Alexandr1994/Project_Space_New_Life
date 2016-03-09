@@ -27,7 +27,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         protected override void CustomConstructor()
         {
             this.Size = gameViewSize;//Установка размера формы равным размеру вида
-            this.view = new ObjectView(new RectangleShape(this.Size), BlendMode.Multiply);    
+            this.view = new ImageView(new RectangleShape(this.Size), BlendMode.Multiply);    
             this.Location = new Vector2f(0,0);//Установка позиции в 0,0
         }
 
@@ -78,7 +78,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// Получить отображения всех форм
         /// </summary>
         /// <returns>Коллекция отображений форм</returns>
-        public List<ObjectView> RenderForm()
+        public List<ImageView> RenderForm()
         {
             return this.GetChildFormView();
         }

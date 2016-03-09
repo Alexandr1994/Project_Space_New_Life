@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="modules\Controlers\AbstractController.cs" />
     <Compile Include="modules\Controlers\ComputerController.cs" />
+    <Compile Include="modules\Controlers\Forms\Label.cs" />
     <Compile Include="modules\Controlers\Forms\LinearBar.cs" />
     <Compile Include="modules\Controlers\Forms\Button.cs" />
     <Compile Include="modules\Controlers\Forms\CircleButton.cs" />
@@ -101,13 +102,15 @@
     <Compile Include="modules\Controlers\Forms\RectPanel.cs" />
     <Compile Include="modules\Controlers\Forms\RectButton.cs" />
     <Compile Include="modules\Controlers\InterfaceParts\PlayerStateIndicator.cs" />
+    <Compile Include="modules\Dispatchers\RenderView.cs" />
     <Compile Include="modules\Dispatchers\SystemRoot.cs" />
     <Compile Include="modules\Controlers\PlayerController.cs" />
     <Compile Include="modules\Dispatchers\PlayerContainer.cs" />
     <Compile Include="modules\Dispatchers\PlayerInterfaceContainer.cs" />
     <Compile Include="modules\Dispatchers\RenderModule.cs" />
-    <Compile Include="modules\Dispatchers\ObjectView.cs" />
+    <Compile Include="modules\Dispatchers\ImageView.cs" />
     <Compile Include="modules\Dispatchers\ResurceStorage.cs" />
+    <Compile Include="modules\Dispatchers\TextView.cs" />
     <Compile Include="modules\GameObjects\ActiveObject.cs" />
     <Compile Include="modules\GameObjects\Environments\BaseEnvironment.cs" />
     <Compile Include="modules\GameObjects\VisualEffect.cs" />

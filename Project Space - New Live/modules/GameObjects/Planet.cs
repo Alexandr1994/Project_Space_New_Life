@@ -58,11 +58,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin">Массив текстур</param>
         protected override void ConstructView(Texture[] skin)
         {
-            this.view = new ObjectView[2];
+            this.view = new ImageView[2];
             BlendMode[] modes = new[] {BlendMode.Alpha, BlendMode.Multiply};
             for (int i = 0; i < this.view.Length; i ++)
             {
-                this.view[i] = new ObjectView(new CircleShape((float)radius), modes[i]);//создание нового ObjectView
+                this.view[i] = new ImageView(new CircleShape((float)radius), modes[i]);//создание нового ObjectView
                 this.view[i].Image.Position = coords - new Vector2f(radius, radius);//установка позиции отображегния ObjectView
                 this.view[i].Image.Texture = skin[i];//установка текстуры отображения ObjectMode
             }
@@ -89,7 +89,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.Move();//вычислить идеальные координтаы
             this.CorrectObjectPoint(homeCoords);//выполнить коррекцию относительно глобальных координт
             offsets = this.coords - offsets;//вычислить смещения
-            foreach (ObjectView locView in View)
+            foreach (ImageView locView in View)
             {
                 locView.Translate(offsets);
             }

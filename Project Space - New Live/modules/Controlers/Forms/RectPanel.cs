@@ -35,7 +35,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// </summary>
         protected override void CustomConstructor()
         {
-            view = new ObjectView(new RectangleShape(new Vector2f(200, 200)), BlendMode.Alpha);
+            view = new ImageView(new RectangleShape(new Vector2f(200, 200)), BlendMode.Alpha);
             this.Location = view.Image.Position = new Vector2f(0, 0);
             this.size = new Vector2f(200, 200);
             this.SetPanelTexture(ResurceStorage.PanelText);

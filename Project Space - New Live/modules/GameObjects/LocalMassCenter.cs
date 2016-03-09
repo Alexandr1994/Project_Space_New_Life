@@ -121,14 +121,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="companetn">Компанент, чьи отображения нужно получить</param>
         /// <returns>Коллекция отображений</returns>
-        private List<ObjectView> GetCompanentViews(GameObject[] companetn)
+        private List<ImageView> GetCompanentViews(GameObject[] companetn)
         {
-            List<ObjectView> retViews = new List<ObjectView>();//массив возвращаемых отображений
+            List<ImageView> retViews = new List<ImageView>();//массив возвращаемых отображений
             if (companetn != null)//если центр масс имеет данные комапненты, передать их отображения в возвращаемый массив
             {
                 for (int i = 0; i < companetn.Length; i ++)
                 {
-                    foreach (ObjectView view in companetn[i].View)//получить все отображения данного компанента центра масс
+                    foreach (ImageView view in companetn[i].View)//получить все отображения данного компанента центра масс
                     {
                         retViews.Add(view);
                     }
@@ -142,14 +142,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Получить все отображения данного центра масс
         /// </summary>
         /// <returns>Коллекция отображений</returns>
-        public List<ObjectView> GetView()
+        public List<ImageView> GetView()
         {
-            List<ObjectView> retViews = new List<ObjectView>();//массив возвращаемых отображений
+            List<ImageView> retViews = new List<ImageView>();//массив возвращаемых отображений
             if (this.massCenters != null)//если центр масс имеет подчиненными центры масс, извлечь из них отображения звезд
             {
                 for (int i = 0; i < this.massCenters.Length; i++)
                 {//получить все отображения звезд в подчиненном центре масс
-                    foreach (ObjectView singleView in this.massCenters[i].GetView())
+                    foreach (ImageView singleView in this.massCenters[i].GetView())
                     {//перевести полученные отображения в возвращаемый массив
                         retViews.Add(singleView);
                     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Project_Space___New_Live.modules.Controlers.Forms;
 using Project_Space___New_Live.modules.Controlers.InterfaceParts;
+using Project_Space___New_Live.modules.GameObjects;
 using SFML.Graphics;
 using SFML.System;
 
@@ -77,7 +78,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
             this.formsCollection.Add("AmmoBar", new LinearBar());//Индикатор защиты
             this.formsCollection["AmmoBar"].Location = new Vector2f(200, 75);
-            (this.formsCollection["AmmoBar"] as LinearBar).SetTexturets(new Texture[] { ResurceStorage.PanelText, ResurceStorage.ammoBar });
+            (this.formsCollection["AmmoBar"] as LinearBar).SetTexturets(new Texture[] { null, ResurceStorage.ammoBar });
+            (this.formsCollection["AmmoBar"] as LinearBar).VisibleSubstrate = false;
 
             this.formsCollection.Add("EndButton", new CircleButton());//Кнопка окончания
             this.formsCollection["EndButton"].MouseClick += OnClick;

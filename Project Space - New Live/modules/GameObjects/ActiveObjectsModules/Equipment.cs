@@ -32,11 +32,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Изображение оборудования
         /// </summary>
-        private ObjectView view;
+        private ImageView view;
         /// <summary>
         /// Изображение оборудования
         /// </summary>
-        public ObjectView View
+        public ImageView View
         {
             get { return this.view; }
         }
@@ -161,7 +161,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             this.mass = mass;//установка массы
             this.energyNeeds = energyNeeds;//установка энергопотребления
-            this.view = new ObjectView(image, BlendMode.Alpha);//построение отображения
+            this.view = new ImageView(image, BlendMode.Alpha);//построение отображения
             this.Repair();//установка состояния и износа
             this.version = 0;//Установка версии оборудования в 0
             this.upgrateDirectionsHistory.Add(0);//сохранение базовой модификации

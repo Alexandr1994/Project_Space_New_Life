@@ -57,8 +57,8 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected override void ConstructView(Texture[] skin)
         {
             //TODO Зaщита от неправильной размерности
-            this.view = new ObjectView[1];
-            this.view[0] = new ObjectView(new RectangleShape(this.size), BlendMode.Alpha);
+            this.view = new ImageView[1];
+            this.view[0] = new ImageView(new RectangleShape(this.size), BlendMode.Alpha);
             this.view[0].Image.Texture = skin[0];
             this.view[0].Image.Position = this.coords - this.size / 2;
         }

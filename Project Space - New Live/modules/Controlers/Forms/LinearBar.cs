@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
@@ -14,6 +15,19 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
     /// </summary>
     class LinearBar : Form
     {
+
+        private bool visibleSubsrate = true;
+
+        public bool VisibleSubstrate
+        {
+            get { return this.visibleSubsrate; }
+            set
+            {
+                this.visibleSubsrate = value;
+                this.HideShowSubstrate();
+            }
+        }
+
         /// <summary>
         /// Указатель на форму линии шкалы
         /// </summary>
@@ -43,11 +57,14 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         protected override void CustomConstructor()
         {
             this.Size = new Vector2f(200, 20);
-            this.view = new ObjectView(new RectangleShape(this.Size), BlendMode.Alpha);
+            this.view = new ImageView(new RectangleShape(this.Size), BlendMode.Alpha);
             this.AddForm(this.lineOfBar = new BarLine());
             this.PercentOfBar = 100;
+            if (!this.visibleSubsrate)
+            {
+                this.view.Image.FillColor = new Color(0, 0, 0, 0);
+            }
         }
-
 
         /// <summary>
         /// Установка текстур линейного индикатора
@@ -66,6 +83,18 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 }
             }
             return false;
+        }
+
+        private void HideShowSubstrate()
+        {
+            if (this.visibleSubsrate)
+            {
+                this.view.Image.FillColor = new Color(0, 0, 0, Byte.MaxValue);
+            }
+            else
+            {
+                this.view.Image.FillColor = new Color(0, 0, 0, 0);
+            }
         }
 
         /// <summary>
@@ -117,7 +146,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             protected override void CustomConstructor()
             {
                 this.Size = new Vector2f(200, 20);
-                this.view = new ObjectView(new RectangleShape(this.Size), BlendMode.Alpha);   
+                this.view = new ImageView(new RectangleShape(this.Size), BlendMode.Alpha);   
                 this.fullLenght = this.Size.X;
             }
 

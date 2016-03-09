@@ -125,15 +125,15 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Отображение
         /// </summary>
-        protected ObjectView view = new ObjectView();
+        protected ImageView view = new ImageView();
 
         /// <summary>
         /// Получить отображения текущией и дочерних форм
         /// </summary>
         /// <returns>Коллекция отображений форм</returns>
-        protected List<ObjectView> GetChildFormView()
+        protected List<ImageView> GetChildFormView()
         {
-            List<ObjectView> retValue = new List<ObjectView>();
+            List<ImageView> retValue = new List<ImageView>();
             view.Image.Position = this.GetGraphicPosition();//коррекция отображения
             if (this.Visible)//если форма видимая
             {
@@ -142,7 +142,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 {
                     if (this.ChildFormFallTest(childForm)) //проверка если дочерняя форма не "падает" с текущей
                     {
-                        foreach (ObjectView locView in childForm.GetChildFormView())//получаем отображение данной дочерней формы
+                        foreach (ImageView locView in childForm.GetChildFormView())//получаем отображение данной дочерней формы
                         {
                             retValue.Add(locView);
                         }

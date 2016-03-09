@@ -136,7 +136,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Отображение корабля
         /// </summary>
-        public override ObjectView[] View
+        public override ImageView[] View
         {
             get
             {
@@ -144,7 +144,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                 {
                     return this.view;
                 }
-                ObjectView[] retViews = new ObjectView[4];
+                ImageView[] retViews = new ImageView[4];
                 int index = 0;
                 while (index != (int)(Parts.Shield))
                 {
@@ -288,7 +288,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.coords.X += (float)(speed * Math.Cos(angle));
             this.coords.Y += (float)(speed * Math.Sin(angle));
             Vector2f delta = this.coords - tempCoords;//Изменение по координатам Х и Y
-            foreach (ObjectView partView in this.view)
+            foreach (ImageView partView in this.view)
             {
                 partView.Translate(delta);
             }
@@ -301,7 +301,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         public virtual void ChangeRotation(float angle)
         {
             this.rotation += angle;//изменение текущего поворота корабля
-            foreach (ObjectView partView in this.view)
+            foreach (ImageView partView in this.view)
             {
                 partView.Rotate(this.coords, angle);//изменение каждой части отображения
             }
@@ -568,7 +568,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                     case "Wall"://обработка контакта с препядствием
                         {
                             Wall wall = interactObject as Wall;
-                            foreach (ObjectView partShipView in this.View)
+                            foreach (ImageView partShipView in this.View)
                             {
                                 if (partShipView.BorderContactAnalize(wall.View[0]))
                                 {
@@ -660,16 +660,16 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected override void ConstructView(Texture[] skin)
         {
             //добавить защиту
-            this.view = new ObjectView[5];
+            this.view = new ImageView[5];
             int index = 0;
             while (index != (int)(Parts.Shield))
             {
-                this.view[index] = new ObjectView(BlendMode.Alpha);
+                this.view[index] = new ImageView(BlendMode.Alpha);
                 this.view[index].Image = new RectangleShape(this.ViewPartSize);
                 this.view[index].Image.Texture = skin[index];
                 index++;
             }
-            this.view[(int)Parts.Shield] = new ObjectView(BlendMode.Alpha);
+            this.view[(int)Parts.Shield] = new ImageView(BlendMode.Alpha);
             this.view[(int)Parts.Shield].Image = new CircleShape(this.ViewPartSize.Y);
             this.view[(int)Parts.Shield].Image.Texture = skin[(int) Parts.Shield];
             this.view[(int)Parts.Shield].Image.Position = this.Coords - new Vector2f(this.ViewPartSize.Y, this.ViewPartSize.Y);//Энергощит

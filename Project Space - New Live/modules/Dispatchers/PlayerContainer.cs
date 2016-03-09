@@ -15,7 +15,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
 {
     public class PlayerContainer
     {
-
         /// <summary>
         /// Ссылка на графический модуль
         /// </summary>
@@ -70,14 +69,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 container = new PlayerContainer(environment);
             }
             return container;
-        }
-
-        /// <summary>
-        /// Десантирование танка на планету (ВРЕМЕННАЯ РЕАЛИЗАЦИЯ!!)
-        /// </summary>
-        public void OnPlanetLanding()
-        {
-            ;
         }
 
         /// <summary>

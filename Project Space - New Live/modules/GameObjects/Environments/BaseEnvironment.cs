@@ -17,12 +17,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Фон среды
         /// </summary>
-        private ObjectView background;
+        private ImageView background;
 
         /// <summary>
         /// Фон среды
         /// </summary>
-        public ObjectView Background
+        public ImageView Background
         {
             get { return this.background; }
         }
@@ -82,7 +82,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin"></param>
         private void InitBackgroung(Texture skin)
         {
-            this.background = new ObjectView(new RectangleShape(new Vector2f(10000, 10000)), BlendMode.Alpha);
+            this.background = new ImageView(new RectangleShape(new Vector2f(10000, 10000)), BlendMode.Alpha);
             this.background.Image.Texture = skin;
             this.background.Image.Texture.Repeated = true;
             this.background.Image.Texture.Smooth = true;
@@ -190,9 +190,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Вернуть коллекцию отображений объектов звездной системы
         /// </summary>
         /// <returns>Коллекция отображений объектов в звездной системе</returns>
-        public List<ObjectView> GetView()
+        public List<ImageView> GetView()
         {
-            List<ObjectView> environmentViews = new List<ObjectView>();
+            List<ImageView> environmentViews = new List<ImageView>();
             environmentViews.Add(this.background);
             foreach (Wall wall in this.wallsCollection)
             {

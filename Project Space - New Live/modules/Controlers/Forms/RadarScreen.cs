@@ -47,7 +47,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         {
             this.Size = new Vector2f(170, 170);
             this.Location = new Vector2f(10, 10);
-            this.view = new ObjectView(new CircleShape(this.Size.X/2), BlendMode.Alpha);
+            this.view = new ImageView(new CircleShape(this.Size.X/2), BlendMode.Alpha);
             this.view.Image.FillColor = Color.Black;
             this.view.Image.OutlineThickness = 1;
             this.viewSize = RenderModule.getInstance().GameView.Size;
@@ -191,7 +191,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             /// </summary>
             protected override void CustomConstructor()
             {
-                this.view = new ObjectView(new CircleShape(), BlendMode.Alpha);
+                this.view = new ImageView(new CircleShape(), BlendMode.Alpha);
                 this.view.Image.FillColor = Color.Green;
             }
 
@@ -218,7 +218,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             {
                 this.Size = new Vector2f(100,100);
                 this.Location = new Vector2f(0,0);
-                this.view = new ObjectView(new CircleShape(this.Size.X/2), BlendMode.Alpha);
+                this.view = new ImageView(new CircleShape(this.Size.X/2), BlendMode.Alpha);
                 this.view.Image.Texture = ResurceStorage.noise;
                 this.view.Image.Texture.Repeated = this.view.Image.Texture.Smooth = true;
 
@@ -265,7 +265,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             protected override void CustomConstructor()
             {
                 this.Size = new Vector2f(40, 30);
-                view = new ObjectView(new RectangleShape(this.Size), BlendMode.Alpha);
+                view = new ImageView(new RectangleShape(this.Size), BlendMode.Alpha);
                 this.view.Image.OutlineThickness = 2;
                 this.view.Image.OutlineColor = new Color(0, 150, 0, 150);
                 this.view.Image.FillColor = new Color(0,0,0,0);
@@ -294,7 +294,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             protected override void CustomConstructor()
             {
                 this.Size = new Vector2f(100, 100);
-                this.view =  new ObjectView(new CircleShape(this.size.X), BlendMode.Alpha);
+                this.view =  new ImageView(new CircleShape(this.size.X), BlendMode.Alpha);
                 this.view.Image.OutlineThickness = 4;
                 this.view.Image.OutlineColor = new Color(0, 150, 0, 150);
                 this.view.Image.FillColor = new Color(0, 0, 0, 0);
@@ -322,7 +322,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             protected override void CustomConstructor()
             {
                 this.Size = new Vector2f(100, 4);
-                this.view = new ObjectView(new RectangleShape(this.size), BlendMode.Alpha);
+                this.view = new ImageView(new RectangleShape(this.size), BlendMode.Alpha);
                 this.view.Image.FillColor = new Color(0, 150, 0, 150);
             }
 

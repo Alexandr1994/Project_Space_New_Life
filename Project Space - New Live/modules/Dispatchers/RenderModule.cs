@@ -157,7 +157,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void RenderProcess()
         {
             this.ViewControl();
-            foreach (ObjectView view in this.Form.RenderForm())
+            foreach (ImageView view in this.Form.RenderForm())
             {
                 mainWindow.Draw(view.Image, view.State);
             }
@@ -170,10 +170,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void RenderProcess(BaseEnvironment activeBaseEnvironment)
         {
             this.ViewControl();
-            List<ObjectView> views = new List<ObjectView>();
+            List<ImageView> views = new List<ImageView>();
             views.AddRange(activeBaseEnvironment.GetView());
             views.AddRange(this.Form.RenderForm());
-            foreach (ObjectView view in views)
+            foreach (ImageView view in views)
             {
                mainWindow.Draw(view.Image, view.State);
             }
