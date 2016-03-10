@@ -14,7 +14,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
     /// <summary>
     /// Главная форма
     /// </summary>
-    class MainForm : Form
+    class MainForm : ImageForm
     {
        /// <summary>
        /// Экземпляр формы
@@ -78,7 +78,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// Получить отображения всех форм
         /// </summary>
         /// <returns>Коллекция отображений форм</returns>
-        public List<ImageView> RenderForm()
+        public List<RenderView> RenderForm()
         {
             return this.GetChildFormView();
         }

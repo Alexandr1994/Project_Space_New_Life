@@ -17,7 +17,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
     /// <summary>
     /// Экран радара
     /// </summary>
-    class RadarScreen : Form
+    class RadarScreen : ImageForm
     {
         /// <summary>
         /// Размер видимой области
@@ -166,7 +166,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Cущность на радаре
         /// </summary>
-        private class RadarEntity : Form
+        private class RadarEntity : ImageForm
         {
             /// <summary>
             /// Переопределение свойства размера (временная реализация)
@@ -209,7 +209,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Радарный шум
         /// </summary>
-        private class RadarNoise : Form
+        private class RadarNoise : ImageForm
         {
             /// <summary>
             /// Конструктор радарного шума
@@ -218,7 +218,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             {
                 this.Size = new Vector2f(100,100);
                 this.Location = new Vector2f(0,0);
-                this.view = new ImageView(new CircleShape(this.Size.X/2), BlendMode.Alpha);
+                this.view = new ImageView(new CircleShape(this.Size.X / 2), BlendMode.Alpha);
                 this.view.Image.Texture = ResurceStorage.noise;
                 this.view.Image.Texture.Repeated = this.view.Image.Texture.Smooth = true;
 
@@ -256,7 +256,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Видимая заона на экране радара
         /// </summary>
-        private class VisibleRegion : Form
+        private class VisibleRegion : ImageForm
         {
             
             /// <summary>
@@ -268,7 +268,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 view = new ImageView(new RectangleShape(this.Size), BlendMode.Alpha);
                 this.view.Image.OutlineThickness = 2;
                 this.view.Image.OutlineColor = new Color(0, 150, 0, 150);
-                this.view.Image.FillColor = new Color(0,0,0,0);
+                this.view.Image.FillColor = new Color(0, 0, 0, 0);
             }
 
             /// <summary>
@@ -285,7 +285,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Кольцо радарной зоны
         /// </summary>
-        private class RadarRing : Form
+        private class RadarRing : ImageForm
         {
 
             /// <summary>
@@ -294,7 +294,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             protected override void CustomConstructor()
             {
                 this.Size = new Vector2f(100, 100);
-                this.view =  new ImageView(new CircleShape(this.size.X), BlendMode.Alpha);
+                this.view = new ImageView(new CircleShape(this.size.X), BlendMode.Alpha);
                 this.view.Image.OutlineThickness = 4;
                 this.view.Image.OutlineColor = new Color(0, 150, 0, 150);
                 this.view.Image.FillColor = new Color(0, 0, 0, 0);
@@ -314,7 +314,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Радарная линия
         /// </summary>
-        private class RadarLine : Form
+        private class RadarLine : ImageForm
         {
             /// <summary>
             /// Конструктор радарной линии

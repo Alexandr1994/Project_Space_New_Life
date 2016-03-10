@@ -104,11 +104,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void Main()
         {
             Text text = new Text();
-            text.Font = ResurceStorage.font;
+            text.Font = FontsStorage.TimesNewRoman;
             text.Color = Color.Green;
             ;
 
-            TextView test = new TextView("LOL!!", BlendMode.Multiply, ResurceStorage.font);
+            TextView test = new TextView("LOL!!", BlendMode.Multiply, FontsStorage.TimesNewRoman);
             test.TextString.Position = this.GraphicModule.GameView.Center;
 
 
@@ -126,9 +126,19 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 text.DisplayedString =
                     this.activeObjectsCollection[0].MoveManager.ConstructResultVector().Speed.ToString();
                 GraphicModule.MainWindow.Draw(text);*/
-                
+
                 test.Rotate(test.ViewCenter, (float)(5*Math.PI/180));
-                test.Translate(new Vector2f(4, 4));
+
+                if (test.PointAnalize(this.activeObjectsCollection[0].Coords,  test.ViewCenter))
+                {
+                    test.TextString.Color = Color.Yellow;
+                }
+                else
+                {
+                    test.TextString.Color = Color.Blue;
+                }
+
+
                 GraphicModule.MainWindow.Draw(test.TextString);
 
                 GraphicModule.MainWindow.DispatchEvents();

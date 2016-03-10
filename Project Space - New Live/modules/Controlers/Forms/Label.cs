@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Project_Space___New_Live.modules.Dispatchers;
 
 namespace Project_Space___New_Live.modules.Controlers.Forms
 {
-    class Label : Form
+    class Label : TextForm
     {
-
-
 
         protected override void CustomConstructor()
         {
-            throw new NotImplementedException();
+            //this.view = new TextView();
         }
     }
 }

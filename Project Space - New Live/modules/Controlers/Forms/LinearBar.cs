@@ -13,7 +13,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
     /// <summary>
     /// Линейный индикатор
     /// </summary>
-    class LinearBar : Form
+    class LinearBar : ImageForm
     {
 
         private bool visibleSubsrate = true;
@@ -100,7 +100,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Линия индикатора
         /// </summary>
-        private class BarLine : Form
+        private class BarLine : ImageForm
         {
 
             /// <summary>
@@ -131,7 +131,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 set
                 {
                     this.size = value;
-                    if (this.view.Image != null)
+                    if (this.View != null)
                     {
                         RectangleShape temp = this.view.Image as RectangleShape;
                         temp.Size = this.size;

@@ -10,7 +10,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
     /// <summary>
     /// Абстрактная панель
     /// </summary>
-    abstract class Panel : Form
+    abstract class Panel : ImageForm
     {
 
         /// <summary>

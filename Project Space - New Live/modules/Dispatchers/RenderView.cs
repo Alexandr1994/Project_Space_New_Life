@@ -16,7 +16,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Внутреннее отображение
         /// </summary>
-        protected abstract Drawable InsideView
+        public abstract Transformable InsideView
         {
             get; 
             set; 
@@ -162,6 +162,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
             Shape image = this.InsideView as Shape;
             image.Position = new Vector2f(image.Position.X + offsets.X, image.Position.Y + offsets.Y);
         }
+
+
+        public abstract bool PointAnalize(Vector2f point, Vector2f center);
+
+        //TODO ЗАРЕШАТЬ!!!!
+        public abstract bool BorderContactAnalize(RenderView targetView);
 
     }
 }

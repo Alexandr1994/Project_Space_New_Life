@@ -15,7 +15,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
     /// <summary>
     /// Абстрактная кнопка
     /// </summary>
-    public abstract class Button : Form
+    public abstract class Button : ImageForm
     {
         /// <summary>
         /// Состояния кнопки
@@ -84,7 +84,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <param name="e">Аргументы события</param>
         private void ViewToNormalState(object sender, MouseMoveEventArgs e)
         {
-            this.view.Image.Texture = this.viewStates[(int) (ViewStates.Normal)];
+            this.view.Image.Texture = this.viewStates[(int)(ViewStates.Normal)];
         }
 
         /// <summary>

@@ -20,9 +20,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Внутренне свойство
         /// </summary>
-        protected override Drawable InsideView 
+        public override Transformable InsideView 
         {
-            get {return this.image as Drawable;}
+            get { return this.image as Transformable; }
             set {this.image = value as Shape;}
         }
 
@@ -83,7 +83,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public bool PointAnalize(Vector2f point, Vector2f center)
+        public override bool PointAnalize(Vector2f point, Vector2f center)
         {
             switch (this.Image.GetType().Name)//определиение объекта
             {
@@ -269,9 +269,13 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Анализ пересечения границ объектов
         /// </summary>
         /// <returns></returns>
-        public bool BorderContactAnalize(ImageView targetView)
+        public override bool BorderContactAnalize(RenderView targetView)
         {
-            //в независимости от типов отображений, если центр одного из отображений находится в области другого 
+            
+            
+            ImageView targetView2 = targetView as ImageView;
+            
+                //в независимости от типов отображений, если центр одного из отображений находится в области другого 
             if (this.PointAnalize(targetView.ViewCenter, this.ViewCenter) || targetView.PointAnalize(this.ViewCenter, targetView.ViewCenter))
             {//то объекты пересекаются
                 return true;    
@@ -280,30 +284,30 @@ namespace Project_Space___New_Live.modules.Dispatchers
             {
                 case "RectangleShape":
                 {
-                    switch (targetView.Image.GetType().Name)//и типа проверяемого вызываем один и методов проверки
+                    switch (targetView2.Image.GetType().Name)//и типа проверяемого вызываем один и методов проверки
                     {
                         case "RectangleShape":
                         {//проверка прямоугольник и прямоугольник
-                            return this.RectangleAndRectangleContactAnalize(targetView);
+                            return this.RectangleAndRectangleContactAnalize(targetView2);
                         }
                         case "CircleShape":
                         {//проверка эллипс и прямоугольник
-                               return this.RectangleAndEllipceContactAnalize(targetView);
+                            return this.RectangleAndEllipceContactAnalize(targetView2);
                         }    
                     }
                 }
                     break;
                 case "CircleShape"://и типа проверяемого вызываем один и методов проверки
-                { 
-                    switch (targetView.Image.GetType().Name)
+                {
+                    switch (targetView2.Image.GetType().Name)
                     {//проверка эллипс и прямоугобник
                         case "RectangleShape":
                             {
-                                return targetView.RectangleAndEllipceContactAnalize(this);
+                                return targetView2.RectangleAndEllipceContactAnalize(this);
                             }
                         case "CircleShape":
                             {//проверка эллипс и эллипс
-                                return this.EllipseAndEllipseContactAnalize(targetView);
+                                return this.EllipseAndEllipseContactAnalize(targetView2);
                             }
                     }
                 }

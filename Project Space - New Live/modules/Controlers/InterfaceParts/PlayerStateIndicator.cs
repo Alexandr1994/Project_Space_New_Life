@@ -10,7 +10,7 @@ namespace Project_Space___New_Live.modules.Controlers.InterfaceParts
     /// <summary>
     /// Контейнер форм интерфейса пользователя
     /// </summary>
-    class PlayerStateIndicator : Form
+    class PlayerStateIndicator : ImageForm
     {
 
         /// <summary>

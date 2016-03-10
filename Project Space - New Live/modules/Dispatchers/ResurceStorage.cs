@@ -13,7 +13,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
     /// </summary>
     static class ResurceStorage
     {
-        static public Font font = new Font("Resources/times.ttf");
         static public Texture[] shipTextures = new Texture[6];
         static public Texture[] circuleButtonTextures = new Texture[4];
         static public Texture[] rectangleButtonTextures = new Texture[4];

@@ -17,6 +17,12 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
     /// </summary>
     public abstract class Form
     {
+
+        /// <summary>
+        /// Отображение
+        /// </summary>
+        protected abstract RenderView View { get; }
+
         /// <summary>
         /// Позиция
         /// </summary>
@@ -35,6 +41,16 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
+        /// Размер
+        /// </summary>
+        protected Vector2f size;
+
+        /// <summary>
+        /// Размер
+        /// </summary>
+        public abstract Vector2f Size { get; set; }
+
+        /// <summary>
         /// Видимость формы и дочерних форм
         /// </summary>
         private bool visible;
@@ -46,33 +62,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         {
             get { return this.visible; }
             set { this.visible = value; }
-        }
-
-        /// <summary>
-        /// Размер
-        /// </summary>
-        protected Vector2f size;
-
-        /// <summary>
-        /// Размер
-        /// </summary>
-        public virtual Vector2f Size
-        {
-            get { return this.size; }
-            set
-            {
-                if(this.view.Image != null)
-                {
-                    float Xcoef = value.X / this.size.X;
-                    float Ycoef = value.Y / this.size.Y;
-                    this.view.Image.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
-                    this.size = value;//сохранение размеров
-                }
-                else
-                {
-                    size = value;
-                }
-            }
         }
 
         /// <summary>
@@ -88,7 +77,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         {
             this.parentForm = parentForm;
         }
-
 
         /// <summary>
         /// Коллекция дочерних форм
@@ -123,26 +111,21 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Отображение
-        /// </summary>
-        protected ImageView view = new ImageView();
-
-        /// <summary>
         /// Получить отображения текущией и дочерних форм
         /// </summary>
         /// <returns>Коллекция отображений форм</returns>
-        protected List<ImageView> GetChildFormView()
+        protected List<RenderView> GetChildFormView()
         {
-            List<ImageView> retValue = new List<ImageView>();
-            view.Image.Position = this.GetGraphicPosition();//коррекция отображения
+            List<RenderView> retValue = new List<RenderView>();
+            this.View.InsideView.Position = this.GetGraphicPosition();//коррекция отображения;
             if (this.Visible)//если форма видимая
             {
-                retValue.Add(this.view); //добавление отображени в массив
+                retValue.Add(this.View); //добавление отображени в массив
                 foreach (Form childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
                 {
                     if (this.ChildFormFallTest(childForm)) //проверка если дочерняя форма не "падает" с текущей
                     {
-                        foreach (ImageView locView in childForm.GetChildFormView())//получаем отображение данной дочерней формы
+                        foreach (RenderView locView in childForm.GetChildFormView())//получаем отображение данной дочерней формы
                         {
                             retValue.Add(locView);
                         }
@@ -161,7 +144,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         private bool ChildFormFallTest(Form childForm)
         {
             Vector2f centerOfForm = childForm.GetPhizicalPosition() + childForm.Size / 2;//Нахождение центра формы
-            if (this.PointTest(centerOfForm) || this.view.BorderContactAnalize(childForm.view))//если хотя бы часть проверяемой формы находится в пределах родительской
+            if (this.PointTest(centerOfForm) || this.View.BorderContactAnalize(childForm.View))//если хотя бы часть проверяемой формы находится в пределах родительской
             {
                 return true;//вернуть true
             }
@@ -307,7 +290,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         protected virtual bool PointTest(Vector2f testingPoint)
         {
             Vector2f center = this.GetPhizicalPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра формы
-            return this.view.PointAnalize(testingPoint, center);
+            return this.View.PointAnalize(testingPoint, center);
         }
 
         /// <summary>

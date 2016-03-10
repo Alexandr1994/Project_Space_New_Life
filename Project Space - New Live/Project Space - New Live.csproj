@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="modules\Controlers\AbstractController.cs" />
     <Compile Include="modules\Controlers\ComputerController.cs" />
+    <Compile Include="modules\Controlers\Forms\ImageForm.cs" />
     <Compile Include="modules\Controlers\Forms\Label.cs" />
     <Compile Include="modules\Controlers\Forms\LinearBar.cs" />
     <Compile Include="modules\Controlers\Forms\Button.cs" />
@@ -101,7 +102,9 @@
     <Compile Include="modules\Controlers\Forms\RadarScreen.cs" />
     <Compile Include="modules\Controlers\Forms\RectPanel.cs" />
     <Compile Include="modules\Controlers\Forms\RectButton.cs" />
+    <Compile Include="modules\Controlers\Forms\TextForm.cs" />
     <Compile Include="modules\Controlers\InterfaceParts\PlayerStateIndicator.cs" />
+    <Compile Include="modules\Dispatchers\FontsStorage.cs" />
     <Compile Include="modules\Dispatchers\RenderView.cs" />
     <Compile Include="modules\Dispatchers\SystemRoot.cs" />
     <Compile Include="modules\Controlers\PlayerController.cs" />

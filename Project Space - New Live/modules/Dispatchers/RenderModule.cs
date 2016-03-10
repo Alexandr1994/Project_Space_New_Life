@@ -170,12 +170,13 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void RenderProcess(BaseEnvironment activeBaseEnvironment)
         {
             this.ViewControl();
-            List<ImageView> views = new List<ImageView>();
+            List<RenderView> views = new List<RenderView>();
             views.AddRange(activeBaseEnvironment.GetView());
             views.AddRange(this.Form.RenderForm());
-            foreach (ImageView view in views)
+
+            foreach (RenderView view in views)
             {
-               mainWindow.Draw(view.Image, view.State);
+                mainWindow.Draw(view.InsideView as Drawable, view.State);
             }
         }
     }
