@@ -126,7 +126,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 text.DisplayedString =
                     this.activeObjectsCollection[0].MoveManager.ConstructResultVector().Speed.ToString();
                 GraphicModule.MainWindow.Draw(text);*/
-
+                /*
                 test.Rotate(test.ViewCenter, (float)(5*Math.PI/180));
 
                 if (test.PointAnalize(this.activeObjectsCollection[0].Coords,  test.ViewCenter))
@@ -137,9 +137,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 {
                     test.TextString.Color = Color.Blue;
                 }
-
-
-                GraphicModule.MainWindow.Draw(test.TextString);
+                GraphicModule.MainWindow.Draw(test.TextString);*/
 
                 GraphicModule.MainWindow.DispatchEvents();
                 GraphicModule.MainWindow.Display();

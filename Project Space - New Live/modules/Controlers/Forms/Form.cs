@@ -48,7 +48,24 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// <summary>
         /// Размер
         /// </summary>
-        public abstract Vector2f Size { get; set; }
+        public virtual Vector2f Size
+        {
+            get { return this.size; }
+            set
+            {
+                if (this.View != null)
+                {
+                    float Xcoef = value.X / this.size.X;
+                    float Ycoef = value.Y / this.size.Y;
+                    this.View.InsideView.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
+                    this.size = value;//сохранение размеров
+                }
+                else
+                {
+                    size = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Видимость формы и дочерних форм
@@ -175,22 +192,27 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         /// Возникает при вхождении курсора в область формы
         /// </summary>
         public event EventHandler<MouseMoveEventArgs> MouseIn = null;
+
         /// <summary>
         /// Возникает при покидании курсором области формы
         /// </summary>
         public event EventHandler<MouseMoveEventArgs> MouseOut = null;
+
         /// <summary>
         /// Возникает при нахождении курсора в области формы
         /// </summary>
         public event EventHandler<MouseMoveEventArgs> MouseMove = null;
+
         /// <summary>
         /// Возникает при отжатии левой кнопки мыши
         /// </summary>
         public event EventHandler<MouseButtonEventArgs> MouseUp = null;
+
         /// <summary>
         /// Возникает при нажатии на левую кнопку мыши
         /// </summary>
         public event EventHandler<MouseButtonEventArgs> MouseDown = null;
+
         /// <summary>
         /// Событие клика кнопки
         /// </summary>

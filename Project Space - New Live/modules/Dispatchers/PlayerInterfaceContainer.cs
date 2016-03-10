@@ -86,10 +86,27 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.formsCollection["EndButton"].Size = new Vector2f(80, 30);
             this.formsCollection["EndButton"].Location = new Vector2f(this.mainForm.Size.X - 80, 0);
 
+            this.formsCollection.Add("Label", new Label());
+            (this.formsCollection["Label"] as Label).Text = "ВЫХОД ->";
+            (this.formsCollection["Label"] as Label).TextColor = Color.White;
+            this.formsCollection["Label"].Location = new Vector2f(this.mainForm.Size.X - (80 + this.formsCollection["Label"].Size.X), 0);
+            this.formsCollection["Label"].MouseIn += OnHover;
+            this.formsCollection["Label"].MouseOut += OnExit;
+
             foreach (KeyValuePair<String, Form> form in this.formsCollection)//добавление форм интерфейса на главную форму
             {
                 this.mainForm.AddForm(form.Value);
             }
+        }
+
+        private void OnHover(object sender, EventArgs e)
+        {
+            (sender as Label).TextColor = Color.Red;
+        }
+
+        private void OnExit(object sender, EventArgs e)
+        {
+            (sender as Label).TextColor = Color.White;
         }
 
         /// <summary>

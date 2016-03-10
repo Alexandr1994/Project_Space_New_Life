@@ -9,37 +9,22 @@ using SFML.System;
 
 namespace Project_Space___New_Live.modules.Controlers.Forms
 {
+    /// <summary>
+    /// Фигурная форма
+    /// </summary>
     public abstract class ImageForm : Form
     {
-
-
+        /// <summary>
+        /// Отображение
+        /// </summary>
         protected ImageView view;
 
+        /// <summary>
+        /// Отображение
+        /// </summary>
         protected override RenderView View
         {
             get { return this.view; }
-        }
-
-        /// <summary>
-        /// Размер
-        /// </summary>
-        public override Vector2f Size
-        {
-            get { return this.size; }
-            set
-            {
-                if (this.View != null)
-                {
-                    float Xcoef = value.X / this.size.X;
-                    float Ycoef = value.Y / this.size.Y;
-                    this.view.Image.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
-                    this.size = value;//сохранение размеров
-                }
-                else
-                {
-                    size = value;
-                }
-            }
         }
 
     }

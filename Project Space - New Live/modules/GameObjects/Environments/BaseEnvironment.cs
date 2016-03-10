@@ -86,7 +86,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.background.Image.Texture = skin;
             this.background.Image.Texture.Repeated = true;
             this.background.Image.Texture.Smooth = true;
-            this.background.Image.TextureRect = new IntRect(100, 100, 2000, 2000);
+            this.background.Image.TextureRect = new IntRect(0, 0, (int)(skin.Size.X), (int)(skin.Size.Y));
             this.background.Image.Position = new Vector2f(-5000, -5000);
         }
 

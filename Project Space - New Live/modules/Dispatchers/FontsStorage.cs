@@ -42,7 +42,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Шрифт Calibri
         /// </summary>
-        private static Font calibri = new Font("Resources/Fonts/Caribli.ttf");
+        private static Font calibri = new Font("Resources/Fonts/Calibri.ttf");
 
         /// <summary>
         /// Шрифт Calibri
@@ -68,7 +68,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Шрифт по умолчанию
         /// </summary>
-        public static Font DefaultFonf
+        public static Font DefaultFont
         {
             get { return timesNewRoman; }
         }
