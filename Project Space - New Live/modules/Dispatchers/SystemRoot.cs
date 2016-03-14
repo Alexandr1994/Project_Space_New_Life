@@ -103,15 +103,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         public void Main()
         {
-            Text text = new Text();
-            text.Font = FontsStorage.TimesNewRoman;
-            text.Color = Color.Green;
-            ;
-
-            TextView test = new TextView("LOL!!", BlendMode.Multiply, FontsStorage.TimesNewRoman);
-            test.TextString.Position = this.GraphicModule.GameView.Center;
-
-
             this.playerContainer.SetControllingActiveObject(this.activeObjectsCollection[0]);
             while (this.GraphicInterfaceContainer.GameContinue)
             {
@@ -120,27 +111,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 this.environment.Process();
                 this.GraphicInterfaceContainer.Process();
                 this.GraphicModule.RenderProcess(this.playerContainer.Environment);
-
-                /*
-                text.Position = this.GraphicModule.GameView.Center;
-                text.DisplayedString =
-                    this.activeObjectsCollection[0].MoveManager.ConstructResultVector().Speed.ToString();
-                GraphicModule.MainWindow.Draw(text);*/
-                /*
-                test.Rotate(test.ViewCenter, (float)(5*Math.PI/180));
-
-                if (test.PointAnalize(this.activeObjectsCollection[0].Coords,  test.ViewCenter))
-                {
-                    test.TextString.Color = Color.Yellow;
-                }
-                else
-                {
-                    test.TextString.Color = Color.Blue;
-                }
-                GraphicModule.MainWindow.Draw(test.TextString);*/
-
-                GraphicModule.MainWindow.DispatchEvents();
-                GraphicModule.MainWindow.Display();
+                this.GraphicModule.MainWindow.DispatchEvents();
+                this.GraphicModule.MainWindow.Display();
             }
         }
 
