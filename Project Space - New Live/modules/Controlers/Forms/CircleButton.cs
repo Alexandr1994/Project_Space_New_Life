@@ -17,6 +17,27 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
     class CircleButton : Button
     {
 
+        public override Vector2f Size
+        {
+            get { return this.size; }
+            set
+            {
+                if (this.View != null)
+                {
+                    float radius = (this.View.InsideView as CircleShape).Radius;
+                    float Xcoef = value.X / radius / 2;
+                    float Ycoef = value.Y / radius / 2;
+                    this.View.InsideView.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
+                    this.size = value;//сохранение размеров
+                    this.TextLocationCorrection();
+                }
+                else
+                {
+                    size = value;
+                }
+            }
+        }
+
         /// <summary>
         /// Конструктор круглой кнопки
         /// </summary>
@@ -27,6 +48,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             this.Location = view.Image.Position = new Vector2f(0, 0);
             this.SetViewStates(ResurceStorage.circuleButtonTextures);
             this.view.Image.Texture = this.viewStates[0];
+            this.SetLabel();
             this.ButtonViewEventReaction();
             this.CatchEvents();
         }

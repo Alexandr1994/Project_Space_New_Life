@@ -81,32 +81,17 @@ namespace Project_Space___New_Live.modules.Dispatchers
             (this.formsCollection["AmmoBar"] as LinearBar).SetTexturets(new Texture[] { null, ResurceStorage.ammoBar });
             (this.formsCollection["AmmoBar"] as LinearBar).VisibleSubstrate = false;
 
-            this.formsCollection.Add("EndButton", new CircleButton());//Кнопка окончания
+            this.formsCollection.Add("EndButton", new RectButton());//Кнопка окончания
+            (this.formsCollection["EndButton"] as Button).Text = "Выход";
+            (this.formsCollection["EndButton"] as Button).FontSize = 24;
             this.formsCollection["EndButton"].MouseClick += OnClick;
             this.formsCollection["EndButton"].Size = new Vector2f(80, 30);
             this.formsCollection["EndButton"].Location = new Vector2f(this.mainForm.Size.X - 80, 0);
-
-            this.formsCollection.Add("Label", new Label());
-            (this.formsCollection["Label"] as Label).Text = "ВЫХОД ->";
-            (this.formsCollection["Label"] as Label).TextColor = Color.White;
-            this.formsCollection["Label"].Location = new Vector2f(this.mainForm.Size.X - (80 + this.formsCollection["Label"].Size.X), 0);
-            this.formsCollection["Label"].MouseIn += OnHover;
-            this.formsCollection["Label"].MouseOut += OnExit;
 
             foreach (KeyValuePair<String, Form> form in this.formsCollection)//добавление форм интерфейса на главную форму
             {
                 this.mainForm.AddForm(form.Value);
             }
-        }
-
-        private void OnHover(object sender, EventArgs e)
-        {
-            (sender as Label).TextColor = Color.Red;
-        }
-
-        private void OnExit(object sender, EventArgs e)
-        {
-            (sender as Label).TextColor = Color.White;
         }
 
         /// <summary>

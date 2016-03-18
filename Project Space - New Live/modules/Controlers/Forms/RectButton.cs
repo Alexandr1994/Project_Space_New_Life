@@ -25,6 +25,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             this.view = new ImageView(new RectangleShape(this.Size), BlendMode.Alpha);  
             this.SetViewStates(ResurceStorage.rectangleButtonTextures);
             this.view.Image.Texture = this.viewStates[0];
+            this.SetLabel();
             this.ButtonViewEventReaction();
             this.CatchEvents();
         }

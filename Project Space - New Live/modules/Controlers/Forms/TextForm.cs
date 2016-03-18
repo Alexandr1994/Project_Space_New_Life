@@ -82,24 +82,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         }
 
         /// <summary>
-        /// Цвет текста
-        /// </summary>
-        protected Color textColor = Color.Black;
-
-        /// <summary>
-        /// Цвет текста
-        /// </summary>
-        public Color TextColor
-        {
-            get { return this.textColor; }
-            set
-            {
-                this.textColor = value;
-                this.ResaveTextString();
-            }
-        }
-
-        /// <summary>
         /// Размер
         /// </summary>
         public override Vector2f Size
@@ -115,7 +97,6 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             this.view.TextString.Font = this.font;
             this.view.TextString.CharacterSize = this.charSize;
             this.view.TextString.DisplayedString = this.text;
-            this.view.TextString.Color = this.textColor;
             this.size = new Vector2f(this.view.TextString.GetLocalBounds().Width, this.view.TextString.GetLocalBounds().Height);
         }
 
