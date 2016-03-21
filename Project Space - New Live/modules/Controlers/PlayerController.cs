@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
@@ -35,9 +36,8 @@ namespace Project_Space___New_Live.modules.Controlers
         /// Конструктор
         /// </summary>
         /// <param name="playerObject">Корабль игрока</param>
-        private PlayerController(PlayerContainer playerContainer)
+        private PlayerController()
         {
-            this.playerContainer = playerContainer;
             this.GameRenderer = RenderModule.getInstance();//Получение класса отрисовщика
             this.GameRenderer.MainWindow.KeyPressed += this.OnKey;
             this.GameRenderer.MainWindow.KeyReleased += this.FromKey;
@@ -49,16 +49,25 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Получение экзепляра класса игрового контроллера
         /// </summary>
-        /// <param name="playerShip">Корабль игрока</param>
-        /// <returns>Ссылка на экземпляр игрового контроллера</returns>
-        public static PlayerController GetInstanse(PlayerContainer playerContainer)
+        /// <returns>Ссылка на экземпляр ручного контроллера</returns>
+        public static PlayerController GetInstanse()
         {
             if (GameController == null)
             {
-                GameController = new PlayerController(playerContainer);
+                GameController = new PlayerController();
             }
             return GameController;
         }
+
+        /// <summary>
+        /// Переустановка Контейнера Игрока
+        /// </summary>
+        /// <param name="newContainer"></param>
+        public void SetNewController(PlayerContainer newContainer)
+        {
+            this.playerContainer = newContainer;
+        }
+
 
         //Общие флаги управления
 

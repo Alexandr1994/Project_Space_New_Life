@@ -15,6 +15,38 @@ namespace Project_Space___New_Live.modules.Dispatchers
 {
     public class PlayerContainer
     {
+
+        /// <summary>
+        /// Сохраняемый нейроконтроллер
+        /// </summary>
+        private ComputerController savingComputerController;
+
+        /// <summary>
+        /// Флаг центрирования данного контейнера
+        /// </summary>
+        private bool viewCentering = false;
+
+        /// <summary>
+        /// Флаг центрирования данного контейнера
+        /// </summary>
+        public bool ViewCentering
+        {
+            get { return this.viewCentering; }
+        }
+
+        /// <summary>
+        /// Флаг ручного управления
+        /// </summary>
+        private bool handControlling = false;
+
+        /// <summary>
+        /// Флаг ручного управления
+        /// </summary>
+        public bool HandControlling
+        {
+            get { return this.handControlling; }
+        }
+
         /// <summary>
         /// Ссылка на графический модуль
         /// </summary>
@@ -58,35 +90,61 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Поучить экземпляр контейнера
-        /// </summary>
-        /// <param name="GameWorld">Коллекция звездных систем</param>
-        /// <returns>Экземпляр контейнера игрока</returns>
-        public static PlayerContainer GetInstanse(BaseEnvironment environment)
-        {
-            if (container == null)
-            {
-                container = new PlayerContainer(environment);
-            }
-            return container;
-        }
-
-        /// <summary>
         /// Конструктор контейнера
         /// </summary>
         /// <param name="GameWorld">Коллекция звездных систем</param>
-        private PlayerContainer(BaseEnvironment environment)
+        public PlayerContainer(BaseEnvironment environment)
         {
             this.environment = environment;
-            this.GameRenderer = RenderModule.getInstance();//Сылки на модуль отрисовки
+            this.GameRenderer = RenderModule.getInstance();//Ссылка на модуль отрисовки
         }
 
+        /// <summary>
+        /// Установить флаг центрирования для данного контейнера
+        /// </summary>
+        public void SetViewCentering()
+        {
+            this.viewCentering = true;
+        }
+
+        /// <summary>
+        /// Сбросить флаг центрирования для данного контейнера
+        /// </summary>
+        public void UnsetViewCentering()
+        {
+            this.viewCentering = false;
+        }
+
+        /// <summary>
+        /// Установить ручное управление Игроком
+        /// </summary>
+        public void SetHandControlling()
+        {
+            this.handControlling = true;//установить флаг ручного управления
+            PlayerController controller = PlayerController.GetInstanse();//получить экземпляр ручного контроллера
+            controller.SetNewController(this);//установить новый Контейнер Игрока
+            this.controllingObject.SetBrains(controller);//Установить Игроку ручной контроллер
+        }
+
+        /// <summary>
+        /// Установить управление нейроконтроллером
+        /// </summary>
+        public void UnsetHandControlling()
+        {
+            this.handControlling = false;//сбросить флаг ручного управления
+            this.controllingObject.SetBrains(this.savingComputerController);//установить Игроку нейроконтроллер
+        }
+
+        /// <summary>
+        /// Установить контролируемого игрока
+        /// </summary>
+        /// <param name="activeObject">Игрок</param>
         public void SetControllingActiveObject(ActiveObject activeObject)
         {
             this.controllingObject = activeObject;
-            PlayerController controller = PlayerController.GetInstanse(this);
-            this.controllingObject.SetBrains(controller);
             this.lastPlayerCoords = this.controllingObject.Coords;//последних координат корабля игрока
+            this.savingComputerController = new ComputerController(controllingObject);//Создание нейроконтроллера для игрока
+            this.controllingObject.SetBrains(this.savingComputerController);//Установка нейроконтроллера
         }
 
         /// <summary>
@@ -146,12 +204,15 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Функция работы конетйнера игрока
+        /// Центрировать камеру на данном игроке
         /// </summary>
-        public void Process()
+        public void ViewCenteringFunc()
         {
-            this.lastPlayerCoords = this.controllingObject.Coords;//сохранение новых координат
-            this.GameRenderer.GameView.Center = this.controllingObject.Coords;//Установка камеры
+            if (this.viewCentering)
+            {
+                this.lastPlayerCoords = this.controllingObject.Coords;//сохранение новых координат
+                this.GameRenderer.GameView.Center = this.controllingObject.Coords;//Установка камеры
+            }
         }
 
 

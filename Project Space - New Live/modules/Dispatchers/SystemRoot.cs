@@ -54,7 +54,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Хранилище информации для отображения
         /// </summary>
-        private PlayerContainer playerContainer;
+        private PlayerContainer[] playerContainers = new PlayerContainer[2];
 
         /// <summary>
         /// Коллекция активных объектов
@@ -69,8 +69,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.GraphicModule = RenderModule.getInstance();//Полученить указатель на модуль отрисовки
             this.ConstructFleets();//Инициализация активных объектов
             this.ConstructWorld();//Конструирование среды
-            this.playerContainer = PlayerContainer.GetInstanse(environment);//Инициализация игрока            
-            this.GraphicInterfaceContainer = new PlayerInterfaceContainer(this.GraphicModule.Form, this.playerContainer);//Сконструировать контейнер игрового интерфейса
+            for (int i = 0; i < this.playerContainers.Length; i++)
+            {
+                this.playerContainers[i] = new PlayerContainer(environment);//Инициализация игроков   
+            }     
+            this.GraphicInterfaceContainer = new PlayerInterfaceContainer(this.GraphicModule.Form, this.playerContainers);//Сконструировать контейнер игрового интерфейса
             
         }
 
@@ -93,9 +96,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         private void ConstructFleets()
         {
             this.activeObjectsCollection.Add(new ActiveObject(2000, new Vector2f(400, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30)));
-            this.activeObjectsCollection[0].SetBrains(new ComputerController(this.activeObjectsCollection[0]));
-            this.activeObjectsCollection.Add(new ActiveObject(10000, new Vector2f(-450, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30)));
-            this.activeObjectsCollection[1].SetBrains(new ComputerController(this.activeObjectsCollection[1]));
+            this.activeObjectsCollection.Add(new ActiveObject(2000, new Vector2f(-450, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30)));
         }
 
         /// <summary>
@@ -103,14 +104,17 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         public void Main()
         {
-            this.playerContainer.SetControllingActiveObject(this.activeObjectsCollection[0]);
+            for (int i = 0; i < this.playerContainers.Length; i++)
+            {
+                this.playerContainers[i].SetControllingActiveObject(this.activeObjectsCollection[i]); 
+            }     
             while (this.GraphicInterfaceContainer.GameContinue)
             {
                 Thread.Sleep(sleepTime);
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
                 this.environment.Process();
                 this.GraphicInterfaceContainer.Process();
-                this.GraphicModule.RenderProcess(this.playerContainer.Environment);
+                this.GraphicModule.RenderProcess(this.environment);
                 this.GraphicModule.MainWindow.DispatchEvents();
                 this.GraphicModule.MainWindow.Display();
             }

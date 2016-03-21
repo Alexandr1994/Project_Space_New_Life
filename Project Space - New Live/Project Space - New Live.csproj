@@ -116,6 +116,7 @@
     <Compile Include="modules\Dispatchers\ResurceStorage.cs" />
     <Compile Include="modules\Dispatchers\TextView.cs" />
     <Compile Include="modules\GameObjects\ActiveObject.cs" />
+    <Compile Include="modules\GameObjects\CheckPoint.cs" />
     <Compile Include="modules\GameObjects\Environments\BaseEnvironment.cs" />
     <Compile Include="modules\GameObjects\VisualEffect.cs" />
     <Compile Include="modules\GameObjects\GameEntity.cs" />
