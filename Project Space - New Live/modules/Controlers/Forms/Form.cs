@@ -57,7 +57,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
                 {
                     float Xcoef = value.X / this.size.X;
                     float Ycoef = value.Y / this.size.Y;
-                    this.View.InsideView.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
+                    this.View.View.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
                     this.size = value;//сохранение размеров
                 }
                 else
@@ -134,7 +134,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
         protected List<RenderView> GetChildFormView()
         {
             List<RenderView> retValue = new List<RenderView>();
-            this.View.InsideView.Position = this.GetGraphicPosition();//коррекция отображения;
+            this.View.View.Position = this.GetGraphicPosition();//коррекция отображения;
             if (this.Visible)//если форма видимая
             {
                 retValue.Add(this.View); //добавление отображени в массив

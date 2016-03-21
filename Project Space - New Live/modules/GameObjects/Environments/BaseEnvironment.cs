@@ -41,6 +41,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             set { this.movingResistance = value; }
         }
 
+        private CheckPoint[] checkPoints = new CheckPoint[2];
 
         /// <summary>
         /// Коллекция пассивных объектов
@@ -67,13 +68,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="background">Фон</param>
         /// <param name="moveResistance">Сопротивление перемещению объектов в среде</param>
-        public BaseEnvironment(Texture background, float moveResistance)
+        public BaseEnvironment(Texture background, float moveResistance, CheckPoint[] checkPoints)
         {
             this.MovingResistance = moveResistance;
             this.InitBackgroung(background); //Построение фона звездной системы
             this.shellsCollection = new List<Shell>();
             this.effectsCollection = new List<VisualEffect>();
             this.wallsCollection = new List<Wall>();
+            this.checkPoints = checkPoints;
         }
 
         /// <summary>
@@ -124,6 +126,10 @@ namespace Project_Space___New_Live.modules.GameObjects
                     i --;
                 }
             }
+            for (int i = 0; i < this.checkPoints.Length; i++)
+            {
+                this.checkPoints[i].Process(new Vector2f(0, 0));
+            }
         }
 
         /// <summary>
@@ -153,6 +159,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             foreach (Wall wall in this.wallsCollection) //сформировать коллекцию активных объектов
             {
                 objectsCollection.Add(wall);
+            }
+            for (int i = 0; i < this.checkPoints.Length; i++)
+            {
+                objectsCollection.Add(checkPoints[i]);
             }
             foreach (GameObject activeObject in this.activeObjectsCollection) //сформировать коллекцию активных объектов
             {
@@ -198,6 +208,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 environmentViews.AddRange(wall.View);
             }
+            for (int i = 0; i < this.checkPoints.Length; i++)
+            {
+                environmentViews.AddRange(checkPoints[i].View);
+            }
             foreach (GameObject shell in this.shellsCollection)
             {
                 environmentViews.AddRange(shell.View);
@@ -216,6 +230,17 @@ namespace Project_Space___New_Live.modules.GameObjects
         public void AddWall(Wall wall)
         {
             this.wallsCollection.Add(wall);
+        }
+
+        /// <summary>
+        /// Распределение контрольных точек между Игроками
+        /// </summary>
+        public void SetCheckPoints()
+        {
+            for (int i = 0; i < this.checkPoints.Length; i ++)
+            {
+                this.activeObjectsCollection[i].CheckPoint = this.checkPoints[i];
+            }
         }
 
     }

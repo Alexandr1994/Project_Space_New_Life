@@ -176,7 +176,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
             foreach (RenderView view in views)
             {
-                mainWindow.Draw(view.InsideView as Drawable, view.State);
+                mainWindow.Draw(view.View as Drawable, view.State);
             }
         }
     }

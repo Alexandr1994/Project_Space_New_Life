@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.GameObjects;
 using SFML.Graphics;
+using SFML.System;
 
 namespace Project_Space___New_Live.modules.Dispatchers
 {
@@ -31,6 +32,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
         static public Texture shipExplosion = new Texture("Resources/SuperExp.png");//Взрыв корабля
         static public Texture shellHitting = new Texture("Resources/Hitting.png");//Взрыв снаряда
         static public Texture RockTexture = new Texture("Resources/land.png");//текстура камня
+        static public Texture blueCheckPoint = new Texture("Resources/BlueCheckPoint.png");
+        static public Texture redCheckPoint = new Texture("Resources/RedCheckPoint.png");
+        static public Texture greenCheckPoint = new Texture("Resources/GreenCheckPoint.png");
         static private int[] orbits = { 600, 1000, 1700 }; //орибиты планет 
 
         /// <summary>
@@ -67,7 +71,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         static public BaseEnvironment InitSystem1()
         {
-            return new BaseEnvironment(backText, (float)0.5);
+            Random random = new Random();
+            CheckPoint[] checkPoints = new CheckPoint[2];
+            checkPoints[0] = new StableCheckPoint(new Vector2f((float)(random.NextDouble() * 5000), (float)(random.NextDouble() * 5000)), new[] { redCheckPoint });
+            checkPoints[1] = new StableCheckPoint(new Vector2f((float)(random.NextDouble() * 5000), (float)(random.NextDouble() * 5000)), new[] { blueCheckPoint });
+            return new BaseEnvironment(backText, (float)0.5, checkPoints);
         }
     
     }

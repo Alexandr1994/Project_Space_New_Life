@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Controlers;
@@ -101,6 +102,20 @@ namespace Project_Space___New_Live.modules.GameObjects
             set { this.environment = value; }
         }
 
+        /// <summary>
+        /// Контрольная точка Игрока
+        /// </summary>
+        protected CheckPoint checkPoint;
+
+        /// <summary>
+        /// Контрольная точка игрока
+        /// </summary>
+        public CheckPoint CheckPoint
+        {
+            get { return this.checkPoint; }
+            set { this.checkPoint = value; }
+        }
+        
         //ОТОБРАЖЕНИЕ ОБЪЕКТА
 
         /// <summary>

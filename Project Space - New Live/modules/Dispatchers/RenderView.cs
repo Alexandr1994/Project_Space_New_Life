@@ -14,9 +14,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
     public abstract class RenderView
     {
         /// <summary>
-        /// Внутреннее отображение
+        /// Трансформиру
         /// </summary>
-        public abstract Transformable InsideView
+        public abstract Transformable View
         {
             get; 
             set; 
@@ -46,14 +46,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
             {
                 Vector2f center = new Vector2f();
                 FloatRect imageParams = new FloatRect();
-                String typeName = this.InsideView.GetType().Name;
+                String typeName = this.View.GetType().Name;
                 if (typeName == "Text")
                 {
-                    imageParams = (this.InsideView as Text).GetGlobalBounds();
+                    imageParams = (this.View as Text).GetGlobalBounds();
                 }
                 if(typeName == "RectangleShape" || typeName == "CircleShape" || typeName == "ConvexShape")
                 {
-                    imageParams = (this.InsideView as Shape).GetGlobalBounds();
+                    imageParams = (this.View as Shape).GetGlobalBounds();
                 }
                 center.X = imageParams.Left + imageParams.Width / 2;
                 center.Y = imageParams.Top + imageParams.Height / 2;
@@ -68,14 +68,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public virtual Vector2f GetSize()
         {
             FloatRect temp = new FloatRect();
-            String typeName = this.InsideView.GetType().Name;
+            String typeName = this.View.GetType().Name;
             if (typeName == "Text")
             {
-                temp = (this.InsideView as Text).GetLocalBounds();
+                temp = (this.View as Text).GetLocalBounds();
             }
             if (typeName == "RectangleShape" || typeName == "CircleShape" || typeName == "ConvexShape")
             {
-                temp = (this.InsideView as Shape).GetLocalBounds();
+                temp = (this.View as Shape).GetLocalBounds();
             }
             return new Vector2f(temp.Width, temp.Height);
         }
@@ -87,7 +87,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="angle">Угол, на который будет произведен поворот в рад.</param>
         public void Rotate(Vector2f rotationCenter, float angle)
         {
-            String typeName = this.InsideView.GetType().Name;
+            String typeName = this.View.GetType().Name;
             if (typeName == "Text")
             {
                 this.TextRotate(rotationCenter, angle);
@@ -105,7 +105,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="angle">Угол, на который будет произведен поворот в рад.</param>
         private void TextRotate(Vector2f rotationCenter, float angle)
         {
-            Text textString = this.InsideView as Text;
+            Text textString = this.View as Text;
             textString.Rotation += (float)(angle * (180 / Math.PI));//поворот изображения
             if (textString.Rotation > 360)
             {
@@ -121,7 +121,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="angle">Угол, на который будет произведен поворот в рад.</param>
         private void ObjectRotate(Vector2f rotationCenter, float angle)
         {
-            Shape image = this.InsideView as Shape; 
+            Shape image = this.View as Shape; 
             image.Rotation += (float)(angle * (180 / Math.PI));//поворот изображения
             if (image.Rotation > 360)
             {
@@ -150,12 +150,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="offsets">Смещение по осям Х и Y</param>
         public void Translate(Vector2f offsets)
         {
-            this.InsideView.Position = new Vector2f(this.InsideView.Position.X + offsets.X, this.InsideView.Position.Y + offsets.Y);
+            this.View.Position = new Vector2f(this.View.Position.X + offsets.X, this.View.Position.Y + offsets.Y);
         }
 
         public bool PointAnalize(Vector2f point, Vector2f center)
         {
-            switch (this.InsideView.GetType().Name)//определиение объекта
+            switch (this.View.GetType().Name)//определиение объекта
             {
                 case "RectangleShape":
                 {
@@ -217,7 +217,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             Vector2f tempVertex = new Vector2f();
             List<Vector2f> vertexesCollection = new List<Vector2f>();
-            float angle = (float)(this.InsideView.Rotation * Math.PI) / 180;//угол поворота прямоугольника в радианах
+            float angle = (float)(this.View.Rotation * Math.PI) / 180;//угол поворота прямоугольника в радианах
             if (angle == 0)//корректировка угла поворота отображения
             {
                 angle += (float)(0.0001 * Math.PI / 180);
@@ -298,8 +298,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
         private bool EllipsePointTest(Vector2f point, Vector2f center)
         {
             Vector2f halfAxises = new Vector2f();//полуоси
-            halfAxises.X = (this.InsideView as CircleShape).Radius * this.InsideView.Scale.X;//нахождение полуоси Х
-            halfAxises.Y = (this.InsideView as CircleShape).Radius * this.InsideView.Scale.Y;//нахождение полуоси Y
+            halfAxises.X = (this.View as CircleShape).Radius * this.View.Scale.X;//нахождение полуоси Х
+            halfAxises.Y = (this.View as CircleShape).Radius * this.View.Scale.Y;//нахождение полуоси Y
             float value = this.EllipseFuncValue(point, halfAxises, center);
             if (value < 0)
             {
@@ -317,7 +317,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         private float EllipseFuncValue(Vector2f point, Vector2f halfAxises, Vector2f center)
         {
-            float angle = (float)(this.InsideView.Rotation * Math.PI) / 180;//угол поворота эллипас в радианах
+            float angle = (float)(this.View.Rotation * Math.PI) / 180;//угол поворота эллипас в радианах
             Vector2f deltaCoords = point - center;//разность координат целевой точки и центра эллипас
             float shX = (float)(deltaCoords.X * Math.Cos(angle) + deltaCoords.Y * Math.Sin(angle));//X с учетом поворота эллипас
             float shY = (float)(-deltaCoords.X * Math.Sin(angle) + deltaCoords.Y * Math.Cos(angle));//Y с учетом поворота эллипас
@@ -331,11 +331,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
             {//то объекты пересекаются
                 return true;
             }
-            switch (this.InsideView.GetType().Name)//в зависимости от типа данного отображения
+            switch (this.View.GetType().Name)//в зависимости от типа данного отображения
             {
                 case "RectangleShape":
                 {
-                    switch (targetView.InsideView.GetType().Name)//и типа проверяемого вызываем один и методов проверки
+                    switch (targetView.View.GetType().Name)//и типа проверяемого вызываем один и методов проверки
                     {
                         case "RectangleShape"://проверка прямоугольник и прямоугольник
                         {
@@ -353,7 +353,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 }; break;
                 case "CircleShape"://и типа проверяемого вызываем один и методов проверки
                 {
-                    switch (targetView.InsideView.GetType().Name)
+                    switch (targetView.View.GetType().Name)
                     {
                         case "RectangleShape"://проверка эллипс и прямоугобник
                         {
@@ -371,7 +371,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 }; break;
                 case "Text":
                 {
-                    switch (targetView.InsideView.GetType().Name)//и типа проверяемого вызываем один и методов проверки
+                    switch (targetView.View.GetType().Name)//и типа проверяемого вызываем один и методов проверки
                     {
                         case "RectangleShape"://проверка текст и прямоугольник
                         {
@@ -404,10 +404,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
             List<Vector3f> linesCollection = this.FindPoligonBorder(vertexesCoords);//Поиск параметров функций прямых составляющих многоугольник
             //targetView - эллипс
             Vector2f halfAxises = new Vector2f();//полуоси
-            halfAxises.X = (targetView.InsideView as CircleShape).Radius * targetView.InsideView.Scale.X;//нахождение полуоси Х
-            halfAxises.Y = (targetView.InsideView as CircleShape).Radius * targetView.InsideView.Scale.Y;//нахождение полуоси Y
+            halfAxises.X = (targetView.View as CircleShape).Radius * targetView.View.Scale.X;//нахождение полуоси Х
+            halfAxises.Y = (targetView.View as CircleShape).Radius * targetView.View.Scale.Y;//нахождение полуоси Y
             Vector2f targetCenter = targetView.ViewCenter;
-            float targetAngle = (float)(targetView.InsideView.Rotation * Math.PI / 180);
+            float targetAngle = (float)(targetView.View.Rotation * Math.PI / 180);
             for (int i = 0; i < linesCollection.Count; i++)
             {
                 //Индекс начальной вершины отрезка
@@ -564,14 +564,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
             Vector2f delta = center - targetCenter;
             double distance = Math.Sqrt(Math.Pow(delta.X, 2) + Math.Pow(delta.Y, 2));//расстояние между центарми отображений
             float betweenAngle = (float)(Math.Acos(delta.X / distance));
-            float selfAngle = (float)((this.InsideView.Rotation * Math.PI / 180) - betweenAngle);//угол поворота данного отображения
-            float targetAngle = (float)(-(targetView.InsideView.Rotation * Math.PI / 180) + betweenAngle);//угол поворота проверяемого отображения
+            float selfAngle = (float)((this.View.Rotation * Math.PI / 180) - betweenAngle);//угол поворота данного отображения
+            float targetAngle = (float)(-(targetView.View.Rotation * Math.PI / 180) + betweenAngle);//угол поворота проверяемого отображения
             Vector2f selfHalfAxises = new Vector2f();
             Vector2f targetHalfAxises = new Vector2f();
-            selfHalfAxises.X = (this.InsideView as CircleShape).Radius * this.InsideView.Scale.X;//нахождение полуоси Х
-            selfHalfAxises.Y = (this.InsideView as CircleShape).Radius * this.InsideView.Scale.Y;//нахождение полуоси Y
-            targetHalfAxises.X = (targetView.InsideView as CircleShape).Radius * targetView.InsideView.Scale.X;//нахождение полуоси Х
-            targetHalfAxises.Y = (targetView.InsideView as CircleShape).Radius * targetView.InsideView.Scale.Y;//нахождение полуоси Y
+            selfHalfAxises.X = (this.View as CircleShape).Radius * this.View.Scale.X;//нахождение полуоси Х
+            selfHalfAxises.Y = (this.View as CircleShape).Radius * this.View.Scale.Y;//нахождение полуоси Y
+            targetHalfAxises.X = (targetView.View as CircleShape).Radius * targetView.View.Scale.X;//нахождение полуоси Х
+            targetHalfAxises.Y = (targetView.View as CircleShape).Radius * targetView.View.Scale.Y;//нахождение полуоси Y
             float selfRadius = //вычисляем расстояние от центра до дуги данного эллипса
                 (float)
                     (Math.Sqrt(Math.Pow(selfHalfAxises.X * Math.Cos(selfAngle), 2) +

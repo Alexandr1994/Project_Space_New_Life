@@ -118,6 +118,7 @@
     <Compile Include="modules\GameObjects\ActiveObject.cs" />
     <Compile Include="modules\GameObjects\CheckPoint.cs" />
     <Compile Include="modules\GameObjects\Environments\BaseEnvironment.cs" />
+    <Compile Include="modules\GameObjects\StableCheckPoint.cs" />
     <Compile Include="modules\GameObjects\VisualEffect.cs" />
     <Compile Include="modules\GameObjects\GameEntity.cs" />
     <Compile Include="modules\GameObjects\GameObject.cs" />

@@ -20,7 +20,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Внутренне свойство
         /// </summary>
-        public override Transformable InsideView 
+        public override Transformable View 
         {
             get { return this.image as Transformable; }
             set {this.image = value as Shape;}

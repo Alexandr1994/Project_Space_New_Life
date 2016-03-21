@@ -108,6 +108,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             {
                 this.playerContainers[i].SetControllingActiveObject(this.activeObjectsCollection[i]); 
             }     
+            this.environment.SetCheckPoints();
             while (this.GraphicInterfaceContainer.GameContinue)
             {
                 Thread.Sleep(sleepTime);

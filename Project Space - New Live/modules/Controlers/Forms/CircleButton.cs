@@ -24,10 +24,10 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             {
                 if (this.View != null)
                 {
-                    float radius = (this.View.InsideView as CircleShape).Radius;
+                    float radius = (this.View.View as CircleShape).Radius;
                     float Xcoef = value.X / radius / 2;
                     float Ycoef = value.Y / radius / 2;
-                    this.View.InsideView.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
+                    this.View.View.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
                     this.size = value;//сохранение размеров
                     this.TextLocationCorrection();
                 }

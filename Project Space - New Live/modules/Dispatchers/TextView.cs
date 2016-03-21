@@ -16,7 +16,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Внутренне свойство
         /// </summary>
-        public override Transformable InsideView
+        public override Transformable View
         {
             get { return this.textString as Transformable; }
             set { this.textString = value as Text; }
