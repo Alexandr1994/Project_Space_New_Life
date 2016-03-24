@@ -14,7 +14,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
     /// </summary>
     static class ResurceStorage
     {
-        static public Texture[] shipTextures = new Texture[6];
+        static public Texture[] shipTextures = new Texture[8];
         static public Texture[] circuleButtonTextures = new Texture[4];
         static public Texture[] rectangleButtonTextures = new Texture[4];
         static public Texture[] TankTextures = new Texture[7];
@@ -42,12 +42,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         static ResurceStorage()
         {
-            shipTextures[0] = new Texture("Resources/textPlayer0.png");
-            shipTextures[1] = new Texture("Resources/textPlayer3.png");
-            shipTextures[2] = new Texture("Resources/textPlayer2.png");
-            shipTextures[3] = new Texture("Resources/textPlayer1.png");
-            shipTextures[4] = new Texture("Resources/Shield.png");
-            shipTextures[5] = new Texture("Resources/SuperExp.png");
+            shipTextures[0] = new Texture("Resources/redPointer.png");
+            shipTextures[1] = new Texture("Resources/bluePointer.png");
+            shipTextures[2] = new Texture("Resources/textPlayer0.png");
+            shipTextures[3] = new Texture("Resources/textPlayer3.png");
+            shipTextures[4] = new Texture("Resources/textPlayer2.png");
+            shipTextures[5] = new Texture("Resources/textPlayer1.png");
+            shipTextures[6] = new Texture("Resources/Shield.png");
+            shipTextures[7] = new Texture("Resources/SuperExp.png");
             TankTextures[0] = new Texture("Resources/tank0.png");
             TankTextures[1] = new Texture("Resources/tank1.png");
             TankTextures[2] = new Texture("Resources/tank2.png");

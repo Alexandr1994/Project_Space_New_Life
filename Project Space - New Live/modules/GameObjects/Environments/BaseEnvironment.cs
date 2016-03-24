@@ -237,10 +237,8 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public void SetCheckPoints()
         {
-            for (int i = 0; i < this.checkPoints.Length; i ++)
-            {
-                this.activeObjectsCollection[i].CheckPoint = this.checkPoints[i];
-            }
+            this.activeObjectsCollection[0].SetCheckPoints(this.checkPoints[0], this.checkPoints[1]);
+            this.activeObjectsCollection[1].SetCheckPoints(this.checkPoints[1], this.checkPoints[0]);
         }
 
     }

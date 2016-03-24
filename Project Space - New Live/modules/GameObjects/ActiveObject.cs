@@ -51,9 +51,17 @@ namespace Project_Space___New_Live.modules.GameObjects
         public enum Parts : int
         {
             /// <summary>
+            /// Указатель на домашнюю контрольную точку
+            /// </summary>
+            PointerToHome = 0,
+            /// <summary>
+            /// Указатель на целевую контрольную точку
+            /// </summary>
+            PointerToTarget,
+            /// <summary>
             /// Передняя часть
             /// </summary>
-            FrontPart = 0,
+            FrontPart,
             /// <summary>
             /// Задняя часть
             /// </summary>
@@ -103,19 +111,21 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Контрольная точка Игрока
+        /// Контрольные точки Игрока
         /// </summary>
-        protected CheckPoint checkPoint;
+        protected CheckPoint[] checkPoints = new CheckPoint[2];
 
         /// <summary>
-        /// Контрольная точка игрока
+        /// Установка контрольных точек
         /// </summary>
-        public CheckPoint CheckPoint
+        /// <param name="newHome"></param>
+        /// <param name="newTarget"></param>
+        public void SetCheckPoints(CheckPoint newHome, CheckPoint newTarget)
         {
-            get { return this.checkPoint; }
-            set { this.checkPoint = value; }
+            this.checkPoints[(int)(Parts.PointerToHome)] = newHome;
+            this.checkPoints[(int)(Parts.PointerToTarget)] = newTarget;
         }
-        
+
         //ОТОБРАЖЕНИЕ ОБЪЕКТА
 
         /// <summary>
@@ -159,7 +169,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                 {
                     return this.view;
                 }
-                ImageView[] retViews = new ImageView[4];
+                ImageView[] retViews = new ImageView[6];
                 int index = 0;
                 while (index != (int)(Parts.Shield))
                 {
@@ -508,6 +518,20 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
+        /// Процесс измерения указателей на контрольные точки
+        /// </summary>
+        private void PointersProcess()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                Vector2f temp = this.checkPoints[i].Coords - this.coords;
+                float angle = (float) (Math.Atan2(temp.Y, temp.X));
+                angle -= (float)((this.view[i].Image.Rotation - 90) * Math.PI / 180);
+                this.view[i].Rotate(this.view[i].ViewCenter, angle);
+            }
+        }
+
+        /// <summary>
         /// Движение корабля
         /// </summary>
         protected override void Move()
@@ -535,6 +559,21 @@ namespace Project_Space___New_Live.modules.GameObjects
                 this.MoveManager.ShellShoot(this, shell.SpeedVector, shell.Mass);//отдача от выстрела
             }
             this.Move();//отработка системы движений
+            this.PointersProcess();
+        }
+
+        /// <summary>
+        /// Получить контактирующие части отображения
+        /// </summary>
+        /// <returns></returns>
+        private ImageView[] GetContactingViews()
+        {
+            ImageView[] ret_value = new ImageView[this.View.Length - 2];
+            for (int i = (int)(Parts.FrontPart); i < this.View.Length; i ++)
+            {
+                ret_value[i - 2] = this.View[i];
+            }
+            return ret_value;
         }
 
         /// <summary>
@@ -543,6 +582,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         public void AnalizeObjectInteraction()
         {
             List<GameObject> interactiveObjects = this.Environment.GetObjectsInEnvironment();//получить все объекты в среде
+            ImageView[] contactingViews = this.GetContactingViews();//Получить контактирующие части отображения
             foreach (GameObject interactObject in interactiveObjects)
             {
                 switch (interactObject.GetType().Name)
@@ -552,14 +592,14 @@ namespace Project_Space___New_Live.modules.GameObjects
                             Star star = interactObject as Star;
                             if (!ShieldActive)//если энергощит не активен
                             {//то проверяем все части корабля
-                                for (int i = 0; i < this.View.Length; i++) //если одна из частей корабля контактирует 
+                                for (int i = 0; i < contactingViews.Length; i++) //если одна из частей корабля контактирует 
                                 {
-                                    if (View[i].BorderContactAnalize(interactObject.View[(int)Star.Views.Star]))
+                                    if (contactingViews[i].BorderContactAnalize(interactObject.View[(int)Star.Views.Star]))
                                     //с самой звездой
                                     {
                                         this.GetDamage(this.MaxHealth, 100, i); //нанести максимальный урон кораблю
                                     }
-                                    if (View[i].BorderContactAnalize(interactObject.View[(int)Star.Views.Crown]))
+                                    if (contactingViews[i].BorderContactAnalize(interactObject.View[(int)Star.Views.Crown]))
                                     //со звездной короной
                                     {
                                         this.GetDamage(5, 5, i); //нанести некоторый урон
@@ -601,19 +641,19 @@ namespace Project_Space___New_Live.modules.GameObjects
                             {
                                 continue;//то перейти к анализу следующего объекта
                             }
-                            for (int i = 0; i < this.View.Length; i++)//проанализировать возможность столкновения каждой части данного корабля
+                            for (int i = 0; i < contactingViews.Length; i++)//проанализировать возможность столкновения каждой части данного корабля
                             {
-                                for (int j = 0; j < ship.View.Length; j++)//с каждой частью проверяемого корабля
+                                for (int j = 0; j < ship.GetContactingViews().Length; j++)//с каждой частью проверяемого корабля
                                 {
-                                    if (this.View[i].BorderContactAnalize(ship.View[j]))//и в случае пересечения отображений
+                                    if (contactingViews[i].BorderContactAnalize(ship.GetContactingViews()[j]))//и в случае пересечения отображений
                                     {
                                         float deltaX = this.Coords.X - ship.Coords.X;//обработать столкновение
                                         float deltaY = this.Coords.Y - ship.Coords.Y;
                                         float contactAngle = (float)(Math.Atan2(deltaY, deltaX));
                                         this.MoveManager.CrashMove(ship.MoveManager, this.Mass, ship.Mass, contactAngle);
                                         //нанесение урона временная реализация
-                                       // this.GetDamage(50, 1, i);//и нанести урон как данному
-                                       // ship.GetDamage(50, 1, j);//так и проверяемому кораблю
+                                        this.GetDamage(50, 1, i);//и нанести урон как данному
+                                        ship.GetDamage(50, 1, j);//так и проверяемому кораблю
                                     }
                                 }
                             }
@@ -625,9 +665,9 @@ namespace Project_Space___New_Live.modules.GameObjects
                             {
                                 continue;//то переходим к анализу сдежующего объекта
                             }
-                            for (int i = 0; i < this.View.Length; i++)
+                            for (int i = 0; i < contactingViews.Length; i++)
                             {
-                                if (this.View[i].BorderContactAnalize(shell.View[(int)(Shell.ShellParts.Core)]))//если произошло пересечение отображений корабля и снаряда
+                                if (contactingViews[i].BorderContactAnalize(shell.View[(int)(Shell.ShellParts.Core)]))//если произошло пересечение отображений корабля и снаряда
                                 {
                                     this.GetDamage(shell.ObjectDamage, shell.EquipmentDamage, i);//то нанести кораблю урон
                                     this.MoveManager.ShellHit(this, shell.SpeedVector, shell.Mass);//инерция от попадания
@@ -675,8 +715,16 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected override void ConstructView(Texture[] skin)
         {
             //добавить защиту
-            this.view = new ImageView[5];
-            int index = 0;
+            this.view = new ImageView[7];
+            for (int i = 0; i < 2; i++)
+            {
+                this.view[i] = new ImageView(BlendMode.Alpha);
+                Vector2f tempSize = new Vector2f((this.ViewPartSize.X * 2) + 5, this.ViewPartSize.Y * 3);
+                this.view[i].Image = new RectangleShape(tempSize);
+                this.view[i].Image.Texture = skin[i];
+                this.view[i].Image.Position = this.coords - tempSize / 2;
+            }
+            int index = (int)(Parts.FrontPart);
             while (index != (int)(Parts.Shield))
             {
                 this.view[index] = new ImageView(BlendMode.Alpha);
