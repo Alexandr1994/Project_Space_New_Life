@@ -49,7 +49,7 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 if (distance > dangerRadius)//если расстояние до цели больше радиуса опасной зоны
                 {
-                    if (Math.Abs(relativeAngle) > Math.PI / 2 && angleBetween < Math.PI / 2)//проверить нахождение в "мертовой" угловой зоне
+                    if (Math.Abs(relativeAngle) > 4 * Math.PI / 5 && angleBetween < Math.PI / 2)//проверить нахождение в "мертовой" угловой зоне
                     {
                         return;//если объект в мертвой зоне сохранить его предыдушее состояние
                     }
@@ -158,7 +158,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Процесс работы контроллера
         /// </summary>
-        public override void Process()
+        public override void Process(List<ObjectSignature> signaturesCollection)
         {
             //this.MoveToTarget(this.playerContainer.ControllingObject.GetTargetCheckPoint().Coords);
             this.AttackTarget(this.playerContainer.ControllingObject.GetTargetCheckPoint().Coords, 300);

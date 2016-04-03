@@ -87,7 +87,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public float Range
         {
-            get { return this.shellSpeed * this.shellLifeTime / SystemRoot.SleepTime; }
+            get { return this.shellSpeed * this.shellLifeTime / GameRoot.SleepTime; }
         }
 
         /// <summary>

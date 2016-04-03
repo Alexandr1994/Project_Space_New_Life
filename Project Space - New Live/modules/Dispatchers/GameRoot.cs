@@ -20,7 +20,7 @@ using SFML.Window;
 
 namespace Project_Space___New_Live.modules.Dispatchers
 {
-    class SystemRoot
+    class GameRoot
     {
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Построение игры
         /// </summary>
-        public SystemRoot()
+        public GameRoot()
         {
             this.GraphicModule = RenderModule.getInstance();//Полученить указатель на модуль отрисовки
             this.ConstructFleets();//Инициализация активных объектов
@@ -78,11 +78,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Построение звездных систем (временная реализация)
+        /// Построение среды
         /// </summary>
         private void ConstructWorld()
         {
-            this.environment = ResurceStorage.InitSystem1();//сконструировать одну звездную систему
+            this.environment = ResurceStorage.InitSystem2();
             this.environment.SetActiveObjectsCollection(this.activeObjectsCollection);
             foreach (ActiveObject activeObject in this.activeObjectsCollection)
             {
@@ -116,50 +116,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         public void Main()
         {
-            Text text = new Text();
-            text.Font = FontsStorage.TimesNewRoman;
-
             while (this.GraphicInterfaceContainer.GameContinue)
             {
                 Thread.Sleep(sleepTime);
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
                 this.environment.Process();
-
-                String str = "";
-                text.Position = this.activeObjectsCollection[0].Coords;
-                double f = this.activeObjectsCollection[0].AttackAngle;
-                if (f > Math.PI)
-                {
-                    f -= 2 * Math.PI;
-                }
-                if (f < -Math.PI)
-                {
-                    f += 2 * Math.PI;
-                }
-                Vector2f d = this.activeObjectsCollection[0].GetTargetCheckPoint().Coords - this.activeObjectsCollection[0].Coords;
-               /* if (d.X < 0)
-                {
-                    d.X = -d.X;
-                    float sign = (float)(f/Math.Abs(f));
-                    f = sign * (Math.PI - Math.Abs(f));
-                   
-                }
-                double t = Math.Atan2(d.Y, d.X);
-                if (t > Math.PI)
-                {
-                    t -= 2 * Math.PI;
-                }
-                if (t < -Math.PI)
-                {
-                    t += 2 * Math.PI;
-                }
-
-                text.DisplayedString = f.ToString() + "   " + t.ToString();
-                this.GraphicModule.MainWindow.Draw(text );
-                */
-               
-
-
                 this.GraphicInterfaceContainer.Process();
                 this.GraphicModule.RenderProcess(this.environment);
                 this.GraphicModule.MainWindow.DispatchEvents();

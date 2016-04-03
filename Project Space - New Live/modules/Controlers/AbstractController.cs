@@ -65,10 +65,11 @@ namespace Project_Space___New_Live.modules.Controlers
         }
 
 
+
         /// <summary>
         /// Процесс работы контроллера
         /// </summary>
-        public abstract void Process();
+        public abstract void Process(List<ObjectSignature> signaturesCollection);
 
         /// <summary>
         /// Переодическое обнуление флагов контроллера

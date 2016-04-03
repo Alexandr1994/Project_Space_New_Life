@@ -16,9 +16,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         public enum CharactsKeys : int
         {
             /// <summary>
+            /// Координаты (Vector2f)
+            /// </summary>
+            Coords = 0,
+            /// <summary>
             /// Масса (double)
             /// </summary>
-            Mass = 0,
+            Mass,
             /// <summary>
             /// Размер (Vector2f)
             /// </summary>

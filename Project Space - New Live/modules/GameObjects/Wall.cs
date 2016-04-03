@@ -87,6 +87,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected override ObjectSignature ConstructSignature()
         {
             ObjectSignature signature = new ObjectSignature();
+            signature.AddCharacteristics(this.Coords);
             signature.AddCharacteristics(this.mass);
             signature.AddCharacteristics(this.size);
             return signature;;

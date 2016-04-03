@@ -38,6 +38,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.view[0].Image.Texture = newSkin[0];
         }
 
+        /// <summary>
+        /// Сконструировать отображение
+        /// </summary>
+        /// <param name="skin"></param>
         protected override void ConstructView(Texture[] skin)
         {
             this.view = new ImageView[1];
@@ -46,14 +50,23 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.view[0].Image.Texture = skin[0];
         }
 
+        /// <summary>
+        /// Процесс работы контрольной точки
+        /// </summary>
+        /// <param name="homeCoords"></param>
         public override void Process(Vector2f homeCoords)
         {
             this.Move();
         }
-
+           
+        /// <summary>
+        /// Сконструировать сигнатуру кноторольной точки
+        /// </summary>
+        /// <returns>Сигнатура контрольной точки</returns>
         protected override ObjectSignature ConstructSignature()
         {
             ObjectSignature retValue = new ObjectSignature();
+            retValue.AddCharacteristics(this.Coords);
             retValue.AddCharacteristics(this.Mass);
             retValue.AddCharacteristics(this.view[0].GetSize());
             return retValue;

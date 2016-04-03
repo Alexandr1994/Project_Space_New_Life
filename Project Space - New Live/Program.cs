@@ -19,8 +19,8 @@ namespace Project_Space___New_Live
 
         private static void Main(string[] args)
         {
-            SystemRoot system = new SystemRoot();
-            system.Main();
+            GameRoot game = new GameRoot();
+            game.Main();
         } 
     }
 

@@ -208,7 +208,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Процесс работы контроллера
         /// </summary>
-        public override void Process()
+        public override void Process(List<ObjectSignature> signaturesCollection)
         {
             this.Moving();
             this.RefreshFlags();

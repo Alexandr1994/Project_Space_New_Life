@@ -123,8 +123,16 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         private Vector2f size;
 
+        /// <summary>
+        /// Сконструировать сигнатуру
+        /// </summary>
+        /// <returns></returns>
         protected override ObjectSignature ConstructSignature()
         {
+            ObjectSignature signature = new ObjectSignature();
+            signature.AddCharacteristics(this.coords);
+            signature.AddCharacteristics(this.Mass);
+            signature.AddCharacteristics(this.size);
             return null;
         }
 

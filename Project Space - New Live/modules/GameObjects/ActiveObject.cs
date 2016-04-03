@@ -591,7 +591,15 @@ namespace Project_Space___New_Live.modules.GameObjects
                     return;
                 }
                 Shell shell;
-                this.brains.Process(); //отработка управляющей системы
+                List<ObjectSignature> signaturesCollection = new List<ObjectSignature>();//Коллекция сигнатур объектов в зоне видимости
+                foreach (GameObject gameObject in this.Environment.GetObjectsInEnvironment(this.Coords, this.objectRadar.VisibleRadius))//получить сигнатуры всех объектов в зоне действия радара
+                {
+                    if (gameObject != this)//кроме своей собственной
+                    {
+                        signaturesCollection.Add(gameObject.GetSignature());
+                    }       
+                }
+                this.brains.Process(signaturesCollection); //отработка управляющей системы
                 this.EnergyProcess(); //отработка энергосистемы
                 if ((shell = this.objectWeaponSystem.Process(this)) != null)
                     //если в ходе работы оружейной системы был получен снаряд
@@ -629,39 +637,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 switch (interactObject.GetType().Name)
                 {
-                    case "Star"://обработка контакта со звездой
-                        {
-                            Star star = interactObject as Star;
-                            if (!ShieldActive)//если энергощит не активен
-                            {//то проверяем все части корабля
-                                for (int i = 0; i < contactingViews.Length; i++) //если одна из частей корабля контактирует 
-                                {
-                                    if (contactingViews[i].BorderContactAnalize(interactObject.View[(int)Star.Views.Star]))
-                                    //с самой звездой
-                                    {
-                                        this.GetDamage(this.MaxHealth, 100, i); //нанести максимальный урон кораблю
-                                    }
-                                    if (contactingViews[i].BorderContactAnalize(interactObject.View[(int)Star.Views.Crown]))
-                                    //со звездной короной
-                                    {
-                                        this.GetDamage(5, 5, i); //нанести некоторый урон
-                                    }
-                                }
-                            }
-                            else//если энергощит активен
-                            {//то проверяем только энергощит
-                                if (View[(int)Parts.Shield].BorderContactAnalize(interactObject.View[(int)Star.Views.Star]))
-                                //с самой звездой
-                                {
-                                    this.GetDamage(this.MaxHealth, 100, (int)Parts.Shield); //нанести максимальный урон кораблю
-                                }
-                                if (View[(int)Parts.Shield].BorderContactAnalize(interactObject.View[(int)Star.Views.Crown]))
-                                //со звездной короной
-                                {
-                                    this.GetDamage(5, 5, (int)Parts.Shield); //нанести некоторый урон
-                                }
-                            }
-                        }; break;
                     case "Wall"://обработка контакта с препядствием
                         {
                             Wall wall = interactObject as Wall;
@@ -800,6 +775,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected override ObjectSignature ConstructSignature()
         {
             ObjectSignature signature = new ObjectSignature();
+            signature.AddCharacteristics(this.Coords);
             signature.AddCharacteristics(this.mass);
             Vector2f sizes = new Vector2f(this.ViewPartSize.X * 3, this.ViewPartSize.Y * 2);
             signature.AddCharacteristics(sizes);
