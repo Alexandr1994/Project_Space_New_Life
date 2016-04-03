@@ -12,7 +12,7 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
     /// </summary>
     abstract class Panel : ImageForm
     {
-
+        
         /// <summary>
         /// Установка текстуры формы
         /// </summary>

@@ -93,6 +93,7 @@
     <Compile Include="modules\Controlers\ComputerController.cs" />
     <Compile Include="modules\Controlers\Forms\ActiveLabel.cs" />
     <Compile Include="modules\Controlers\Forms\ImageForm.cs" />
+    <Compile Include="modules\Controlers\Forms\InvisiblePanel.cs" />
     <Compile Include="modules\Controlers\Forms\Label.cs" />
     <Compile Include="modules\Controlers\Forms\LinearBar.cs" />
     <Compile Include="modules\Controlers\Forms\Button.cs" />

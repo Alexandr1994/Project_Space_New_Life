@@ -57,10 +57,83 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
+        /// Добавление зон сдвига камеры
+        /// </summary>
+        private void ConstructScrollerAreas()
+        {
+            int referenceSize = 30;
+            Panel panel = new InvisiblePanel();//Зона сдвига вверх и влево
+            panel.Size = new Vector2f(referenceSize, referenceSize);
+            panel.Location = new Vector2f(0, 0);
+            panel.MouseMove += this.MoveViewUp;
+            panel.MouseMove += this.MoveViewLeft;
+            this.formsCollection.Add("LeftTopScroller", panel);
+            panel = new InvisiblePanel();//Зона сдвига влево
+            panel.Size = new Vector2f(referenceSize, this.mainForm.Size.Y - referenceSize * 2);
+            panel.Location = new Vector2f(0, referenceSize);
+            panel.MouseMove += this.MoveViewLeft;
+            this.formsCollection.Add("LeftScroller", panel);
+            panel = new InvisiblePanel();//Зона сдвига вниз и влево
+            panel.Size = new Vector2f(referenceSize, referenceSize);
+            panel.Location = new Vector2f(0, this.mainForm.Size.Y - referenceSize);
+            panel.MouseMove += this.MoveViewDown;
+            panel.MouseMove += this.MoveViewLeft;
+            this.formsCollection.Add("LeftDownScroller", panel);
+            panel = new InvisiblePanel();//Зона сдвига вверх и вправо
+            panel.Size = new Vector2f(referenceSize, referenceSize);
+            panel.Location = new Vector2f(this.mainForm.Size.X - referenceSize, 0);
+            panel.MouseMove += this.MoveViewUp;
+            panel.MouseMove += this.MoveViewRight;
+            this.formsCollection.Add("RightTopScroller", panel);
+            panel = new InvisiblePanel();//Зона сдвига вправо
+            panel.Size = new Vector2f(referenceSize, this.mainForm.Size.Y - referenceSize * 2);
+            panel.Location = new Vector2f(this.mainForm.Size.X - referenceSize, referenceSize);
+            panel.MouseMove += this.MoveViewRight;
+            this.formsCollection.Add("RightScroller", panel);
+            panel = new InvisiblePanel();//Зона сдвига вниз и вправо
+            panel.Size = new Vector2f(referenceSize, referenceSize);
+            panel.Location = new Vector2f(this.mainForm.Size.X - referenceSize, this.mainForm.Size.Y - referenceSize);
+            panel.MouseMove += this.MoveViewDown;
+            panel.MouseMove += this.MoveViewRight;
+            this.formsCollection.Add("RightDownScroller", panel);
+            panel = new InvisiblePanel();//Зона сдвига вниз
+            panel.Size = new Vector2f(this.mainForm.Size.X - referenceSize * 2, referenceSize);
+            panel.Location = new Vector2f(referenceSize, this.mainForm.Size.Y - referenceSize);
+            panel.MouseMove += this.MoveViewDown;
+            this.formsCollection.Add("DownScroller", panel);
+            panel = new InvisiblePanel();//Зона сдвига вверх
+            panel.Size = new Vector2f(this.mainForm.Size.X - referenceSize * 2, referenceSize);
+            panel.Location = new Vector2f(referenceSize, 0);
+            panel.MouseMove += this.MoveViewUp;
+            this.formsCollection.Add("UpScroller", panel);
+        }
+
+        private void MoveViewUp(object sender, EventArgs e)
+        {
+            RenderModule.getInstance().GameView.Center += new Vector2f(0, -20);//Сместить вид вверх 
+        }
+
+        private void MoveViewDown(object sender, EventArgs e)
+        {
+            RenderModule.getInstance().GameView.Center += new Vector2f(0, 20);//Сместить вид вниз 
+        }
+
+        private void MoveViewLeft(object sender, EventArgs e)
+        {
+            RenderModule.getInstance().GameView.Center += new Vector2f(-20, 0);//Сместить вид влево 
+        }
+
+        private void MoveViewRight(object sender, EventArgs e)
+        {
+            RenderModule.getInstance().GameView.Center += new Vector2f(20, 0);//Сместить вид вправо 
+        }
+
+        /// <summary>
         /// Построение интерфейса
         /// </summary>
         private void InterfaceConstruct()
         {
+            this.ConstructScrollerAreas();
             Button circleBtn = new CircleButton();
             LinearBar linearBar = new LinearBar();
 
@@ -134,15 +207,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
             circleBtn.MouseClick += this.HandControlPlayer2;
             this.formsCollection.Add("controlBtn2", circleBtn);
 
-
             this.formsCollection.Add("EndButton", new RectButton());//Кнопка окончания
             (this.formsCollection["EndButton"] as Button).Text = "Выход";
             (this.formsCollection["EndButton"] as Button).FontSize = 24;
             this.formsCollection["EndButton"].MouseClick += OnClick;
             this.formsCollection["EndButton"].Size = new Vector2f(80, 30);
             this.formsCollection["EndButton"].Location = new Vector2f(this.mainForm.Size.X - 80, 0);
-
-
 
             foreach (KeyValuePair<String, Form> form in this.formsCollection)//добавление форм интерфейса на главную форму
             {
