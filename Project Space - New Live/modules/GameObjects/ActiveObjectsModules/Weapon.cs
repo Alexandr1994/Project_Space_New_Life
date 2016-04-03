@@ -83,6 +83,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
+        /// Радиус действия оружия
+        /// </summary>
+        public float Range
+        {
+            get { return this.shellSpeed * this.shellLifeTime / SystemRoot.SleepTime; }
+        }
+
+        /// <summary>
         /// Текущий боезапас
         /// </summary>
         private int ammo;
