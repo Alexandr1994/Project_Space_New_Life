@@ -782,5 +782,32 @@ namespace Project_Space___New_Live.modules.GameObjects
             return signature;
         }
 
+        /// <summary>
+        /// Воскрешенпие игрока
+        /// </summary>
+        /// <param name="newCoords">Новые координаты</param>
+        public void Reborn(Vector2f newCoords)
+        {
+            foreach (Equipment equipment in this.Equipment)//Восстановление компанентов
+            {
+                equipment.Repair();
+            }
+            this.objectBattery.FullCharge();//восстановление ресурса
+            for (int i = 0; i < this.ObjectWeaponSystem.WeaponsCount; i++)//востановление боезапаса
+            {
+                int tempAmmoCount = this.ObjectWeaponSystem.GetWeapon(i).MaxAmmo;
+                this.ObjectWeaponSystem.ReloadWeapon(i, tempAmmoCount);
+            }
+            Vector2f offset = newCoords - this.Coords;
+            this.coords = newCoords;
+            this.health = this.maxHealth;//Восстановление общего состояния
+            this.destroyed = false;
+            this.ShowPlayer();//Восстановить отображение игрока
+            foreach (ImageView imgView in this.view)
+            {
+                imgView.Translate(offset);
+            }
+        }
+
     }
 }

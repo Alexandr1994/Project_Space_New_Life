@@ -97,7 +97,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public void Process()
         {
-            for(int i = 0; i < this.activeObjectsCollection.Count; i ++)//работа активных объектоа находящихся в данной звездной системе
+            for(int i = 0; i < this.activeObjectsCollection.Count; i ++)//работа активных объекта находящихся в данной звездной системе
             {
                 if (!this.activeObjectsCollection[i].Destroyed)
                 {
@@ -109,6 +109,11 @@ namespace Project_Space___New_Live.modules.GameObjects
                             this.activeObjectsCollection[i].ConstructDeathVisualEffect(new Vector2f(144, 144), 52));
                         //this.activeObjectsCollection.Remove(this.activeObjectsCollection[i]);//удалить его из коллекции
                     }
+                }
+                else//если объект был уничтожен восстановить его
+                {
+                    Random rand = new Random();
+                    this.activeObjectsCollection[i].Reborn(new Vector2f((float)(rand.NextDouble() * 5000), (float)(rand.NextDouble() * 5000)));
                 }
             }
             for (int i = 0; i < this.shellsCollection.Count; i ++)//работа со снарядами в данной звездной системе

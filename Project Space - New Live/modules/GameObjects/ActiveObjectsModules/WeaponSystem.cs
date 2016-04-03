@@ -253,5 +253,15 @@ namespace Project_Space___New_Live.modules.GameObjects
             return 0;
         }
 
+        /// <summary>
+        /// Перезарядка оружия
+        /// </summary>
+        /// <param name="index">Индекс</param>
+        /// <param name="ammoCount">Количество боеприпасов</param>
+        public void ReloadWeapon(int index, int ammoCount)
+        {
+            this.weaponsCollection[index].AmmoCharging(ammoCount);
+        }
+
     }
 }

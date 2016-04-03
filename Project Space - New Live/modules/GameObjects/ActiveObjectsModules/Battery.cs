@@ -73,7 +73,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Полнаязарядка батареи
+        /// Полная зарядка батареи
         /// </summary>
         public void FullCharge()
         {

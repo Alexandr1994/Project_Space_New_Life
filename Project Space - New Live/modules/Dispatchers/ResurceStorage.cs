@@ -89,8 +89,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
             Random random = new Random();
             CheckPoint[] checkPoints = new CheckPoint[2];
             float angle = (float) (random.NextDouble()*2*Math.PI);
-            checkPoints[0] = new OrbitalCheckPoint(new Vector2f(2500, 2500), random.Next(2500), (float)(angle - random.NextDouble() * Math.PI), (float)(random.NextDouble() * 0.5 * Math.PI / 180), new[] { redCheckPoint });
-            checkPoints[1] = new OrbitalCheckPoint(new Vector2f(2500, 2500), random.Next(2500), (float)(angle - random.NextDouble() * Math.PI), (float)(random.NextDouble() * 0.5 * Math.PI / 180), new[] { blueCheckPoint }); 
+            checkPoints[0] = new OrbitalCheckPoint(new Vector2f(2500, 2500), random.Next(2500), (float)(angle - random.NextDouble() * Math.PI), (float)(random.NextDouble() * 0.1 * Math.PI / 180), new[] { redCheckPoint });
+            checkPoints[1] = new OrbitalCheckPoint(new Vector2f(2500, 2500), random.Next(2500), (float)(angle - random.NextDouble() * Math.PI), (float)(random.NextDouble() * 0.1 * Math.PI / 180), new[] { blueCheckPoint }); 
             return new BaseEnvironment(backText, (float)0.5, checkPoints);
         }
 
