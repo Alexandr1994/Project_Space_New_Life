@@ -143,7 +143,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             this.controllingObject = activeObject;
             this.lastPlayerCoords = this.controllingObject.Coords;//последних координат корабля игрока
-            this.savingComputerController = new ComputerController(controllingObject);//Создание нейроконтроллера для игрока
+            this.savingComputerController = new ComputerController(this);//Создание нейроконтроллера для игрока
             this.controllingObject.SetBrains(this.savingComputerController);//Установка нейроконтроллера
         }
 

@@ -99,12 +99,16 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             for(int i = 0; i < this.activeObjectsCollection.Count; i ++)//работа активных объектоа находящихся в данной звездной системе
             {
-                this.activeObjectsCollection[i].Process(new Vector2f(0, 0));
-                this.activeObjectsCollection[i].AnalizeObjectInteraction();
-                if (this.activeObjectsCollection[i].Destroyed)//если установлен флаг уничтожения активногог объекта
+                if (!this.activeObjectsCollection[i].Destroyed)
                 {
-                    this.effectsCollection.Add(this.activeObjectsCollection[i].ConstructDeathVisualEffect(new Vector2f(144, 144), 52));
-                    this.activeObjectsCollection.Remove(this.activeObjectsCollection[i]);//удалить его из коллекции
+                    this.activeObjectsCollection[i].Process(new Vector2f(0, 0));
+                    this.activeObjectsCollection[i].AnalizeObjectInteraction();
+                    if (this.activeObjectsCollection[i].Destroyed) //если установлен флаг уничтожения активногог объекта
+                    {
+                        this.effectsCollection.Add(
+                            this.activeObjectsCollection[i].ConstructDeathVisualEffect(new Vector2f(144, 144), 52));
+                        //this.activeObjectsCollection.Remove(this.activeObjectsCollection[i]);//удалить его из коллекции
+                    }
                 }
             }
             for (int i = 0; i < this.shellsCollection.Count; i ++)//работа со снарядами в данной звездной системе

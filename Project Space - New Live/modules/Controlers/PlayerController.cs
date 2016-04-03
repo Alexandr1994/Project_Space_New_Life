@@ -28,11 +28,6 @@ namespace Project_Space___New_Live.modules.Controlers
         static private PlayerController GameController;
 
         /// <summary>
-        /// Ссылка на хранилище управляемых объектов
-        /// </summary>
-        private PlayerContainer playerContainer = null;
-
-        /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="playerObject">Корабль игрока</param>
@@ -67,18 +62,6 @@ namespace Project_Space___New_Live.modules.Controlers
         {
             this.playerContainer = newContainer;
         }
-
-
-        //Общие флаги управления
-
-        //Управление движением
-        private bool Forward = false;
-        private bool Reverse = false;
-        private bool LeftFly = false;
-        private bool RightFly = false;
-        private bool LeftRotate = false;
-        private bool RightRotate = false;
-        private bool StopMoving = false;
 
         /// <summary>
         /// Обрабочик нажатий на клавиши
@@ -212,45 +195,14 @@ namespace Project_Space___New_Live.modules.Controlers
             }
         }
 
-
+        /// <summary>
+        /// Отработка выхода курсора из области главной формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="Args"></param>
         private void OnMouseOut(object sender, MouseMoveEventArgs Args)
         {
             this.playerContainer.ControllingObject.StopFire();
-        }
-
-        /// <summary>
-        /// Обработка движений корабля
-        /// </summary>
-        private void Moving()
-        {
-            if (Forward)
-            {
-                this.playerContainer.ControllingObject.MoveManager.GiveForwardThrust(this.playerContainer.ControllingObject);
-            }
-            if (Reverse)
-            {
-                this.playerContainer.ControllingObject.MoveManager.GiveReversThrust(this.playerContainer.ControllingObject);
-            }
-            if (LeftFly)
-            {
-                this.playerContainer.ControllingObject.MoveManager.GiveSideThrust(this.playerContainer.ControllingObject, -1);
-            }
-            if (RightFly)
-            {
-                this.playerContainer.ControllingObject.MoveManager.GiveSideThrust(this.playerContainer.ControllingObject, 1);
-            }
-            if (LeftRotate)
-            {
-                this.playerContainer.ControllingObject.MoveManager.GiveRotationThrust(this.playerContainer.ControllingObject, -1);
-            }
-            if (RightRotate)
-            {
-                this.playerContainer.ControllingObject.MoveManager.GiveRotationThrust(this.playerContainer.ControllingObject, 1);
-            }
-            if (StopMoving)
-            {
-                this.playerContainer.ControllingObject.MoveManager.FullStop(this.playerContainer.ControllingObject);
-            }           
         }
 
         /// <summary>

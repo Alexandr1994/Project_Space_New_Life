@@ -116,6 +116,20 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected CheckPoint[] checkPoints = new CheckPoint[2];
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public CheckPoint GetTargetCheckPoint()
+        {
+            return this.checkPoints[(int)(Parts.PointerToTarget)];
+        }
+
+        public CheckPoint GetHomeCheckPoint()
+        {
+            return this.checkPoints[(int)(Parts.PointerToHome)];
+        }
+
+        /// <summary>
         /// Установка контрольных точек
         /// </summary>
         /// <param name="newHome"></param>
@@ -238,7 +252,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             get { return this.destroyed; }
         }
-
+        
         /// <summary>
         /// Текущий запас прочности
         /// </summary>
@@ -303,6 +317,28 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
+        /// Скрыть отображение
+        /// </summary>
+        private void HidePlayer()
+        {
+            for (int i = 0; i < this.View.Length; i ++)
+            {
+                this.View[i].Image.FillColor = new Color(0, 0, 0, 0);
+            }
+        }
+
+        /// <summary>
+        /// Показать отображение
+        /// </summary>
+        private void ShowPlayer()
+        {
+            for (int i = 0; i < this.View.Length; i++)
+            {
+                this.View[i].Image.FillColor = new Color(255, 255, 255, 255);
+            }
+        }
+
+        /// <summary>
         /// Элементарное движение активного объекта
         /// </summary>
         /// <param name="speed">Скорость движения</param>
@@ -330,9 +366,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 partView.Rotate(this.coords, angle);//изменение каждой части отображения
             }
-            if (this.rotation > 2 * Math.PI)
+            if (Math.Abs(this.rotation) > 2 * Math.PI)
             {
-                this.rotation -= (float)(2 * Math.PI);
+                float sign = this.Rotation/Math.Abs(this.Rotation);
+                this.rotation -= (float)(2 * Math.PI * sign);
             }
         }
 
@@ -545,21 +582,26 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="homeCoords">Координаты начала отсчета</param>
         public override void Process(Vector2f homeCoords)
         {
-            if (this.Health < 1)//Если оставшийся запас прочности упал до 0
+            if (!this.Destroyed)
             {
-                this.destroyed = true;//то установить флаг уничтожения корабля
-                return;
+                if (this.Health < 1) //Если оставшийся запас прочности упал до 0
+                {
+                    this.destroyed = true; //то установить флаг уничтожения корабля
+                    this.HidePlayer();
+                    return;
+                }
+                Shell shell;
+                this.brains.Process(); //отработка управляющей системы
+                this.EnergyProcess(); //отработка энергосистемы
+                if ((shell = this.objectWeaponSystem.Process(this)) != null)
+                    //если в ходе работы оружейной системы был получен снаряд
+                {
+                    this.Environment.AddNewShell(shell); //то отправить его в коллекцияю снарядов звездной системы
+                    this.MoveManager.ShellShoot(this, shell.SpeedVector, shell.Mass); //отдача от выстрела
+                }
+                this.Move(); //отработка системы движений
+                this.PointersProcess();
             }
-            Shell shell;
-            this.brains.Process();//отработка управляющей системы
-            this.EnergyProcess();//отработка энергосистемы
-            if ((shell = this.objectWeaponSystem.Process(this)) != null)//если в ходе работы оружейной системы был получен снаряд
-            {
-                this.Environment.AddNewShell(shell);//то отправить его в коллекцияю снарядов звездной системы
-                this.MoveManager.ShellShoot(this, shell.SpeedVector, shell.Mass);//отдача от выстрела
-            }
-            this.Move();//отработка системы движений
-            this.PointersProcess();
         }
 
         /// <summary>
@@ -636,24 +678,31 @@ namespace Project_Space___New_Live.modules.GameObjects
                         }; break;
                     case "ActiveObject"://обработка контакта с кораблем
                         {
-                            ActiveObject ship = interactObject as ActiveObject;
-                            if (ship == this)//если анализируемый корабли является данным кораблем
+                            ActiveObject player = interactObject as ActiveObject;
+                            if (!player.Destroyed)
                             {
-                                continue;//то перейти к анализу следующего объекта
-                            }
-                            for (int i = 0; i < contactingViews.Length; i++)//проанализировать возможность столкновения каждой части данного корабля
-                            {
-                                for (int j = 0; j < ship.GetContactingViews().Length; j++)//с каждой частью проверяемого корабля
+                                if (player == this) //если анализируемый корабли является данным кораблем
                                 {
-                                    if (contactingViews[i].BorderContactAnalize(ship.GetContactingViews()[j]))//и в случае пересечения отображений
+                                    continue; //то перейти к анализу следующего объекта
+                                }
+                                for (int i = 0; i < contactingViews.Length; i++)
+                                    //проанализировать возможность столкновения каждой части данного корабля
+                                {
+                                    for (int j = 0; j < player.GetContactingViews().Length; j++)
+                                        //с каждой частью проверяемого корабля
                                     {
-                                        float deltaX = this.Coords.X - ship.Coords.X;//обработать столкновение
-                                        float deltaY = this.Coords.Y - ship.Coords.Y;
-                                        float contactAngle = (float)(Math.Atan2(deltaY, deltaX));
-                                        this.MoveManager.CrashMove(ship.MoveManager, this.Mass, ship.Mass, contactAngle);
-                                        //нанесение урона временная реализация
-                                        this.GetDamage(50, 1, i);//и нанести урон как данному
-                                        ship.GetDamage(50, 1, j);//так и проверяемому кораблю
+                                        if (contactingViews[i].BorderContactAnalize(player.GetContactingViews()[j]))
+                                            //и в случае пересечения отображений
+                                        {
+                                            float deltaX = this.Coords.X - player.Coords.X; //обработать столкновение
+                                            float deltaY = this.Coords.Y - player.Coords.Y;
+                                            float contactAngle = (float) (Math.Atan2(deltaY, deltaX));
+                                            this.MoveManager.CrashMove(player.MoveManager, this.Mass, player.Mass,
+                                                contactAngle);
+                                            //нанесение урона временная реализация
+                                            this.GetDamage(50, 1, i); //и нанести урон как данному
+                                            player.GetDamage(50, 1, j); //так и проверяемому кораблю
+                                        }
                                     }
                                 }
                             }
@@ -741,6 +790,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.view[(int)Parts.RightWing].Image.Position = this.Coords + new Vector2f(this.ViewPartSize.X / 2, -this.ViewPartSize.Y * 3 / 4);//Левое "крыло"
             this.view[(int)Parts.LeftWing].Image.Position = this.Coords + new Vector2f(-this.ViewPartSize.X * 3 / 2, -this.ViewPartSize.Y * 3 / 4);//Правое "крыло"
             this.visualEffectSkin = skin[skin.Length - 1];
+            this.ShowPlayer();
         }
 
         /// <summary>
