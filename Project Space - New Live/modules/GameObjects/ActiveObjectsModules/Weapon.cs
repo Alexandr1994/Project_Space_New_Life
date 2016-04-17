@@ -256,6 +256,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             if (this.MaxAmmo - this.Ammo > newAmmo)
             {
                 this.ammo = this.Ammo + newAmmo;
+                return;
             }
             this.ammo = this.MaxAmmo;
         }

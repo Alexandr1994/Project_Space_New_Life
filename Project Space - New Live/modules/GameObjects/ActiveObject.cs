@@ -137,6 +137,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         public void SetCheckPoints(CheckPoint newHome, CheckPoint newTarget)
         {
             this.checkPoints[(int)(Parts.PointerToHome)] = newHome;
+            this.checkPoints[(int)(Parts.PointerToHome)].ChangeMaster(this);
             this.checkPoints[(int)(Parts.PointerToTarget)] = newTarget;
         }
 
@@ -700,6 +701,36 @@ namespace Project_Space___New_Live.modules.GameObjects
                                 }
                             }
                         }; break;
+                    case "StableCheckPoint"://обработка контакта с контрольной точкой
+                    case "OrbitalCheckPoint"://обработка контакта с контрольной точкой
+                    {
+                        
+                        CheckPoint checkPoint = interactObject as CheckPoint;
+                        for (int i = 0; i < contactingViews.Length; i++)
+                        {
+                            if (contactingViews[i].BorderContactAnalize(checkPoint.View[(int)(Shell.ShellParts.Core)]))//если произошло пересечение отображений корабля и снаряда
+                            {
+                                if (this.checkPoints[(int)(Parts.PointerToHome)].MasterObject == this)
+                                {
+                                    this.Recovery((int)((float)this.MaxHealth / 100));
+                                    foreach (Equipment equipment in this.Equipment)
+                                    {
+                                        equipment.Repair();
+                                    }
+                                    for (int j = 0; j < this.ObjectWeaponSystem.WeaponsCount; j++)
+                                    {
+                                        Weapon weapon = this.ObjectWeaponSystem.GetWeapon(j);
+                                        weapon.AmmoCharging((int)((float)weapon.MaxAmmo / 100));
+                                    }
+                                    this.objectBattery.Charge((int)((float)this.objectBattery.MaxEnergy / 100));
+                                }
+                                else
+                                {
+                                    ;
+                                }
+                            }
+                        }  
+                    }; break;
                 }
             }
 
@@ -723,7 +754,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.maxHealth = this.health = maxHealth;
 
             this.objectEngine = new Engine(100, 1, 2000, 1500, 10, 8, null);//двигатель
-            this.objectReactor = new Reactor(100, 5, null);//реактор
+            this.objectReactor = new Reactor(100, 1, null);//реактор
             this.objectBattery = new Battery(100, 500, null);//энергобатарея
             this.objectRadar  = new Radar(20, 2500, null);//радар
             this.objectShield = new Shield(20, 3, 100, 0, 1, null);//энергощит 

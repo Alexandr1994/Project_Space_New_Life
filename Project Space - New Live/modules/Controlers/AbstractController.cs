@@ -34,6 +34,14 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         protected void Moving()
         {
+            if (LeftRotate)
+            {
+                this.playerContainer.ControllingObject.MoveManager.GiveRotationThrust(this.playerContainer.ControllingObject, -1);
+            }
+            if (RightRotate)
+            {
+                this.playerContainer.ControllingObject.MoveManager.GiveRotationThrust(this.playerContainer.ControllingObject, 1);
+            }
             if (Forward)
             {
                 this.playerContainer.ControllingObject.MoveManager.GiveForwardThrust(this.playerContainer.ControllingObject);
@@ -49,14 +57,6 @@ namespace Project_Space___New_Live.modules.Controlers
             if (RightFly)
             {
                 this.playerContainer.ControllingObject.MoveManager.GiveSideThrust(this.playerContainer.ControllingObject, 1);
-            }
-            if (LeftRotate)
-            {
-                this.playerContainer.ControllingObject.MoveManager.GiveRotationThrust(this.playerContainer.ControllingObject, -1);
-            }
-            if (RightRotate)
-            {
-                this.playerContainer.ControllingObject.MoveManager.GiveRotationThrust(this.playerContainer.ControllingObject, 1);
             }
             if (StopMoving)
             {

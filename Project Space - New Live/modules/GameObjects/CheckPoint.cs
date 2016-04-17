@@ -31,6 +31,15 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Смена Игрока-хозяина
         /// </summary>
         /// <param name="newMaster">Новый Игрок-Хозяин</param>
+        public void ChangeMaster(ActiveObject newMaster)
+        {
+            this.masterObject = newMaster;
+        }
+
+        /// <summary>
+        /// Смена Игрока-хозяина
+        /// </summary>
+        /// <param name="newMaster">Новый Игрок-Хозяин</param>
         /// <param name="newSkin">Новая текстура</param>
         public void ChangeMaster(ActiveObject newMaster, Texture[] newSkin)
         {
@@ -71,5 +80,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             retValue.AddCharacteristics(this.view[0].GetSize());
             return retValue;
         }
+
     }
 }
