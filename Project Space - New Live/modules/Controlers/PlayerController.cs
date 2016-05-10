@@ -58,9 +58,9 @@ namespace Project_Space___New_Live.modules.Controlers
         /// Переустановка Контейнера Игрока
         /// </summary>
         /// <param name="newContainer"></param>
-        public void SetNewController(PlayerContainer newContainer)
+        public void SetNewController(ObjectContainer newContainer)
         {
-            this.playerContainer = newContainer;
+            this.ObjectContainer = newContainer;
         }
 
         /// <summary>
@@ -102,15 +102,15 @@ namespace Project_Space___New_Live.modules.Controlers
                 }; break;
                 case Keyboard.Key.Num1:
                 {
-                    this.playerContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);
+                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);
                 }; break;
                 case Keyboard.Key.Num2:
                 {
-                    this.playerContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(1);
+                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(1);
                 }; break;
                 case Keyboard.Key.Num3:
                 {
-                    this.playerContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(2);
+                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(2);
                 }; break;
                 case Keyboard.Key.LControl:
                 {
@@ -172,7 +172,7 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 case Mouse.Button.Left:
                 {
-                    this.playerContainer.ControllingObject.OpenFire();
+                    this.ObjectContainer.ControllingObject.OpenFire();
                 }; break;
                 default: break;
             }
@@ -189,7 +189,7 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 case Mouse.Button.Left:
                 {
-                    this.playerContainer.ControllingObject.StopFire();
+                    this.ObjectContainer.ControllingObject.StopFire();
                 }; break;
                 default: break;
             }
@@ -202,7 +202,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <param name="Args"></param>
         private void OnMouseOut(object sender, MouseMoveEventArgs Args)
         {
-            this.playerContainer.ControllingObject.StopFire();
+            this.ObjectContainer.ControllingObject.StopFire();
         }
 
         /// <summary>
@@ -219,13 +219,13 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         private void ShieldProcess()
         {
-            if (this.playerContainer.ControllingObject.ShieldActive)//Если энергощит активен
+            if (this.ObjectContainer.ControllingObject.ShieldActive)//Если энергощит активен
             {
-                this.playerContainer.ControllingObject.DeactivateShield();//деактивировать его
+                this.ObjectContainer.ControllingObject.DeactivateShield();//деактивировать его
             }
             else
             {
-                this.playerContainer.ControllingObject.ActivateShield();//иначе активировать
+                this.ObjectContainer.ControllingObject.ActivateShield();//иначе активировать
             }
         }
     }

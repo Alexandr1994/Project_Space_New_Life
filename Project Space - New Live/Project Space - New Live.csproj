@@ -105,12 +105,11 @@
     <Compile Include="modules\Controlers\Forms\RectPanel.cs" />
     <Compile Include="modules\Controlers\Forms\RectButton.cs" />
     <Compile Include="modules\Controlers\Forms\TextForm.cs" />
-    <Compile Include="modules\Controlers\InterfaceParts\PlayerStateIndicator.cs" />
     <Compile Include="modules\Dispatchers\FontsStorage.cs" />
     <Compile Include="modules\Dispatchers\RenderView.cs" />
     <Compile Include="modules\Dispatchers\GameRoot.cs" />
     <Compile Include="modules\Controlers\PlayerController.cs" />
-    <Compile Include="modules\Dispatchers\PlayerContainer.cs" />
+    <Compile Include="modules\Dispatchers\ObjectContainer.cs" />
     <Compile Include="modules\Dispatchers\PlayerInterfaceContainer.cs" />
     <Compile Include="modules\Dispatchers\RenderModule.cs" />
     <Compile Include="modules\Dispatchers\ImageView.cs" />
@@ -136,7 +135,6 @@
     <Compile Include="modules\GameObjects\ActiveObjectsModules\SpeedVector.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\Weapon.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\WeaponSystem.cs" />
-    <Compile Include="modules\GameObjects\Wall.cs" />
     <Compile Include="modules\NeronNetwork\ActivationFunction.cs" />
     <Compile Include="modules\NeronNetwork\Neron.cs" />
     <Compile Include="Program.cs" />

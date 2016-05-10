@@ -97,6 +97,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
+        /// Добавить победу данному объекту
+        /// </summary>
+        public void AddWin()
+        {
+            this.brains.AddWin();
+        }
+
+        /// <summary>
         /// Экземпляр среды, в которой находится данный объект
         /// </summary>
         protected BaseEnvironment environment;
@@ -242,6 +250,19 @@ namespace Project_Space___New_Live.modules.GameObjects
         //СОСТОЯНИЕ ОБЪЕКТА
 
         /// <summary>
+        /// Активный объект, уничтоживший данный
+        /// </summary>
+        private ActiveObject killerActiveObjet;
+
+        /// <summary>
+        /// Активный объект, уничтоживший данный объект
+        /// </summary>
+        public ActiveObject KillerActiveObject
+        {
+            get { return this.killerActiveObjet; }
+        }
+
+        /// <summary>
         /// Флаг уничтожения активного объекта
         /// </summary>
         protected bool destroyed = false;
@@ -280,6 +301,21 @@ namespace Project_Space___New_Live.modules.GameObjects
             get { return this.maxHealth; }
         }
 
+        /// <summary>
+        /// Масса объекта (с учетом оборудования)
+        /// </summary>
+        public override float Mass
+        {
+            get
+            {
+                float mass = this.mass;
+                foreach (Equipment equipment in this.Equipment)
+                {
+                    mass += equipment.Mass;
+                }
+                return mass;
+            }
+        }
 
         //ПОЛЯ И МЕТОДЫ ДИВЖЕНИЯ ОБЪЕКТА
 
@@ -638,46 +674,37 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 switch (interactObject.GetType().Name)
                 {
-                    case "Wall"://обработка контакта с препядствием
-                        {
-                            Wall wall = interactObject as Wall;
-                            foreach (ImageView partShipView in this.View)
-                            {
-                                if (partShipView.BorderContactAnalize(wall.View[0]))
-                                {
-                                    float deltaX = this.Coords.X - wall.Coords.X;//обработать столкновение
-                                    float deltaY = this.Coords.Y - wall.Coords.Y;
-                                    float contactAngle = (float)(Math.Atan2(deltaY, deltaX));
-                                    this.MoveManager.CrashMove(this.Mass, wall.Mass, contactAngle);
-                                }
-                            }
-                        }; break;
                     case "ActiveObject"://обработка контакта с кораблем
                         {
-                            ActiveObject player = interactObject as ActiveObject;
-                            if (!player.Destroyed)
+                            ActiveObject enemy = interactObject as ActiveObject;
+                            if (!enemy.Destroyed)
                             {
-                                if (player == this) //если анализируемый корабли является данным кораблем
+                                if (enemy == this) //если анализируемый корабли является данным кораблем
                                 {
                                     continue; //то перейти к анализу следующего объекта
                                 }
                                 for (int i = 0; i < contactingViews.Length; i++)
                                     //проанализировать возможность столкновения каждой части данного корабля
                                 {
-                                    for (int j = 0; j < player.GetContactingViews().Length; j++)
+                                    for (int j = 0; j < enemy.GetContactingViews().Length; j++)
                                         //с каждой частью проверяемого корабля
                                     {
-                                        if (contactingViews[i].BorderContactAnalize(player.GetContactingViews()[j]))
+                                        if (contactingViews[i].BorderContactAnalize(enemy.GetContactingViews()[j]))
                                             //и в случае пересечения отображений
                                         {
-                                            float deltaX = this.Coords.X - player.Coords.X; //обработать столкновение
-                                            float deltaY = this.Coords.Y - player.Coords.Y;
+                                            float deltaX = this.Coords.X - enemy.Coords.X; //обработать столкновение
+                                            float deltaY = this.Coords.Y - enemy.Coords.Y;
                                             float contactAngle = (float) (Math.Atan2(deltaY, deltaX));
-                                            this.MoveManager.CrashMove(player.MoveManager, this.Mass, player.Mass,
+                                            this.MoveManager.CrashMove(enemy.MoveManager, this.Mass, enemy.Mass,
                                                 contactAngle);
                                             //нанесение урона временная реализация
                                             this.GetDamage(50, 1, i); //и нанести урон как данному
-                                            player.GetDamage(50, 1, j); //так и проверяемому кораблю
+
+                                            if (this.Health < 1)//если после столкновения запас прочности упал ниже 1
+                                            {
+                                                this.killerActiveObjet = enemy;//то увеличить количество побед противника
+                                            }
+                                            enemy.GetDamage(50, 1, j); //так и проверяемому кораблю
                                         }
                                     }
                                 }
@@ -695,6 +722,10 @@ namespace Project_Space___New_Live.modules.GameObjects
                                 if (contactingViews[i].BorderContactAnalize(shell.View[(int)(Shell.ShellParts.Core)]))//если произошло пересечение отображений корабля и снаряда
                                 {
                                     this.GetDamage(shell.ObjectDamage, shell.EquipmentDamage, i);//то нанести кораблю урон
+                                    if (this.Health < 1)//если после попадания запас прочности упал ниже 1
+                                    {
+                                        this.killerActiveObjet = shell.ShooterObject;//то сохрнить ссылку на стрелка
+                                    }
                                     this.MoveManager.ShellHit(this, shell.SpeedVector, shell.Mass);//инерция от попадания
                                     shell.HitToTarget();//и установить флаг окончания жизни снаряда
                                     break;
@@ -703,8 +734,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                         }; break;
                     case "StableCheckPoint"://обработка контакта с контрольной точкой
                     case "OrbitalCheckPoint"://обработка контакта с контрольной точкой
-                    {
-                        
+                    {          
                         CheckPoint checkPoint = interactObject as CheckPoint;
                         for (int i = 0; i < contactingViews.Length; i++)
                         {
@@ -754,13 +784,13 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.maxHealth = this.health = maxHealth;
 
             this.objectEngine = new Engine(100, 1, 2000, 1500, 10, 8, null);//двигатель
-            this.objectReactor = new Reactor(100, 1, null);//реактор
+            this.objectReactor = new Reactor(100, 2, null);//реактор
             this.objectBattery = new Battery(100, 500, null);//энергобатарея
             this.objectRadar  = new Radar(20, 2500, null);//радар
             this.objectShield = new Shield(20, 3, 100, 0, 1, null);//энергощит 
             this.objectWeaponSystem = new WeaponSystem(3);
-            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0], ResurceStorage.shellHitting}, null));
-            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(1 * Math.PI / 180), 100, 50, 5000, 25, 1, new Vector2f(25, 1), new Texture[] { ResurceStorage.rectangleButtonTextures[2], ResurceStorage.shellHitting}, null));
+            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 15, 10, 10, 5, (float)(5 * Math.PI / 180), 100, 100, 3500, 15, 10, new Vector2f(8, 3), new Texture[] {ResurceStorage.rectangleButtonTextures[0], ResurceStorage.shellHitting}, null));
+            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 25, 15, 15, 5, (float)(3 * Math.PI / 180), 100, 50, 5000, 25, 1, new Vector2f(35, 1), new Texture[] { ResurceStorage.rectangleButtonTextures[2], ResurceStorage.shellHitting}, null));
         }
 
         /// <summary>
@@ -807,7 +837,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             ObjectSignature signature = new ObjectSignature();
             signature.AddCharacteristics(this.Coords);
-            signature.AddCharacteristics(this.mass);
+            signature.AddCharacteristics(this.Mass);
             Vector2f sizes = new Vector2f(this.ViewPartSize.X * 3, this.ViewPartSize.Y * 2);
             signature.AddCharacteristics(sizes);
             return signature;

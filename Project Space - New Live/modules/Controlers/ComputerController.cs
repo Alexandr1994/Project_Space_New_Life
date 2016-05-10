@@ -30,6 +30,11 @@ namespace Project_Space___New_Live.modules.Controlers
         }
 
         /// <summary>
+        /// Объект-противник
+        /// </summary>
+        private Vector2f coordsEnemy;
+
+        /// <summary>
         /// Текущий энекретический режим
         /// </summary>
         private EnergyMode currentEnergyMode = EnergyMode.Maximal;
@@ -37,10 +42,10 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Конструктор компьтерного контроллера
         /// </summary>
-        /// <param name="playerContainer"></param>
-        public ComputerController(PlayerContainer playerContainer)
+        /// <param name="ObjectContainer"></param>
+        public ComputerController(ObjectContainer ObjectContainer)
         {
-            this.playerContainer = playerContainer;
+            this.ObjectContainer = ObjectContainer;
         }
 
         /// <summary>
@@ -57,8 +62,8 @@ namespace Project_Space___New_Live.modules.Controlers
             }
             else
             {
-                float maxSpeed = (this.playerContainer.ControllingObject.Equipment[(int)(ActiveObject.EquipmentNames.Engine)] as Engine).MaxForwardSpeed;
-                float currentSpeed = this.playerContainer.ControllingObject.MoveManager.ConstructResultVector().Speed;
+                float maxSpeed = (this.ObjectContainer.ControllingObject.Equipment[(int)(ActiveObject.EquipmentNames.Engine)] as Engine).MaxForwardSpeed;
+                float currentSpeed = this.ObjectContainer.ControllingObject.MoveManager.ConstructResultVector().Speed;
                 double speedPersent = 100 * currentSpeed / maxSpeed;
                 if (speedPersent < 25)
                 {
@@ -80,10 +85,10 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <param name="dangerRadius">Радиус опасной зоны, около цели (По-умолчанию 0)</param>
         private void RotateToTarget(Vector2f targetCoords, float dangerRadius = 0)
         {
-            Vector2f divCoords = targetCoords - this.playerContainer.ControllingObject.Coords;//Вычисление основынх параметров
+            Vector2f divCoords = targetCoords - this.ObjectContainer.ControllingObject.Coords;//Вычисление основынх параметров
             float distance = (float)(Math.Sqrt(Math.Pow(divCoords.X, 2) + Math.Pow(divCoords.Y, 2)));
             float relativeAngle = (float) (Math.Atan2(divCoords.Y,  divCoords.X));
-            float angleBetween = this.FindAngleBetweenVectors(this.playerContainer.ControllingObject.Coords, this.playerContainer.ControllingObject.Rotation, targetCoords);
+            float angleBetween = this.FindAngleBetweenVectors(this.ObjectContainer.ControllingObject.Coords, this.ObjectContainer.ControllingObject.Rotation, targetCoords);
             if (angleBetween > 5 * Math.PI / 180)//если угол между векторами направление и положения цели больше порога
             {
                 if (distance > dangerRadius)//если расстояние до цели больше радиуса опасной зоны
@@ -92,7 +97,7 @@ namespace Project_Space___New_Live.modules.Controlers
                     {
                         return;//если объект в мертвой зоне сохранить его предыдушее состояние
                     }
-                    if (relativeAngle < this.playerContainer.ControllingObject.Rotation)//иначе оценить куда нужно произвести поворот и установить соответствующие флаги
+                    if (relativeAngle < this.ObjectContainer.ControllingObject.Rotation)//иначе оценить куда нужно произвести поворот и установить соответствующие флаги
                     {
                         this.LeftRotate = true;
                         this.RightRotate = false;
@@ -105,7 +110,7 @@ namespace Project_Space___New_Live.modules.Controlers
                 }
                 else
                 {//если же объект находится в радиусе опасной зоны
-                    if (relativeAngle >= this.playerContainer.ControllingObject.Rotation)//то начать уклонение
+                    if (relativeAngle >= this.ObjectContainer.ControllingObject.Rotation)//то начать уклонение
                     {
                         this.LeftRotate = true;
                         this.RightRotate = false;
@@ -121,7 +126,7 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 if (distance <= dangerRadius)//то оценить нахождение в опасной зоне
                 {
-                    if (relativeAngle >= this.playerContainer.ControllingObject.Rotation)//и начать уклонение если требуется
+                    if (relativeAngle >= this.ObjectContainer.ControllingObject.Rotation)//и начать уклонение если требуется
                     {
                         this.LeftRotate = true;
                         this.RightRotate = false;
@@ -183,8 +188,25 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         public override void Process(List<ObjectSignature> signaturesCollection)
         {
+            this.coordsEnemy = new Vector2f(float.NaN, float.NaN);//сброс координат противника перед анализом
+            foreach (ObjectSignature signature in signaturesCollection)//поиск обекта-противника в зоне видимости
+            {
+                Vector2f sizes = (Vector2f)signature.Characteristics[(int)(ObjectSignature.CharactsKeys.Size)];
+                float mass = (float)signature.Characteristics[(int)(ObjectSignature.CharactsKeys.Mass)];
+                if (sizes.X > 30 && sizes.Y > 30 && mass > 500)//если параметры размера и массы превышают пороговые
+                {
+                    this.coordsEnemy = (Vector2f)signature.Characteristics[(int)(ObjectSignature.CharactsKeys.Coords)];//сохранение текущих координат как координат объекта-противника
+                }
+            }
             this.EnergyAnalise();
-            this.AttackTarget(this.playerContainer.ControllingObject.GetTargetCheckPoint().Coords, 300);
+            if (float.IsNaN(this.coordsEnemy.X) || float.IsNaN(this.coordsEnemy.Y))//если противник не обнаружен
+            {
+                this.MoveToTarget(this.ObjectContainer.ControllingObject.GetTargetCheckPoint().Coords);//двигаться к целевой контрольной точке
+            }
+            else
+            {
+                this.AttackTarget(this.coordsEnemy, 600);//иначе атаковать противника
+            }
             this.Moving();
         }
 
@@ -198,21 +220,21 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <param name="dangerRadius">Радиус опасной зоны, около цели (По-умолчанию 300)</param>
         private void MaximumAttack(Vector2f targetCoords, float dangerRadius = 300)
         {
-            Vector2f divCoords = targetCoords - this.playerContainer.ControllingObject.Coords;//Вычисление основынх параметров
+            Vector2f divCoords = targetCoords - this.ObjectContainer.ControllingObject.Coords;//Вычисление основынх параметров
             float distance = (float)(Math.Sqrt(Math.Pow(divCoords.X, 2) + Math.Pow(divCoords.Y, 2)));
-            float angleBetween = this.FindAngleBetweenVectors(this.playerContainer.ControllingObject.Coords, this.playerContainer.ControllingObject.Rotation, targetCoords);//Вычисление параметров
+            float angleBetween = this.FindAngleBetweenVectors(this.ObjectContainer.ControllingObject.Coords, this.ObjectContainer.ControllingObject.Rotation, targetCoords);//Вычисление параметров
             this.MoveToTarget(targetCoords, dangerRadius);//наведение на цель
-            if (!this.playerContainer.ControllingObject.ObjectWeaponSystem.HasAmmo)//если боезапаса нет
+            if (!this.ObjectContainer.ControllingObject.ObjectWeaponSystem.HasAmmo)//если боезапаса нет
             {
                 return;//окончить работу боевой функции
             }
-            Weapon currentWeapon = this.playerContainer.ControllingObject.ObjectWeaponSystem.GetActiveWeapon();//получить активное оружие
+            Weapon currentWeapon = this.ObjectContainer.ControllingObject.ObjectWeaponSystem.GetActiveWeapon();//получить активное оружие
             if (currentWeapon.Ammo < 1)//если боезапас данного оружия израсходован
             {
-                int activeWeaponIndex = this.playerContainer.ControllingObject.ObjectWeaponSystem.IndexOfActiveWeapon;//получить индекс текущего оружия
-                if (!this.playerContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(activeWeaponIndex + 1))//установить индекс следующего оружия
+                int activeWeaponIndex = this.ObjectContainer.ControllingObject.ObjectWeaponSystem.IndexOfActiveWeapon;//получить индекс текущего оружия
+                if (!this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(activeWeaponIndex + 1))//установить индекс следующего оружия
                 {
-                    this.playerContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);//если не удалось то установить индекс самого первого оружия в коллекции
+                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);//если не удалось то установить индекс самого первого оружия в коллекции
                 }
                 return;//окончить работу боевой функции
             }
@@ -220,11 +242,11 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 if (angleBetween < currentWeapon.Dispersion)//и прицеливания
                 {
-                    this.playerContainer.ControllingObject.OpenFire();//то открыть огонь
+                    this.ObjectContainer.ControllingObject.OpenFire();//то открыть огонь
                     return;//окончить работу боевой функции
                 }
             }
-            this.playerContainer.ControllingObject.StopFire();//иначе прекратить огонь
+            this.ObjectContainer.ControllingObject.StopFire();//иначе прекратить огонь
         }
 
         /// <summary>
@@ -234,21 +256,21 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <param name="dangerRadius">Радиус опасной зоны, около цели (По-умолчанию 300)</param>
         private void EconomicAttack(Vector2f targetCoords, float dangerRadius = 300)
         {
-            Vector2f divCoords = targetCoords - this.playerContainer.ControllingObject.Coords;//Вычисление основынх параметров
+            Vector2f divCoords = targetCoords - this.ObjectContainer.ControllingObject.Coords;//Вычисление основынх параметров
             float distance = (float)(Math.Sqrt(Math.Pow(divCoords.X, 2) + Math.Pow(divCoords.Y, 2)));
-            float angleBetween = this.FindAngleBetweenVectors(this.playerContainer.ControllingObject.Coords, this.playerContainer.ControllingObject.Rotation, targetCoords);//Вычисление параметров
+            float angleBetween = this.FindAngleBetweenVectors(this.ObjectContainer.ControllingObject.Coords, this.ObjectContainer.ControllingObject.Rotation, targetCoords);//Вычисление параметров
             this.MoveToTarget(targetCoords, dangerRadius);//наведение на цель
-            if (!this.playerContainer.ControllingObject.ObjectWeaponSystem.HasAmmo)//если боезапаса нет
+            if (!this.ObjectContainer.ControllingObject.ObjectWeaponSystem.HasAmmo)//если боезапаса нет
             {
                 return;//окончить работу боевой функции
             }
-            Weapon currentWeapon = this.playerContainer.ControllingObject.ObjectWeaponSystem.GetActiveWeapon();//получить активное оружие
+            Weapon currentWeapon = this.ObjectContainer.ControllingObject.ObjectWeaponSystem.GetActiveWeapon();//получить активное оружие
             if (currentWeapon.Ammo < 1)//если боезапас данного оружия израсходован
             {
-                int activeWeaponIndex = this.playerContainer.ControllingObject.ObjectWeaponSystem.IndexOfActiveWeapon;//получить индекс текущего оружия
-                if (!this.playerContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(activeWeaponIndex + 1))//установить индекс следующего оружия
+                int activeWeaponIndex = this.ObjectContainer.ControllingObject.ObjectWeaponSystem.IndexOfActiveWeapon;//получить индекс текущего оружия
+                if (!this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(activeWeaponIndex + 1))//установить индекс следующего оружия
                 {
-                    this.playerContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);//если не удалось то установить индекс самого первого оружия в коллекции
+                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);//если не удалось то установить индекс самого первого оружия в коллекции
                 }
                 return;//окончить работу боевой функции
             }
@@ -256,14 +278,14 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 if (angleBetween < currentWeapon.Dispersion)//и прицеливания
                 {
-                    if (this.playerContainer.GetEnergy() > 15)
+                    if (this.ObjectContainer.GetEnergy() > 15)
                     {
-                        this.playerContainer.ControllingObject.OpenFire();//то открыть огонь
+                        this.ObjectContainer.ControllingObject.OpenFire();//то открыть огонь
                         return;//окончить работу боевой функции
                     }
                 }
             }
-            this.playerContainer.ControllingObject.StopFire();//иначе прекратить огонь
+            this.ObjectContainer.ControllingObject.StopFire();//иначе прекратить огонь
         }
 
         /// <summary>
@@ -275,7 +297,7 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 case EnergyMode.Maximal:
                 {
-                    if (this.playerContainer.GetEnergy() < 20)
+                    if (this.ObjectContainer.GetEnergy() < 20)
                     {
                         this.currentEnergyMode = EnergyMode.Economic;
                     }
@@ -283,7 +305,7 @@ namespace Project_Space___New_Live.modules.Controlers
                 }
                 case EnergyMode.Economic:
                 {
-                    if (this.playerContainer.GetEnergy() > 60)
+                    if (this.ObjectContainer.GetEnergy() > 60)
                     {
                         this.currentEnergyMode = EnergyMode.Maximal;
                     }

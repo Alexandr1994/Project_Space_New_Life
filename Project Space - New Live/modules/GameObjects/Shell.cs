@@ -133,7 +133,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             signature.AddCharacteristics(this.coords);
             signature.AddCharacteristics(this.Mass);
             signature.AddCharacteristics(this.size);
-            return null;
+            return signature;
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected override void ConstructView(Texture[] skin)
         {
             this.view = new ImageView[1];
-            this.view[(int)ShellParts.Core] = new ImageView(new CircleShape(1), BlendMode.Alpha);
+            this.view[(int)ShellParts.Core] = new ImageView(new RectangleShape(new Vector2f(1, 1)), BlendMode.Alpha);
             this.view[(int) ShellParts.Core].Image.Scale = this.size;
             this.View[(int) ShellParts.Core].Image.Position = this.Coords - new Vector2f(this.size.X, this.size.Y);
             this.view[(int) ShellParts.Core].Image.Texture = skin[0];

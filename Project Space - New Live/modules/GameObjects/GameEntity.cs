@@ -31,16 +31,6 @@ namespace Project_Space___New_Live
         public abstract void Process(Vector2f homeCoords);
 
         /// <summary>
-        /// Скорректировать координаты сущности
-        /// </summary>
-        /// <param name="correction">Коррекция</param>
-        public void CorrectObjectPoint(Vector2f correction)
-        {
-            this.coords.X += correction.X;
-            this.coords.Y += correction.Y;
-        }
-
-        /// <summary>
         /// Функция движения сущности
         /// </summary>
         protected abstract void Move();

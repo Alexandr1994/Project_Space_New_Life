@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Controlers;
 using Project_Space___New_Live.modules.Controlers.Forms;
-using Project_Space___New_Live.modules.Controlers.InterfaceParts;
+
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
 using SFML.Graphics;
@@ -54,7 +54,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Хранилище информации для отображения
         /// </summary>
-        private PlayerContainer[] playerContainers = new PlayerContainer[2];
+        private ObjectContainer[] _objectContainers = new ObjectContainer[2];
 
         /// <summary>
         /// Коллекция активных объектов
@@ -69,11 +69,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.GraphicModule = RenderModule.getInstance();//Полученить указатель на модуль отрисовки
             this.ConstructFleets();//Инициализация активных объектов
             this.ConstructWorld();//Конструирование среды
-            for (int i = 0; i < this.playerContainers.Length; i++)
+            for (int i = 0; i < this._objectContainers.Length; i++)
             {
-                this.playerContainers[i] = new PlayerContainer(environment);//Инициализация игроков   
+                this._objectContainers[i] = new ObjectContainer(environment);//Инициализация игроков   
             }     
-            this.GraphicInterfaceContainer = new PlayerInterfaceContainer(this.GraphicModule.Form, this.playerContainers);//Сконструировать контейнер игрового интерфейса
+            this.GraphicInterfaceContainer = new PlayerInterfaceContainer(this.GraphicModule.Form, this._objectContainers);//Сконструировать контейнер игрового интерфейса
             this.InitPlayerContainers();//Инициализацимя контейнеров игроков
         }
 
@@ -104,9 +104,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         private void InitPlayerContainers()
         {
-            for (int i = 0; i < this.playerContainers.Length; i++)//Установка игроков
+            for (int i = 0; i < this._objectContainers.Length; i++)//Установка игроков
             {
-                this.playerContainers[i].SetControllingActiveObject(this.activeObjectsCollection[i]);
+                this._objectContainers[i].SetControllingActiveObject(this.activeObjectsCollection[i]);
             }
             this.environment.SetCheckPoints();//Установка контрольных точек
         }
@@ -121,6 +121,10 @@ namespace Project_Space___New_Live.modules.Dispatchers
                 Thread.Sleep(sleepTime);
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
                 this.environment.Process();
+                foreach (ObjectContainer playerContainer in this._objectContainers)
+                {
+                    playerContainer.StatePlayerControll();
+                }
                 this.GraphicInterfaceContainer.Process();
                 this.GraphicModule.RenderProcess(this.environment);
                 this.GraphicModule.MainWindow.DispatchEvents();

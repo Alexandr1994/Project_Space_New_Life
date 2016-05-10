@@ -5,16 +5,51 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Controlers;
-using Project_Space___New_Live.modules.Controlers.Forms;
-using Project_Space___New_Live.modules.Controlers.InterfaceParts;
-using Project_Space___New_Live.modules.GameObjects;
+using Project_Space___New_Live.modules.Controlers.Forms;using Project_Space___New_Live.modules.GameObjects;
 using SFML.Graphics;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.Dispatchers
 {
-    public class PlayerContainer
+    /// <summary>
+    /// Система мониторинга объекта
+    /// </summary>
+    public class ObjectContainer
     {
+
+        /// <summary>
+        /// Счетчки "гибелей" объекта
+        /// </summary>
+        private int deathCounter = 0;
+
+        /// <summary>
+        /// Количество "гибелей" объекта
+        /// </summary>
+        public int DeathCount
+        {
+            get { return this.deathCounter; }
+        }
+
+        /// <summary>
+        /// Счетчик побед объекта
+        /// </summary>
+        private int winCounter = 0;
+
+        /// <summary>
+        /// Количество побед
+        /// </summary>
+        public int WinCount
+        {
+            get { return this.winCounter; }
+        }
+
+        /// <summary>
+        /// Инкремент счетчика побед
+        /// </summary>
+        public void AddWin()
+        {
+            this.winCounter ++;
+        }
 
         /// <summary>
         /// Сохраняемый нейроконтроллер
@@ -55,20 +90,20 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Экземпляр контейнера
         /// </summary>
-        private static PlayerContainer container = null;
+        private static ObjectContainer container = null;
         
         /// <summary>
-        /// Координаты игрока на предыдущей итерации
+        /// Координаты объекта на предыдущей итерации
         /// </summary>
         private Vector2f lastPlayerCoords;
 
         /// <summary>
-        /// Корабль игрока
+        /// Корабль объекта
         /// </summary>
         private ActiveObject controllingObject = null;
 
         /// <summary>
-        /// Корабль игрока
+        /// Корабль объекта
         /// </summary>
         public ActiveObject ControllingObject
         {
@@ -93,7 +128,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Конструктор контейнера
         /// </summary>
         /// <param name="GameWorld">Коллекция звездных систем</param>
-        public PlayerContainer(BaseEnvironment environment)
+        public ObjectContainer(BaseEnvironment environment)
         {
             this.environment = environment;
             this.GameRenderer = RenderModule.getInstance();//Ссылка на модуль отрисовки
@@ -116,14 +151,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Установить ручное управление Игроком
+        /// Установить ручное управление объектом
         /// </summary>
         public void SetHandControlling()
         {
             this.handControlling = true;//установить флаг ручного управления
             PlayerController controller = PlayerController.GetInstanse();//получить экземпляр ручного контроллера
-            controller.SetNewController(this);//установить новый Контейнер Игрока
-            this.controllingObject.SetBrains(controller);//Установить Игроку ручной контроллер
+            controller.SetNewController(this);//установить новый Контейнер объекта
+            this.controllingObject.SetBrains(controller);//Установить объекту ручной контроллер
         }
 
         /// <summary>
@@ -132,23 +167,23 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void UnsetHandControlling()
         {
             this.handControlling = false;//сбросить флаг ручного управления
-            this.controllingObject.SetBrains(this.savingComputerController);//установить Игроку нейроконтроллер
+            this.controllingObject.SetBrains(this.savingComputerController);//установить объекту нейроконтроллер
         }
 
         /// <summary>
-        /// Установить контролируемого игрока
+        /// Установить контролируемого объекта
         /// </summary>
-        /// <param name="activeObject">Игрок</param>
+        /// <param name="activeObject">Объект</param>
         public void SetControllingActiveObject(ActiveObject activeObject)
         {
             this.controllingObject = activeObject;
-            this.lastPlayerCoords = this.controllingObject.Coords;//последних координат корабля игрока
-            this.savingComputerController = new ComputerController(this);//Создание нейроконтроллера для игрока
+            this.lastPlayerCoords = this.controllingObject.Coords;//последних координат корабля объекта
+            this.savingComputerController = new ComputerController(this);//Создание нейроконтроллера для объекта
             this.controllingObject.SetBrains(this.savingComputerController);//Установка нейроконтроллера
         }
 
         /// <summary>
-        /// Текущий запас прочности корабля игрока  в процентах
+        /// Текущий запас прочности корабля объекта в процентах
         /// </summary>
         /// <returns></returns>
         public float GetHealh()
@@ -157,7 +192,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Текущий энергозапас корабля игрока в процентах
+        /// Текущий энергозапас корабля объекта в процентах
         /// </summary>
         /// <returns></returns>
         public float GetEnergy()
@@ -190,7 +225,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Радиус действия радара игрока
+        /// Радиус области видимости объекта
         /// </summary>
         /// <returns></returns>
         public float GetRadarRange()
@@ -204,7 +239,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
         /// <summary>
-        /// Центрировать камеру на данном игроке
+        /// Центрировать камеру на данном объекте
         /// </summary>
         public void ViewCenteringFunc()
         {
@@ -215,6 +250,18 @@ namespace Project_Space___New_Live.modules.Dispatchers
             }
         }
 
+        /// <summary>
+        /// Осуществление контроля над объектом
+        /// </summary>
+        public void StatePlayerControll()
+        {
+            if (this.controllingObject.Destroyed)
+            {
+                this.deathCounter ++;
+                Random rand = new Random();
+                this.controllingObject.Reborn(new Vector2f((float)(rand.NextDouble() * 5000), (float)(rand.NextDouble() * 5000)));
+            }
+        }
 
     }
 }

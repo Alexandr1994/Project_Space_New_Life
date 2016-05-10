@@ -44,11 +44,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         private CheckPoint[] checkPoints = new CheckPoint[2];
 
         /// <summary>
-        /// Коллекция пассивных объектов
-        /// </summary>
-        private List<Wall> wallsCollection; 
-
-        /// <summary>
         /// Коллекция активных объектов
         /// </summary>
         private List<ActiveObject> activeObjectsCollection;
@@ -71,10 +66,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         public BaseEnvironment(Texture background, float moveResistance, CheckPoint[] checkPoints)
         {
             this.MovingResistance = moveResistance;
-            this.InitBackgroung(background); //Построение фона звездной системы
+            this.InitBackgroung(background); //Построение фона среды
             this.shellsCollection = new List<Shell>();
             this.effectsCollection = new List<VisualEffect>();
-            this.wallsCollection = new List<Wall>();
             this.checkPoints = checkPoints;
         }
 
@@ -97,7 +91,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public void Process()
         {
-            for(int i = 0; i < this.activeObjectsCollection.Count; i ++)//работа активных объекта находящихся в данной звездной системе
+            for(int i = 0; i < this.activeObjectsCollection.Count; i ++)//работа активных объекта находящихся в данной среде
             {
                 if (!this.activeObjectsCollection[i].Destroyed)
                 {
@@ -105,18 +99,13 @@ namespace Project_Space___New_Live.modules.GameObjects
                     this.activeObjectsCollection[i].AnalizeObjectInteraction();
                     if (this.activeObjectsCollection[i].Destroyed) //если установлен флаг уничтожения активногог объекта
                     {
-                        this.effectsCollection.Add(
-                            this.activeObjectsCollection[i].ConstructDeathVisualEffect(new Vector2f(144, 144), 52));
+                        this.activeObjectsCollection[i].KillerActiveObject.AddWin();
+                        this.effectsCollection.Add(this.activeObjectsCollection[i].ConstructDeathVisualEffect(new Vector2f(144, 144), 52));
                         //this.activeObjectsCollection.Remove(this.activeObjectsCollection[i]);//удалить его из коллекции
                     }
                 }
-                else//если объект был уничтожен восстановить его
-                {
-                    Random rand = new Random();
-                    this.activeObjectsCollection[i].Reborn(new Vector2f((float)(rand.NextDouble() * 5000), (float)(rand.NextDouble() * 5000)));
-                }
             }
-            for (int i = 0; i < this.shellsCollection.Count; i ++)//работа со снарядами в данной звездной системе
+            for (int i = 0; i < this.shellsCollection.Count; i ++)//работа со снарядами в данной среде
             {
                 this.shellsCollection[i].Process(new Vector2f(0, 0));
                 if (this.shellsCollection[i].LifeOver)//если время жизни снаряда вышло
@@ -161,14 +150,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Получить коллекцию объектов находящихся в среде
         /// </summary>
-        /// <returns>Коллекция объектов в звездной системе</returns>
+        /// <returns>Коллекция объектов в среде</returns>
         public List<GameObject> GetObjectsInEnvironment()
         {
             List<GameObject> objectsCollection = new List<GameObject>();
-            foreach (Wall wall in this.wallsCollection) //сформировать коллекцию активных объектов
-            {
-                objectsCollection.Add(wall);
-            }
             for (int i = 0; i < this.checkPoints.Length; i++)
             {
                 objectsCollection.Add(checkPoints[i]);
@@ -189,7 +174,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="point">Центр круговой области</param>
         /// <param name="radius">Радиус круговой области</param>
-        /// <returns>Коллекция объектов звездной системы в указанной области</returns>
+        /// <returns>Коллекция объектов среды в указанной области</returns>
         public List<GameObject> GetObjectsInEnvironment(Vector2f point, double radius)
         {
             List<GameObject> ret_value = new List<GameObject>();
@@ -206,17 +191,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Вернуть коллекцию отображений объектов звездной системы
+        /// Вернуть коллекцию отображений объектов среды
         /// </summary>
-        /// <returns>Коллекция отображений объектов в звездной системе</returns>
+        /// <returns>Коллекция отображений объектов в среды</returns>
         public List<ImageView> GetView()
         {
             List<ImageView> environmentViews = new List<ImageView>();
             environmentViews.Add(this.background);
-            foreach (Wall wall in this.wallsCollection)
-            {
-                environmentViews.AddRange(wall.View);
-            }
             for (int i = 0; i < this.checkPoints.Length; i++)
             {
                 environmentViews.AddRange(checkPoints[i].View);
@@ -234,11 +215,6 @@ namespace Project_Space___New_Live.modules.GameObjects
                 environmentViews.Add(effect.View);
             }
             return environmentViews;
-        }
-
-        public void AddWall(Wall wall)
-        {
-            this.wallsCollection.Add(wall);
         }
 
         /// <summary>

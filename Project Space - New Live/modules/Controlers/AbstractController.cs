@@ -16,7 +16,7 @@ namespace Project_Space___New_Live.modules.Controlers
         /// <summary>
         /// Ссылка на хранилище управляемых объектов
         /// </summary>
-        protected PlayerContainer playerContainer = null;
+        protected ObjectContainer ObjectContainer = null;
 
         //Общие флаги управления
 
@@ -36,34 +36,41 @@ namespace Project_Space___New_Live.modules.Controlers
         {
             if (LeftRotate)
             {
-                this.playerContainer.ControllingObject.MoveManager.GiveRotationThrust(this.playerContainer.ControllingObject, -1);
+                this.ObjectContainer.ControllingObject.MoveManager.GiveRotationThrust(this.ObjectContainer.ControllingObject, -1);
             }
             if (RightRotate)
             {
-                this.playerContainer.ControllingObject.MoveManager.GiveRotationThrust(this.playerContainer.ControllingObject, 1);
+                this.ObjectContainer.ControllingObject.MoveManager.GiveRotationThrust(this.ObjectContainer.ControllingObject, 1);
             }
             if (Forward)
             {
-                this.playerContainer.ControllingObject.MoveManager.GiveForwardThrust(this.playerContainer.ControllingObject);
+                this.ObjectContainer.ControllingObject.MoveManager.GiveForwardThrust(this.ObjectContainer.ControllingObject);
             }
             if (Reverse)
             {
-                this.playerContainer.ControllingObject.MoveManager.GiveReversThrust(this.playerContainer.ControllingObject);
+                this.ObjectContainer.ControllingObject.MoveManager.GiveReversThrust(this.ObjectContainer.ControllingObject);
             }
             if (LeftFly)
             {
-                this.playerContainer.ControllingObject.MoveManager.GiveSideThrust(this.playerContainer.ControllingObject, -1);
+                this.ObjectContainer.ControllingObject.MoveManager.GiveSideThrust(this.ObjectContainer.ControllingObject, -1);
             }
             if (RightFly)
             {
-                this.playerContainer.ControllingObject.MoveManager.GiveSideThrust(this.playerContainer.ControllingObject, 1);
+                this.ObjectContainer.ControllingObject.MoveManager.GiveSideThrust(this.ObjectContainer.ControllingObject, 1);
             }
             if (StopMoving)
             {
-                this.playerContainer.ControllingObject.MoveManager.FullStop(this.playerContainer.ControllingObject);
+                this.ObjectContainer.ControllingObject.MoveManager.FullStop(this.ObjectContainer.ControllingObject);
             }
         }
 
+        /// <summary>
+        /// Инкремент счетчика побед
+        /// </summary>
+        public void AddWin()
+        {
+            this.ObjectContainer.AddWin();
+        }
 
 
         /// <summary>

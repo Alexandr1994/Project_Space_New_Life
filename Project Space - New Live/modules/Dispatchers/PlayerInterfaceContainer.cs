@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Project_Space___New_Live.modules.Controlers.Forms;
-using Project_Space___New_Live.modules.Controlers.InterfaceParts;
 using Project_Space___New_Live.modules.GameObjects;
 using SFML.Graphics;
 using SFML.System;
@@ -32,7 +31,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Контейнер игрока
         /// </summary>
-        private PlayerContainer[] playerContainers = new PlayerContainer[2];
+        private ObjectContainer[] objectContainers = new ObjectContainer[2];
 
         /// <summary>
         /// Коллекция форм
@@ -48,11 +47,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Конструктор интерфейса
         /// </summary>
         /// <param name="mainForm">Главная форма</param>
-        /// <param name="playerContainers">Контейнер игрока</param>
-        public PlayerInterfaceContainer(MainForm mainForm, PlayerContainer[] playerContainers)
+        /// <param name="_objectContainers">Контейнер игрока</param>
+        public PlayerInterfaceContainer(MainForm mainForm, ObjectContainer[] _objectContainers)
         {
             this.mainForm = mainForm;
-            this.playerContainers = playerContainers;
+            this.objectContainers = _objectContainers;
             this.InterfaceConstruct();
         }
 
@@ -134,6 +133,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         private void InterfaceConstruct()
         {
             this.ConstructScrollerAreas();
+            Label label = new Label();
             Button circleBtn = new CircleButton();
             LinearBar linearBar = new LinearBar();
 
@@ -169,7 +169,15 @@ namespace Project_Space___New_Live.modules.Dispatchers
             circleBtn.Location = new Vector2f(200, 120);
             circleBtn.MouseClick += this.HandControlPlayer1;
             this.formsCollection.Add("controlBtn1", circleBtn);
-
+            label.TextColor = Color.Red;
+            label.Location = new Vector2f(10, 200);
+            label.Text = this.objectContainers[0].DeathCount.ToString();
+            this.formsCollection.Add("defeatCount1" ,label);
+            label = new Label();
+            label.TextColor = Color.Green;
+            label.Location = new Vector2f(10, 230);
+            label.Text = this.objectContainers[0].WinCount.ToString();
+            this.formsCollection.Add("winCount1", label);
             
             //Формы отображения состояния игрока 2
             this.formsCollection.Add("RadarScreen2", new RadarScreen());//Экран радара
@@ -213,6 +221,17 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.formsCollection["EndButton"].MouseClick += OnClick;
             this.formsCollection["EndButton"].Size = new Vector2f(80, 30);
             this.formsCollection["EndButton"].Location = new Vector2f(this.mainForm.Size.X - 80, 0);
+            label = new Label();
+            label.TextColor = Color.Red;
+            label.Location = new Vector2f(this.mainForm.Size.X - 20, this.mainForm.Size.Y - 200);
+            label.Text = this.objectContainers[1].DeathCount.ToString();
+            this.formsCollection.Add("defeatCount2", label);
+            label = new Label();
+            label.TextColor = Color.Green;
+            label.Location = new Vector2f(this.mainForm.Size.X - 20, this.mainForm.Size.Y - 230);
+            label.Text = this.objectContainers[1].WinCount.ToString();
+            this.formsCollection.Add("winCount2", label);
+
 
             foreach (KeyValuePair<String, Form> form in this.formsCollection)//добавление форм интерфейса на главную форму
             {
@@ -227,15 +246,15 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="e"></param>
         private void CenterOnPlayer1(object sender, EventArgs e)
         {
-            if (this.playerContainers[0].ViewCentering)//если камера центрирована относитьльно Игрока
+            if (this.objectContainers[0].ViewCentering)//если камера центрирована относитьльно Игрока
             {
-                this.playerContainers[0].UnsetViewCentering();//Сбросить центрирование
+                this.objectContainers[0].UnsetViewCentering();//Сбросить центрирование
             }
             else
             {
-                this.playerContainers[0].SetViewCentering();//Иначе отцентрировать камеру отнсительно Игрока
+                this.objectContainers[0].SetViewCentering();//Иначе отцентрировать камеру отнсительно Игрока
             }
-            this.playerContainers[1].UnsetViewCentering();//Сбросить центрирование камеры относительно Игрока-противника
+            this.objectContainers[1].UnsetViewCentering();//Сбросить центрирование камеры относительно Игрока-противника
         }
 
         /// <summary>
@@ -245,15 +264,15 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="e"></param>
         private void CenterOnPlayer2(object sender, EventArgs e)
         {
-            if (this.playerContainers[1].ViewCentering)//если камера центрирована относитьльно Игрока
+            if (this.objectContainers[1].ViewCentering)//если камера центрирована относитьльно Игрока
             {
-                this.playerContainers[1].UnsetViewCentering();//Сбросить центрирование
+                this.objectContainers[1].UnsetViewCentering();//Сбросить центрирование
             }
             else
             {
-                this.playerContainers[1].SetViewCentering();//Иначе отцентрировать камеру отнсительно Игрока
+                this.objectContainers[1].SetViewCentering();//Иначе отцентрировать камеру отнсительно Игрока
             }
-            this.playerContainers[0].UnsetViewCentering();//Сбросить центрирование камеры относительно Игрока-противника
+            this.objectContainers[0].UnsetViewCentering();//Сбросить центрирование камеры относительно Игрока-противника
         }
 
         /// <summary>
@@ -263,14 +282,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="e"></param>
         private void HandControlPlayer1(object sender, EventArgs e)
         {
-            this.playerContainers[1].UnsetHandControlling();//установить Игроку-противнику нейроконтроллер
-            if (this.playerContainers[0].HandControlling)//если Игрок управляется в ручную
+            this.objectContainers[1].UnsetHandControlling();//установить Игроку-противнику нейроконтроллер
+            if (this.objectContainers[0].HandControlling)//если Игрок управляется в ручную
             {
-                this.playerContainers[0].UnsetHandControlling();//установить в качестве контроллера нейроконтроллер
+                this.objectContainers[0].UnsetHandControlling();//установить в качестве контроллера нейроконтроллер
             }
             else
             {
-                this.playerContainers[0].SetHandControlling();//иначе установить ручное управление
+                this.objectContainers[0].SetHandControlling();//иначе установить ручное управление
             }
         }
 
@@ -281,14 +300,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <param name="e"></param>
         private void HandControlPlayer2(object sender, EventArgs e)
         {
-            this.playerContainers[0].UnsetHandControlling();//установить Игроку-противнику нейроконтроллер
-            if (this.playerContainers[1].HandControlling)//если Игрок управляется в ручную
+            this.objectContainers[0].UnsetHandControlling();//установить Игроку-противнику нейроконтроллер
+            if (this.objectContainers[1].HandControlling)//если Игрок управляется в ручную
             {
-                this.playerContainers[1].UnsetHandControlling();//установить в качестве контроллера нейроконтроллер
+                this.objectContainers[1].UnsetHandControlling();//установить в качестве контроллера нейроконтроллер
             }
             else
             {
-                this.playerContainers[1].SetHandControlling();//иначе установить ручное управление
+                this.objectContainers[1].SetHandControlling();//иначе установить ручное управление
             } 
         }
 
@@ -309,19 +328,23 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void Process()
         {
             //Процесс отображения состояния Игрока 1
-            this.playerContainers[0].ViewCenteringFunc();
-            (this.formsCollection["RadarScreen1"] as RadarScreen).RadarProcess(this.playerContainers[0].Environment, this.playerContainers[0].ControllingObject);
-            (this.formsCollection["HealthBar1"] as LinearBar).PercentOfBar = this.playerContainers[0].GetHealh();
-            (this.formsCollection["EnergyBar1"] as LinearBar).PercentOfBar = this.playerContainers[0].GetEnergy();
-            (this.formsCollection["ProtectBar1"] as LinearBar).PercentOfBar = this.playerContainers[0].GetShieldPower();
-            (this.formsCollection["AmmoBar1"] as LinearBar).PercentOfBar = this.playerContainers[0].GetWeaponAmmo();
+            this.objectContainers[0].ViewCenteringFunc();
+            (this.formsCollection["RadarScreen1"] as RadarScreen).RadarProcess(this.objectContainers[0].Environment, this.objectContainers[0].ControllingObject);
+            (this.formsCollection["HealthBar1"] as LinearBar).PercentOfBar = this.objectContainers[0].GetHealh();
+            (this.formsCollection["EnergyBar1"] as LinearBar).PercentOfBar = this.objectContainers[0].GetEnergy();
+            (this.formsCollection["ProtectBar1"] as LinearBar).PercentOfBar = this.objectContainers[0].GetShieldPower();
+            (this.formsCollection["AmmoBar1"] as LinearBar).PercentOfBar = this.objectContainers[0].GetWeaponAmmo();
+            (this.formsCollection["defeatCount1"] as Label).Text = this.objectContainers[0].DeathCount.ToString();
+            (this.formsCollection["winCount1"] as Label).Text = this.objectContainers[0].WinCount.ToString();
             //Процесс отображения состояния Игрока 2
-            this.playerContainers[1].ViewCenteringFunc();
-            (this.formsCollection["RadarScreen2"] as RadarScreen).RadarProcess(this.playerContainers[1].Environment, this.playerContainers[1].ControllingObject);
-            (this.formsCollection["HealthBar2"] as LinearBar).PercentOfBar = this.playerContainers[1].GetHealh();
-            (this.formsCollection["EnergyBar2"] as LinearBar).PercentOfBar = this.playerContainers[1].GetEnergy();
-            (this.formsCollection["ProtectBar2"] as LinearBar).PercentOfBar = this.playerContainers[1].GetShieldPower();
-            (this.formsCollection["AmmoBar2"] as LinearBar).PercentOfBar = this.playerContainers[1].GetWeaponAmmo();
+            this.objectContainers[1].ViewCenteringFunc();
+            (this.formsCollection["RadarScreen2"] as RadarScreen).RadarProcess(this.objectContainers[1].Environment, this.objectContainers[1].ControllingObject);
+            (this.formsCollection["HealthBar2"] as LinearBar).PercentOfBar = this.objectContainers[1].GetHealh();
+            (this.formsCollection["EnergyBar2"] as LinearBar).PercentOfBar = this.objectContainers[1].GetEnergy();
+            (this.formsCollection["ProtectBar2"] as LinearBar).PercentOfBar = this.objectContainers[1].GetShieldPower();
+            (this.formsCollection["AmmoBar2"] as LinearBar).PercentOfBar = this.objectContainers[1].GetWeaponAmmo();
+            (this.formsCollection["defeatCount2"] as Label).Text = this.objectContainers[1].DeathCount.ToString();
+            (this.formsCollection["winCount2"] as Label).Text = this.objectContainers[1].WinCount.ToString();
         }
 
 
