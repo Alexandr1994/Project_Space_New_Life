@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
 
-namespace Project_Space___New_Live.modules.Dispatchers
+namespace Project_Space___New_Live.modules.Storages
 {
     /// <summary>
     /// Хранищище шрифтов

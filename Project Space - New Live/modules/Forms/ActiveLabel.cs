@@ -7,7 +7,7 @@ using Project_Space___New_Live.modules.Dispatchers;
 using SFML.Graphics;
 using SFML.Window;
 
-namespace Project_Space___New_Live.modules.Controlers.Forms
+namespace Project_Space___New_Live.modules.Forms
 {
     class ActiveLabel : TextForm
     {

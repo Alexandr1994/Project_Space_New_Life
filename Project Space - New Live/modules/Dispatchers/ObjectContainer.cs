@@ -4,8 +4,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Project_Space___New_Live.modules.Controlers;
-using Project_Space___New_Live.modules.Controlers.Forms;using Project_Space___New_Live.modules.GameObjects;
+using Project_Space___New_Live.modules;
+using Project_Space___New_Live.modules.Forms;using Project_Space___New_Live.modules.GameObjects;
 using SFML.Graphics;
 using SFML.System;
 
@@ -259,7 +259,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             {
                 this.deathCounter ++;
                 Random rand = new Random();
-                this.controllingObject.Reborn(new Vector2f((float)(rand.NextDouble() * 5000), (float)(rand.NextDouble() * 5000)));
+                this.controllingObject.Reborn(new Vector2f((float)(rand.NextDouble() * 1000), (float)(rand.NextDouble() * 1000)));
             }
         }
 

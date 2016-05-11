@@ -9,11 +9,12 @@ using System.Security.AccessControl;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Project_Space___New_Live.modules.Controlers;
-using Project_Space___New_Live.modules.Controlers.Forms;
+using Project_Space___New_Live.modules;
+using Project_Space___New_Live.modules.Forms;
 
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
+using Project_Space___New_Live.modules.Storages;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -95,8 +96,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         private void ConstructFleets()
         {
-            this.activeObjectsCollection.Add(new ActiveObject(2000, new Vector2f(400, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30)));
-            this.activeObjectsCollection.Add(new ActiveObject(2000, new Vector2f(-450, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30)));
+            Texture[] firstObjectTextures = ImageStorage.GreenObject;
+            Texture[] secondObjectTextures = ImageStorage.YellowObject;
+            firstObjectTextures[1] = secondObjectTextures[0];
+            secondObjectTextures[1] = firstObjectTextures[0];
+            this.activeObjectsCollection.Add(new ActiveObject(2000, new Vector2f(400, 400), 250, firstObjectTextures, new Vector2f(15, 30)));
+            this.activeObjectsCollection.Add(new ActiveObject(2000, new Vector2f(-450, 400), 250, secondObjectTextures, new Vector2f(15, 30)));
         }
 
         /// <summary>

@@ -74,7 +74,12 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.ConstructView(skin);//построить отображение
         }
 
-
-
+        public override void Reset()
+        {
+            Random random = new Random();
+            this.orbitalAngle = (float)(random.NextDouble() * 2 * Math.PI);
+            this.Move();//сформировать координаты
+            this.ConstructView(new Texture[] { this.view[0].Image.Texture });
+        }
     }
 }

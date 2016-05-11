@@ -10,7 +10,7 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace Project_Space___New_Live.modules.Controlers
+namespace Project_Space___New_Live.modules
 {
     /// <summary>
     /// Игровой контроллер непосредственного управления объектом 

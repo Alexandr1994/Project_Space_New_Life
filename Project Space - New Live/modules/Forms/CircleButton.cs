@@ -9,7 +9,7 @@ using SFML.System;
 using SFML.Window;
 using Project_Space___New_Live.modules.Dispatchers;
 
-namespace Project_Space___New_Live.modules.Controlers.Forms
+namespace Project_Space___New_Live.modules.Forms
 {
     /// <summary>
     /// Круглая/эллиптическая кнопка

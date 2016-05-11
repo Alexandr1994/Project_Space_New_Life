@@ -9,7 +9,7 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace Project_Space___New_Live.modules.Dispatchers
+namespace Project_Space___New_Live.modules
 {
     /// <summary>
     /// Графическое отображение фигуры

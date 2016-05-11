@@ -7,7 +7,7 @@ using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
 using SFML.System;
 
-namespace Project_Space___New_Live.modules.Controlers
+namespace Project_Space___New_Live.modules
 {
     /// <summary>
     /// Компьютерный контроллер
@@ -205,7 +205,7 @@ namespace Project_Space___New_Live.modules.Controlers
             }
             else
             {
-                this.AttackTarget(this.coordsEnemy, 600);//иначе атаковать противника
+                this.AttackTarget(this.coordsEnemy, 525);//иначе атаковать противника
             }
             this.Moving();
         }

@@ -8,7 +8,7 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace Project_Space___New_Live.modules.Controlers.Forms
+namespace Project_Space___New_Live.modules.Forms
 {
     /// <summary>
     /// Прямоугольная/квадратная кнопка

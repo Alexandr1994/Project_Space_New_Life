@@ -32,5 +32,15 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             this.view[0].Rotate(this.view[0].ViewCenter, (float)(3 * Math.PI / 180));
         }
+
+        /// <summary>
+        /// Переустановка стабильной контрольной точки
+        /// </summary>
+        public override void Reset()
+        {
+            Random random = new Random();
+            this.coords = new Vector2f((float)(random.NextDouble() * 2000), (float)(random.NextDouble() * 2000));
+            this.ConstructView(new Texture[]{this.view[0].Image.Texture});
+        }
     }
 }

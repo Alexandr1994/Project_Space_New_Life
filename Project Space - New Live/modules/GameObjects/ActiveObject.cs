@@ -4,9 +4,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Project_Space___New_Live.modules.Controlers;
+using Project_Space___New_Live.modules;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
+using Project_Space___New_Live.modules.Storages;
 using SFML.Graphics;
 using SFML.System;
 
@@ -738,9 +739,9 @@ namespace Project_Space___New_Live.modules.GameObjects
                         CheckPoint checkPoint = interactObject as CheckPoint;
                         for (int i = 0; i < contactingViews.Length; i++)
                         {
-                            if (contactingViews[i].BorderContactAnalize(checkPoint.View[(int)(Shell.ShellParts.Core)]))//если произошло пересечение отображений корабля и снаряда
+                            if (contactingViews[i].BorderContactAnalize(checkPoint.View[0]))//если произошло пересечение отображений корабля и контрольной точки
                             {
-                                if (this.checkPoints[(int)(Parts.PointerToHome)].MasterObject == this)
+                                if (checkPoint.MasterObject == this)
                                 {
                                     this.Recovery((int)((float)this.MaxHealth / 100));
                                     foreach (Equipment equipment in this.Equipment)
@@ -756,7 +757,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                                 }
                                 else
                                 {
-                                    ;
+                                    checkPoint.Reset();
                                 }
                             }
                         }  
@@ -789,8 +790,8 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.objectRadar  = new Radar(20, 2500, null);//радар
             this.objectShield = new Shield(20, 3, 100, 0, 1, null);//энергощит 
             this.objectWeaponSystem = new WeaponSystem(3);
-            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 15, 10, 10, 5, (float)(5 * Math.PI / 180), 100, 100, 3500, 15, 10, new Vector2f(8, 3), new Texture[] {ResurceStorage.rectangleButtonTextures[0], ResurceStorage.shellHitting}, null));
-            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 25, 15, 15, 5, (float)(3 * Math.PI / 180), 100, 50, 5000, 25, 1, new Vector2f(35, 1), new Texture[] { ResurceStorage.rectangleButtonTextures[2], ResurceStorage.shellHitting}, null));
+            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 15, 10, 10, 5, (float)(5 * Math.PI / 180), 100, 100, 3500, 15, 10, new Vector2f(8, 3), new Texture[] {ResurceStorage.rectangleButtonTextures[0], ImageStorage.Hitting}, null));
+            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 25, 15, 15, 5, (float)(3 * Math.PI / 180), 100, 50, 5000, 25, 1, new Vector2f(35, 1), new Texture[] { ResurceStorage.rectangleButtonTextures[2], ImageStorage.Hitting }, null));
         }
 
         /// <summary>

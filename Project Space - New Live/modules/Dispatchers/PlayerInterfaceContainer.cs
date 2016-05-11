@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Project_Space___New_Live.modules.Controlers.Forms;
+using Project_Space___New_Live.modules.Forms;
 using Project_Space___New_Live.modules.GameObjects;
+using Project_Space___New_Live.modules.Storages;
 using SFML.Graphics;
 using SFML.System;
 
@@ -140,22 +141,22 @@ namespace Project_Space___New_Live.modules.Dispatchers
             //Формы отображения состояния игрока 1
             this.formsCollection.Add("RadarScreen1", new RadarScreen());//Экран радара
             linearBar.Location = new Vector2f(200, 0);//Индиктор прочности
-            linearBar.SetTexturets(new Texture[] { null, ResurceStorage.healthBar });
+            linearBar.SetTexturets(new Texture[] { null, ImageStorage.RedYellowBar });
             linearBar.VisibleSubstrate = false;
             this.formsCollection.Add("HealthBar1", linearBar);
             linearBar = new LinearBar();//Индикатор энергии
             linearBar.Location = new Vector2f(200, 20);
-            linearBar.SetTexturets(new Texture[] { null, ResurceStorage.energyBar });
+            linearBar.SetTexturets(new Texture[] { null, ImageStorage.BlueBar });
             linearBar.VisibleSubstrate = false;
             this.formsCollection.Add("EnergyBar1", linearBar);
             linearBar = new LinearBar();//Индикатор боезапаса
             linearBar.Location = new Vector2f(200, 40);
-            linearBar.SetTexturets(new Texture[] { null, ResurceStorage.ammoBar });
+            linearBar.SetTexturets(new Texture[] { null, ImageStorage.RedWhiteBar });
             linearBar.VisibleSubstrate = false;
             this.formsCollection.Add("AmmoBar1", linearBar);
             linearBar = new LinearBar();//Индикатор защиты
             linearBar.Location = new Vector2f(200, 60);
-            linearBar.SetTexturets(new Texture[] { null, ResurceStorage.protectBar });
+            linearBar.SetTexturets(new Texture[] { null, ImageStorage.GreenYellowBar });
             linearBar.VisibleSubstrate = false;
             this.formsCollection.Add("ProtectBar1", linearBar);
             circleBtn.Location = new Vector2f(200, 85);//Кнопка центрирования относительно Игрока 1
@@ -184,22 +185,22 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.formsCollection["RadarScreen2"].Location = this.mainForm.Size - new Vector2f(170, 170);
             linearBar = new LinearBar();//Индиктор прочности
             linearBar.Location = this.mainForm.Size - new Vector2f(200 + 200, 80);
-            linearBar.SetTexturets(new Texture[] { null, ResurceStorage.healthBar });
+            linearBar.SetTexturets(new Texture[] { null, ImageStorage.RedYellowBar });
             linearBar.VisibleSubstrate = false;
             this.formsCollection.Add("HealthBar2", linearBar);
             linearBar = new LinearBar();//Индикатор энергии
             linearBar.Location = this.mainForm.Size - new Vector2f(200 + 200, 60);
-            linearBar.SetTexturets(new Texture[] { null, ResurceStorage.energyBar });
+            linearBar.SetTexturets(new Texture[] { null, ImageStorage.BlueBar });
             linearBar.VisibleSubstrate = false;
             this.formsCollection.Add("EnergyBar2", linearBar);
             linearBar = new LinearBar();//Индикатор боезапаса
             linearBar.Location = this.mainForm.Size - new Vector2f(200 + 200, 40);
-            linearBar.SetTexturets(new Texture[] { null, ResurceStorage.ammoBar });
+            linearBar.SetTexturets(new Texture[] { null, ImageStorage.RedWhiteBar });
             linearBar.VisibleSubstrate = false;
             this.formsCollection.Add("AmmoBar2", linearBar);
             linearBar = new LinearBar();//Индикатор защиты
             linearBar.Location = this.mainForm.Size - new Vector2f(200 + 200, 20);
-            linearBar.SetTexturets(new Texture[] { null, ResurceStorage.protectBar });
+            linearBar.SetTexturets(new Texture[] { null, ImageStorage.GreenYellowBar });
             linearBar.VisibleSubstrate = false;
             this.formsCollection.Add("ProtectBar2", linearBar);
             circleBtn = new CircleButton();//Кнопка центрирования относительно Игрока 2

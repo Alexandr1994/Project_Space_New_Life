@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SFML.Graphics;
 using SFML.System;
 
-namespace Project_Space___New_Live.modules.Dispatchers
+namespace Project_Space___New_Live.modules
 {
     /// <summary>
     /// Абстрактное графическое отображение

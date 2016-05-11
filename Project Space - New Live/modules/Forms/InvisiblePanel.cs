@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
 using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
 
-namespace Project_Space___New_Live.modules.Controlers.Forms
+namespace Project_Space___New_Live.modules.Forms
 {
     /// <summary>
-    /// Прамоугольная панель
+    /// Невидимая панель
     /// </summary>
-    class RectPanel : Panel
+    class InvisiblePanel : Panel
     {
         /// <summary>
         /// Изменение размера формы
@@ -38,8 +37,8 @@ namespace Project_Space___New_Live.modules.Controlers.Forms
             view = new ImageView(new RectangleShape(new Vector2f(200, 200)), BlendMode.Alpha);
             this.Location = view.Image.Position = new Vector2f(0, 0);
             this.size = new Vector2f(200, 200);
-            this.SetPanelTexture(ResurceStorage.PanelText);
+            this.SetPanelTexture(null);
+            this.view.Image.FillColor = new Color(0, 0, 0, 0);
         }
-
     }
 }

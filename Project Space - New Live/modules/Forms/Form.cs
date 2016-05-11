@@ -10,7 +10,7 @@ using SFML.Window;
 using SFML.System;
 using Project_Space___New_Live.modules.Dispatchers;
 
-namespace Project_Space___New_Live.modules.Controlers.Forms
+namespace Project_Space___New_Live.modules.Forms
 {
     /// <summary>
     /// Абстрактная форма интерфейса

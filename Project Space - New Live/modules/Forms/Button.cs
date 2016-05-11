@@ -10,7 +10,7 @@ using SFML.System;
 using SFML.Window;
 using SFML.Graphics;
 
-namespace Project_Space___New_Live.modules.Controlers.Forms
+namespace Project_Space___New_Live.modules.Forms
 {
     /// <summary>
     /// Абстрактная кнопка

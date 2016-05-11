@@ -81,5 +81,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             return retValue;
         }
 
+        /// <summary>
+        /// Переустановка контрольной точки
+        /// </summary>
+        public abstract void Reset();
+
     }
 }

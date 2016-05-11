@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
 
-namespace Project_Space___New_Live.modules.Controlers
+namespace Project_Space___New_Live.modules
 {
     /// <summary>
     /// Аьъбстрактная система управления кораблем (контроллер)

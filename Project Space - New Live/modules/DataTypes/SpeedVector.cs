@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project_Space___New_Live.modules.GameObjects
+namespace Project_Space___New_Live.modules
 {
     /// <summary>
     /// Вектор скорости
