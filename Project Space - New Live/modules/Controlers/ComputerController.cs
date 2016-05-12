@@ -30,9 +30,57 @@ namespace Project_Space___New_Live.modules
         }
 
         /// <summary>
+        /// Набор возможных решений
+        /// </summary>
+        private enum Decistion : int
+        {
+            /// <summary>
+            /// Атаковать противника
+            /// </summary>
+            Attack = 0,
+            /// <summary>
+            /// Избегать противника
+            /// </summary>
+            Avoid,
+            /// <summary>
+            /// Игнорировать противника
+            /// </summary>
+            Ignore
+        }
+
+        /// <summary>
+        /// Текущее принятое решение
+        /// </summary>
+        private Decistion currentDecistion = Decistion.Ignore;
+
+        /// <summary>
+        /// Количество принятых решений
+        /// </summary>
+        private int decisionCount = 0;
+
+        /// <summary>
         /// Объект-противник
         /// </summary>
         private Vector2f coordsEnemy;
+
+        /// <summary>
+        /// Объект, сохранающий статистические данные
+        /// </summary>
+        private DataSaver dataSaver;
+
+        /// <summary>
+        /// Таймер сохранения статистики
+        /// </summary>
+        private Clock dataSaverClock;
+
+        //Таймер принятия решений
+        private Clock decisionClock;
+
+        /// <summary>
+        /// Период принятия решения
+        /// </summary>
+        private int decisionTime;
+
 
         /// <summary>
         /// Текущий энекретический режим
@@ -43,9 +91,13 @@ namespace Project_Space___New_Live.modules
         /// Конструктор компьтерного контроллера
         /// </summary>
         /// <param name="ObjectContainer"></param>
-        public ComputerController(ObjectContainer ObjectContainer)
+        public ComputerController(ObjectContainer ObjectContainer, String dataFileName, int decisionTime = 1000)
         {
             this.ObjectContainer = ObjectContainer;
+            this.dataSaver = new DataSaver(dataFileName);
+            this.decisionTime = decisionTime;
+            this.dataSaverClock = new Clock();//запуск таймеров
+            this.decisionClock = new Clock(); ;
         }
 
         /// <summary>
@@ -183,35 +235,98 @@ namespace Project_Space___New_Live.modules
             
         }
      
+
         /// <summary>
         /// Процесс работы контроллера
         /// </summary>
+        /// <param name="signaturesCollection">Коллекция сигнатур объектов в зоне видимости</param>
         public override void Process(List<ObjectSignature> signaturesCollection)
         {
-            this.coordsEnemy = new Vector2f(float.NaN, float.NaN);//сброс координат противника перед анализом
+            this.TimerCheck();//проверка таймеров
+            this.coordsEnemy = this.DetectEnemy(signaturesCollection);//находим текущие координаты противника 
+            this.EnergyAnalise();//производим анализ энергозапаса 
+            if (float.IsNaN(this.coordsEnemy.X) || float.IsNaN(this.coordsEnemy.Y))//если противник не обнаружен
+            {
+                this.MoveToTarget(this.ObjectContainer.ControllingObject.GetTargetCheckPoint().Coords);//двигаться к целевой контрольной точке (Стратегия Игнорирования)
+            }
+            else
+            {
+                this.Action();//иначе действовать в соответсвии с принятым решением
+            }
+            this.Moving();//движения
+        }
+
+        /// <summary>
+        /// Принять решение
+        /// </summary>
+        private void TakeDecison()
+        {
+            this.decisionClock.Restart();//перезапуск таймера принятия решений
+            //TODO реализовать принятие решений с помощью ИНС
+            this.currentDecistion = Decistion.Attack;
+            this.decisionCount ++;//инкремент счетчика решений
+        }
+
+        /// <summary>
+        /// Дейстиве
+        /// </summary>
+        private void Action()
+        {
+            switch (this.currentDecistion)//выбор алгоритма в соответствии с принятым решением
+            {
+                case Decistion.Attack://нападение
+                {
+                    this.AttackTarget(this.coordsEnemy, 525);//атаковать противника
+                }; break;
+                case Decistion.Avoid://избегание
+                {
+                    this.MoveToTarget(this.ObjectContainer.ControllingObject.GetHomeCheckPoint().Coords, 0);//иначе двигаться к домашней контрольной точке
+                }; break;
+                case Decistion.Ignore://игнорирование
+                default:
+                {
+                    this.MoveToTarget(this.ObjectContainer.ControllingObject.GetTargetCheckPoint().Coords);//двигаться к целевой контрольной точке
+                }; break;
+            }
+        }
+
+        /// <summary>
+        /// Найти противника среди объектов в зоне видимости
+        /// </summary>
+        /// <param name="signaturesCollection">Коллекция сигнатур объектов в зоне видимости</param>
+        /// <returns>Текущие координаты противника или пара NaN, если противник не обнаружен в зоне видимости</returns>
+        private Vector2f DetectEnemy(List<ObjectSignature> signaturesCollection)
+        {   
+            //TODO реализовать нейросетевой анализ
             foreach (ObjectSignature signature in signaturesCollection)//поиск обекта-противника в зоне видимости
             {
                 Vector2f sizes = (Vector2f)signature.Characteristics[(int)(ObjectSignature.CharactsKeys.Size)];
                 float mass = (float)signature.Characteristics[(int)(ObjectSignature.CharactsKeys.Mass)];
                 if (sizes.X > 30 && sizes.Y > 30 && mass > 500)//если параметры размера и массы превышают пороговые
                 {
-                    this.coordsEnemy = (Vector2f)signature.Characteristics[(int)(ObjectSignature.CharactsKeys.Coords)];//сохранение текущих координат как координат объекта-противника
+                    return (Vector2f)signature.Characteristics[(int)(ObjectSignature.CharactsKeys.Coords)];//возврат текущих координат как координат объекта-противника
                 }
             }
-            this.EnergyAnalise();
-            if (float.IsNaN(this.coordsEnemy.X) || float.IsNaN(this.coordsEnemy.Y))//если противник не обнаружен
-            {
-                this.MoveToTarget(this.ObjectContainer.ControllingObject.GetTargetCheckPoint().Coords);//двигаться к целевой контрольной точке
-            }
-            else
-            {
-                this.AttackTarget(this.coordsEnemy, 525);//иначе атаковать противника
-            }
-            this.Moving();
+            return new Vector2f(float.NaN, float.NaN);//возврат пары NaN если противник не обнаружен в зоне видимости
         }
 
-
-
+        /// <summary>
+        /// Проверка таймеров
+        /// </summary>
+        private void TimerCheck()
+        {
+            if (this.decisionClock.ElapsedTime.AsMilliseconds() > this.decisionTime)//если прошло время принятия решения
+            {
+                this.TakeDecison();//принять решение
+                this.decisionClock.Restart();//перезапуск таймера
+            }
+            if (this.dataSaverClock.ElapsedTime.AsSeconds() > 60)//если прошла минута с прошлой записи статистических данных
+            {
+                this.dataSaver.WriteData(this.ObjectContainer.WinCount, this.ObjectContainer.DeathCount, this.decisionCount);//сделать новую запись
+                this.decisionCount = 0;//обнулить счетчик принятия решений
+                this.dataSaverClock.Restart();//перезапуск таймера
+            }
+        }
 
         /// <summary>
         /// Атака в максимальном энергорежиме
@@ -293,21 +408,21 @@ namespace Project_Space___New_Live.modules
         /// </summary>
         private void EnergyAnalise()
         {
-            switch (this.currentEnergyMode)
+            switch (this.currentEnergyMode)//в зависимости от текущего энерго режима
             {
-                case EnergyMode.Maximal:
+                case EnergyMode.Maximal://Максимальный режим
                 {
-                    if (this.ObjectContainer.GetEnergy() < 20)
+                    if (this.ObjectContainer.GetEnergy() < 20)//если запас энерги упал ниже 20% 
                     {
-                        this.currentEnergyMode = EnergyMode.Economic;
+                        this.currentEnergyMode = EnergyMode.Economic;//переход в экономичный режим
                     }
                     return;
                 }
-                case EnergyMode.Economic:
+                case EnergyMode.Economic://экономичный режим
                 {
-                    if (this.ObjectContainer.GetEnergy() > 60)
+                    if (this.ObjectContainer.GetEnergy() > 60)//если запас энерги возрос выше 20%
                     {
-                        this.currentEnergyMode = EnergyMode.Maximal;
+                        this.currentEnergyMode = EnergyMode.Maximal;//переход в максимальный режим
                     }
                     return;
                 }

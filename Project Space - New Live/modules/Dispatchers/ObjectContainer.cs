@@ -174,11 +174,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Установить контролируемого объекта
         /// </summary>
         /// <param name="activeObject">Объект</param>
-        public void SetControllingActiveObject(ActiveObject activeObject)
+        public void SetControllingActiveObject(ActiveObject activeObject, int objectIndex)
         {
             this.controllingObject = activeObject;
             this.lastPlayerCoords = this.controllingObject.Coords;//последних координат корабля объекта
-            this.savingComputerController = new ComputerController(this);//Создание нейроконтроллера для объекта
+            this.savingComputerController = new ComputerController(this, "statistic_object_" + objectIndex.ToString());//Создание нейроконтроллера для объекта
             this.controllingObject.SetBrains(this.savingComputerController);//Установка нейроконтроллера
         }
 

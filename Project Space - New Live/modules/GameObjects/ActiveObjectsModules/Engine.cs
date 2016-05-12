@@ -15,25 +15,6 @@ namespace Project_Space___New_Live.modules.GameObjects
     /// </summary>
     public class Engine : Equipment
     {
-        /// <summary>
-        /// Направления модификации двигательной установки
-        /// </summary>
-        public enum UpgrateDirectionID : int
-        {
-            /// <summary>
-            /// базовая версия
-            /// </summary>
-            Base = 0,
-            /// <summary>
-            /// Улучшение маршевых скоростных характеристик
-            /// </summary>
-            ForwardSpeed,
-            /// <summary>
-            /// Улучшение маневровых характеристик
-            /// </summary>
-            ShuntingSpeed
-        }
-
         
         // Набор базовых характеристик оборудования
         
@@ -151,18 +132,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         protected override void CustomModification()
         {//Характеристики улучшаются на 20% на каждое улучшение
-            //определение количества модификаций по возможным направлениям
-            int forwardUpdates = this.upgrateDirectionsHistory.Count(i => i == (int)UpgrateDirectionID.ForwardSpeed);
-            int shuntingUpdates = this.upgrateDirectionsHistory.Count(i => i == (int) UpgrateDirectionID.ShuntingSpeed);
-            //Изменение текущих параметров по направлению улучшения маршевых характеристик
-            this.forwardThrust = this.baseForwardThrust + (forwardUpdates * this.baseForwardThrust / 5);
+            this.forwardThrust = this.baseForwardThrust + (this.Version * this.baseForwardThrust / 5);
             this.maxForwardSpeed = this.baseMaxForwardSpeed + (this.Version * this.baseMaxForwardSpeed / 5);
             //Изменение текущик параметров по направлению улучшения маневровых характеристик
-            this.shuntingThrust = this.baseShuntingThrust + (shuntingUpdates * this.baseShuntingThrust / 5);
+            this.shuntingThrust = this.baseShuntingThrust + (this.Version * this.baseShuntingThrust / 5);
             this.maxShuntingSpeed = this.baseMaxShuntingSpeed + (this.Version * this.baseMaxShuntingSpeed / 5);
         }
-
-        
-        
     }
 }

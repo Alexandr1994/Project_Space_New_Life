@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Project_Space___New_Live.modules.GameObjects.Equipment">
+    <Position X="73.5" Y="9" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>IIAAACAQAABAAABQAAAgAAAAADABAAAUAQCABACIAAA=</HashCode>
+      <FileName>modules\GameObjects\ActiveObjectsModules\Equipment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.Battery">
+    <Position X="78.5" Y="18.25" Width="2.25" />
+    <InheritanceLine Type="Project_Space___New_Live.modules.GameObjects.Equipment" FixedToPoint="true">
+      <Path>
+        <Point X="74.75" Y="14.468" />
+        <Point X="74.75" Y="17.875" />
+        <Point X="79.75" Y="17.875" />
+        <Point X="79.75" Y="18.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAQAAQABAQAAQAEAAEAAAAAAAAAAAABABAAAAA=</HashCode>
+      <FileName>modules\GameObjects\ActiveObjectsModules\Battery.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.Engine">
+    <Position X="70" Y="18.25" Width="2.25" />
+    <InheritanceLine Type="Project_Space___New_Live.modules.GameObjects.Equipment" FixedToPoint="true">
+      <Path>
+        <Point X="74.75" Y="14.468" />
+        <Point X="74.75" Y="17.875" />
+        <Point X="71.125" Y="17.875" />
+        <Point X="71.125" Y="18.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EIACABAQAAAAACAAAAAAASAAAAEgAAAAAAQAACAAEAA=</HashCode>
+      <FileName>modules\GameObjects\ActiveObjectsModules\Engine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.Radar">
+    <Position X="81.5" Y="18.25" Width="2.25" />
+    <InheritanceLine Type="Project_Space___New_Live.modules.GameObjects.Equipment" FixedToPoint="true">
+      <Path>
+        <Point X="74.75" Y="14.468" />
+        <Point X="74.75" Y="17.875" />
+        <Point X="82.562" Y="17.875" />
+        <Point X="82.562" Y="18.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAACAAAQAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>modules\GameObjects\ActiveObjectsModules\Radar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.Reactor">
+    <Position X="72.75" Y="18.25" Width="2.25" />
+    <InheritanceLine Type="Project_Space___New_Live.modules.GameObjects.Equipment" FixedToPoint="true">
+      <Path>
+        <Point X="74.75" Y="14.468" />
+        <Point X="74.75" Y="17.875" />
+        <Point X="73.875" Y="17.875" />
+        <Point X="73.875" Y="18.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAAAAAAAAAQAAAAEEAAAAAAAAA=</HashCode>
+      <FileName>modules\GameObjects\ActiveObjectsModules\Reactor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.Shield">
+    <Position X="75.5" Y="18.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AGAAAAAQCABAAABAAEAAABAAAAAAQAAAIAAIBBAAAAA=</HashCode>
+      <FileName>modules\GameObjects\ActiveObjectsModules\Shield.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.Weapon">
+    <Position X="66" Y="18.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>ADQAQAAwAAQADAAkAAEARAAAADAAACEgBAIAQAAwADA=</HashCode>
+      <FileName>modules\GameObjects\ActiveObjectsModules\Weapon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.ActiveObject">
+    <Position X="62" Y="8.25" Width="3" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Project_Space___New_Live.modules.GameObjects.ActiveObject.EquipmentNames">
+        <TypeIdentifier>
+          <NewMemberFileName>modules\GameObjects\ActiveObject.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Project_Space___New_Live.modules.GameObjects.ActiveObject.Parts">
+        <TypeIdentifier>
+          <NewMemberFileName>modules\GameObjects\ActiveObject.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AACACCAqUoiAiqAEgkiggQRMAAGBDMEAMAAkgQKAhog=</HashCode>
+      <FileName>modules\GameObjects\ActiveObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.MoveManager">
+    <Position X="69.5" Y="9" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>gAAAICAABAAAAACAAgBAAAAQEAqAAIAAQABAEAAAAJA=</HashCode>
+      <FileName>modules\GameObjects\ActiveObjectsModules\MoveManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.WeaponSystem">
+    <Position X="66" Y="11.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAICBAAgAAAIAAgACgEIAAAAAAAABAECBFkAAABJAAA=</HashCode>
+      <FileName>modules\GameObjects\ActiveObjectsModules\WeaponSystem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.ObjectSignature">
+    <Position X="69.75" Y="14.25" Width="2.25" />
+    <NestedTypes>
+      <Enum Name="Project_Space___New_Live.modules.GameObjects.ObjectSignature.CharactsKeys" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>modules\GameObjects\ObjectSignature.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAEAAgAAAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>modules\GameObjects\ObjectSignature.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.GameObject" Collapsed="true">
+    <Position X="66" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAACAAAAAAAAAAAAABEAAAIQAAAACAAAA=</HashCode>
+      <FileName>modules\GameObjects\GameObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.GameEntity" Collapsed="true">
+    <Position X="66" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAgAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>modules\GameObjects\GameEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

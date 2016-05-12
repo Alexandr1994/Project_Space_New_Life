@@ -66,12 +66,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// История улучшений
-        /// </summary>
-        protected List<int> upgrateDirectionsHistory = new List<int>(); 
-
-
-        /// <summary>
         /// Текущий уровень износа оборудования (в процентах) 
         /// </summary>
         protected int wearState = 0;
@@ -98,11 +92,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Модификация оборудования
         /// </summary>
-        /// <param name="directionID"></param>
-        public void Upgrate(int directionID)
+        public void Upgrate()
         {
             this.version ++;//увеличение версии
-            this.upgrateDirectionsHistory.Add(directionID);//сохраниение в истории данных об улучшении
             this.CustomModification();//улучшение оборудования
         }
 
@@ -114,7 +106,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             if (version > 0)
             {
                 this.version--; //умениьшение версии
-                this.upgrateDirectionsHistory.RemoveAt(upgrateDirectionsHistory.Count - 1);//уничтожение данных о последнем улучшении в истории
                 this.CustomModification(); //модификация оборудования
             }
         }
@@ -164,7 +155,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.view = new ImageView(image, BlendMode.Alpha);//построение отображения
             this.Repair();//установка состояния и износа
             this.version = 0;//Установка версии оборудования в 0
-            this.upgrateDirectionsHistory.Add(0);//сохранение базовой модификации
         }
 
         /// <summary>

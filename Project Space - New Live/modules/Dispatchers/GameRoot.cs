@@ -111,7 +111,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             for (int i = 0; i < this._objectContainers.Length; i++)//Установка игроков
             {
-                this._objectContainers[i].SetControllingActiveObject(this.activeObjectsCollection[i]);
+                this._objectContainers[i].SetControllingActiveObject(this.activeObjectsCollection[i], i);
             }
             this.environment.SetCheckPoints();//Установка контрольных точек
         }

@@ -91,6 +91,7 @@
   <ItemGroup>
     <Compile Include="modules\Controlers\AbstractController.cs" />
     <Compile Include="modules\Controlers\ComputerController.cs" />
+    <Compile Include="modules\Dispatchers\DataSaver.cs" />
     <Compile Include="modules\Forms\ActiveLabel.cs" />
     <Compile Include="modules\Forms\ImageForm.cs" />
     <Compile Include="modules\Forms\InvisiblePanel.cs" />
@@ -117,7 +118,7 @@
     <Compile Include="modules\DataTypes\TextView.cs" />
     <Compile Include="modules\GameObjects\ActiveObject.cs" />
     <Compile Include="modules\GameObjects\CheckPoint.cs" />
-    <Compile Include="modules\GameObjects\ActiveObjectsModules\BaseEnvironment.cs" />
+    <Compile Include="modules\GameObjects\BaseEnvironment.cs" />
     <Compile Include="modules\GameObjects\OrbitalCheckPoint.cs" />
     <Compile Include="modules\GameObjects\StableCheckPoint.cs" />
     <Compile Include="modules\GameObjects\VisualEffect.cs" />
@@ -143,6 +144,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ActiveObject Classes.cd" />
+    <None Include="ControlClasses.cd" />
+    <None Include="Environment Classes.cd" />
     <None Include="packages.config" />
     <None Include="Project Space - New Live_TemporaryKey.pfx" />
   </ItemGroup>

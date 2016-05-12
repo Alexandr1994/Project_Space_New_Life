@@ -16,25 +16,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Направления модификации генератора энергощита
-        /// </summary>
-        public enum UpgrateDirectionID : int
-        {
-            /// <summary>
-            /// базовая версия
-            /// </summary>
-            Base = 0,
-            /// <summary>
-            /// Улучшение характеристик мощности экрана энергощита
-            /// </summary>
-            DefencivePower,
-            /// <summary>
-            /// Улучшение характеристик восстановления экрана энергощита
-            /// </summary>
-            RegenerationPower
-        }
-
-        /// <summary>
         /// Текущая мощность экрана щита
         /// </summary>
         private int shieldPower;
@@ -153,14 +134,8 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         protected override void CustomModification()
         {
-            //определение количества модификаций по возможным направлениям
-            int defenciveUpdates = this.upgrateDirectionsHistory.Count(i => i == (int)UpgrateDirectionID.DefencivePower);
-            int regenerationUpdates = this.upgrateDirectionsHistory.Count(i => i == (int)UpgrateDirectionID.RegenerationPower);
-            //Изменение текущих параметров по направлению улучшения мощности экрана щита
-            this.maxShieldPower = this.baseMaxShieldPower + (defenciveUpdates * this.baseMaxShieldPower);
-
-            //Изменение текущих параметров по направлению улучшения восстанавливаемости экрана щита
-            this.shieldRegeneration = regenerationUpdates * this.baseShieldRegeneration;
+            this.maxShieldPower = this.baseMaxShieldPower + (this.Version * this.baseMaxShieldPower);
+            this.shieldRegeneration = this.Version * this.baseShieldRegeneration;
 
         }
     }
