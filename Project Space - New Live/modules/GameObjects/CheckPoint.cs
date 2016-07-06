@@ -74,11 +74,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <returns>Сигнатура контрольной точки</returns>
         protected override ObjectSignature ConstructSignature()
         {
-            ObjectSignature retValue = new ObjectSignature();
-            retValue.AddCharacteristics(this.Coords);
-            retValue.AddCharacteristics(this.Mass);
-            retValue.AddCharacteristics(this.view[0].GetSize());
-            return retValue;
+            ObjectSignature signature = new ObjectSignature();
+            signature.Coords = this.Coords;
+            signature.Mass = 0;
+            signature.Size = this.View[0].GetSize();
+            signature.Directon = 0;
+            signature.Speed = 0;
+            return signature;
         }
 
         /// <summary>

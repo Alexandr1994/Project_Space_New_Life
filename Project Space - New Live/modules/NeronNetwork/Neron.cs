@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Project_Space___New_Live.modules.NeronNetwork
 {
+    /// <summary>
+    /// Искусственный нейрон
+    /// </summary>
     class Neron
     {
         /// <summary>
@@ -14,14 +17,23 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         private ActivationFunction activationFunction;
 
         /// <summary>
-        /// Массив входных весовых коэффициентов
+        /// Активационная функция
         /// </summary>
-        private List<float> weightCoefs;
+        public ActivationFunction NeronActivationFunction
+        {
+            get { return this.activationFunction; }
+        }
+
 
         /// <summary>
         /// Массив входных весовых коэффициентов
         /// </summary>
-        public List<float> WeightCoefs
+        private List<double> weightCoefs;
+
+        /// <summary>
+        /// Массив входных весовых коэффициентов
+        /// </summary>
+        public List<double> WeightCoefs
         {
             get { return this.weightCoefs; }
         }
@@ -42,24 +54,41 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// <summary>
         /// Смещение активационной функции
         /// </summary>
-        private float functionOffset;
+        private double functionOffset;
 
         /// <summary>
         /// Скорость обучения нейрона
         /// </summary>
-        private float learningSpeed;
+        private double learningSpeed;
 
+
+        /// <summary>
+        /// Конструктор нейрона
+        /// </summary>
+        /// <param name="function">Активационная функция</param>
+        /// <param name="inputVectorLenght">Количество входов</param>
+        public Neron(ActivationFunction.Types function, int inputVectorLenght, double threshold = 0, double activateCoef = 1)
+        {
+            this.weightCoefs = new List<double>();
+            this.activationFunction = new ActivationFunction(function, threshold, activateCoef);//установка активационной функции
+            Random random = new Random();
+            this.inputVectorSize = inputVectorLenght;//сохранение размера входного вектора
+            for (int i = 0; i < inputVectorLenght; i ++)//инициализация весов входов от 0 до 10
+            {
+                this.weightCoefs.Add(random.NextDouble() * 100);//установка нового входного веса
+            }
+        }
 
         /// <summary>
         /// Процесс работы нейрона
         /// </summary>
         /// <param name="inputVector">Входной вектор</param>
         /// <returns>Выходное значение нейрона или NaN в случае ошибки</returns>
-        public float Process(List<float> inputVector)
+        public double Process(List<double> inputVector)
         {
             if (inputVector.Count != this.inputVectorSize)
             {
-                return float.NaN;
+                return double.NaN;
             }
             return this.activationFunction.GetFunctionValue(this.GetWeightedSum(inputVector) + this.functionOffset);
         }
@@ -69,26 +98,26 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// </summary>
         /// <param name="inputVector">Входной вектор</param>
         /// <returns>Взвешенная сумма</returns>
-        public float GetWeightedSum(List<float> inputVector)
+        public double GetWeightedSum(List<double> inputVector)
         {
-            float weightedSum = 0;
-            for(int i = 0; i > inputVector.Count; i ++)
+            double weightedSum = 0;
+            for(int i = 0; i < inputVector.Count; i ++)
             {
                 weightedSum += this.weightCoefs[i] * inputVector[i];
             }
             return weightedSum;
         }
 
-        /// <summary>
+      /*  /// <summary>
         /// Функция коррекции весовых коэффициентов входов нейрона
         /// </summary>
         /// <param name="inputVector">Входной вектор</param>
         /// <param name="idealValue">Требуемое выходное значение</param>
         /// <returns>Ошибка</returns>
-        public float LearnNero(List<float> inputVector, float idealValue)
+        public double LearnNero(List<double> inputVector, double idealValue)
         {
-            float currentValue = this.Process(inputVector);
-            float error = idealValue - currentValue; //вычисление ошибки
+            double currentValue = this.Process(inputVector);
+            double error = idealValue - currentValue; //вычисление ошибки
             if (Math.Abs(error) > 0)
             {
                 for (int i = 0; i < inputVector.Count; i++)
@@ -100,6 +129,16 @@ namespace Project_Space___New_Live.modules.NeronNetwork
                 }
             }
             return Math.Abs(error);
+        }*/
+
+        /// <summary>
+        /// Корректировка весового коэффициента с идексом index
+        /// </summary>
+        /// <param name="correction">коррекция</param>
+        /// <param name="index">индекс коэффициента</param>
+        public void WeightCorrection(double correction, int index)
+        {
+            this.weightCoefs[index] += correction;
         }
 
 

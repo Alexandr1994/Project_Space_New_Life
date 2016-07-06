@@ -78,12 +78,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin"></param>
         private void InitBackgroung(Texture skin)
         {
-            this.background = new ImageView(new RectangleShape(new Vector2f(3000, 3000)), BlendMode.Alpha);
+            this.background = new ImageView(new RectangleShape(new Vector2f(16000, 14000)), BlendMode.Alpha);
             this.background.Image.Texture = skin;
             this.background.Image.Texture.Repeated = true;
             this.background.Image.Texture.Smooth = true;
             this.background.Image.TextureRect = new IntRect(0, 0, (int)(skin.Size.X), (int)(skin.Size.Y));
-            this.background.Image.Position = new Vector2f(-1500, -1500);
+            this.background.Image.Position = new Vector2f(-8000, -7000);
         }
 
         /// <summary>

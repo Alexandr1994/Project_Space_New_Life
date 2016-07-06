@@ -78,13 +78,6 @@ namespace Project_Space___New_Live.modules
         /// </summary>
         public abstract void Process(List<ObjectSignature> signaturesCollection);
 
-        /// <summary>
-        /// Переодическое обнуление флагов контроллера
-        /// </summary>
-        protected void RefreshFlags()
-        {
-           ;
-        }
 
     }
 }

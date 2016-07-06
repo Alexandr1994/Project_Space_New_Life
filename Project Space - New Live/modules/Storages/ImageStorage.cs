@@ -13,13 +13,27 @@ namespace Project_Space___New_Live.modules.Storages
     public static class ImageStorage
     {
 
-        //фон
+        //ФОНЫ
 
         static private Texture background = new Texture("Resources/Images/background.png");
 
         public static Texture Background
         {
             get { return background; }
+        }
+
+        static private Texture background2 = new Texture("Resources/Images/background2.png");
+
+        public static Texture Background2
+        {
+            get { return background2; }
+        }
+
+        static private Texture background3 = new Texture("Resources/Images/background3.png");
+
+        public static Texture Background3
+        {
+            get { return background3; }
         }
 
         //ЛЕНТЫ ВИЗУАЛЬНЫХ ЭФФЕКТОВ

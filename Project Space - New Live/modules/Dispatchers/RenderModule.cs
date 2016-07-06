@@ -157,9 +157,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void RenderProcess()
         {
             this.ViewControl();
-            foreach (ImageView view in this.Form.RenderForm())
+            foreach (RenderView view in this.Form.RenderForm())
             {
-                mainWindow.Draw(view.Image, view.State);
+                mainWindow.Draw(view.View as Drawable, view.State);
             }
         }
 

@@ -130,9 +130,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected override ObjectSignature ConstructSignature()
         {
             ObjectSignature signature = new ObjectSignature();
-            signature.AddCharacteristics(this.coords);
-            signature.AddCharacteristics(this.Mass);
-            signature.AddCharacteristics(this.size);
+            signature.Coords = this.Coords;
+            signature.Mass = this.Mass;
+            signature.Size = this.size;
+            signature.Speed = this.SpeedVector.Speed;
+            signature.Directon = this.SpeedVector.Angle;
             return signature;
         }
 

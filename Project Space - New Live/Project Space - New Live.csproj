@@ -106,6 +106,15 @@
     <Compile Include="modules\Forms\RectPanel.cs" />
     <Compile Include="modules\Forms\RectButton.cs" />
     <Compile Include="modules\Forms\TextForm.cs" />
+    <Compile Include="modules\NeronNetwork\ActivationFunction.cs" />
+    <Compile Include="modules\NeronNetwork\KohonenNetwork.cs" />
+    <Compile Include="modules\NeronNetwork\LearningHelper.cs" />
+    <Compile Include="modules\NeronNetwork\Neron.cs" />
+    <Compile Include="modules\NeronNetwork\NeronNetwork.cs" />
+    <Compile Include="modules\NeronNetwork\Perceptron.cs" />
+    <Compile Include="modules\NeronNetwork\SingleLayerNetwork.cs" />
+    <Compile Include="modules\NeronNetwork\VectorsOperations.cs" />
+    <Compile Include="modules\Storages\CharacterLimmits.cs" />
     <Compile Include="modules\Storages\FontsStorage.cs" />
     <Compile Include="modules\DataTypes\RenderView.cs" />
     <Compile Include="modules\Dispatchers\GameRoot.cs" />
@@ -136,8 +145,6 @@
     <Compile Include="modules\DataTypes\SpeedVector.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\Weapon.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\WeaponSystem.cs" />
-    <Compile Include="modules\NeronNetwork\ActivationFunction.cs" />
-    <Compile Include="modules\NeronNetwork\Neron.cs" />
     <Compile Include="modules\Storages\ImageStorage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -147,6 +154,7 @@
     <None Include="ActiveObject Classes.cd" />
     <None Include="ControlClasses.cd" />
     <None Include="Environment Classes.cd" />
+    <None Include="Neronetworks.cd" />
     <None Include="packages.config" />
     <None Include="Project Space - New Live_TemporaryKey.pfx" />
   </ItemGroup>

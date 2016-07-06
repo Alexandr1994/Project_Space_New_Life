@@ -97,7 +97,7 @@ namespace Project_Space___New_Live.modules.Forms
                     ObjectSignature currentSignature = currentObject.GetSignature();
                     if (currentSignature != null)
                     {
-                        Vector2f size = (Vector2f) currentSignature.Characteristics[(int) ObjectSignature.CharactsKeys.Size]; //Размер объекта
+                        Vector2f size = currentSignature.Size; //Размер объекта
                         RadarEntity newObject = new RadarEntity();
                         newObject.Size = size*radarCoeffic;
                         newObject.Location = this.radarCenter - newObject.Size + (currentObject.Coords - player.Coords) * radarCoeffic;
@@ -159,7 +159,7 @@ namespace Project_Space___New_Live.modules.Forms
         { 
             RadarEntity ship = new RadarEntity();
             ObjectSignature playerSignature = player.GetSignature();
-            ship.Size = (Vector2f)playerSignature.Characteristics[(int)ObjectSignature.CharactsKeys.Size] * radarCoeffic;
+            ship.Size = playerSignature.Size * radarCoeffic;
             ship.Location = this.radarCenter - ship.Size/2;
             this.AddForm(ship);
         }

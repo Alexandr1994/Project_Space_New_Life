@@ -109,10 +109,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         private void InitPlayerContainers()
         {
-            for (int i = 0; i < this._objectContainers.Length; i++)//Установка игроков
-            {
-                this._objectContainers[i].SetControllingActiveObject(this.activeObjectsCollection[i], i);
-            }
+            this._objectContainers[0].SetControllingActiveObject(this.activeObjectsCollection[0], 0, 1000, true);
+            this._objectContainers[1].SetControllingActiveObject(this.activeObjectsCollection[1], 1, 3000, true);
             this.environment.SetCheckPoints();//Установка контрольных точек
         }
 
@@ -131,7 +129,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
                     playerContainer.StatePlayerControll();
                 }
                 this.GraphicInterfaceContainer.Process();
-                this.GraphicModule.RenderProcess(this.environment);
+                if (this.GraphicInterfaceContainer.RenderingEnvironment)
+                {
+                    this.GraphicModule.RenderProcess(this.environment);
+                }
+                else
+                {
+                    this.GraphicModule.RenderProcess();
+                }
                 this.GraphicModule.MainWindow.DispatchEvents();
                 this.GraphicModule.MainWindow.Display();
             }

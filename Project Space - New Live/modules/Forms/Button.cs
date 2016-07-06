@@ -172,7 +172,7 @@ namespace Project_Space___New_Live.modules.Forms
         /// <param name="e">Аргументы события</param>
         private void ViewToNormalState(object sender, MouseMoveEventArgs e)
         {
-            this.view.Image.Texture = this.viewStates[(int)(ViewStates.Normal)];
+            this.view.Image.Texture = this.viewStates[(int)ViewStates.Normal];
             this.label.ViewToNormalState();
         }
 
@@ -183,7 +183,7 @@ namespace Project_Space___New_Live.modules.Forms
         /// <param name="e">Аргументы события</param>
         private void ViewToActiveState(object sender, MouseMoveEventArgs e)
         {
-            this.view.Image.Texture = this.viewStates[(int)(ViewStates.Active)];
+            this.view.Image.Texture = this.viewStates[(int)ViewStates.Active];
             this.label.ViewToActiveState();
         }
 
@@ -194,7 +194,7 @@ namespace Project_Space___New_Live.modules.Forms
         /// <param name="e">Аргументы события</param>
         private void ViewToPressedState(object sender, MouseButtonEventArgs e)
         {
-            this.view.Image.Texture = this.viewStates[(int)(ViewStates.Pressed)];
+            this.view.Image.Texture = this.viewStates[(int)ViewStates.Pressed];
             this.label.ViewToPressedState();
             this.leftPressed = true;
         }
@@ -206,7 +206,7 @@ namespace Project_Space___New_Live.modules.Forms
         /// <param name="e">Аргументы события</param>
         private void ViewToClickedState(object sender, MouseButtonEventArgs e)
         {
-            this.view.Image.Texture = this.viewStates[(int)(ViewStates.Clicked)];
+            this.view.Image.Texture = this.viewStates[(int)ViewStates.Clicked];
             this.label.ViewToClickedState();
         }
 
@@ -253,7 +253,7 @@ namespace Project_Space___New_Live.modules.Forms
             }
 
             /// <summary>
-            /// 
+            /// Конструктор отображения кнопки
             /// </summary>
             protected override void CustomConstructor()
             {

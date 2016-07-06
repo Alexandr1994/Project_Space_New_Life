@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
+using Project_Space___New_Live.modules.NeronNetwork;
+using Project_Space___New_Live.modules.Storages;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules
@@ -61,7 +64,7 @@ namespace Project_Space___New_Live.modules
         /// <summary>
         /// Объект-противник
         /// </summary>
-        private Vector2f coordsEnemy;
+        private ObjectSignature enemy;
 
         /// <summary>
         /// Объект, сохранающий статистические данные
@@ -81,11 +84,39 @@ namespace Project_Space___New_Live.modules
         /// </summary>
         private int decisionTime;
 
-
         /// <summary>
         /// Текущий энекретический режим
         /// </summary>
         private EnergyMode currentEnergyMode = EnergyMode.Maximal;
+
+        /// <summary>
+        /// Флаг, управления с помощью нейросети
+        /// </summary>
+        private bool neronControlling = false;
+
+        /// <summary>
+        /// Флаг, управления с помощью нейросети
+        /// </summary>
+        public bool NeronControlling
+        {
+            get { return this.neronControlling; }
+            set { this.neronControlling = value; }
+        }
+
+        /// <summary>
+        /// ИНС принятия решений
+        /// </summary>
+        private Perceptron decisionNetwork;
+
+        /// <summary>
+        /// ИНС класификации объектов в зоне видимости
+        /// </summary>
+        private Perceptron objectClassNetwork;
+
+        /// <summary>
+        /// ИНС запуска защитной системы
+        /// </summary>
+        private Perceptron protectionNetwork;
 
         /// <summary>
         /// Конструктор компьтерного контроллера
@@ -98,6 +129,13 @@ namespace Project_Space___New_Live.modules
             this.decisionTime = decisionTime;
             this.dataSaverClock = new Clock();//запуск таймеров
             this.decisionClock = new Clock(); ;
+            //построение нейросетей
+        //    this.decisionNetwork = new Perceptron(2, new List<int>(){6, 3}, new List<ActivationFunction.Types>() {ActivationFunction.Types.Sigmoidal, ActivationFunction.Types.Sigmoidal}, 20);
+            this.decisionNetwork = new Perceptron(1, new List<int>() { 3 }, new List<ActivationFunction.Types>() { ActivationFunction.Types.Sigmoidal }, 20);
+            this.objectClassNetwork = new Perceptron(1, new List<int>(){3}, new List<ActivationFunction.Types>() {ActivationFunction.Types.Linear}, 3 );
+            this.protectionNetwork = new Perceptron(1, new List<int>() {2}, new List<ActivationFunction.Types>() { ActivationFunction.Types.Linear }, 4);
+
+            this.NetworksLearn();
         }
 
         /// <summary>
@@ -225,11 +263,11 @@ namespace Project_Space___New_Live.modules
             {
                 case EnergyMode.Maximal:
                 {
-                    this.MaximumAttack(targetCoords, dangerRadius);
+                    this.Attack(targetCoords, dangerRadius);
                 }; break;
                 case EnergyMode.Economic:
                 {
-                    this.MaximumAttack(targetCoords, dangerRadius);
+                    this.Attack(targetCoords, dangerRadius);
                 }; break;
             }
             
@@ -242,10 +280,10 @@ namespace Project_Space___New_Live.modules
         /// <param name="signaturesCollection">Коллекция сигнатур объектов в зоне видимости</param>
         public override void Process(List<ObjectSignature> signaturesCollection)
         {
+            this.enemy = this.DetectEnemy(signaturesCollection);//находим текущие координаты противника 
             this.TimerCheck();//проверка таймеров
-            this.coordsEnemy = this.DetectEnemy(signaturesCollection);//находим текущие координаты противника 
             this.EnergyAnalise();//производим анализ энергозапаса 
-            if (float.IsNaN(this.coordsEnemy.X) || float.IsNaN(this.coordsEnemy.Y))//если противник не обнаружен
+            if (float.IsNaN(this.enemy.Coords.X) || float.IsNaN(this.enemy.Coords.Y))//если противник не обнаружен
             {
                 this.MoveToTarget(this.ObjectContainer.ControllingObject.GetTargetCheckPoint().Coords);//двигаться к целевой контрольной точке (Стратегия Игнорирования)
             }
@@ -259,12 +297,88 @@ namespace Project_Space___New_Live.modules
         /// <summary>
         /// Принять решение
         /// </summary>
-        private void TakeDecison()
+        private void TakeDecision()
         {
             this.decisionClock.Restart();//перезапуск таймера принятия решений
-            //TODO реализовать принятие решений с помощью ИНС
-            this.currentDecistion = Decistion.Attack;
+            if (this.neronControlling)
+            {
+                
+
+                List<double> outputVector = this.decisionNetwork.Process(this.ConstructInputVector());
+                int maxNeuronIndex = outputVector.IndexOf(outputVector.Max());
+                switch (maxNeuronIndex)
+                {
+                    case 0:
+                    {
+                        this.currentDecistion = Decistion.Attack;
+                    } ; break;
+                    case 1:
+                    {
+                            this.currentDecistion = Decistion.Avoid;
+                    }; break;
+                    case 2:
+                    {
+                            this.currentDecistion = Decistion.Ignore;
+                    }; break;
+                }
+
+            }
+            else
+            {
+                if (this.ObjectContainer.GetHealh() < 25 ||
+                    !this.ObjectContainer.ControllingObject.ObjectWeaponSystem.HasAmmo)
+                {
+                    this.currentDecistion = Decistion.Avoid;
+                }
+                else
+                {
+                    this.currentDecistion = Decistion.Attack;
+                }
+            }
             this.decisionCount ++;//инкремент счетчика решений
+        }
+
+        /// <summary>
+        /// Сформировать входной вектор
+        /// </summary>
+        /// <returns>Входной вектор</returns>
+        private List<double> ConstructInputVector()
+        {
+            List<double> inputVector = new List<double>();
+            //составояющая собственной боеспособности
+            inputVector.Add(this.ObjectContainer.GetHealh() / 100);//оставшийся запас прочности
+            inputVector.Add(this.ObjectContainer.GetEnergy() / 100);//количество энергии
+            foreach (Equipment equipment in this.ObjectContainer.ControllingObject.Equipment)
+            //вектор состояния оборудования
+            {
+                inputVector.Add(equipment.WearState/100);
+            }
+            inputVector.Add(this.ObjectContainer.GetShieldPower() / 100);
+            for (int i = 0; i < this.ObjectContainer.ControllingObject.ObjectWeaponSystem.MaxWeaponsCount; i ++)
+                //вектор оружия
+            {
+                if (i > this.ObjectContainer.ControllingObject.ObjectWeaponSystem.WeaponsCount - 1)
+                {
+                    inputVector.Add(0);
+                    inputVector.Add(0);
+                }
+                else
+                {
+                    Weapon weapon = this.ObjectContainer.ControllingObject.ObjectWeaponSystem.GetWeapon(i);
+                    inputVector.Add(weapon.Ammo/weapon.MaxAmmo);
+                    inputVector.Add(weapon.WearState/100);
+                }
+            }
+            //состовляющая опастности противника
+            Vector2f delaCoords = this.ObjectContainer.ControllingObject.Coords - this.enemy.Coords;
+            inputVector.Add((Math.Sqrt(Math.Pow(delaCoords.X, 2) + Math.Pow(delaCoords.Y, 2))) / this.ObjectContainer.GetRadarRange());
+            inputVector.Add(this.FindAngleBetweenVectors(this.enemy.Coords, this.enemy.Directon, this.ObjectContainer.ControllingObject.Coords) / Math.PI);
+            inputVector.Add(this.enemy.Speed);
+            inputVector.Add(CharacterLimmits.NormSize(this.enemy.Size).X);
+            inputVector.Add(CharacterLimmits.NormSize(this.enemy.Size).Y);
+            inputVector.Add(CharacterLimmits.NormMass(enemy.Mass));
+            //сформированный входной вектор
+            return inputVector;
         }
 
         /// <summary>
@@ -276,7 +390,7 @@ namespace Project_Space___New_Live.modules
             {
                 case Decistion.Attack://нападение
                 {
-                    this.AttackTarget(this.coordsEnemy, 525);//атаковать противника
+                    this.AttackTarget(this.enemy.Coords, 525);//атаковать противника
                 }; break;
                 case Decistion.Avoid://избегание
                 {
@@ -295,19 +409,30 @@ namespace Project_Space___New_Live.modules
         /// </summary>
         /// <param name="signaturesCollection">Коллекция сигнатур объектов в зоне видимости</param>
         /// <returns>Текущие координаты противника или пара NaN, если противник не обнаружен в зоне видимости</returns>
-        private Vector2f DetectEnemy(List<ObjectSignature> signaturesCollection)
+        private ObjectSignature DetectEnemy(List<ObjectSignature> signaturesCollection)
         {   
             //TODO реализовать нейросетевой анализ
+            List<ObjectSignature> shellsCharactersCollection = new List<ObjectSignature>();
+            ObjectSignature enemy = new ObjectSignature();
+            enemy.Coords =  new Vector2f(float.NaN, float.NaN); ;
             foreach (ObjectSignature signature in signaturesCollection)//поиск обекта-противника в зоне видимости
             {
-                Vector2f sizes = (Vector2f)signature.Characteristics[(int)(ObjectSignature.CharactsKeys.Size)];
-                float mass = (float)signature.Characteristics[(int)(ObjectSignature.CharactsKeys.Mass)];
-                if (sizes.X > 30 && sizes.Y > 30 && mass > 500)//если параметры размера и массы превышают пороговые
+              //  List<double> outputVector = this.objectClassNetwork.Process()
+
+                Vector2f normedSize = CharacterLimmits.NormSize(signature.Size);
+                float normedMass = CharacterLimmits.NormMass(signature.Mass);
+
+                if (normedSize.X > 0.1 && normedSize.Y > 0.1 && normedMass > 0.2)//если параметры размера и массы превышают пороговые
                 {
-                    return (Vector2f)signature.Characteristics[(int)(ObjectSignature.CharactsKeys.Coords)];//возврат текущих координат как координат объекта-противника
+                    enemy = signature;//возврат текущих координат как координат объекта-противника
+                }
+                if (normedSize.X < 0.1 && normedSize.Y > 0.1 && normedMass > 0 && normedMass < 0.2)
+                {
+                    shellsCharactersCollection.Add(signature);
                 }
             }
-            return new Vector2f(float.NaN, float.NaN);//возврат пары NaN если противник не обнаружен в зоне видимости
+            this.ProtectionAnalize(shellsCharactersCollection);
+            return enemy;//возврат пары NaN если противник не обнаружен в зоне видимости
         }
 
         /// <summary>
@@ -317,7 +442,7 @@ namespace Project_Space___New_Live.modules
         {
             if (this.decisionClock.ElapsedTime.AsMilliseconds() > this.decisionTime)//если прошло время принятия решения
             {
-                this.TakeDecison();//принять решение
+                this.TakeDecision();//принять решение
                 this.decisionClock.Restart();//перезапуск таймера
             }
             if (this.dataSaverClock.ElapsedTime.AsSeconds() > 60)//если прошла минута с прошлой записи статистических данных
@@ -333,7 +458,7 @@ namespace Project_Space___New_Live.modules
         /// </summary>
         /// <param name="targetCoords">Координаты цели</param>
         /// <param name="dangerRadius">Радиус опасной зоны, около цели (По-умолчанию 300)</param>
-        private void MaximumAttack(Vector2f targetCoords, float dangerRadius = 300)
+        private void Attack(Vector2f targetCoords, float dangerRadius = 300)
         {
             Vector2f divCoords = targetCoords - this.ObjectContainer.ControllingObject.Coords;//Вычисление основынх параметров
             float distance = (float)(Math.Sqrt(Math.Pow(divCoords.X, 2) + Math.Pow(divCoords.Y, 2)));
@@ -365,45 +490,6 @@ namespace Project_Space___New_Live.modules
         }
 
         /// <summary>
-        /// Атака в экономичном энергорежиме
-        /// </summary>
-        /// <param name="targetCoords">Координаты цели</param>
-        /// <param name="dangerRadius">Радиус опасной зоны, около цели (По-умолчанию 300)</param>
-        private void EconomicAttack(Vector2f targetCoords, float dangerRadius = 300)
-        {
-            Vector2f divCoords = targetCoords - this.ObjectContainer.ControllingObject.Coords;//Вычисление основынх параметров
-            float distance = (float)(Math.Sqrt(Math.Pow(divCoords.X, 2) + Math.Pow(divCoords.Y, 2)));
-            float angleBetween = this.FindAngleBetweenVectors(this.ObjectContainer.ControllingObject.Coords, this.ObjectContainer.ControllingObject.Rotation, targetCoords);//Вычисление параметров
-            this.MoveToTarget(targetCoords, dangerRadius);//наведение на цель
-            if (!this.ObjectContainer.ControllingObject.ObjectWeaponSystem.HasAmmo)//если боезапаса нет
-            {
-                return;//окончить работу боевой функции
-            }
-            Weapon currentWeapon = this.ObjectContainer.ControllingObject.ObjectWeaponSystem.GetActiveWeapon();//получить активное оружие
-            if (currentWeapon.Ammo < 1)//если боезапас данного оружия израсходован
-            {
-                int activeWeaponIndex = this.ObjectContainer.ControllingObject.ObjectWeaponSystem.IndexOfActiveWeapon;//получить индекс текущего оружия
-                if (!this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(activeWeaponIndex + 1))//установить индекс следующего оружия
-                {
-                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);//если не удалось то установить индекс самого первого оружия в коллекции
-                }
-                return;//окончить работу боевой функции
-            }
-            if (distance < currentWeapon.Range)//если объект находится в зоне поражения
-            {
-                if (angleBetween < currentWeapon.Dispersion)//и прицеливания
-                {
-                    if (this.ObjectContainer.GetEnergy() > 15)
-                    {
-                        this.ObjectContainer.ControllingObject.OpenFire();//то открыть огонь
-                        return;//окончить работу боевой функции
-                    }
-                }
-            }
-            this.ObjectContainer.ControllingObject.StopFire();//иначе прекратить огонь
-        }
-
-        /// <summary>
         /// Управление энергорежимами
         /// </summary>
         private void EnergyAnalise()
@@ -428,6 +514,53 @@ namespace Project_Space___New_Live.modules
                 }
             }
         }
+
+        public void ProtectionAnalize(List<ObjectSignature> shellsSignaturesCollection)
+        {
+            float normedEnergy = this.ObjectContainer.GetEnergy() / 100;
+            float normedShieldPower = this.ObjectContainer.GetShieldPower() / 100;
+            int normedShellsCount = 0;
+            if (shellsSignaturesCollection.Count > 0)
+            {
+                foreach (ObjectSignature shellSignature in shellsSignaturesCollection)
+                {
+                    double normedAngle = this.FindAngleBetweenVectors(shellSignature.Coords, shellSignature.Directon, this.ObjectContainer.ControllingObject.Coords) / Math.PI;
+                    if (normedAngle < 0.028)
+                    {
+                        normedShellsCount ++;
+                    }
+                }
+                normedShellsCount = normedShellsCount / shellsSignaturesCollection.Count;
+            }
+            if (normedEnergy > 0.5 && normedShieldPower > 0 && normedShellsCount > 0.3)
+            {
+                this.ObjectContainer.ControllingObject.ActivateShield();
+            }
+            else
+            {
+                this.ObjectContainer.ControllingObject.DeactivateShield();
+            }
+        }
+
+        /// <summary>
+        /// Обучение нейронных сететй
+        /// </summary>
+        public void NetworksLearn()
+        {
+            LearningHelper helper = new LearningHelper();
+            //обучение сети принятия решений
+            List<List<List<double>>> learningSets = helper.LoadLearningSet("decision.nls", 20, 3);
+            this.decisionNetwork.Learning(learningSets[0], 0.001, 500, learningSets[1]);
+            //Обучение классифицирующей сети 
+       /*     learningSets = helper.LoadLearningSet("class", 3, 3);
+            this.decisionNetwork.Learning(learningSets[0], 0.001, 10000, learningSets[1]);
+            //Обучение защитной сети 
+            learningSets = helper.LoadLearningSet("protect", 4, 2);
+            this.decisionNetwork.Learning(learningSets[0], 0.001, 1000, learningSets[1]);*/
+        }
+
+
+
 
     }
 }

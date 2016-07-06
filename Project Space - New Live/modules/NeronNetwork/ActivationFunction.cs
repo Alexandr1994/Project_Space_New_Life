@@ -38,13 +38,13 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// Порог для (пороговой)
         /// Предел насыщения (для линейной с насыщением)
         /// </summary>
-        private float threshold = 0;
+        private double threshold = 0;
 
         /// <summary>
         /// Порог для (пороговой)
         /// Предел насыщения (для линейной с насыщением)
         /// </summary>
-        public float Threshold
+        public double Threshold
         {
             get { return this.threshold; }
         }
@@ -52,12 +52,12 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// <summary>
         /// Коэффициент активации
         /// </summary>
-        private float activateCoef = 0;
+        private double activateCoef = 0;
 
         /// <summary>
         /// Коэффициент активации
         /// </summary>
-        public float ActivateCoef
+        public double ActivateCoef
         {
             get { return this.activateCoef; }
         }
@@ -80,7 +80,7 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// </summary>
         /// <param name="arg">Аргумент</param>
         /// <returns>Значение функции или NaN если активационная функция не выбрана</returns>
-        public float GetFunctionValue(float arg)
+        public double GetFunctionValue(double arg)
         {
             switch (this.functionType)
             {
@@ -102,17 +102,50 @@ namespace Project_Space___New_Live.modules.NeronNetwork
                 }
                 default:
                 {
-                    return float.NaN;
+                    return double.NaN;
                 }
             }
         }
+
+        /// <summary>
+        /// Получить значение первой производной активационной функции
+        /// </summary>
+        /// <param name="arg">Аргумент</param>
+        /// <returns>Значение первой производной активационной функции</returns>
+        public double GetDerivativeFunctionValue(double arg)
+        {
+            switch (this.functionType)
+            {
+                case Types.Threshold:
+                {
+                    return this.GetDerivativeThresholdValue();
+                }
+                case Types.Linear:
+                {
+                    return this.GetDerivativeLinearValue();
+                }
+                case Types.LineatWithSaturation:
+                {
+                    return this.GetDerivativeLinearWithSaturationValue(arg);
+                }
+                case Types.Sigmoidal:
+                {
+                    return this.GerDerivativeSigmoidalValue(arg);
+                }
+                default:
+                {
+                    return double.NaN;
+                }
+            }
+        }
+
 
         /// <summary>
         /// Получить значение пороговой функции
         /// </summary>
         /// <param name="arg">Аргумент</param>
         /// <returns>Значение функции</returns>
-        private float GetThresholdValue(float arg)
+        private double GetThresholdValue(double arg)
         {
             if (arg >= this.threshold)
             {
@@ -122,13 +155,34 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         }
 
         /// <summary>
+        /// Получить значение первой производной пороговой функции
+        /// </summary>
+        /// <param name="arg">Аргумент</param>
+        /// <returns>Значение производной функции</returns>
+        private double GetDerivativeThresholdValue()
+        {
+            return 0;
+
+        }
+
+        /// <summary>
         /// Получить значение линейной функции
         /// </summary>
         /// <param name="arg">Аргумент</param>
         /// <returns>Значение функции</returns>
-        private float GetLinearValue(float arg)
+        private double GetLinearValue(double arg)
         {
             return this.activateCoef * arg;
+        }
+
+        /// <summary>
+        /// Получить значение первой производной линейной функции
+        /// </summary>
+        /// <param name="arg">Аргумент</param>
+        /// <returns>Значение производной функции</returns>
+        private double GetDerivativeLinearValue()
+        {
+            return this.activateCoef;
         }
 
         /// <summary>
@@ -136,7 +190,7 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// </summary>
         /// <param name="arg">Аргумент</param>
         /// <returns>Значение функции</returns>
-        private float GetLinearWithSaturationValue(float arg)
+        private double GetLinearWithSaturationValue(double arg)
         {
             if (Math.Abs(arg) > this.threshold)
             {
@@ -150,14 +204,39 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         }
 
         /// <summary>
-        /// Получить значение сигмоидальной униполярной функции
+        /// Получить значение первой производной линейной функции с насыщением
         /// </summary>
         /// <param name="arg">Аргумент</param>
         /// <returns>Значение функции</returns>
-        private float GetSigmoidalValue(float arg)
+        private double GetDerivativeLinearWithSaturationValue(double arg)
         {
-            return (float)(1 / (1 + Math.Exp(-this.activateCoef * arg)));
+            if (Math.Abs(arg) > this.threshold)
+            {
+                return 0;
+            }
+            return this.activateCoef;
         }
+
+        /// <summary>
+        /// Получить значение сигмоидальной функции
+        /// </summary>
+        /// <param name="arg">Аргумент</param>
+        /// <returns>Значение функции</returns>
+        private double GetSigmoidalValue(double arg)
+        {
+            return 1 / (1 + Math.Exp(-this.activateCoef * arg));
+        }
+
+        /// <summary>
+        /// Получить значение первой производной сигмоидальной функции
+        /// </summary>
+        /// <param name="arg">Аргумент</param>
+        /// <returns>Значение функции</returns>
+        private double GerDerivativeSigmoidalValue(double arg)
+        {
+            return this.GetSigmoidalValue(arg) * (1 - this.GetSigmoidalValue(arg));
+        }
+
 
         /// <summary>
         /// Конструктор активационной функции
@@ -165,7 +244,7 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// <param name="type"></param>
         /// <param name="threshold"></param>
         /// <param name="activateCoef"></param>
-        public ActivationFunction(Types type, float threshold = 0, float activateCoef = 1)
+        public ActivationFunction(Types type, double threshold = 0, double activateCoef = 1)
         {
             this.functionType = type;
             this.threshold = threshold;

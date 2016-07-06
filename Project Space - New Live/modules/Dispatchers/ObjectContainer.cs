@@ -87,11 +87,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         private RenderModule GameRenderer;
 
-        /// <summary>
-        /// Экземпляр контейнера
-        /// </summary>
-        private static ObjectContainer container = null;
-        
+       
         /// <summary>
         /// Координаты объекта на предыдущей итерации
         /// </summary>
@@ -174,11 +170,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Установить контролируемого объекта
         /// </summary>
         /// <param name="activeObject">Объект</param>
-        public void SetControllingActiveObject(ActiveObject activeObject, int objectIndex)
+        public void SetControllingActiveObject(ActiveObject activeObject, int objectIndex, int decisionTime, bool neuronControlling = false)
         {
             this.controllingObject = activeObject;
             this.lastPlayerCoords = this.controllingObject.Coords;//последних координат корабля объекта
-            this.savingComputerController = new ComputerController(this, "statistic_object_" + objectIndex.ToString());//Создание нейроконтроллера для объекта
+            this.savingComputerController = new ComputerController(this, "statistic_object_" + objectIndex.ToString(), decisionTime);//Создание нейроконтроллера для объекта
+            this.savingComputerController.NeronControlling = neuronControlling;
             this.controllingObject.SetBrains(this.savingComputerController);//Установка нейроконтроллера
         }
 
@@ -207,12 +204,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetShieldPower()
         {
-            if (this.controllingObject.ShieldActive)
-            {
-                Shield shield = controllingObject.Equipment[(int)ActiveObject.EquipmentNames.Shield] as Shield;
-                return (float)shield.ShieldPower / (float)shield.MaxShieldPower * 100;
-            }
-            return 0;
+            Shield shield = controllingObject.Equipment[(int)ActiveObject.EquipmentNames.Shield] as Shield;
+            return (float) shield.ShieldPower / (float) shield.MaxShieldPower * 100;
         }
         
         /// <summary>

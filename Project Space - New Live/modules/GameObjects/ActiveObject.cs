@@ -527,10 +527,12 @@ namespace Project_Space___New_Live.modules.GameObjects
                     }; break;
                 case (int)Parts.LeftWing://Левое крыло
                     {
+                        this.WearingCustomEquipment(this.objectShield, equipmentDamage);//износ щита
                         this.WearingCustomEquipment(this.objectEngine, equipmentDamage);//Износ двигателя
                     }; break;
                 case (int)(Parts.RightWing)://Правое крыло
                     {
+                        this.WearingCustomEquipment(this.objectShield, equipmentDamage);//износ щита
                         this.WearingCustomEquipment(this.objectEngine, equipmentDamage);//Износ двигателя
                     }; break;
                 default: break;
@@ -626,6 +628,19 @@ namespace Project_Space___New_Live.modules.GameObjects
                 {
                     this.destroyed = true; //то установить флаг уничтожения корабля
                     this.HidePlayer();
+                    try
+                    {
+                        if ((this.brains as ComputerController).NeronControlling)
+                        {
+                            (this.brains as ComputerController).NetworksLearn();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        ;
+                    }
+                    
+
                     return;
                 }
                 Shell shell;
@@ -753,6 +768,7 @@ namespace Project_Space___New_Live.modules.GameObjects
                                         Weapon weapon = this.ObjectWeaponSystem.GetWeapon(j);
                                         weapon.AmmoCharging((int)((float)weapon.MaxAmmo / 100));
                                     }
+                                    this.objectShield.RegenerateShield(this.objectShield.MaxShieldPower / 100);
                                     this.objectBattery.Charge((int)((float)this.objectBattery.MaxEnergy / 100));
                                 }
                                 else
@@ -790,7 +806,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.objectRadar  = new Radar(20, 2500, null);//радар
             this.objectShield = new Shield(20, 3, 100, 0, 1, null);//энергощит 
             this.objectWeaponSystem = new WeaponSystem(3);
-            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 15, 10, 10, 5, (float)(5 * Math.PI / 180), 100, 100, 3500, 15, 10, new Vector2f(8, 3), new Texture[] {ResurceStorage.rectangleButtonTextures[0], ImageStorage.Hitting}, null));
+            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 20, 35, 10, 5, (float)(5 * Math.PI / 180), 100, 100, 3500, 30, 7, new Vector2f(10, 3), new Texture[] {ResurceStorage.rectangleButtonTextures[0], ImageStorage.Hitting}, null));
             this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 25, 15, 15, 5, (float)(3 * Math.PI / 180), 100, 50, 5000, 25, 1, new Vector2f(35, 1), new Texture[] { ResurceStorage.rectangleButtonTextures[2], ImageStorage.Hitting }, null));
         }
 
@@ -837,10 +853,11 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected override ObjectSignature ConstructSignature()
         {
             ObjectSignature signature = new ObjectSignature();
-            signature.AddCharacteristics(this.Coords);
-            signature.AddCharacteristics(this.Mass);
-            Vector2f sizes = new Vector2f(this.ViewPartSize.X * 3, this.ViewPartSize.Y * 2);
-            signature.AddCharacteristics(sizes);
+            signature.Coords = this.Coords;
+            signature.Mass = this.Mass;
+            signature.Size = new Vector2f(this.ViewPartSize.X * 3, this.ViewPartSize.Y * 2);
+            signature.Directon = this.Rotation;
+            signature.Speed = this.moveManager.ConstructResultVector().Speed / this.objectEngine.MaxForwardSpeed;
             return signature;
         }
 
@@ -865,6 +882,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.health = this.maxHealth;//Восстановление общего состояния
             this.destroyed = false;
             this.ShowPlayer();//Восстановить отображение игрока
+            this.objectShield.RegenerateShield(this.objectShield.MaxShieldPower);
             foreach (ImageView imgView in this.view)
             {
                 imgView.Translate(offset);

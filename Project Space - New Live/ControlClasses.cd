@@ -1,28 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="Project_Space___New_Live.modules.Dispatchers.ObjectContainer">
-    <Position X="14.5" Y="1.75" Width="3.25" />
+    <Position X="25.25" Y="4.25" Width="3.75" />
     <TypeIdentifier>
       <HashCode>B0AAACACAACEAgAAwEUAANBAEAAAQAAABABEgBAEQAA=</HashCode>
       <FileName>modules\Dispatchers\ObjectContainer.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Project_Space___New_Live.modules.Dispatchers.PlayerInterfaceContainer">
-    <Position X="2.75" Y="6" Width="3" />
-    <TypeIdentifier>
-      <HashCode>AAAACABAAAAAAMIAAgAAAAgSAAAAAAEAAAACAAAgAAg=</HashCode>
-      <FileName>modules\Dispatchers\PlayerInterfaceContainer.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Project_Space___New_Live.modules.AbstractController">
-    <Position X="10.75" Y="1.75" Width="2.5" />
+    <Position X="21.75" Y="4.25" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAACIAAAAFAAAAAgAAAAAIAAEAAAAAAIACAAEAIAI=</HashCode>
+      <HashCode>AAAAACIAAAAEAAAAAgAAAAAIAAEAAAAAAIACAAEAIAI=</HashCode>
       <FileName>modules\Controlers\AbstractController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Project_Space___New_Live.modules.ComputerController">
-    <Position X="6.75" Y="1.75" Width="2.5" />
+    <Position X="17.75" Y="4.25" Width="2.5" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
@@ -39,40 +32,19 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAgUAAIiBQEAEBgABAAAAAQCAAAAEAAAAABAAAhQ=</HashCode>
+      <HashCode>AAAAAhUAAYCAQEAEBhABAAAAAYAAAAAEQAAAABAgQ5Q=</HashCode>
       <FileName>modules\Controlers\ComputerController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Project_Space___New_Live.modules.PlayerController">
-    <Position X="10.75" Y="5.75" Width="2.5" />
+    <Position X="21.75" Y="8.25" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>CAAAAAAAABACCIAAAgAAAIAAAAAEQAAIAAAAAAACAAA=</HashCode>
+      <HashCode>CAAAAAAAAJACCIAABgABAIAAAAAEQAAIAAAAAAACAAA=</HashCode>
       <FileName>modules\Controlers\PlayerController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Project_Space___New_Live.modules.GameObjects.BaseEnvironment" Collapsed="true">
-    <Position X="12.25" Y="10.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAQAAgAAQAAAAAAAAgAAAAIAQACAACAAAAAxAAABIAE=</HashCode>
-      <FileName>modules\GameObjects\BaseEnvironment.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Project_Space___New_Live.modules.GameObjects.ActiveObject" Collapsed="true">
-    <Position X="10" Y="10.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AACACCAqUoiAiqAEgkiggQRMAAGBDMEAMAAkgQKAhog=</HashCode>
-      <FileName>modules\GameObjects\ActiveObject.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Project_Space___New_Live.modules.Dispatchers.GameRoot">
-    <Position X="2.5" Y="1.75" Width="3.5" />
-    <TypeIdentifier>
-      <HashCode>BAAABAQCAAAABgAAAABAAAAgAAAAAAAAAAAABBABAAA=</HashCode>
-      <FileName>modules\Dispatchers\GameRoot.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="Project_Space___New_Live.modules.Dispatchers.DataSaver">
-    <Position X="15" Y="9.5" Width="2" />
+    <Position X="29.25" Y="4.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAEAgAAAAAQAAAAAAAAA=</HashCode>
       <FileName>modules\Dispatchers\DataSaver.cs</FileName>

@@ -45,11 +45,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
             CheckPoint[] checkPoints = new CheckPoint[2];
             checkPoints[0] = new StableCheckPoint(new Vector2f((float)(random.NextDouble() * 1500), (float)(random.NextDouble() * 1500)), new[] { ImageStorage.BlueCheckPoint });
             checkPoints[1] = new StableCheckPoint(new Vector2f((float)(random.NextDouble() * 1500), (float)(random.NextDouble() * 1500)), new[] { ImageStorage.RedCheckPoint });
-            return new BaseEnvironment(ImageStorage.Background, (float)0.5, checkPoints);
+            return new BaseEnvironment(ImageStorage.Background3, (float)0.5, checkPoints);
         }
 
         /// <summary>
-        /// Инициализация тестовой звездной системы 1
+        /// Инициализация тестовой звездной системы 2
         /// </summary>
         /// <returns></returns>
         static public BaseEnvironment InitSystem2()
@@ -60,7 +60,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             checkPoints[0] = new OrbitalCheckPoint(new Vector2f(1000, 1000), random.Next(1000), (float)(angle - random.NextDouble() * Math.PI), (float)(random.NextDouble() * 0.1 * Math.PI / 180), new[] { ImageStorage.GreenCheckPoint });
             angle = (float)(random.NextDouble() * 2 * Math.PI);
             checkPoints[1] = new OrbitalCheckPoint(new Vector2f(-1000, -1000), random.Next(1000), (float)(angle - random.NextDouble() * Math.PI), (float)(random.NextDouble() * 0.1 * Math.PI / 180), new[] { ImageStorage.YellowCheckPoint }); 
-            return new BaseEnvironment(ImageStorage.Background, (float)0.5, checkPoints);
+            return new BaseEnvironment(ImageStorage.Background3, (float)0.5, checkPoints);
         }
 
     

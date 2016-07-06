@@ -28,11 +28,23 @@ namespace Project_Space___New_Live.modules
         static private PlayerController GameController;
 
         /// <summary>
+        /// Объект, сохранающий статистические данные
+        /// </summary>
+        private DataSaver dataSaver;
+
+        /// <summary>
+        /// Таймер сохранения статистики
+        /// </summary>
+        private Clock dataSaverClock;
+
+        /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="playerObject">Корабль игрока</param>
         private PlayerController()
         {
+            this.dataSaverClock = new Clock();//инициализация таймера записи
+            this.dataSaver = new DataSaver("human_data");//инициализация файла для сохранения данных
             this.GameRenderer = RenderModule.getInstance();//Получение класса отрисовщика
             this.GameRenderer.MainWindow.KeyPressed += this.OnKey;
             this.GameRenderer.MainWindow.KeyReleased += this.FromKey;
@@ -210,8 +222,8 @@ namespace Project_Space___New_Live.modules
         /// </summary>
         public override void Process(List<ObjectSignature> signaturesCollection)
         {
+            this.TimerCheck();
             this.Moving();
-            this.RefreshFlags();
         }
 
         /// <summary>
@@ -228,5 +240,18 @@ namespace Project_Space___New_Live.modules
                 this.ObjectContainer.ControllingObject.ActivateShield();//иначе активировать
             }
         }
+
+        /// <summary>
+        /// Проверка таймера сохранения данных
+        /// </summary>
+        private void TimerCheck()
+        {
+            if (this.dataSaverClock.ElapsedTime.AsSeconds() > 60)//если прошла минута с прошлой записи статистических данных
+            {
+                this.dataSaver.WriteData(this.ObjectContainer.WinCount, this.ObjectContainer.DeathCount, 0);//сделать новую запись
+                this.dataSaverClock.Restart();//перезапуск таймера
+            }
+        }
+
     }
 }

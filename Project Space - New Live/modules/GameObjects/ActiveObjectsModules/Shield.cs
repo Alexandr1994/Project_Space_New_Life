@@ -77,7 +77,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             this.SetCommonCharacteristics(mass, energyNeeds, image);//сохранение общих характеристик
             //установка текущих характеристик двигательной установки и сохранение базовых характеристик
-            this.baseMaxShieldPower = this.maxShieldPower = maxShieldPower;
+            this.shieldPower = this.baseMaxShieldPower = this.maxShieldPower = maxShieldPower;
             this.shieldRegeneration = shieldRegeneration;
             this.baseShieldRegeneration = baseShieldRegeneration;
             this.state = false;
@@ -89,9 +89,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <returns>true - удалось активировать, false - не удалось</returns>
         public override bool Activate()
         {
-            if (!this.emergensyState)//если щит не в аварийном состоянии
+            if (!this.emergensyState && this.shieldPower > 0)//если щит не в аварийном состоянии
             {//то установить текущую мощность экрана в максимальную и установить состояние в активное
-                this.shieldPower = this.maxShieldPower;
+                //this.shieldPower = this.maxShieldPower;
                 this.state = true;
                 return true;//вернуть true
             }
@@ -103,7 +103,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public override void Deactivate()
         {
-            this.shieldPower = 0;
             this.state = false;
         }
 
@@ -121,11 +120,14 @@ namespace Project_Space___New_Live.modules.GameObjects
             else
             {
                 this.Deactivate();
+                this.shieldPower = 0;
+
             }
             this.Wearing(equipmentDamage);
             if (emergensyState)
             {
                 this.Deactivate();
+                this.shieldPower = 0;
             }
         }
 
@@ -136,7 +138,22 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             this.maxShieldPower = this.baseMaxShieldPower + (this.Version * this.baseMaxShieldPower);
             this.shieldRegeneration = this.Version * this.baseShieldRegeneration;
-
         }
+
+        /// <summary>
+        /// Восстановление ресурса щита
+        /// </summary>
+        public void RegenerateShield(int recoveryValue)
+        {
+            if (this.shieldPower + recoveryValue < this.MaxShieldPower)
+            {
+                this.shieldPower += recoveryValue;
+            }
+            else
+            {
+                this.shieldPower = this.MaxShieldPower;
+            }
+        }
+
     }
 }

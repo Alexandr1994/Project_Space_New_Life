@@ -22,11 +22,25 @@ namespace Project_Space___New_Live.modules.Dispatchers
         private bool gameContinue = true;
 
         /// <summary>
+        /// Флаг отрисовки моделей среды и объектов
+        /// </summary>
+        private bool renderingEnvironment = true;
+
+
+        /// <summary>
         /// Флаг продолжения игры
         /// </summary>
         public bool GameContinue
         {
             get { return this.gameContinue; }
+        }
+
+        /// <summary>
+        /// Флаг отрисовки моделей среды и объектов
+        /// </summary>
+        public bool RenderingEnvironment
+        {
+            get { return this.renderingEnvironment; }
         }
 
         /// <summary>
@@ -215,13 +229,21 @@ namespace Project_Space___New_Live.modules.Dispatchers
             circleBtn.Location = this.mainForm.Size - new Vector2f(200, 120) - circleBtn.Size; ;
             circleBtn.MouseClick += this.HandControlPlayer2;
             this.formsCollection.Add("controlBtn2", circleBtn);
-
-            this.formsCollection.Add("EndButton", new RectButton());//Кнопка окончания
+            //Кнопка завершения работы программы
+            this.formsCollection.Add("EndButton", new RectButton());
             (this.formsCollection["EndButton"] as Button).Text = "Выход";
             (this.formsCollection["EndButton"] as Button).FontSize = 24;
-            this.formsCollection["EndButton"].MouseClick += OnClick;
+            this.formsCollection["EndButton"].MouseClick += OnEndClick;
             this.formsCollection["EndButton"].Size = new Vector2f(80, 30);
             this.formsCollection["EndButton"].Location = new Vector2f(this.mainForm.Size.X - 80, 0);
+            //Кнопка включения/выключения отображения
+            this.formsCollection.Add("RendButton", new RectButton());
+            (this.formsCollection["RendButton"] as Button).Text = "Графика";
+            (this.formsCollection["RendButton"] as Button).FontSize = 14;
+            this.formsCollection["RendButton"].MouseClick += OnRendClick;
+            this.formsCollection["RendButton"].Size = new Vector2f(80, 40);
+            this.formsCollection["RendButton"].Location = new Vector2f(0, this.mainForm.Size.Y - 40);
+
             label = new Label();
             label.TextColor = Color.Red;
             label.Location = new Vector2f(this.mainForm.Size.X - 20, this.mainForm.Size.Y - 200);
@@ -318,9 +340,26 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         /// <param name="sender">Форма, в которой возникло событие</param>
         /// <param name="e">Аргументы события</param>
-        private void OnClick(object sender, EventArgs e)
+        private void OnEndClick(object sender, EventArgs e)
         {
             this.gameContinue = false;
+        }
+
+        /// <summary>
+        /// Нажатие на кнопку графики
+        /// </summary>
+        /// <param name="sender">Форма, в которой возникло событие</param>
+        /// <param name="e">Аргументы события</param>
+        private void OnRendClick(object sender, EventArgs e)
+        {
+            if (this.renderingEnvironment)
+            {
+                this.renderingEnvironment = false;
+            }
+            else
+            {
+                this.renderingEnvironment = true;
+            }
         }
 
         /// <summary>

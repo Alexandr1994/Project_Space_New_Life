@@ -185,7 +185,7 @@ namespace Project_Space___New_Live.modules
         /// <returns></returns>
         private bool RectanglePointTest(Vector2f point, Vector2f center)
         {
-            List<Vector2f> rectangleVertex = this.FindRectangleVertexes(center);//ищем координаты вершин прямоугольника
+            List<Vector2f> rectangleVertex = this.Render(center);//ищем координаты вершин прямоугольника
             List<Vector3f> rectangleLines = this.FindPoligonBorder(rectangleVertex);//ищем характеристики вершин составляющих прямоугольник
             return this.CommonPointTest(point, rectangleLines);//проверка нахождения точки в области прямоугольника
         }
@@ -213,7 +213,7 @@ namespace Project_Space___New_Live.modules
         /// </summary>
         /// <param name="center"></param>
         /// <returns></returns>
-        private List<Vector2f> FindRectangleVertexes(Vector2f center)
+        private List<Vector2f> Render(Vector2f center)
         {
             Vector2f tempVertex = new Vector2f();
             List<Vector2f> vertexesCollection = new List<Vector2f>();
@@ -400,7 +400,7 @@ namespace Project_Space___New_Live.modules
         private bool RectangleAndEllipceContactAnalize(RenderView targetView)
         {
             Vector2f center = this.ViewCenter;
-            List<Vector2f> vertexesCoords = this.FindRectangleVertexes(center);//Поиск координат вершин
+            List<Vector2f> vertexesCoords = this.Render(center);//Поиск координат вершин
             List<Vector3f> linesCollection = this.FindPoligonBorder(vertexesCoords);//Поиск параметров функций прямых составляющих многоугольник
             //targetView - эллипс
             Vector2f halfAxises = new Vector2f();//полуоси
@@ -516,10 +516,10 @@ namespace Project_Space___New_Live.modules
         private bool RectangleAndRectangleContactAnalize(RenderView targetView)
         {
             //поиск собственных вершин и границы
-            List<Vector2f> selfVertexes = this.FindRectangleVertexes(this.ViewCenter);
+            List<Vector2f> selfVertexes = this.Render(this.ViewCenter);
             List<Vector3f> selfLines = this.FindPoligonBorder(selfVertexes);
             //поиск вершин и границы целевой фигуры
-            List<Vector2f> targetVertexes = targetView.FindRectangleVertexes(targetView.ViewCenter);
+            List<Vector2f> targetVertexes = targetView.Render(targetView.ViewCenter);
             List<Vector3f> targetLines = targetView.FindPoligonBorder(targetVertexes);
             for (int i = 0; i < selfLines.Count; i++)
             {
