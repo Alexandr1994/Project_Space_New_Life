@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
-using Project_Space___New_Live.modules.NeronNetwork;
+using NeuronNetwork;
 using Project_Space___New_Live.modules.Storages;
 using SFML.System;
 

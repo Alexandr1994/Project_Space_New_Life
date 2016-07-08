@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project_Space___New_Live.modules.NeronNetwork
+namespace NeuronNetwork
 {
     /// <summary>
     /// Искусственная нейронная сеть
@@ -20,20 +20,20 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// <summary>
         /// Нейронные слои
         /// </summary>
-        protected List<List<Neron>> neronLayers = new List<List<Neron>>();
+        protected List<List<Neuron>> neuronLayers = new List<List<Neuron>>();
 
         /// <summary>
         /// Нейронные слои
         /// </summary>
-        public List<List<Neron>> NeronLayers
+        public List<List<Neuron>> NeuronLayers
         {
-            get { return this.neronLayers; }
+            get { return this.neuronLayers; }
         }
 
 
-        public void CorrectNeron(double correction, int layer, int index, int weightIndex)
+        public void CorrectNeuron(double correction, int layer, int index, int weightIndex)
         {
-            this.neronLayers[layer][index].WeightCorrection(correction, weightIndex);
+            this.neuronLayers[layer][index].WeightCorrection(correction, weightIndex);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// <returns>Активационная функция</returns>
         protected ActivationFunction GetLayerActivationFunction(int layerIndex)
         {
-            return this.NeronLayers[layerIndex][0].NeronActivationFunction;
+            return this.NeuronLayers[layerIndex][0].NeuronActivationFunction;
         }
 
     }

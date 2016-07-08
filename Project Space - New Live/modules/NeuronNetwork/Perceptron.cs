@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project_Space___New_Live.modules.NeronNetwork
+namespace NeuronNetwork
 {
     /// <summary>
     /// Пеоцептрон (персептрон)
@@ -15,39 +15,39 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// Конструктор перцептрона (персептрона)
         /// </summary>
         /// <param name="layerCount">Количество слоев нейросети (без учета входного)</param>
-        /// <param name="neronsCount">Массив количеств нейронов в каждом слое (без учета входного)</param>
+        /// <param name="neuronsCount">Массив количеств нейронов в каждом слое (без учета входного)</param>
         /// <param name="layerFuncType">Типы активационных функций неронов в каждом слое (без учета входного)</param>
         /// <param name="inputVectorLenght">Размер входного вектора</param>
         /// <param name="inputType">Тип активационной функции входного слоя</param>
-        public Perceptron(int layerCount, List<int> neronsCount, List<ActivationFunction.Types> layerFuncType, int inputVectorLenght, ActivationFunction.Types inputType = ActivationFunction.Types.Sigmoidal)
+        public Perceptron(int layerCount, List<int> neuronsCount, List<ActivationFunction.Types> layerFuncType, int inputVectorLenght, ActivationFunction.Types inputType = ActivationFunction.Types.Sigmoidal)
         {
-            if (layerCount != neronsCount.Count || layerCount != layerFuncType.Count)//если сверка на количества слоев нейронов с количеством их характеристик
+            if (layerCount != neuronsCount.Count || layerCount != layerFuncType.Count)//если сверка на количества слоев нейронов с количеством их характеристик
             {
                 throw new Exception("Not fit nerons layers counts in args!");//исключение в случае насовпадения
             }
             
-            List<Neron> newLayer = new List<Neron>();
+            List<Neuron> newLayer = new List<Neuron>();
             for (int i = 0; i < inputVectorLenght; i ++)
             {
-                newLayer.Add(new Neron(inputType, 1));
+                newLayer.Add(new Neuron(inputType, 1));
             }
-            this.neronLayers.Add(newLayer);//добавление входного слоя в коллекцию нейронов
+            this.neuronLayers.Add(newLayer);//добавление входного слоя в коллекцию нейронов
 
             for (int i = 0; i < layerCount; i++)//инициализация слоев нейронов
             {
-                newLayer = new List<Neron>();
-                for (int j = 0; j < neronsCount[i]; j++)//инициализация неронов в данном слое
+                newLayer = new List<Neuron>();
+                for (int j = 0; j < neuronsCount[i]; j++)//инициализация неронов в данном слое
                 {
                     if (i == 0)
                     {
-                        newLayer.Add(new Neron(layerFuncType[i], inputVectorLenght));
+                        newLayer.Add(new Neuron(layerFuncType[i], inputVectorLenght));
                     }
                     else
                     {//иначе размерность входного вектора нейрнов данного слоя равна количеству нейронов в предидущем слое
-                        newLayer.Add(new Neron(layerFuncType[i], neronsCount[i - 1]));
+                        newLayer.Add(new Neuron(layerFuncType[i], neuronsCount[i - 1]));
                     }
                 }
-                this.neronLayers.Add(newLayer);//добавление нового слоя в коллекцию нейронов
+                this.neuronLayers.Add(newLayer);//добавление нового слоя в коллекцию нейронов
             }
         }
 
@@ -59,7 +59,7 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// <returns>Выходной вектор или null в случае ошибки (несоответствия размерности векторов количеству входов нейронов)</returns>
         public override List<double> Process(List<double> inputVector)
         {
-            return this.GetLayerOut(inputVector, this.neronLayers.Count - 1);//вернуть выходной вектор
+            return this.GetLayerOut(inputVector, this.neuronLayers.Count - 1);//вернуть выходной вектор
         }
 
         /// <summary>
@@ -83,18 +83,18 @@ namespace Project_Space___New_Live.modules.NeronNetwork
                     tempVector.AddRange(outputVector);
                 }
                 outputVector.Clear();//отчистка выходного вектора
-                for(int j = 0; j < this.neronLayers[i].Count; j ++) //цикл отработки слоя нейросети
+                for(int j = 0; j < this.neuronLayers[i].Count; j ++) //цикл отработки слоя нейросети
                 {
                     //если размерность входного вектроа для текущего нейрона соответствует количеству его входов
                     if (i == 0)//отработка входного слоя (если имеется)
                     {
-                        outputVector.Add(this.neronLayers[i][j].Process(new List<double>(){tempVector[j]}));
+                        outputVector.Add(this.neuronLayers[i][j].Process(new List<double>(){tempVector[j]}));
                     }
                     else
                     {
-                        if (tempVector.Count == this.neronLayers[i][j].InputVectorSize)
+                        if (tempVector.Count == this.neuronLayers[i][j].InputVectorSize)
                         {
-                            outputVector.Add(this.neronLayers[i][j].Process(tempVector));
+                            outputVector.Add(this.neuronLayers[i][j].Process(tempVector));
                                 //в выходной вектор добавить состояние текущего нейрона
                         }
                         else
@@ -153,7 +153,7 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         private void LayersCorrection(List<double> inputVector, List<double> resultVector, List<double> idealOutVactor)
         {
             List<double> previosCorrection = new List<double>();
-            for (int i = 0; i < this.neronLayers.Count; i ++)
+            for (int i = 0; i < this.neuronLayers.Count; i ++)
             {
 
                 List<double> preOutVector = new List<double>();
@@ -166,17 +166,17 @@ namespace Project_Space___New_Live.modules.NeronNetwork
                     preOutVector = inputVector;
                 }
 
-                for (int j = this.neronLayers[i].Count - 1; j >= 0; j --)
+                for (int j = this.neuronLayers[i].Count - 1; j >= 0; j --)
                 {
-                    if (i == this.neronLayers.Count - 1)//обучение выходного слоя
+                    if (i == this.neuronLayers.Count - 1)//обучение выходного слоя
                     {
                         double delta = this.GetLayerActivationFunction(i).GetDerivativeFunctionValue(resultVector[j]) * (idealOutVactor[j] - resultVector[j]);
                        // double delta = (idealOutVactor[j] - resultVector[j]);
-                        for (int k = 0; k < this.neronLayers[i][j].WeightCoefs.Count; k++)
+                        for (int k = 0; k < this.neuronLayers[i][j].WeightCoefs.Count; k++)
                         {
                             double correction = delta * preOutVector[k];
                             previosCorrection.Add(correction);
-                            this.CorrectNeron(this.learningCoef * correction, i, j, k);
+                            this.CorrectNeuron(this.learningCoef * correction, i, j, k);
                         }
                     }
                     else
@@ -188,15 +188,15 @@ namespace Project_Space___New_Live.modules.NeronNetwork
                         {
                             double correction = delta * preOutVector[j];
                             previosCorrection.Add(correction);
-                            this.CorrectNeron(this.learningCoef * correction, i, j, 0);
+                            this.CorrectNeuron(this.learningCoef * correction, i, j, 0);
                         }
                         else//обучение скрытых слоев
                         {
-                            for (int k = 0; k < this.neronLayers[i][j].WeightCoefs.Count; k++)
+                            for (int k = 0; k < this.neuronLayers[i][j].WeightCoefs.Count; k++)
                             {
                                 double correction = delta * preOutVector[k];
                                 previosCorrection.Add(correction);
-                                this.CorrectNeron(this.learningCoef * correction, i, j, k);
+                                this.CorrectNeuron(this.learningCoef * correction, i, j, k);
 
                             }
                         }

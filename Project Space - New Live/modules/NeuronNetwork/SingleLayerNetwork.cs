@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project_Space___New_Live.modules.NeronNetwork
+namespace NeuronNetwork
 {
     /// <summary>
     /// Однослойная ИНС
@@ -15,17 +15,17 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// <summary>
         /// Конструктор однослойной ИНС
         /// </summary>
-        /// <param name="neronsCount">Количесто нейронов</param>
+        /// <param name="neuronsCount">Количесто нейронов</param>
         /// <param name="inputType">Тип активационной функции</param>
         /// <param name="inputVectorLenght">Размер входного вектора</param>
-        public SingleLayerNetwork(int neronsCount,ActivationFunction.Types layerFuncType, int inputVectorLenght)
+        public SingleLayerNetwork(int neuronsCount,ActivationFunction.Types layerFuncType, int inputVectorLenght)
         {
-            List<Neron> newLayer = new List<Neron>();
-            for (int i = 0; i < neronsCount; i++)//инициализация неронов в данном слое
+            List<Neuron> newLayer = new List<Neuron>();
+            for (int i = 0; i < neuronsCount; i++)//инициализация неронов в данном слое
             {
-                newLayer.Add(new Neron(layerFuncType, inputVectorLenght));
+                newLayer.Add(new Neuron(layerFuncType, inputVectorLenght));
             }
-            this.neronLayers.Add(newLayer);//добавление нового слоя в коллекцию нейронов
+            this.neuronLayers.Add(newLayer);//добавление нового слоя в коллекцию нейронов
         }
 
         /// <summary>
@@ -36,11 +36,11 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         public override List<double> Process(List<double> inputVector)
         {
             List<double> outputVector = new List<double>();
-            for (int i = 0; i < this.neronLayers[0].Count; i ++)
+            for (int i = 0; i < this.neuronLayers[0].Count; i ++)
             {
-                if (inputVector.Count == this.neronLayers[0][i].InputVectorSize)
+                if (inputVector.Count == this.neuronLayers[0][i].InputVectorSize)
                 {
-                    outputVector.Add(this.neronLayers[0][i].Process(inputVector));//в выходной вектор добавить состояние текущего нейрона
+                    outputVector.Add(this.neuronLayers[0][i].Process(inputVector));//в выходной вектор добавить состояние текущего нейрона
                 }
                 else
                 {
@@ -82,7 +82,7 @@ namespace Project_Space___New_Live.modules.NeronNetwork
                             {
                                 if (inputVectors[i][k] != 0)
                                 {
-                                    this.neronLayers[0][j].WeightCorrection(errors[j] * this.learningCoef, k);
+                                    this.neuronLayers[0][j].WeightCorrection(errors[j] * this.learningCoef, k);
                                 }
                             }
                         }

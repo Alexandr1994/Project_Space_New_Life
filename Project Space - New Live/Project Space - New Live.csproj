@@ -27,6 +27,8 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -106,14 +108,14 @@
     <Compile Include="modules\Forms\RectPanel.cs" />
     <Compile Include="modules\Forms\RectButton.cs" />
     <Compile Include="modules\Forms\TextForm.cs" />
-    <Compile Include="modules\NeronNetwork\ActivationFunction.cs" />
-    <Compile Include="modules\NeronNetwork\KohonenNetwork.cs" />
-    <Compile Include="modules\NeronNetwork\LearningHelper.cs" />
-    <Compile Include="modules\NeronNetwork\Neron.cs" />
-    <Compile Include="modules\NeronNetwork\NeronNetwork.cs" />
-    <Compile Include="modules\NeronNetwork\Perceptron.cs" />
-    <Compile Include="modules\NeronNetwork\SingleLayerNetwork.cs" />
-    <Compile Include="modules\NeronNetwork\VectorsOperations.cs" />
+    <Compile Include="modules\NeuronNetwork\ActivationFunction.cs" />
+    <Compile Include="modules\NeuronNetwork\KohonenNetwork.cs" />
+    <Compile Include="modules\NeuronNetwork\LearningHelper.cs" />
+    <Compile Include="modules\NeuronNetwork\Neuron.cs" />
+    <Compile Include="modules\NeuronNetwork\NeuronNetwork.cs" />
+    <Compile Include="modules\NeuronNetwork\Perceptron.cs" />
+    <Compile Include="modules\NeuronNetwork\SingleLayerNetwork.cs" />
+    <Compile Include="modules\NeuronNetwork\VectorsOperations.cs" />
     <Compile Include="modules\Storages\CharacterLimmits.cs" />
     <Compile Include="modules\Storages\FontsStorage.cs" />
     <Compile Include="modules\DataTypes\RenderView.cs" />
@@ -186,6 +188,8 @@
     <Error Condition="!Exists('packages\Baseclass.Contrib.Nuget.Output.2.1.0\build\net40\Baseclass.Contrib.Nuget.Output.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Baseclass.Contrib.Nuget.Output.2.1.0\build\net40\Baseclass.Contrib.Nuget.Output.targets'))" />
   </Target>
   <Import Project="packages\Baseclass.Contrib.Nuget.Output.2.1.0\build\net40\Baseclass.Contrib.Nuget.Output.targets" Condition="Exists('packages\Baseclass.Contrib.Nuget.Output.2.1.0\build\net40\Baseclass.Contrib.Nuget.Output.targets')" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="packages\Graphnode.SFML.Net.2.3\build\Graphnode.SFML.Net.targets" Condition="Exists('packages\Graphnode.SFML.Net.2.3\build\Graphnode.SFML.Net.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

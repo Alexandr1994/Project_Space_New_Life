@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project_Space___New_Live.modules.NeronNetwork
+namespace NeuronNetwork
 {
     /// <summary>
     /// Искусственный нейрон
     /// </summary>
-    class Neron
+    class Neuron
     {
         /// <summary>
         /// Активационная функция
@@ -19,7 +19,7 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// <summary>
         /// Активационная функция
         /// </summary>
-        public ActivationFunction NeronActivationFunction
+        public ActivationFunction NeuronActivationFunction
         {
             get { return this.activationFunction; }
         }
@@ -67,7 +67,7 @@ namespace Project_Space___New_Live.modules.NeronNetwork
         /// </summary>
         /// <param name="function">Активационная функция</param>
         /// <param name="inputVectorLenght">Количество входов</param>
-        public Neron(ActivationFunction.Types function, int inputVectorLenght, double threshold = 0, double activateCoef = 1)
+        public Neuron(ActivationFunction.Types function, int inputVectorLenght, double threshold = 0, double activateCoef = 1)
         {
             this.weightCoefs = new List<double>();
             this.activationFunction = new ActivationFunction(function, threshold, activateCoef);//установка активационной функции

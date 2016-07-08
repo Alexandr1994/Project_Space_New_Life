@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project_Space___New_Live.modules.NeronNetwork
+namespace NeuronNetwork
 {
     /// <summary>
     /// Загрузчик обучающей выборки из файла
