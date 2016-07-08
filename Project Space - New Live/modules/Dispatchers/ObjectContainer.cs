@@ -96,12 +96,12 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Корабль объекта
         /// </summary>
-        private ActiveObject controllingObject = null;
+        private ActiveObject1 controllingObject = null;
 
         /// <summary>
         /// Корабль объекта
         /// </summary>
-        public ActiveObject ControllingObject
+        public ActiveObject1 ControllingObject
         {
             get { return this.controllingObject; }
         }
@@ -170,7 +170,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// Установить контролируемого объекта
         /// </summary>
         /// <param name="activeObject">Объект</param>
-        public void SetControllingActiveObject(ActiveObject activeObject, int objectIndex, int decisionTime, bool neuronControlling = false)
+        public void SetControllingActiveObject(ActiveObject1 activeObject, int objectIndex, int decisionTime, bool neuronControlling = false)
         {
             this.controllingObject = activeObject;
             this.lastPlayerCoords = this.controllingObject.Coords;//последних координат корабля объекта
@@ -194,7 +194,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetEnergy()
         {
-            Battery battery = this.controllingObject.Equipment[(int)(ActiveObject.EquipmentNames.Battery)] as Battery;
+            Battery battery = this.controllingObject.Equipment[(int)(ActiveObject1.EquipmentNames.Battery)] as Battery;
             return (float)battery.Energy / (float)battery.MaxEnergy * 100;
         }
 
@@ -204,7 +204,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetShieldPower()
         {
-            Shield shield = controllingObject.Equipment[(int)ActiveObject.EquipmentNames.Shield] as Shield;
+            Shield shield = controllingObject.Equipment[(int)ActiveObject1.EquipmentNames.Shield] as Shield;
             return (float) shield.ShieldPower / (float) shield.MaxShieldPower * 100;
         }
         
@@ -223,11 +223,11 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <returns></returns>
         public float GetRadarRange()
         {
-            if (this.controllingObject.Equipment[(int)ActiveObject.EquipmentNames.Radar] == null)
+            if (this.controllingObject.Equipment[(int)ActiveObject1.EquipmentNames.Radar] == null)
             {//если радар отстутствует вернуть 0
                 return 0;
             }
-            Radar radar = this.controllingObject.Equipment[(int)ActiveObject.EquipmentNames.Radar] as Radar;
+            Radar radar = this.controllingObject.Equipment[(int)ActiveObject1.EquipmentNames.Radar] as Radar;
             return radar.VisibleRadius;//вернуть радиус заны видимости радара
         }
 

@@ -46,12 +46,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Объект, выстреливший данный снаряд
         /// </summary>
-        private ActiveObject shooterObject;
+        private ActiveObject1 shooterObject;
 
         /// <summary>
         /// Объект, выстреливший данный снаряд
         /// </summary>
-        public ActiveObject ShooterObject
+        public ActiveObject1 ShooterObject
         {
             get { return this.shooterObject; }
         }
@@ -151,7 +151,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="angle">Угол поворота вектора направления</param>
         /// <param name="lifeTime">Время жизни</param>
         /// <param name="skin">Массив текстур</param>
-        public Shell(ActiveObject shooter, float mass, Vector2f coords, Vector2f size, int objectDamage, int equipmentDamage, float speed, float angle, int lifeTime, Texture[] skin)
+        public Shell(ActiveObject1 shooter, float mass, Vector2f coords, Vector2f size, int objectDamage, int equipmentDamage, float speed, float angle, int lifeTime, Texture[] skin)
         {
             this.shooterObject = shooter;
             this.mass = mass;

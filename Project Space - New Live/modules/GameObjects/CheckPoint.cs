@@ -17,12 +17,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Игрок хозяин контрольной точки
         /// </summary>
-        protected ActiveObject masterObject;
+        protected ActiveObject1 masterObject;
 
         /// <summary>
         /// Игрок хозяин контрольной точки
         /// </summary>
-        public ActiveObject MasterObject
+        public ActiveObject1 MasterObject
         {
             get { return this.masterObject; }
         }
@@ -31,7 +31,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Смена Игрока-хозяина
         /// </summary>
         /// <param name="newMaster">Новый Игрок-Хозяин</param>
-        public void ChangeMaster(ActiveObject newMaster)
+        public void ChangeMaster(ActiveObject1 newMaster)
         {
             this.masterObject = newMaster;
         }
@@ -41,7 +41,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="newMaster">Новый Игрок-Хозяин</param>
         /// <param name="newSkin">Новая текстура</param>
-        public void ChangeMaster(ActiveObject newMaster, Texture[] newSkin)
+        public void ChangeMaster(ActiveObject1 newMaster, Texture[] newSkin)
         {
             this.masterObject = newMaster;
             this.view[0].Image.Texture = newSkin[0];

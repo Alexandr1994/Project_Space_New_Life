@@ -60,7 +60,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Коллекция активных объектов
         /// </summary>
-        List<ActiveObject> activeObjectsCollection = new List<ActiveObject>();
+        List<ActiveObject1> activeObjectsCollection = new List<ActiveObject1>();
 
         /// <summary>
         /// Построение игры
@@ -85,7 +85,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             this.environment = ResurceStorage.InitSystem2();
             this.environment.SetActiveObjectsCollection(this.activeObjectsCollection);
-            foreach (ActiveObject activeObject in this.activeObjectsCollection)
+            foreach (ActiveObject1 activeObject in this.activeObjectsCollection)
             {
                 activeObject.Environment = this.environment;
             }
@@ -100,8 +100,8 @@ namespace Project_Space___New_Live.modules.Dispatchers
             Texture[] secondObjectTextures = ImageStorage.YellowObject;
             firstObjectTextures[1] = secondObjectTextures[0];
             secondObjectTextures[1] = firstObjectTextures[0];
-            this.activeObjectsCollection.Add(new ActiveObject(2000, new Vector2f(400, 400), 250, firstObjectTextures, new Vector2f(15, 30)));
-            this.activeObjectsCollection.Add(new ActiveObject(2000, new Vector2f(-450, 400), 250, secondObjectTextures, new Vector2f(15, 30)));
+            this.activeObjectsCollection.Add(new ActiveObject1(2000, new Vector2f(400, 400), 250, firstObjectTextures, new Vector2f(15, 30)));
+            this.activeObjectsCollection.Add(new ActiveObject1(2000, new Vector2f(-450, 400), 250, secondObjectTextures, new Vector2f(15, 30)));
         }
 
         /// <summary>

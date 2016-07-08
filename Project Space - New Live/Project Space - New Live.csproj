@@ -94,6 +94,9 @@
     <Compile Include="modules\Controlers\AbstractController.cs" />
     <Compile Include="modules\Controlers\ComputerController.cs" />
     <Compile Include="modules\Dispatchers\DataSaver.cs" />
+    <Compile Include="modules\Environment\BaseEnvironment.cs" />
+    <Compile Include="modules\Environment\BattleField.cs" />
+    <Compile Include="modules\Environment\StarSystem.cs" />
     <Compile Include="modules\Forms\ActiveLabel.cs" />
     <Compile Include="modules\Forms\ImageForm.cs" />
     <Compile Include="modules\Forms\InvisiblePanel.cs" />
@@ -108,6 +111,15 @@
     <Compile Include="modules\Forms\RectPanel.cs" />
     <Compile Include="modules\Forms\RectButton.cs" />
     <Compile Include="modules\Forms\TextForm.cs" />
+    <Compile Include="modules\GameObjects\ActiveObject.cs" />
+    <Compile Include="modules\GameObjects\LocalMassCenter.cs" />
+    <Compile Include="modules\GameObjects\Planet.cs" />
+    <Compile Include="modules\GameObjects\Ship.cs" />
+    <Compile Include="modules\GameObjects\SphereObject.cs" />
+    <Compile Include="modules\GameObjects\Star.cs" />
+    <Compile Include="modules\GameObjects\Tank.cs" />
+    <Compile Include="modules\GameObjects\Transport.cs" />
+    <Compile Include="modules\GameObjects\Wall.cs" />
     <Compile Include="modules\NeuronNetwork\ActivationFunction.cs" />
     <Compile Include="modules\NeuronNetwork\KohonenNetwork.cs" />
     <Compile Include="modules\NeuronNetwork\LearningHelper.cs" />
@@ -127,7 +139,7 @@
     <Compile Include="modules\DataTypes\ImageView.cs" />
     <Compile Include="modules\Dispatchers\ResurceStorage.cs" />
     <Compile Include="modules\DataTypes\TextView.cs" />
-    <Compile Include="modules\GameObjects\ActiveObject.cs" />
+    <Compile Include="modules\GameObjects\ActiveObject1.cs" />
     <Compile Include="modules\GameObjects\CheckPoint.cs" />
     <Compile Include="modules\GameObjects\BaseEnvironment.cs" />
     <Compile Include="modules\GameObjects\OrbitalCheckPoint.cs" />

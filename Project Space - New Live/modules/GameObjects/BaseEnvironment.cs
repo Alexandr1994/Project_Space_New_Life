@@ -46,7 +46,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Коллекция активных объектов
         /// </summary>
-        private List<ActiveObject> activeObjectsCollection;
+        private List<ActiveObject1> activeObjectsCollection;
 
         /// <summary>
         /// Коллекция снарядов
@@ -134,7 +134,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Установить массив активных объектов
         /// </summary>
         /// <param name="activeObjectsCollection">Новая коллекция активных объектов</param>
-        public virtual void SetActiveObjectsCollection(List<ActiveObject> activeObjectsCollection)
+        public virtual void SetActiveObjectsCollection(List<ActiveObject1> activeObjectsCollection)
         {
             this.activeObjectsCollection = activeObjectsCollection;
         }
@@ -206,7 +206,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 environmentViews.AddRange(shell.View);
             }
-            foreach (ActiveObject activeObject in this.activeObjectsCollection)
+            foreach (ActiveObject1 activeObject in this.activeObjectsCollection)
             {
                 environmentViews.AddRange(activeObject.View);
             }

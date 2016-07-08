@@ -234,7 +234,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="shooter">Стреляющий объект</param>
         /// <returns>Новый снаряд или null, если оружие в аварийном состоянии или исчерпас боезапас</returns>
-        public Shell Shoot(ActiveObject shooter)
+        public Shell Shoot(ActiveObject1 shooter)
         {
             if (!this.emergensyState && this.Ammo > 0)//если оружие в рабочем состоянии и его боезапас не исчерпан
             {//то произвести выстрел

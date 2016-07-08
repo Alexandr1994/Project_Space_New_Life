@@ -82,10 +82,10 @@ namespace Project_Space___New_Live.modules.Forms
         /// </summary>
         /// <param name="activeBaseEnvironmentкущая звездная система</param>
         /// <param name="player">Корабль игрока</param>
-        public void RadarProcess(BaseEnvironment activeBaseEnvironment, ActiveObject player)
+        public void RadarProcess(BaseEnvironment activeBaseEnvironment, ActiveObject1 player)
         {
             float radarCoeffic = 0;
-            Radar playerRadar = player.Equipment[(int) ActiveObject.EquipmentNames.Radar] as Radar;
+            Radar playerRadar = player.Equipment[(int) ActiveObject1.EquipmentNames.Radar] as Radar;
             this.ChildForms.Clear();//Отчистить коллекцию объектов на радаре
             if (playerRadar != null && playerRadar.State)//Если радар имеется и функционирует
             {//то начать посторение отображения
@@ -155,7 +155,7 @@ namespace Project_Space___New_Live.modules.Forms
         /// </summary>
         /// <param name="player">Корабль игрока</param>
         /// <param name="radarCoeffic">Масщтабирующий коэффициент</param>
-        private void RenderPlayerOnRadar(ActiveObject player, float radarCoeffic)
+        private void RenderPlayerOnRadar(ActiveObject1 player, float radarCoeffic)
         { 
             RadarEntity ship = new RadarEntity();
             ObjectSignature playerSignature = player.GetSignature();

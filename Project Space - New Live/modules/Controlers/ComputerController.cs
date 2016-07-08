@@ -152,7 +152,7 @@ namespace Project_Space___New_Live.modules
             }
             else
             {
-                float maxSpeed = (this.ObjectContainer.ControllingObject.Equipment[(int)(ActiveObject.EquipmentNames.Engine)] as Engine).MaxForwardSpeed;
+                float maxSpeed = (this.ObjectContainer.ControllingObject.Equipment[(int)(ActiveObject1.EquipmentNames.Engine)] as Engine).MaxForwardSpeed;
                 float currentSpeed = this.ObjectContainer.ControllingObject.MoveManager.ConstructResultVector().Speed;
                 double speedPersent = 100 * currentSpeed / maxSpeed;
                 if (speedPersent < 25)
