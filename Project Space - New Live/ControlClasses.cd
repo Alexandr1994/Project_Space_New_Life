@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Project_Space___New_Live.modules.Dispatchers.ObjectContainer">
+    <Position X="25.25" Y="4.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>B0AAACACAACEAgAAwEUAANBAEAAAQAAABABEgBAEQAA=</HashCode>
+      <FileName>modules\Dispatchers\ObjectContainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.AbstractController">
+    <Position X="21.75" Y="4.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACIAAAAEAAAAAgAAAAAIAAEAAAAAAIACAAEAIAI=</HashCode>
+      <FileName>modules\Controlers\AbstractController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.ComputerController">
+    <Position X="17.75" Y="4.25" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Project_Space___New_Live.modules.ComputerController.EnergyMode">
+        <TypeIdentifier>
+          <NewMemberFileName>modules\Controlers\ComputerController.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Project_Space___New_Live.modules.ComputerController.Decistion">
+        <TypeIdentifier>
+          <NewMemberFileName>modules\Controlers\ComputerController.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAhUAAYCAQEAEBhABAAAAAYAAAAAEQAAAABAgQ5Q=</HashCode>
+      <FileName>modules\Controlers\ComputerController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.PlayerController">
+    <Position X="21.75" Y="8.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAJACCIAABgABAIAAAAAEQAAIAAAAAAACAAA=</HashCode>
+      <FileName>modules\Controlers\PlayerController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.Dispatchers.DataSaver">
+    <Position X="29.25" Y="4.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAEAgAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>modules\Dispatchers\DataSaver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

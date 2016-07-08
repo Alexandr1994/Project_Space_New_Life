@@ -123,9 +123,19 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         private Vector2f size;
 
+        /// <summary>
+        /// Сконструировать сигнатуру
+        /// </summary>
+        /// <returns></returns>
         protected override ObjectSignature ConstructSignature()
         {
-            return null;
+            ObjectSignature signature = new ObjectSignature();
+            signature.Coords = this.Coords;
+            signature.Mass = this.Mass;
+            signature.Size = this.size;
+            signature.Speed = this.SpeedVector.Speed;
+            signature.Directon = this.SpeedVector.Angle;
+            return signature;
         }
 
         /// <summary>
@@ -161,8 +171,8 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin">Массив текстур частей снаряда</param>
         protected override void ConstructView(Texture[] skin)
         {
-            this.view = new ObjectView[1];
-            this.view[(int)ShellParts.Core] = new ObjectView(new CircleShape(1), BlendMode.Alpha);
+            this.view = new ImageView[1];
+            this.view[(int)ShellParts.Core] = new ImageView(new RectangleShape(new Vector2f(1, 1)), BlendMode.Alpha);
             this.view[(int) ShellParts.Core].Image.Scale = this.size;
             this.View[(int) ShellParts.Core].Image.Position = this.Coords - new Vector2f(this.size.X, this.size.Y);
             this.view[(int) ShellParts.Core].Image.Texture = skin[0];
@@ -179,7 +189,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.coords.X += (float)(this.speedVector.Speed * Math.Cos(this.speedVector.Angle));
             this.coords.Y += (float)(this.speedVector.Speed * Math.Sin(this.speedVector.Angle));
             Vector2f delta = this.coords - tempCoords;//Изменение по координатам Х и Y
-            foreach (ObjectView partView in this.view)
+            foreach (ImageView partView in this.view)
             {
                 partView.Translate(delta);
             }

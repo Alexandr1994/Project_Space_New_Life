@@ -35,6 +35,24 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
+        /// Флаг наличия боеприпасов
+        /// </summary>
+        public bool HasAmmo
+        {
+            get
+            {
+                foreach (Weapon weapon in this.weaponsCollection)//опросить каждое оружие в коллекции
+                {
+                    if (weapon.Ammo > 1)//и если хоть одно из них не исчерпало свой боезапас
+                    {
+                        return true;//то вернеть true
+                    }
+                }
+                return false;//иначе false
+            }
+        }
+
+        /// <summary>
         /// Коллекция оружия в оружейной системе
         /// </summary>
         private List<Weapon> weaponsCollection;
@@ -200,7 +218,30 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Получить текущий боезапас в процентах от максимального
+        /// Вернуть оружие по индексу
+        /// </summary>
+        /// <param name="index">Индекс требуемого оружия</param>
+        /// <returns>Экземпляр оружия по индексу или null если индекс за пределами диапазона</returns>
+        public Weapon GetWeapon(int index)
+        {
+            if (index > this.maxWeaponsCount - 1)
+            {
+                return null;
+            }
+            return this.weaponsCollection[index];
+        }
+
+        /// <summary>
+        /// Вернуть активное оружие
+        /// </summary>
+        /// <returns>Активное оружие</returns>
+        public Weapon GetActiveWeapon()
+        {
+            return this.ActiveWeapon;
+        }
+
+        /// <summary>
+        /// Получить текущий боезапас активного оружия в процентах от максимального
         /// </summary>
         /// <returns>Текущий боезапас в процентах</returns>
         public int GetAmmoPersent()
@@ -210,6 +251,16 @@ namespace Project_Space___New_Live.modules.GameObjects
                 return (this.weaponsCollection[this.indexOfActiveWeapon].Ammo * 100) / this.weaponsCollection[this.indexOfActiveWeapon].MaxAmmo;
             }
             return 0;
+        }
+
+        /// <summary>
+        /// Перезарядка оружия
+        /// </summary>
+        /// <param name="index">Индекс</param>
+        /// <param name="ammoCount">Количество боеприпасов</param>
+        public void ReloadWeapon(int index, int ammoCount)
+        {
+            this.weaponsCollection[index].AmmoCharging(ammoCount);
         }
 
     }

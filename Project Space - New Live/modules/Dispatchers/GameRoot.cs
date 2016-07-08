@@ -9,11 +9,12 @@ using System.Security.AccessControl;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Project_Space___New_Live.modules.Controlers;
-using Project_Space___New_Live.modules.Controlers.Forms;
-using Project_Space___New_Live.modules.Controlers.InterfaceParts;
+using Project_Space___New_Live.modules;
+using Project_Space___New_Live.modules.Forms;
+
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
+using Project_Space___New_Live.modules.Storages;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -47,20 +48,19 @@ namespace Project_Space___New_Live.modules.Dispatchers
         private PlayerInterfaceContainer GraphicInterfaceContainer;
 
         /// <summary>
-        /// Коллекция Звездных систем
+        /// Экземпляр среды
         /// </summary>
-        List<StarSystem> SystemCollection = new List<StarSystem>();
+        private BaseEnvironment environment;
 
         /// <summary>
-        /// Хранилище информации об игроке и активной звездной системе
+        /// Хранилище информации для отображения
         /// </summary>
-        private PlayerContainer playerContainer;
+        private ObjectContainer[] _objectContainers = new ObjectContainer[2];
 
         /// <summary>
-        /// Коллекция космических кораблей
+        /// Коллекция активных объектов
         /// </summary>
-        List<ActiveObject> ShipsCollection = new List<ActiveObject>();
-        //List<Ship> ShipsCollection = new List<Ship>();
+        List<ActiveObject> activeObjectsCollection = new List<ActiveObject>();
 
         /// <summary>
         /// Построение игры
@@ -68,19 +68,27 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public GameRoot()
         {
             this.GraphicModule = RenderModule.getInstance();//Полученить указатель на модуль отрисовки
-            this.ConstructWorld();//Сконструировать игровой мир
-            this.playerContainer = PlayerContainer.GetInstanse(this.SystemCollection);//Инициализация игрока            
-            this.GraphicInterfaceContainer = new PlayerInterfaceContainer(this.GraphicModule.Form, this.playerContainer);//Сконструировать контейнер игрового интерфейса
-            this.ShipsCollection.Add(this.playerContainer.PlayerShip);//создание корабля игрока и установка контроллера
-            this.ConstructFleets();//Инициализация кораблей
+            this.ConstructFleets();//Инициализация активных объектов
+            this.ConstructWorld();//Конструирование среды
+            for (int i = 0; i < this._objectContainers.Length; i++)
+            {
+                this._objectContainers[i] = new ObjectContainer(environment);//Инициализация игроков   
+            }     
+            this.GraphicInterfaceContainer = new PlayerInterfaceContainer(this.GraphicModule.Form, this._objectContainers);//Сконструировать контейнер игрового интерфейса
+            this.InitPlayerContainers();//Инициализацимя контейнеров игроков
         }
 
         /// <summary>
-        /// Построение звездных систем (временная реализация)
+        /// Построение среды
         /// </summary>
         private void ConstructWorld()
         {
-            this.SystemCollection.Add(ResurceStorage.InitSystem1());//сконструировать одну звездную систему
+            this.environment = ResurceStorage.InitSystem2();
+            this.environment.SetActiveObjectsCollection(this.activeObjectsCollection);
+            foreach (ActiveObject activeObject in this.activeObjectsCollection)
+            {
+                activeObject.Environment = this.environment;
+            }
         }
 
         /// <summary>
@@ -88,43 +96,22 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// </summary>
         private void ConstructFleets()
         {
-            this.ShipsCollection.Add(new Ship(1000, new Vector2f(-450, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
-            this.ShipsCollection.Add(new Ship(900, new Vector2f(-450, -400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
-            this.ShipsCollection.Add(new Ship(800, new Vector2f(450, -400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
-            this.ShipsCollection.Add(new Ship(500, new Vector2f(450, 450), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), SystemCollection[0]));
-            foreach (ActiveObject ship in this.ShipsCollection)
-            {
-                ship.SetBrains(new ComputerController(ship as Transport));
-            }
+            Texture[] firstObjectTextures = ImageStorage.GreenObject;
+            Texture[] secondObjectTextures = ImageStorage.YellowObject;
+            firstObjectTextures[1] = secondObjectTextures[0];
+            secondObjectTextures[1] = firstObjectTextures[0];
+            this.activeObjectsCollection.Add(new ActiveObject(2000, new Vector2f(400, 400), 250, firstObjectTextures, new Vector2f(15, 30)));
+            this.activeObjectsCollection.Add(new ActiveObject(2000, new Vector2f(-450, 400), 250, secondObjectTextures, new Vector2f(15, 30)));
         }
 
         /// <summary>
-        /// Процесс игры в космосе
+        /// Инициализация контейноров игроков
         /// </summary>
-        private void SpaceGameProcess()
+        private void InitPlayerContainers()
         {
-            foreach (StarSystem currentSystem in this.SystemCollection) //Отработка игрового мира
-            {
-                currentSystem.RefreshActiveObjectsCollection(this.ShipsCollection as List<ActiveObject>);
-                currentSystem.Process();
-            }
-            for (int i = 0; i < this.ShipsCollection.Count; i ++) //отчистка уничтоженных кораблей
-            {
-                if (this.ShipsCollection[i].Destroyed) //Если найден корабль перешедший в уничтоженное состояние
-                {
-                    this.ShipsCollection.Remove(this.ShipsCollection[i]);
-                    //то удаление его из общей коллекции кораблей
-                    i --;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Процесс игры на танковом поле боя
-        /// </summary>
-        private void BattleFieldGameProcess()
-        {
-            this.playerContainer.PlayerTank.TankBattleField.Process();
+            this._objectContainers[0].SetControllingActiveObject(this.activeObjectsCollection[0], 0, 1000, true);
+            this._objectContainers[1].SetControllingActiveObject(this.activeObjectsCollection[1], 1, 3000, true);
+            this.environment.SetCheckPoints();//Установка контрольных точек
         }
 
         /// <summary>
@@ -136,21 +123,22 @@ namespace Project_Space___New_Live.modules.Dispatchers
             {
                 Thread.Sleep(sleepTime);
                 GraphicModule.MainWindow.Clear(); //перерисовка окна
-                switch (this.playerContainer.CurrentMode)//в зависимости от текущего игрового режима
+                this.environment.Process();
+                foreach (ObjectContainer playerContainer in this._objectContainers)
                 {
-                    case PlayerContainer.Mode.SpaceMode://выполнить итерационный процесс игры в космосе
-                    {
-                        this.SpaceGameProcess();
-                    }; break;
-                    case PlayerContainer.Mode.TankMode://выполнить итерационный процесс игры на танковом поле боя
-                    {
-                        this.BattleFieldGameProcess();
-                    }; break;
+                    playerContainer.StatePlayerControll();
                 }
                 this.GraphicInterfaceContainer.Process();
-                this.GraphicModule.RenderProcess(this.playerContainer.ActiveEnvironment);
-                GraphicModule.MainWindow.DispatchEvents();
-                GraphicModule.MainWindow.Display();
+                if (this.GraphicInterfaceContainer.RenderingEnvironment)
+                {
+                    this.GraphicModule.RenderProcess(this.environment);
+                }
+                else
+                {
+                    this.GraphicModule.RenderProcess();
+                }
+                this.GraphicModule.MainWindow.DispatchEvents();
+                this.GraphicModule.MainWindow.Display();
             }
         }
 

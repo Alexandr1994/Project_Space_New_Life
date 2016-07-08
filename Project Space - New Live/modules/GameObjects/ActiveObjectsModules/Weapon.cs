@@ -83,6 +83,14 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
+        /// Радиус действия оружия
+        /// </summary>
+        public float Range
+        {
+            get { return this.shellSpeed * this.shellLifeTime / GameRoot.SleepTime; }
+        }
+
+        /// <summary>
         /// Текущий боезапас
         /// </summary>
         private int ammo;
@@ -248,6 +256,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             if (this.MaxAmmo - this.Ammo > newAmmo)
             {
                 this.ammo = this.Ammo + newAmmo;
+                return;
             }
             this.ammo = this.MaxAmmo;
         }

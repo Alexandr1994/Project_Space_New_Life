@@ -18,12 +18,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Отображение визуального эффекта
         /// </summary>
-        ObjectView view;
+        ImageView view;
 
         /// <summary>
         /// Отображение визуального эффекта
         /// </summary>
-        public ObjectView View
+        public ImageView View
         {
             get { return this.view; }
         }
@@ -70,7 +70,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skinTape">Текстурная лента</param>
         public VisualEffect(Vector2f coords, Vector2f sizes, int tapeLenght, Texture skinTape)
         {
-            this.view = new ObjectView(new RectangleShape(sizes), BlendMode.Alpha);
+            this.view = new ImageView(new RectangleShape(sizes), BlendMode.Alpha);
             this.view.Image.Position = coords - new Vector2f(sizes.X/2, sizes.Y/2);
             this.sizes = sizes;
             this.view.Image.Texture = skinTape;

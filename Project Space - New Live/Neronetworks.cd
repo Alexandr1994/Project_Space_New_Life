@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Project_Space___New_Live.modules.NeronNetwork.VectorsOperations">
+    <Position X="9.75" Y="1.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>gEAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>modules\NeronNetwork\VectorsOperations.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.NeronNetwork.ActivationFunction">
+    <Position X="3.75" Y="1.5" Width="3.5" />
+    <NestedTypes>
+      <Enum Name="Project_Space___New_Live.modules.NeronNetwork.ActivationFunction.Types" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>modules\NeronNetwork\ActivationFunction.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AACAARAAAAAAAABABAAAAAAAAAAAAGAEAAAgBAKAAMk=</HashCode>
+      <FileName>modules\NeronNetwork\ActivationFunction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.NeronNetwork.KohonenNetwork">
+    <Position X="9.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>modules\NeronNetwork\KohonenNetwork.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.NeronNetwork.LearningHelper">
+    <Position X="9.75" Y="3.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>modules\NeronNetwork\LearningHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.NeronNetwork.Neron">
+    <Position X="6.75" Y="1.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgCAAAAAEAAAEgAAAAgEAAAEAAAABAAgAAAQAAA=</HashCode>
+      <FileName>modules\NeronNetwork\Neron.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.NeronNetwork.NeronNetwork">
+    <Position X="7.25" Y="5.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAEAEAAAgAAAAAAAAAAACAAIAAgAAAAAAA=</HashCode>
+      <FileName>modules\NeronNetwork\NeronNetwork.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.NeronNetwork.Perceptron">
+    <Position X="4.5" Y="7" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAEAAgAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>modules\NeronNetwork\Perceptron.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.NeronNetwork.SingleLayerNetwork">
+    <Position X="9.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>modules\NeronNetwork\SingleLayerNetwork.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

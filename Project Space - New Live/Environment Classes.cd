@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Project_Space___New_Live.modules.GameObjects.VisualEffect">
+    <Position X="11.25" Y="11.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAABEAAQAAAAgAAAAAAAAIBAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>modules\GameObjects\VisualEffect.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.Shell">
+    <Position X="24.25" Y="7.75" Width="3" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Project_Space___New_Live.modules.GameObjects.Shell.ShellParts">
+        <TypeIdentifier>
+          <NewMemberFileName>modules\GameObjects\Shell.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>gAAASIAAAMAAQCAAAoAQAABAEAAAAEAIIABAAAAAEAA=</HashCode>
+      <FileName>modules\GameObjects\Shell.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.GameObject">
+    <Position X="19.25" Y="8.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAACAAAAAAAAAAAAABEAAAIQAAAACAAAA=</HashCode>
+      <FileName>modules\GameObjects\GameObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.CheckPoint">
+    <Position X="15.75" Y="7.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAwAAABCAAAgAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>modules\GameObjects\CheckPoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.BaseEnvironment">
+    <Position X="13.75" Y="11.25" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAgAAQAAAAAAAAgAAAAIAQACAACAAAAAxAAABIAE=</HashCode>
+      <FileName>modules\GameObjects\BaseEnvironment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.GameEntity">
+    <Position X="20" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAgAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>modules\GameObjects\GameEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.ActiveObject" Collapsed="true">
+    <Position X="20" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACACCAqUoiAiqAEgkiggQRMAAGBDMEAMAAkgQKAhog=</HashCode>
+      <FileName>modules\GameObjects\ActiveObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.OrbitalCheckPoint">
+    <Position X="11.25" Y="5.75" Width="2" />
+    <InheritanceLine Type="Project_Space___New_Live.modules.GameObjects.CheckPoint" FixedFromPoint="true">
+      <Path>
+        <Point X="15.75" Y="9.312" />
+        <Point X="15.375" Y="9.312" />
+        <Point X="15.375" Y="7.169" />
+        <Point X="13.25" Y="7.169" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQACABAAIAABAQAAAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>modules\GameObjects\OrbitalCheckPoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Project_Space___New_Live.modules.GameObjects.StableCheckPoint">
+    <Position X="11.25" Y="9.75" Width="1.75" />
+    <InheritanceLine Type="Project_Space___New_Live.modules.GameObjects.CheckPoint" FixedFromPoint="true">
+      <Path>
+        <Point X="15.75" Y="9.312" />
+        <Point X="15.375" Y="9.312" />
+        <Point X="15.375" Y="10.5" />
+        <Point X="13" Y="10.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>modules\GameObjects\StableCheckPoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules.Dispatchers;
@@ -9,7 +10,7 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace Project_Space___New_Live.modules.Controlers
+namespace Project_Space___New_Live.modules
 {
     /// <summary>
     /// Игровой контроллер непосредственного управления объектом 
@@ -27,50 +28,52 @@ namespace Project_Space___New_Live.modules.Controlers
         static private PlayerController GameController;
 
         /// <summary>
-        /// Ссылка на хранилище управляемых объектов
+        /// Объект, сохранающий статистические данные
         /// </summary>
-        private PlayerContainer playerContainer = null;
+        private DataSaver dataSaver;
+
+        /// <summary>
+        /// Таймер сохранения статистики
+        /// </summary>
+        private Clock dataSaverClock;
 
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="playerObject">Корабль игрока</param>
-        private PlayerController(PlayerContainer playerContainer)
+        private PlayerController()
         {
-            this.playerContainer = playerContainer;
+            this.dataSaverClock = new Clock();//инициализация таймера записи
+            this.dataSaver = new DataSaver("human_data");//инициализация файла для сохранения данных
             this.GameRenderer = RenderModule.getInstance();//Получение класса отрисовщика
             this.GameRenderer.MainWindow.KeyPressed += this.OnKey;
             this.GameRenderer.MainWindow.KeyReleased += this.FromKey;
             this.GameRenderer.Form.MouseDown += this.OnButton;
             this.GameRenderer.Form.MouseUp += this.FromButton;
-            this.GameRenderer.Form.MouseMove += this.OnMouseMove;
             this.GameRenderer.Form.MouseOut += this.OnMouseOut;
         }
 
         /// <summary>
         /// Получение экзепляра класса игрового контроллера
         /// </summary>
-        /// <param name="playerShip">Корабль игрока</param>
-        /// <returns>Ссылка на экземпляр игрового контроллера</returns>
-        public static PlayerController GetInstanse(PlayerContainer playerContainer)
+        /// <returns>Ссылка на экземпляр ручного контроллера</returns>
+        public static PlayerController GetInstanse()
         {
             if (GameController == null)
             {
-                GameController = new PlayerController(playerContainer);
+                GameController = new PlayerController();
             }
             return GameController;
         }
 
-        //Общие флаги управления
-
-        //Управление движением
-        private bool Forward = false;
-        private bool Reverse = false;
-        private bool LeftFly = false;
-        private bool RightFly = false;
-        private bool LeftRotate = false;
-        private bool RightRotate = false;
-        private bool StopMoving = false;
+        /// <summary>
+        /// Переустановка Контейнера Игрока
+        /// </summary>
+        /// <param name="newContainer"></param>
+        public void SetNewController(ObjectContainer newContainer)
+        {
+            this.ObjectContainer = newContainer;
+        }
 
         /// <summary>
         /// Обрабочик нажатий на клавиши
@@ -111,26 +114,19 @@ namespace Project_Space___New_Live.modules.Controlers
                 }; break;
                 case Keyboard.Key.Num1:
                 {
-                    this.playerContainer.ActiveTransport.ObjectWeaponSystem.SetActiveWeaponIndex(0);
+                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);
                 }; break;
                 case Keyboard.Key.Num2:
                 {
-                    this.playerContainer.ActiveTransport.ObjectWeaponSystem.SetActiveWeaponIndex(1);
+                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(1);
                 }; break;
                 case Keyboard.Key.Num3:
                 {
-                    this.playerContainer.ActiveTransport.ObjectWeaponSystem.SetActiveWeaponIndex(2);
+                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(2);
                 }; break;
                 case Keyboard.Key.LControl:
                 {
                     this.ShieldProcess();
-                }; break;
-                case Keyboard.Key.Space:
-                {
-                    if (this.playerContainer.PlayerShip.NearPlanet)
-                    {
-                        this.playerContainer.OnPlanetLanding();
-                    }
                 }; break;
                 default: break;
             }
@@ -188,7 +184,7 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 case Mouse.Button.Left:
                 {
-                    this.playerContainer.ActiveTransport.OpenFire();
+                    this.ObjectContainer.ControllingObject.OpenFire();
                 }; break;
                 default: break;
             }
@@ -205,74 +201,29 @@ namespace Project_Space___New_Live.modules.Controlers
             {
                 case Mouse.Button.Left:
                 {
-                    this.playerContainer.ActiveTransport.StopFire();
+                    this.ObjectContainer.ControllingObject.StopFire();
                 }; break;
                 default: break;
             }
         }
 
-
-        private void OnMouseMove(object sender, MouseMoveEventArgs Args)
-        {
-            if (this.playerContainer.CurrentMode == PlayerContainer.Mode.TankMode)
-            {
-                Vector2f coords = this.GameRenderer.GameView.Center - this.GameRenderer.GameView.Size / 2;
-                
-                float coordsDifX = -(this.playerContainer.ActiveTransport.Coords.X - coords.X) + (float)(Mouse.GetPosition().X);
-                float coordsDifY = -(this.playerContainer.ActiveTransport.Coords.Y - coords.Y) + (float)(Mouse.GetPosition().Y);
-                float newAngle = (float)(Math.Atan2(coordsDifY, coordsDifX));
-                this.playerContainer.PlayerTank.RotateTurret(newAngle);
-            }
-        }
-
-
+        /// <summary>
+        /// Отработка выхода курсора из области главной формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="Args"></param>
         private void OnMouseOut(object sender, MouseMoveEventArgs Args)
         {
-            this.playerContainer.ActiveTransport.StopFire();
-        }
-
-        /// <summary>
-        /// Обработка движений корабля
-        /// </summary>
-        private void Moving()
-        {
-            if (Forward)
-            {
-                this.playerContainer.ActiveTransport.MoveManager.GiveForwardThrust(this.playerContainer.ActiveTransport);
-            }
-            if (Reverse)
-            {
-                this.playerContainer.ActiveTransport.MoveManager.GiveReversThrust(this.playerContainer.ActiveTransport);
-            }
-            if (LeftFly)
-            {
-                this.playerContainer.ActiveTransport.MoveManager.GiveSideThrust(this.playerContainer.ActiveTransport, -1);
-            }
-            if (RightFly)
-            {
-                this.playerContainer.ActiveTransport.MoveManager.GiveSideThrust(this.playerContainer.ActiveTransport, 1);
-            }
-            if (LeftRotate)
-            {
-                this.playerContainer.ActiveTransport.MoveManager.GiveRotationThrust(this.playerContainer.ActiveTransport, -1);
-            }
-            if (RightRotate)
-            {
-                this.playerContainer.ActiveTransport.MoveManager.GiveRotationThrust(this.playerContainer.ActiveTransport, 1);
-            }
-            if (StopMoving)
-            {
-                this.playerContainer.ActiveTransport.MoveManager.FullStop(this.playerContainer.ActiveTransport);
-            }           
+            this.ObjectContainer.ControllingObject.StopFire();
         }
 
         /// <summary>
         /// Процесс работы контроллера
         /// </summary>
-        public override void Process()
+        public override void Process(List<ObjectSignature> signaturesCollection)
         {
+            this.TimerCheck();
             this.Moving();
-            this.RefreshFlags();
         }
 
         /// <summary>
@@ -280,14 +231,27 @@ namespace Project_Space___New_Live.modules.Controlers
         /// </summary>
         private void ShieldProcess()
         {
-            if (this.playerContainer.ActiveTransport.ShieldActive)//Если энергощит активен
+            if (this.ObjectContainer.ControllingObject.ShieldActive)//Если энергощит активен
             {
-                this.playerContainer.ActiveTransport.DeactivateShield();//деактивировать его
+                this.ObjectContainer.ControllingObject.DeactivateShield();//деактивировать его
             }
             else
             {
-                this.playerContainer.ActiveTransport.ActivateShield();//иначе активировать
+                this.ObjectContainer.ControllingObject.ActivateShield();//иначе активировать
             }
         }
+
+        /// <summary>
+        /// Проверка таймера сохранения данных
+        /// </summary>
+        private void TimerCheck()
+        {
+            if (this.dataSaverClock.ElapsedTime.AsSeconds() > 60)//если прошла минута с прошлой записи статистических данных
+            {
+                this.dataSaver.WriteData(this.ObjectContainer.WinCount, this.ObjectContainer.DeathCount, 0);//сделать новую запись
+                this.dataSaverClock.Restart();//перезапуск таймера
+            }
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Project_Space___New_Live.modules.Storages;
 using SFML.System;
 
 namespace Project_Space___New_Live.modules.GameObjects
@@ -10,63 +11,75 @@ namespace Project_Space___New_Live.modules.GameObjects
     /// </summary>
     public class ObjectSignature
     {
+
         /// <summary>
-        /// Индексы характеристик
+        /// Координаты
         /// </summary>
-        public enum CharactsKeys : int
+        private Vector2f coords;
+
+        /// <summary>
+        /// Масса
+        /// </summary>
+        private float mass;
+
+        /// <summary>
+        /// Размеры
+        /// </summary>
+        private Vector2f size;
+
+        /// <summary>
+        /// Скорость
+        /// </summary>
+        private float speed;
+
+        /// <summary>
+        /// Направление
+        /// </summary>
+        private float directon;
+
+        /// <summary>
+        /// Координаты
+        /// </summary>
+        public Vector2f Coords
         {
-            /// <summary>
-            /// Масса (double)
-            /// </summary>
-            Mass = 0,
-            /// <summary>
-            /// Размер (Vector2f)
-            /// </summary>
-            Size
-        }
-
-
-
-        /// <summary>
-        /// Количество характеристик в наборе
-        /// </summary>
-        protected int characteristicsCount;
-
-        /// <summary>
-        /// Коллекция харатеристик в сигнатуре
-        /// </summary>
-        private List<object> characteristics = new List<object>();
-
-        /// <summary>
-        /// Коллекция харатеристик в сигнатуре
-        /// </summary>
-        public List<object> Characteristics
-        {
-            get
-            {
-                return this.characteristics;
-            }
-        }
-
-
-        /// <summary>
-        /// Конструктор сигнатуры
-        /// </summary>
-        public ObjectSignature()
-        {
-            this.characteristicsCount = 0;
+            get { return coords; }
+            set { coords = value; }
         }
 
         /// <summary>
-        /// Добавить характеристику
+        /// Масса
         /// </summary>
-        /// <param name="value">Значение характеристики</param>
-        public void AddCharacteristics(object value)
+        public float Mass
         {
-            this.characteristics.Add(value);
-            this.characteristicsCount ++;
+            get { return mass; }
+            set { mass = value; }
         }
 
+        /// <summary>
+        /// Размеры
+        /// </summary>
+        public Vector2f Size
+        {
+            get { return size; }
+            set { size = value; }
+        }
 
+        /// <summary>
+        /// Скорость
+        /// </summary>
+        public float Speed
+        {
+            get { return speed; }
+            set { speed = value; }
+        }
+
+        /// <summary>
+        /// Направление
+        /// </summary>
+        public float Directon
+        {
+            get { return directon; }
+            set { directon = value; }
+        }
     }
 }

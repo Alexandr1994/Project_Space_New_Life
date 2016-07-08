@@ -41,26 +41,44 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 angle += (float)(2 * Math.PI);//вернуть его в пределы от 0 до 360 градусов
             }
-            foreach (SpeedVector vector in speedVectors)
-            {//Если среди существующих векторов присутствует вектор, поворот которого отличается от поворота нового вектора менее чем на 15 градусов
-                if (Math.Abs(vector.Angle - angle) < (Math.PI * 15) / 180)
-                {//то вместо создания нового вектора следует, изменить текущий
-                    if (maxSpeed > (vector.Speed + speed))
+            List<SpeedVector> codirectVectors = this.GetCodirectVectors(angle);
+            List<SpeedVector> counterdirectVectors = this.GetCounterdirectVectors(angle);
+            if (counterdirectVectors.Count != 0)
+            {
+                foreach (SpeedVector vector in counterdirectVectors)
+                {
+                    Vector2f oldVector = new Vector2f();
+                    oldVector.X = (float)(vector.Speed * Math.Cos(vector.Angle));
+                    oldVector.Y = (float)(vector.Speed * Math.Sin(vector.Angle));
+                    Vector2f newVector = new Vector2f();
+                    newVector.X = (float)(speed * Math.Cos(angle));
+                    newVector.Y = (float)(speed * Math.Sin(angle));
+                    float vectorProection = (float)((oldVector.X * newVector.X + oldVector.Y * newVector.Y) / vector.Speed);
+                    vector.SpeedAcceleration(vectorProection);
+                    //vector.SpeedAcceleration(-speed);
+                }
+                return;
+            }
+            if (codirectVectors.Count != 0)
+            {
+                foreach (SpeedVector vector in codirectVectors)
+                {
+                    if (this.ConstructResultVector().Speed < maxSpeed)
                     {
-                        vector.SpeedAcceleration(speed);
+                        Vector2f oldVector = new Vector2f();
+                        oldVector.X = (float)(vector.Speed * Math.Cos(vector.Angle));
+                        oldVector.Y = (float)(vector.Speed * Math.Sin(vector.Angle));
+                        Vector2f newVector = new Vector2f();
+                        newVector.X = (float)(speed * Math.Cos(angle));
+                        newVector.Y = (float)(speed * Math.Sin(angle));
+                        float vectorProection = (float)((oldVector.X * newVector.X + oldVector.Y * newVector.Y) / vector.Speed);
+                        vector.SpeedAcceleration(vectorProection);
+                        //vector.SpeedAcceleration(speed);
                     }
                     vector.VectorRotation(angle - vector.Angle);
-                    return;
-                }
-                if (vector.Angle > angle + (Math.PI / 2) || vector.Angle < (angle - Math.PI / 2))//Или вектор угол которого отличается на 180 градусов (PI)
-                {
-                    vector.SpeedAcceleration(-speed);
-                }
-                /*if ((Math.Abs(vector.Angle - (angle - (float)Math.PI)) < (1.5 * Math.PI / 180)) || (Math.Abs(angle - (vector.Angle - (float)Math.PI)) < (2 * Math.PI / 180)))
-                {//то скорость данного вектора уменьшится
-                    vector.SpeedAcceleration(-speed);
-                }*/
-            }//В противном случае требуется добавить новый вектор
+                } 
+                return;
+            }
             speedVectors.Add(new SpeedVector(speed, angle));    
         }
 
@@ -75,7 +93,7 @@ namespace Project_Space___New_Live.modules.GameObjects
             foreach (SpeedVector vector in this.speedVectors)
             {
                 float divAngle = (float)(vector.Angle - angle);
-                if (Math.Abs(divAngle) > -20 * Math.PI / 180 && Math.Abs(divAngle) < 20 * Math.PI / 180)
+                if (Math.Abs(divAngle) > -90 * Math.PI / 180 && Math.Abs(divAngle) < 90 * Math.PI / 180)
                 {
                     retVectors.Add(vector);
                 }
@@ -88,13 +106,13 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="angle">Угол поворота</param>
         /// <returns>Искомые вектора</returns>
-        private List<SpeedVector> GetContrdirectVectors(float angle)
+        private List<SpeedVector> GetCounterdirectVectors(float angle)
         {
             List<SpeedVector> retVectors = new List<SpeedVector>();
             foreach (SpeedVector vector in this.speedVectors)
             {
                 float divAngle = vector.Angle - angle;
-                if (Math.Abs(divAngle) > 160 * Math.PI / 180 && Math.Abs(divAngle) < 200 * Math.PI / 180)
+                if (Math.Abs(divAngle) > 90 * Math.PI / 180 && Math.Abs(divAngle) < 270 * Math.PI / 180)
                 {
                     retVectors.Add(vector);
                 }
@@ -106,10 +124,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Движение вперед
         /// </summary>
         /// <param name="transport">Транспортное средство</param>
-        public void GiveForwardThrust(Transport transport)
+        public void GiveForwardThrust(ActiveObject transport)
         {
-            Engine engine = transport.Equipment[(int)(Transport.EquipmentNames.Engine)] as Engine;//Получение двигателя транспортного средства
-            Battery battery = transport.Equipment[(int)(Transport.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
+            Engine engine = transport.Equipment[(int)(ActiveObject.EquipmentNames.Engine)] as Engine;//Получение двигателя транспортного средства
+            Battery battery = transport.Equipment[(int)(ActiveObject.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
             if (battery.Uncharge(engine.EnergyNeeds))
             {
                 float acceleration = (float)(engine.ForwardThrust / transport.Mass);
@@ -121,10 +139,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Реверс/задний ход
         /// </summary>
         /// <param name="transport">Транспортное средство</param>
-        public void GiveReversThrust(Transport transport)
+        public void GiveReversThrust(ActiveObject transport)
         {
-            Engine engine = transport.Equipment[(int)(Transport.EquipmentNames.Engine)] as Engine;//Получение двигателя транспортного средства
-            Battery battery = transport.Equipment[(int)(Transport.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
+            Engine engine = transport.Equipment[(int)(ActiveObject.EquipmentNames.Engine)] as Engine;//Получение двигателя транспортного средства
+            Battery battery = transport.Equipment[(int)(ActiveObject.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
             if (battery.Uncharge(engine.EnergyNeeds))
             {
                 float acceleration = (float)(engine.ShuntingThrust / transport.Mass);
@@ -137,10 +155,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="transport">Транспортное средство</param>
         /// <param name="directionSign">Знак направления</param>
-        public void GiveSideThrust(Transport transport, int directionSign)
+        public void GiveSideThrust(ActiveObject transport, int directionSign)
         {
-            Engine engine = transport.Equipment[(int)(Transport.EquipmentNames.Engine)] as Engine;//Получение двигателя транспортного средства
-            Battery battery = transport.Equipment[(int)(Transport.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
+            Engine engine = transport.Equipment[(int)(ActiveObject.EquipmentNames.Engine)] as Engine;//Получение двигателя транспортного средства
+            Battery battery = transport.Equipment[(int)(ActiveObject.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
             if (battery.Uncharge(engine.EnergyNeeds))
             {
                 float acceleration = (float)(engine.ShuntingThrust / transport.Mass);
@@ -154,10 +172,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="transport">Транспортное средство</param>
         /// <param name="Sign">Знак направления</param>
-        public void GiveRotationThrust(Transport transport, int Sign)
+        public void GiveRotationThrust(ActiveObject transport, int Sign)
         {
-            Engine engine = transport.Equipment[(int)(Transport.EquipmentNames.Engine)] as Engine;//Получение двигателя транспортного средства
-            Battery battery = transport.Equipment[(int)(Transport.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
+            Engine engine = transport.Equipment[(int)(ActiveObject.EquipmentNames.Engine)] as Engine;//Получение двигателя транспортного средства
+            Battery battery = transport.Equipment[(int)(ActiveObject.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
             if (battery.Uncharge(engine.EnergyNeeds))
             {
                 Sign = (Sign / Math.Abs(Sign));
@@ -188,10 +206,10 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Торможение
         /// </summary>
         /// <param name="transport">Транспортное средство</param>
-        public void FullStop(Transport transport)
+        public void FullStop(ActiveObject transport)
         {//Ликвидация всех векторов движения
-            Engine engine = transport.Equipment[(int)(Transport.EquipmentNames.Engine)] as Engine;//Получение двигателя транспортного средства
-            Battery battery = transport.Equipment[(int)(Transport.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
+            Engine engine = transport.Equipment[(int)(ActiveObject.EquipmentNames.Engine)] as Engine;//Получение двигателя транспортного средства
+            Battery battery = transport.Equipment[(int)(ActiveObject.EquipmentNames.Battery)] as Battery;//получение батареи транспортного средства
             float acceleration = (float)(engine.ShuntingThrust / transport.Mass);//Прямолинейное торможение
             if (this.speedVectors.Count > 0)
             {
@@ -225,7 +243,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Вращение транспортного средства
         /// </summary>
         /// <param name="Sign">Транспортное средство</param>
-        public void Rotate(Transport transport)
+        public void Rotate(ActiveObject transport)
         {
             double acceleration = Math.Sqrt(transport.Environment.MovingResistance) * Math.PI / 180;
             if (Math.Abs(this.rotationSpeed) < acceleration)//стабилизация вращения
@@ -248,15 +266,15 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// Процесс движения транспортного средства
         /// </summary>
         /// <param name="transport">Транспортное средство</param>
-        public void Process(Transport transport)
+        public void Process(ActiveObject transport)
         {
-            (transport.Equipment[(int)(Transport.EquipmentNames.Engine)]).Deactivate();//Итерационная деактивация двигателя (Двигатель работает с энергозапасом самостоятельно)
+            (transport.Equipment[(int)(ActiveObject.EquipmentNames.Engine)]).Deactivate();//Итерационная деактивация двигателя (Двигатель работает с энергозапасом самостоятельно)
             this.Rotate(transport);//Вразение
             SpeedVector movingVector = this.ConstructResultVector();
             transport.ShipAtomMoving(movingVector.Speed, movingVector.Angle);//вычисление координат по текущему вектору
             foreach (SpeedVector vector in speedVectors)//Прямолинейное смещение
             {
-                vector.SpeedAcceleration((float)- transport.Environment.MovingResistance);//уменьшение скорости на константу
+                vector.SpeedAcceleration((float)-transport.Environment.MovingResistance);//уменьшение скорости на константу
             }
             this.speedVectors.RemoveAll(vector => vector.Speed < 0.1);//Удаление векторов с нулевой скоростью
         }
@@ -307,13 +325,22 @@ namespace Project_Space___New_Live.modules.GameObjects
             contacterNoveManager.ConstructAfterCrashSpeedVector(contacterSpeedVector, ownSpeedVector, contacterMass, ownMass, angle);
         }
 
+
+        public void CrashMove(float ownMass, float contacterMass, float angle)
+        {
+            SpeedVector ownSpeedVector = this.ConstructResultVector();
+            SpeedVector contacterSpeedVector = new SpeedVector(0, 0);
+            this.speedVectors.Clear();//работа с собственными векторами
+            this.ConstructAfterCrashSpeedVector(ownSpeedVector, contacterSpeedVector, ownMass, contacterMass, angle);
+        }
+
         /// <summary>
         /// Движение объекта после попадания
         /// </summary>
         /// <param name="transport">Объект</param>
         /// <param name="shellSpeedVector">Вектор скорости снаряда</param>
         /// <param name="shellMass">Масса снаряда</param>
-        public void ShellHit(Transport transport, SpeedVector shellSpeedVector, float shellMass)
+        public void ShellHit(ActiveObject transport, SpeedVector shellSpeedVector, float shellMass)
         {
             this.OnShellReaction(transport, shellSpeedVector, shellMass);
         }
@@ -324,7 +351,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="transport">Объект</param>
         /// <param name="shellSpeedVector"></param>
         /// <param name="shellMass"></param>
-        public void ShellShoot(Transport transport, SpeedVector shellSpeedVector, float shellMass)
+        public void ShellShoot(ActiveObject transport, SpeedVector shellSpeedVector, float shellMass)
         {
             SpeedVector newSpeedVector = new SpeedVector(shellSpeedVector.Speed, (float)(shellSpeedVector.Angle + Math.PI));
             this.OnShellReaction(transport, newSpeedVector, shellMass);
@@ -336,9 +363,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="transport">Объект</param>
         /// <param name="shellSpeedVector">Вектор скорости снаряда</param>
         /// <param name="shellMass">Масса снаряда</param>
-        private void OnShellReaction(Transport transport, SpeedVector shellSpeedVector, float shellMass)
+        private void OnShellReaction(ActiveObject transport, SpeedVector shellSpeedVector, float shellMass)
         {
-            Engine engine = transport.Equipment[(int)(Transport.EquipmentNames.Engine)] as Engine;//Получение двигателя корабля
+            Engine engine = transport.Equipment[(int)(ActiveObject.EquipmentNames.Engine)] as Engine;//Получение двигателя корабля
             this.AddNewSpeedVector((float)((shellMass * shellSpeedVector.Speed) / transport.Mass), shellSpeedVector.Angle, engine.MaxForwardSpeed);
         }
 

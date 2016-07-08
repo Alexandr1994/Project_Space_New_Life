@@ -91,35 +91,50 @@
   <ItemGroup>
     <Compile Include="modules\Controlers\AbstractController.cs" />
     <Compile Include="modules\Controlers\ComputerController.cs" />
-    <Compile Include="modules\Controlers\Forms\LinearBar.cs" />
-    <Compile Include="modules\Controlers\Forms\Button.cs" />
-    <Compile Include="modules\Controlers\Forms\CircleButton.cs" />
-    <Compile Include="modules\Controlers\Forms\Form.cs" />
-    <Compile Include="modules\Controlers\Forms\MainForm.cs" />
-    <Compile Include="modules\Controlers\Forms\Panel.cs" />
-    <Compile Include="modules\Controlers\Forms\RadarScreen.cs" />
-    <Compile Include="modules\Controlers\Forms\RectPanel.cs" />
-    <Compile Include="modules\Controlers\Forms\RectButton.cs" />
-    <Compile Include="modules\Controlers\InterfaceParts\PlayerStateIndicator.cs" />
+    <Compile Include="modules\Dispatchers\DataSaver.cs" />
+    <Compile Include="modules\Forms\ActiveLabel.cs" />
+    <Compile Include="modules\Forms\ImageForm.cs" />
+    <Compile Include="modules\Forms\InvisiblePanel.cs" />
+    <Compile Include="modules\Forms\Label.cs" />
+    <Compile Include="modules\Forms\LinearBar.cs" />
+    <Compile Include="modules\Forms\Button.cs" />
+    <Compile Include="modules\Forms\CircleButton.cs" />
+    <Compile Include="modules\Forms\Form.cs" />
+    <Compile Include="modules\Forms\MainForm.cs" />
+    <Compile Include="modules\Forms\Panel.cs" />
+    <Compile Include="modules\Forms\RadarScreen.cs" />
+    <Compile Include="modules\Forms\RectPanel.cs" />
+    <Compile Include="modules\Forms\RectButton.cs" />
+    <Compile Include="modules\Forms\TextForm.cs" />
+    <Compile Include="modules\NeronNetwork\ActivationFunction.cs" />
+    <Compile Include="modules\NeronNetwork\KohonenNetwork.cs" />
+    <Compile Include="modules\NeronNetwork\LearningHelper.cs" />
+    <Compile Include="modules\NeronNetwork\Neron.cs" />
+    <Compile Include="modules\NeronNetwork\NeronNetwork.cs" />
+    <Compile Include="modules\NeronNetwork\Perceptron.cs" />
+    <Compile Include="modules\NeronNetwork\SingleLayerNetwork.cs" />
+    <Compile Include="modules\NeronNetwork\VectorsOperations.cs" />
+    <Compile Include="modules\Storages\CharacterLimmits.cs" />
+    <Compile Include="modules\Storages\FontsStorage.cs" />
+    <Compile Include="modules\DataTypes\RenderView.cs" />
     <Compile Include="modules\Dispatchers\GameRoot.cs" />
     <Compile Include="modules\Controlers\PlayerController.cs" />
-    <Compile Include="modules\Dispatchers\PlayerContainer.cs" />
+    <Compile Include="modules\Dispatchers\ObjectContainer.cs" />
     <Compile Include="modules\Dispatchers\PlayerInterfaceContainer.cs" />
     <Compile Include="modules\Dispatchers\RenderModule.cs" />
-    <Compile Include="modules\Dispatchers\ObjectView.cs" />
+    <Compile Include="modules\DataTypes\ImageView.cs" />
     <Compile Include="modules\Dispatchers\ResurceStorage.cs" />
+    <Compile Include="modules\DataTypes\TextView.cs" />
     <Compile Include="modules\GameObjects\ActiveObject.cs" />
-    <Compile Include="modules\GameObjects\Environments\BaseEnvironment.cs" />
-    <Compile Include="modules\GameObjects\Environments\BattleField.cs" />
-    <Compile Include="modules\GameObjects\Tank.cs" />
-    <Compile Include="modules\GameObjects\Transport.cs" />
+    <Compile Include="modules\GameObjects\CheckPoint.cs" />
+    <Compile Include="modules\GameObjects\BaseEnvironment.cs" />
+    <Compile Include="modules\GameObjects\OrbitalCheckPoint.cs" />
+    <Compile Include="modules\GameObjects\StableCheckPoint.cs" />
     <Compile Include="modules\GameObjects\VisualEffect.cs" />
     <Compile Include="modules\GameObjects\GameEntity.cs" />
     <Compile Include="modules\GameObjects\GameObject.cs" />
-    <Compile Include="modules\GameObjects\LocalMassCenter.cs" />
     <Compile Include="modules\GameObjects\ObjectSignature.cs" />
     <Compile Include="modules\GameObjects\Shell.cs" />
-    <Compile Include="modules\GameObjects\Ship.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\Battery.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\Engine.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\Radar.cs" />
@@ -127,19 +142,19 @@
     <Compile Include="modules\GameObjects\ActiveObjectsModules\Shield.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\Equipment.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\MoveManager.cs" />
-    <Compile Include="modules\GameObjects\ActiveObjectsModules\SpeedVector.cs" />
+    <Compile Include="modules\DataTypes\SpeedVector.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\Weapon.cs" />
     <Compile Include="modules\GameObjects\ActiveObjectsModules\WeaponSystem.cs" />
-    <Compile Include="modules\GameObjects\SphereObject.cs" />
-    <Compile Include="modules\GameObjects\Star.cs" />
-    <Compile Include="modules\GameObjects\Planet.cs" />
-    <Compile Include="modules\GameObjects\Environments\StarSystem.cs" />
-    <Compile Include="modules\GameObjects\Wall.cs" />
+    <Compile Include="modules\Storages\ImageStorage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ActiveObject Classes.cd" />
+    <None Include="ControlClasses.cd" />
+    <None Include="Environment Classes.cd" />
+    <None Include="Neronetworks.cd" />
     <None Include="packages.config" />
     <None Include="Project Space - New Live_TemporaryKey.pfx" />
   </ItemGroup>
@@ -160,6 +175,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Baseclass.Contrib.Nuget.Output.1.0.7\build\net40\Baseclass.Contrib.Nuget.Output.targets" Condition="Exists('packages\Baseclass.Contrib.Nuget.Output.1.0.7\build\net40\Baseclass.Contrib.Nuget.Output.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

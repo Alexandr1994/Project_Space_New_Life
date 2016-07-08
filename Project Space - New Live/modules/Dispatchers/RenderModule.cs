@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Project_Space___New_Live.modules.Controlers.Forms;
+using Project_Space___New_Live.modules.Forms;
 using Project_Space___New_Live.modules.GameObjects;
 using SFML.Graphics;
 using SFML.System;
@@ -157,25 +157,26 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void RenderProcess()
         {
             this.ViewControl();
-            foreach (ObjectView view in this.Form.RenderForm())
+            foreach (RenderView view in this.Form.RenderForm())
             {
-                mainWindow.Draw(view.Image, view.State);
+                mainWindow.Draw(view.View as Drawable, view.State);
             }
         }
 
         /// <summary>
         /// Метод отрисовки (игровых объектов и интерфейса)
         /// </summary>
-        /// <param name="activeEnvironment">Активная звездная система</param>
-        public void RenderProcess(BaseEnvironment activeEnvironment)
+        /// <param name="activeBaseEnvironmentтивная звездная система</param>
+        public void RenderProcess(BaseEnvironment activeBaseEnvironment)
         {
             this.ViewControl();
-            List<ObjectView> views = new List<ObjectView>();
-            views.AddRange(activeEnvironment.GetView());
+            List<RenderView> views = new List<RenderView>();
+            views.AddRange(activeBaseEnvironment.GetView());
             views.AddRange(this.Form.RenderForm());
-            foreach (ObjectView view in views)
+
+            foreach (RenderView view in views)
             {
-               mainWindow.Draw(view.Image, view.State);
+                mainWindow.Draw(view.View as Drawable, view.State);
             }
         }
     }

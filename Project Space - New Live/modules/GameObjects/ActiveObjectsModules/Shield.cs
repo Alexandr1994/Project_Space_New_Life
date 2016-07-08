@@ -16,25 +16,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         }
 
         /// <summary>
-        /// Направления модификации генератора энергощита
-        /// </summary>
-        public enum UpgrateDirectionID : int
-        {
-            /// <summary>
-            /// базовая версия
-            /// </summary>
-            Base = 0,
-            /// <summary>
-            /// Улучшение характеристик мощности экрана энергощита
-            /// </summary>
-            DefencivePower,
-            /// <summary>
-            /// Улучшение характеристик восстановления экрана энергощита
-            /// </summary>
-            RegenerationPower
-        }
-
-        /// <summary>
         /// Текущая мощность экрана щита
         /// </summary>
         private int shieldPower;
@@ -96,7 +77,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             this.SetCommonCharacteristics(mass, energyNeeds, image);//сохранение общих характеристик
             //установка текущих характеристик двигательной установки и сохранение базовых характеристик
-            this.baseMaxShieldPower = this.maxShieldPower = maxShieldPower;
+            this.shieldPower = this.baseMaxShieldPower = this.maxShieldPower = maxShieldPower;
             this.shieldRegeneration = shieldRegeneration;
             this.baseShieldRegeneration = baseShieldRegeneration;
             this.state = false;
@@ -108,9 +89,9 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <returns>true - удалось активировать, false - не удалось</returns>
         public override bool Activate()
         {
-            if (!this.emergensyState)//если щит не в аварийном состоянии
+            if (!this.emergensyState && this.shieldPower > 0)//если щит не в аварийном состоянии
             {//то установить текущую мощность экрана в максимальную и установить состояние в активное
-                this.shieldPower = this.maxShieldPower;
+                //this.shieldPower = this.maxShieldPower;
                 this.state = true;
                 return true;//вернуть true
             }
@@ -122,7 +103,6 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         public override void Deactivate()
         {
-            this.shieldPower = 0;
             this.state = false;
         }
 
@@ -140,11 +120,14 @@ namespace Project_Space___New_Live.modules.GameObjects
             else
             {
                 this.Deactivate();
+                this.shieldPower = 0;
+
             }
             this.Wearing(equipmentDamage);
             if (emergensyState)
             {
                 this.Deactivate();
+                this.shieldPower = 0;
             }
         }
 
@@ -153,15 +136,24 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         protected override void CustomModification()
         {
-            //определение количества модификаций по возможным направлениям
-            int defenciveUpdates = this.upgrateDirectionsHistory.Count(i => i == (int)UpgrateDirectionID.DefencivePower);
-            int regenerationUpdates = this.upgrateDirectionsHistory.Count(i => i == (int)UpgrateDirectionID.RegenerationPower);
-            //Изменение текущих параметров по направлению улучшения мощности экрана щита
-            this.maxShieldPower = this.baseMaxShieldPower + (defenciveUpdates * this.baseMaxShieldPower);
-
-            //Изменение текущих параметров по направлению улучшения восстанавливаемости экрана щита
-            this.shieldRegeneration = regenerationUpdates * this.baseShieldRegeneration;
-
+            this.maxShieldPower = this.baseMaxShieldPower + (this.Version * this.baseMaxShieldPower);
+            this.shieldRegeneration = this.Version * this.baseShieldRegeneration;
         }
+
+        /// <summary>
+        /// Восстановление ресурса щита
+        /// </summary>
+        public void RegenerateShield(int recoveryValue)
+        {
+            if (this.shieldPower + recoveryValue < this.MaxShieldPower)
+            {
+                this.shieldPower += recoveryValue;
+            }
+            else
+            {
+                this.shieldPower = this.MaxShieldPower;
+            }
+        }
+
     }
 }
