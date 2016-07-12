@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.System;
+using SFML.Window;
 
 namespace Project_Space___New_Live.modules.GameObjects
 {
@@ -122,6 +123,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <returns>Снаряд или null, если огонь не ведется или не может быть открыт</returns>
         public Shell Process(ActiveObject shooter)
         {
+
             if (this.shooting)//если ведется огонь
             {
                 if (this.shootingTimer.ElapsedTime.AsMilliseconds() > this.ActiveWeapon.ShootingTimeDelay)//и если прошла задержка между выстрелами

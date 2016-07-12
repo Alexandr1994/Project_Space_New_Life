@@ -91,7 +91,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         {
             if (!this.emergensyState && this.shieldPower > 0)//если щит не в аварийном состоянии
             {//то установить текущую мощность экрана в максимальную и установить состояние в активное
-                //this.shieldPower = this.maxShieldPower;
+                this.shieldPower = this.maxShieldPower;
                 this.state = true;
                 return true;//вернуть true
             }
@@ -121,7 +121,6 @@ namespace Project_Space___New_Live.modules.GameObjects
             {
                 this.Deactivate();
                 this.shieldPower = 0;
-
             }
             this.Wearing(equipmentDamage);
             if (emergensyState)

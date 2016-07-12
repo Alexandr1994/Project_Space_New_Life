@@ -143,9 +143,10 @@ namespace Project_Space___New_Live.modules.GameObjects
             this.objectBattery = new Battery(100, 500, null);//энергобатарея
             this.objectRadar  = new Radar(20, 2500, null);//радар
             this.objectShield = new Shield(20, 3, 100, 0, 1, null);//энергощит 
+
             this.objectWeaponSystem = new WeaponSystem(3);
-      //      this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0], ResurceStorage.shellHitting}, null));
-   //         this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(1 * Math.PI / 180), 100, 50, 5000, 25, 1, new Vector2f(25, 1), new Texture[] { ResurceStorage.rectangleButtonTextures[2], ResurceStorage.shellHitting}, null));
+            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 0, (float) (5*Math.PI/180), 100, 100, 1000, 15, 10, new Vector2f(5, 2), new Texture[] {ResurceStorage.rectangleButtonTextures[0], ResurceStorage.shellHitting}, null));
+            this.objectWeaponSystem.AddWeapon(new Weapon(25, 1, 5, 5, 0, 1, (float)(1 * Math.PI / 180), 100, 50, 5000, 25, 1, new Vector2f(25, 1), new Texture[] { ResurceStorage.rectangleButtonTextures[2], ResurceStorage.shellHitting}, null));
         }
 
         /// <summary>
@@ -270,10 +271,10 @@ namespace Project_Space___New_Live.modules.GameObjects
                     case "Shell"://обработка контакта со снарядом
                     {
                         Shell shell = interactObject as Shell;
-                    /*    if (shell.ShooterObject == this)//если снаряд выпущен данным кораблем
+                        if (shell.ShooterObject == this)//если снаряд выпущен данным кораблем
                         {
                             continue;//то переходим к анализу сдежующего объекта
-                        }*/
+                        }
                         for (int i = 0; i < this.View.Length; i ++)
                         {
                             if (this.View[i].BorderContactAnalize(shell.View[(int)(Shell.ShellParts.Core)]))//если произошло пересечение отображений корабля и снаряда
