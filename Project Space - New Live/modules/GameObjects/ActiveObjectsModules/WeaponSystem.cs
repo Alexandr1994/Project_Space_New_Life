@@ -120,7 +120,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// </summary>
         /// <param name="shooter">Объект стрелок</param>
         /// <returns>Снаряд или null, если огонь не ведется или не может быть открыт</returns>
-        public Shell Process(ActiveObject1 shooter)
+        public Shell Process(ActiveObject shooter)
         {
             if (this.shooting)//если ведется огонь
             {

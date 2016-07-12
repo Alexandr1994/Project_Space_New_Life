@@ -54,12 +54,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <summary>
         /// Экземпляр среды, в которой находится данный объект
         /// </summary>
-        protected aBaseEnvironment environment;
+        protected BaseEnvironment environment;
 
         /// <summary>
         /// Экземпляр среды, в которой находится данный объект
         /// </summary>
-        public aBaseEnvironment Environment
+        public BaseEnvironment Environment
         {
             get { return this.environment; }
             set { this.environment = value; }

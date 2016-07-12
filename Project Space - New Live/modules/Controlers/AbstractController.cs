@@ -16,7 +16,7 @@ namespace Project_Space___New_Live.modules
         /// <summary>
         /// Ссылка на хранилище управляемых объектов
         /// </summary>
-        protected ObjectContainer ObjectContainer = null;
+        protected Transport ControllingObject = null;
 
         //Общие флаги управления
 
@@ -36,42 +36,33 @@ namespace Project_Space___New_Live.modules
         {
             if (LeftRotate)
             {
-                this.ObjectContainer.ControllingObject.MoveManager.GiveRotationThrust(this.ObjectContainer.ControllingObject, -1);
+                this.ControllingObject.MoveManager.GiveRotationThrust(this.ControllingObject, -1);
             }
             if (RightRotate)
             {
-                this.ObjectContainer.ControllingObject.MoveManager.GiveRotationThrust(this.ObjectContainer.ControllingObject, 1);
+                this.ControllingObject.MoveManager.GiveRotationThrust(this.ControllingObject, 1);
             }
             if (Forward)
             {
-                this.ObjectContainer.ControllingObject.MoveManager.GiveForwardThrust(this.ObjectContainer.ControllingObject);
+                this.ControllingObject.MoveManager.GiveForwardThrust(this.ControllingObject);
             }
             if (Reverse)
             {
-                this.ObjectContainer.ControllingObject.MoveManager.GiveReversThrust(this.ObjectContainer.ControllingObject);
+                this.ControllingObject.MoveManager.GiveReversThrust(this.ControllingObject);
             }
             if (LeftFly)
             {
-                this.ObjectContainer.ControllingObject.MoveManager.GiveSideThrust(this.ObjectContainer.ControllingObject, -1);
+                this.ControllingObject.MoveManager.GiveSideThrust(this.ControllingObject, -1);
             }
             if (RightFly)
             {
-                this.ObjectContainer.ControllingObject.MoveManager.GiveSideThrust(this.ObjectContainer.ControllingObject, 1);
+                this.ControllingObject.MoveManager.GiveSideThrust(this.ControllingObject, 1);
             }
             if (StopMoving)
             {
-                this.ObjectContainer.ControllingObject.MoveManager.FullStop(this.ObjectContainer.ControllingObject);
+                this.ControllingObject.MoveManager.FullStop(this.ControllingObject);
             }
         }
-
-        /// <summary>
-        /// Инкремент счетчика побед
-        /// </summary>
-        public void AddWin()
-        {
-            this.ObjectContainer.AddWin();
-        }
-
 
         /// <summary>
         /// Процесс работы контроллера

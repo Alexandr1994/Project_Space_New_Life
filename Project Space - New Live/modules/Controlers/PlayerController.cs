@@ -41,10 +41,10 @@ namespace Project_Space___New_Live.modules
         /// Конструктор
         /// </summary>
         /// <param name="playerObject">Корабль игрока</param>
-        private PlayerController()
+        private PlayerController(Transport controllingObject)
         {
+            this.ControllingObject = controllingObject;
             this.dataSaverClock = new Clock();//инициализация таймера записи
-            this.dataSaver = new DataSaver("human_data");//инициализация файла для сохранения данных
             this.GameRenderer = RenderModule.getInstance();//Получение класса отрисовщика
             this.GameRenderer.MainWindow.KeyPressed += this.OnKey;
             this.GameRenderer.MainWindow.KeyReleased += this.FromKey;
@@ -57,11 +57,11 @@ namespace Project_Space___New_Live.modules
         /// Получение экзепляра класса игрового контроллера
         /// </summary>
         /// <returns>Ссылка на экземпляр ручного контроллера</returns>
-        public static PlayerController GetInstanse()
+        public static PlayerController GetInstanse(Transport controllingObject)
         {
             if (GameController == null)
             {
-                GameController = new PlayerController();
+                GameController = new PlayerController(controllingObject);
             }
             return GameController;
         }
@@ -70,9 +70,9 @@ namespace Project_Space___New_Live.modules
         /// Переустановка Контейнера Игрока
         /// </summary>
         /// <param name="newContainer"></param>
-        public void SetNewController(ObjectContainer newContainer)
+        public void SetNewController(Transport newContainer)
         {
-            this.ObjectContainer = newContainer;
+            this.ControllingObject = newContainer;
         }
 
         /// <summary>
@@ -114,15 +114,15 @@ namespace Project_Space___New_Live.modules
                 }; break;
                 case Keyboard.Key.Num1:
                 {
-                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);
+                    this.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);
                 }; break;
                 case Keyboard.Key.Num2:
                 {
-                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(1);
+                    this.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(1);
                 }; break;
                 case Keyboard.Key.Num3:
                 {
-                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(2);
+                    this.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(2);
                 }; break;
                 case Keyboard.Key.LControl:
                 {
@@ -184,7 +184,7 @@ namespace Project_Space___New_Live.modules
             {
                 case Mouse.Button.Left:
                 {
-                    this.ObjectContainer.ControllingObject.OpenFire();
+                    this.ControllingObject.OpenFire();
                 }; break;
                 default: break;
             }
@@ -201,7 +201,7 @@ namespace Project_Space___New_Live.modules
             {
                 case Mouse.Button.Left:
                 {
-                    this.ObjectContainer.ControllingObject.StopFire();
+                    this.ControllingObject.StopFire();
                 }; break;
                 default: break;
             }
@@ -214,7 +214,7 @@ namespace Project_Space___New_Live.modules
         /// <param name="Args"></param>
         private void OnMouseOut(object sender, MouseMoveEventArgs Args)
         {
-            this.ObjectContainer.ControllingObject.StopFire();
+            this.ControllingObject.StopFire();
         }
 
         /// <summary>
@@ -231,13 +231,13 @@ namespace Project_Space___New_Live.modules
         /// </summary>
         private void ShieldProcess()
         {
-            if (this.ObjectContainer.ControllingObject.ShieldActive)//Если энергощит активен
+            if (this.ControllingObject.ShieldActive)//Если энергощит активен
             {
-                this.ObjectContainer.ControllingObject.DeactivateShield();//деактивировать его
+                this.ControllingObject.DeactivateShield();//деактивировать его
             }
             else
             {
-                this.ObjectContainer.ControllingObject.ActivateShield();//иначе активировать
+                this.ControllingObject.ActivateShield();//иначе активировать
             }
         }
 
@@ -248,7 +248,7 @@ namespace Project_Space___New_Live.modules
         {
             if (this.dataSaverClock.ElapsedTime.AsSeconds() > 60)//если прошла минута с прошлой записи статистических данных
             {
-                this.dataSaver.WriteData(this.ObjectContainer.WinCount, this.ObjectContainer.DeathCount, 0);//сделать новую запись
+             //   this.dataSaver.WriteData(this.ObjectContainer.WinCount, this.ObjectContainer.DeathCount, 0);//сделать новую запись
                 this.dataSaverClock.Restart();//перезапуск таймера
             }
         }

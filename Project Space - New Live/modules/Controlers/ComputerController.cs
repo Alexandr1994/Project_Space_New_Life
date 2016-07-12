@@ -121,11 +121,10 @@ namespace Project_Space___New_Live.modules
         /// <summary>
         /// Конструктор компьтерного контроллера
         /// </summary>
-        /// <param name="ObjectContainer"></param>
-        public ComputerController(ObjectContainer ObjectContainer, String dataFileName, int decisionTime = 1000)
+        /// <param name="ControllingObject"></param>
+        public ComputerController(Transport ControllingObject, int decisionTime = 1000)
         {
-            this.ObjectContainer = ObjectContainer;
-            this.dataSaver = new DataSaver(dataFileName);
+            this.ControllingObject = ControllingObject;
             this.decisionTime = decisionTime;
             this.dataSaverClock = new Clock();//запуск таймеров
             this.decisionClock = new Clock(); ;
@@ -152,8 +151,8 @@ namespace Project_Space___New_Live.modules
             }
             else
             {
-                float maxSpeed = (this.ObjectContainer.ControllingObject.Equipment[(int)(ActiveObject1.EquipmentNames.Engine)] as Engine).MaxForwardSpeed;
-                float currentSpeed = this.ObjectContainer.ControllingObject.MoveManager.ConstructResultVector().Speed;
+                float maxSpeed = (this.ControllingObject.Equipment[(int)(Transport.EquipmentNames.Engine)] as Engine).MaxForwardSpeed;
+                float currentSpeed = this.ControllingObject.MoveManager.ConstructResultVector().Speed;
                 double speedPersent = 100 * currentSpeed / maxSpeed;
                 if (speedPersent < 25)
                 {
@@ -175,10 +174,10 @@ namespace Project_Space___New_Live.modules
         /// <param name="dangerRadius">Радиус опасной зоны, около цели (По-умолчанию 0)</param>
         private void RotateToTarget(Vector2f targetCoords, float dangerRadius = 0)
         {
-            Vector2f divCoords = targetCoords - this.ObjectContainer.ControllingObject.Coords;//Вычисление основынх параметров
+            Vector2f divCoords = targetCoords - this.ControllingObject.Coords;//Вычисление основынх параметров
             float distance = (float)(Math.Sqrt(Math.Pow(divCoords.X, 2) + Math.Pow(divCoords.Y, 2)));
             float relativeAngle = (float) (Math.Atan2(divCoords.Y,  divCoords.X));
-            float angleBetween = this.FindAngleBetweenVectors(this.ObjectContainer.ControllingObject.Coords, this.ObjectContainer.ControllingObject.Rotation, targetCoords);
+            float angleBetween = this.FindAngleBetweenVectors(this.ControllingObject.Coords, this.ControllingObject.Rotation, targetCoords);
             if (angleBetween > 5 * Math.PI / 180)//если угол между векторами направление и положения цели больше порога
             {
                 if (distance > dangerRadius)//если расстояние до цели больше радиуса опасной зоны
@@ -187,7 +186,7 @@ namespace Project_Space___New_Live.modules
                     {
                         return;//если объект в мертвой зоне сохранить его предыдушее состояние
                     }
-                    if (relativeAngle < this.ObjectContainer.ControllingObject.Rotation)//иначе оценить куда нужно произвести поворот и установить соответствующие флаги
+                    if (relativeAngle < this.ControllingObject.Rotation)//иначе оценить куда нужно произвести поворот и установить соответствующие флаги
                     {
                         this.LeftRotate = true;
                         this.RightRotate = false;
@@ -200,7 +199,7 @@ namespace Project_Space___New_Live.modules
                 }
                 else
                 {//если же объект находится в радиусе опасной зоны
-                    if (relativeAngle >= this.ObjectContainer.ControllingObject.Rotation)//то начать уклонение
+                    if (relativeAngle >= this.ControllingObject.Rotation)//то начать уклонение
                     {
                         this.LeftRotate = true;
                         this.RightRotate = false;
@@ -216,7 +215,7 @@ namespace Project_Space___New_Live.modules
             {
                 if (distance <= dangerRadius)//то оценить нахождение в опасной зоне
                 {
-                    if (relativeAngle >= this.ObjectContainer.ControllingObject.Rotation)//и начать уклонение если требуется
+                    if (relativeAngle >= this.ControllingObject.Rotation)//и начать уклонение если требуется
                     {
                         this.LeftRotate = true;
                         this.RightRotate = false;
@@ -285,7 +284,7 @@ namespace Project_Space___New_Live.modules
             this.EnergyAnalise();//производим анализ энергозапаса 
             if (float.IsNaN(this.enemy.Coords.X) || float.IsNaN(this.enemy.Coords.Y))//если противник не обнаружен
             {
-                this.MoveToTarget(this.ObjectContainer.ControllingObject.GetTargetCheckPoint().Coords);//двигаться к целевой контрольной точке (Стратегия Игнорирования)
+            //    this.MoveToTarget(this.ControllingObject.GetTargetCheckPoint().Coords);//двигаться к целевой контрольной точке (Стратегия Игнорирования)
             }
             else
             {
@@ -325,8 +324,8 @@ namespace Project_Space___New_Live.modules
             }
             else
             {
-                if (this.ObjectContainer.GetHealh() < 25 ||
-                    !this.ObjectContainer.ControllingObject.ObjectWeaponSystem.HasAmmo)
+                if ((this.ControllingObject.Health / this.ControllingObject.MaxHealth) < 25 ||
+                    !this.ControllingObject.ObjectWeaponSystem.HasAmmo)
                 {
                     this.currentDecistion = Decistion.Avoid;
                 }
@@ -346,9 +345,9 @@ namespace Project_Space___New_Live.modules
         {
             List<double> inputVector = new List<double>();
             //составояющая собственной боеспособности
-            inputVector.Add(this.ObjectContainer.GetHealh() / 100);//оставшийся запас прочности
+       /*     inputVector.Add(this.ObjectContainer.GetHealh() / 100);//оставшийся запас прочности
             inputVector.Add(this.ObjectContainer.GetEnergy() / 100);//количество энергии
-            foreach (Equipment equipment in this.ObjectContainer.ControllingObject.Equipment)
+            foreach (Equipment equipment in this.ControllingObject.Equipment)
             //вектор состояния оборудования
             {
                 inputVector.Add(equipment.WearState/100);
@@ -376,7 +375,7 @@ namespace Project_Space___New_Live.modules
             inputVector.Add(this.enemy.Speed);
             inputVector.Add(CharacterLimmits.NormSize(this.enemy.Size).X);
             inputVector.Add(CharacterLimmits.NormSize(this.enemy.Size).Y);
-            inputVector.Add(CharacterLimmits.NormMass(enemy.Mass));
+            inputVector.Add(CharacterLimmits.NormMass(enemy.Mass));*/
             //сформированный входной вектор
             return inputVector;
         }
@@ -394,12 +393,12 @@ namespace Project_Space___New_Live.modules
                 }; break;
                 case Decistion.Avoid://избегание
                 {
-                    this.MoveToTarget(this.ObjectContainer.ControllingObject.GetHomeCheckPoint().Coords, 0);//иначе двигаться к домашней контрольной точке
+                 //   this.MoveToTarget(this.ControllingObject.GetHomeCheckPoint().Coords, 0);//иначе двигаться к домашней контрольной точке
                 }; break;
                 case Decistion.Ignore://игнорирование
                 default:
                 {
-                    this.MoveToTarget(this.ObjectContainer.ControllingObject.GetTargetCheckPoint().Coords);//двигаться к целевой контрольной точке
+                //    this.MoveToTarget(this.ControllingObject.GetTargetCheckPoint().Coords);//двигаться к целевой контрольной точке
                 }; break;
             }
         }
@@ -447,7 +446,7 @@ namespace Project_Space___New_Live.modules
             }
             if (this.dataSaverClock.ElapsedTime.AsSeconds() > 60)//если прошла минута с прошлой записи статистических данных
             {
-                this.dataSaver.WriteData(this.ObjectContainer.WinCount, this.ObjectContainer.DeathCount, this.decisionCount);//сделать новую запись
+              //  this.dataSaver.WriteData(this.ObjectContainer.WinCount, this.ObjectContainer.DeathCount, this.decisionCount);//сделать новую запись
                 this.decisionCount = 0;//обнулить счетчик принятия решений
                 this.dataSaverClock.Restart();//перезапуск таймера
             }
@@ -460,21 +459,21 @@ namespace Project_Space___New_Live.modules
         /// <param name="dangerRadius">Радиус опасной зоны, около цели (По-умолчанию 300)</param>
         private void Attack(Vector2f targetCoords, float dangerRadius = 300)
         {
-            Vector2f divCoords = targetCoords - this.ObjectContainer.ControllingObject.Coords;//Вычисление основынх параметров
+            Vector2f divCoords = targetCoords - this.ControllingObject.Coords;//Вычисление основынх параметров
             float distance = (float)(Math.Sqrt(Math.Pow(divCoords.X, 2) + Math.Pow(divCoords.Y, 2)));
-            float angleBetween = this.FindAngleBetweenVectors(this.ObjectContainer.ControllingObject.Coords, this.ObjectContainer.ControllingObject.Rotation, targetCoords);//Вычисление параметров
+            float angleBetween = this.FindAngleBetweenVectors(this.ControllingObject.Coords, this.ControllingObject.Rotation, targetCoords);//Вычисление параметров
             this.MoveToTarget(targetCoords, dangerRadius);//наведение на цель
-            if (!this.ObjectContainer.ControllingObject.ObjectWeaponSystem.HasAmmo)//если боезапаса нет
+            if (!this.ControllingObject.ObjectWeaponSystem.HasAmmo)//если боезапаса нет
             {
                 return;//окончить работу боевой функции
             }
-            Weapon currentWeapon = this.ObjectContainer.ControllingObject.ObjectWeaponSystem.GetActiveWeapon();//получить активное оружие
+            Weapon currentWeapon = this.ControllingObject.ObjectWeaponSystem.GetActiveWeapon();//получить активное оружие
             if (currentWeapon.Ammo < 1)//если боезапас данного оружия израсходован
             {
-                int activeWeaponIndex = this.ObjectContainer.ControllingObject.ObjectWeaponSystem.IndexOfActiveWeapon;//получить индекс текущего оружия
-                if (!this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(activeWeaponIndex + 1))//установить индекс следующего оружия
+                int activeWeaponIndex = this.ControllingObject.ObjectWeaponSystem.IndexOfActiveWeapon;//получить индекс текущего оружия
+                if (!this.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(activeWeaponIndex + 1))//установить индекс следующего оружия
                 {
-                    this.ObjectContainer.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);//если не удалось то установить индекс самого первого оружия в коллекции
+                    this.ControllingObject.ObjectWeaponSystem.SetActiveWeaponIndex(0);//если не удалось то установить индекс самого первого оружия в коллекции
                 }
                 return;//окончить работу боевой функции
             }
@@ -482,11 +481,11 @@ namespace Project_Space___New_Live.modules
             {
                 if (angleBetween < currentWeapon.Dispersion)//и прицеливания
                 {
-                    this.ObjectContainer.ControllingObject.OpenFire();//то открыть огонь
+                    this.ControllingObject.OpenFire();//то открыть огонь
                     return;//окончить работу боевой функции
                 }
             }
-            this.ObjectContainer.ControllingObject.StopFire();//иначе прекратить огонь
+            this.ControllingObject.StopFire();//иначе прекратить огонь
         }
 
         /// <summary>
@@ -494,11 +493,11 @@ namespace Project_Space___New_Live.modules
         /// </summary>
         private void EnergyAnalise()
         {
-            switch (this.currentEnergyMode)//в зависимости от текущего энерго режима
+           /* switch (this.currentEnergyMode)//в зависимости от текущего энерго режима
             {
                 case EnergyMode.Maximal://Максимальный режим
                 {
-                    if (this.ObjectContainer.GetEnergy() < 20)//если запас энерги упал ниже 20% 
+                    if ((this.ControllingObject.Equipment as ) < 20)//если запас энерги упал ниже 20% 
                     {
                         this.currentEnergyMode = EnergyMode.Economic;//переход в экономичный режим
                     }
@@ -512,12 +511,12 @@ namespace Project_Space___New_Live.modules
                     }
                     return;
                 }
-            }
+            }*/
         }
 
         public void ProtectionAnalize(List<ObjectSignature> shellsSignaturesCollection)
         {
-            float normedEnergy = this.ObjectContainer.GetEnergy() / 100;
+          /*  float normedEnergy = this.ObjectContainer.GetEnergy() / 100;
             float normedShieldPower = this.ObjectContainer.GetShieldPower() / 100;
             int normedShellsCount = 0;
             if (shellsSignaturesCollection.Count > 0)
@@ -539,7 +538,7 @@ namespace Project_Space___New_Live.modules
             else
             {
                 this.ObjectContainer.ControllingObject.DeactivateShield();
-            }
+            }*/
         }
 
         /// <summary>
@@ -547,7 +546,7 @@ namespace Project_Space___New_Live.modules
         /// </summary>
         public void NetworksLearn()
         {
-            LearningHelper helper = new LearningHelper();
+        /*    LearningHelper helper = new LearningHelper();
             //обучение сети принятия решений
             List<List<List<double>>> learningSets = helper.LoadLearningSet("decision.nls", 20, 3);
             this.decisionNetwork.Learning(learningSets[0], 0.001, 500, learningSets[1]);
