@@ -387,6 +387,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
         {
             this.lastPlayerCoords = this.PlayerTank.Coords;
             this.currentMode = Mode.TankMode;
+ 
+            this.ResetControllingObject();
+
 
             List<Wall> wallsSystem = new List<Wall>();
             wallsSystem.Add(new Wall(new Vector2f(300, 450), new Vector2f(150, 20), new Texture[] { ResurceStorage.PanelText }, false));
@@ -406,7 +409,16 @@ namespace Project_Space___New_Live.modules.Dispatchers
             testTank.Environment = this.activeEnvironment;
             unitsCollection.Add(testTank);
             this.activeEnvironment.RefreshActiveObjectsCollection(unitsCollection);
+
         }
+
+
+        public void ResetControllingObject()
+        {
+            PlayerController controller = PlayerController.GetInstanse(this); 
+            controller.SetControllingObject(this.ActiveTransport);
+        }
+
 
         /// <summary>
         /// Конструктор контейнера
@@ -416,16 +428,16 @@ namespace Project_Space___New_Live.modules.Dispatchers
         private PlayerContainer(List<StarSystem> GameWorld)
         {//Временная реализация конструктора корабля
             //Сохранение в контейнере
-            
-            
+
+            PlayerController controller = PlayerController.GetInstanse(this);
             this.currentMode = (int)Mode.SpaceMode;
             this.playerShip = new Ship(500, new Vector2f(400, 400), 250, ResurceStorage.shipTextures, new Vector2f(15, 30), GameWorld[0]);//Корабля игрока
-            
-            this.playerTank = new Tank(150, new Vector2f(1000, 1000), 150, ResurceStorage.TankTextures, new Vector2f(15, 30));
-            
-            PlayerController controller = PlayerController.GetInstanse(playerShip);
             this.playerShip.SetBrains(controller);
+            this.playerTank = new Tank(150, new Vector2f(1000, 1000), 150, ResurceStorage.TankTextures, new Vector2f(15, 30));
             this.PlayerTank.SetBrains(controller);
+
+            this.ResetControllingObject();
+
             this.lastPlayerCoords = this.playerShip.Coords;//последних координат корабля игрока
             this.activeEnvironment = this.playerShip.ShipStarSystem;//Текущей звездной системы
             this.GameRenderer = RenderModule.getInstance();//Сылки на модуль отрисовки

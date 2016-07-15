@@ -18,6 +18,12 @@ namespace Project_Space___New_Live.modules
     public class PlayerController : AbstractController
     {
         /// <summary>
+        /// Конетейнер игрока
+        /// </summary>
+        private PlayerContainer playerContainer;
+
+
+        /// <summary>
         /// Ссылка на экземпляр класса-отрисовщика 
         /// </summary>
         private RenderModule GameRenderer;
@@ -41,9 +47,9 @@ namespace Project_Space___New_Live.modules
         /// Конструктор
         /// </summary>
         /// <param name="playerObject">Корабль игрока</param>
-        private PlayerController(Transport controllingObject)
+        private PlayerController(PlayerContainer playerContainer)
         {
-            this.ControllingObject = controllingObject;
+            this.playerContainer = playerContainer;
             this.dataSaverClock = new Clock();//инициализация таймера записи
             this.GameRenderer = RenderModule.getInstance();//Получение класса отрисовщика
             this.GameRenderer.MainWindow.KeyPressed += this.OnKey;
@@ -51,17 +57,24 @@ namespace Project_Space___New_Live.modules
             this.GameRenderer.Form.MouseDown += this.OnButton;
             this.GameRenderer.Form.MouseUp += this.FromButton;
             this.GameRenderer.Form.MouseOut += this.OnMouseOut;
+            this.GameRenderer.Form.MouseMove += this.OnMouseMove;
+        }
+
+
+        public void SetControllingObject(Transport transport)
+        {
+            this.ControllingObject = transport;
         }
 
         /// <summary>
         /// Получение экзепляра класса игрового контроллера
         /// </summary>
         /// <returns>Ссылка на экземпляр ручного контроллера</returns>
-        public static PlayerController GetInstanse(Transport controllingObject)
+        public static PlayerController GetInstanse(PlayerContainer playerContainer)
         {
             if (GameController == null)
             {
-                GameController = new PlayerController(controllingObject);
+                GameController = new PlayerController(playerContainer);
             }
             return GameController;
         }
@@ -128,6 +141,13 @@ namespace Project_Space___New_Live.modules
                 {
                     this.ShieldProcess();
                 }; break;
+                case Keyboard.Key.Space:
+                    {
+                        if (this.playerContainer.PlayerShip.NearPlanet)
+                        {
+                            this.playerContainer.OnPlanetLanding();
+                        }
+                    }; break;
                 default: break;
             }
         }
@@ -215,6 +235,19 @@ namespace Project_Space___New_Live.modules
         private void OnMouseOut(object sender, MouseMoveEventArgs Args)
         {
             this.ControllingObject.StopFire();
+        }
+
+        private void OnMouseMove(object sender, MouseMoveEventArgs Args)
+        {
+            if (this.playerContainer.CurrentMode == PlayerContainer.Mode.TankMode)
+            {
+                Vector2f coords = this.GameRenderer.GameView.Center - this.GameRenderer.GameView.Size / 2;
+
+                float coordsDifX = -(this.playerContainer.ActiveTransport.Coords.X - coords.X) + (float)(Mouse.GetPosition().X);
+                float coordsDifY = -(this.playerContainer.ActiveTransport.Coords.Y - coords.Y) + (float)(Mouse.GetPosition().Y);
+                float newAngle = (float)(Math.Atan2(coordsDifY, coordsDifX));
+                this.playerContainer.PlayerTank.RotateTurret(newAngle);
+            }
         }
 
         /// <summary>

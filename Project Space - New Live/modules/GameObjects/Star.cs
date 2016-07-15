@@ -76,9 +76,12 @@ namespace Project_Space___New_Live.modules.GameObjects
         protected override ObjectSignature ConstructSignature()
         {
             ObjectSignature signature = new ObjectSignature();
-       //     signature.AddCharacteristics(this.mass);
             Vector2f sizes = new Vector2f(this.radius * 2, this.radius * 2);
-       //     signature.AddCharacteristics(sizes);
+            signature.Size = sizes;
+            signature.Mass = this.Mass;
+            signature.Speed = (float)this.orbitalSpeed;
+            signature.Directon = (float) (this.orbitalAngle + Math.PI / 2);
+            signature.Coords = this.Coords;
             return signature;
         }
 

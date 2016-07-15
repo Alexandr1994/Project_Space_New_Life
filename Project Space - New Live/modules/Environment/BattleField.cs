@@ -38,7 +38,7 @@ namespace Project_Space___New_Live.modules.GameObjects
         /// <param name="skin">Текстура фона</param>
         protected override void InitBackgroung(Texture skin)
         {
-            ImageView background = new ImageView(new RectangleShape(new Vector2f(10000, 10000)), BlendMode.Add);
+            this.background = new ImageView(new RectangleShape(new Vector2f(10000, 10000)), BlendMode.Add);
             this.background.Image.Position = new Vector2f(-5000, -5000);
             this.background.Image.Texture = skin;
             this.background.Image.Texture.Repeated = true;

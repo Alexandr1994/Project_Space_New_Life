@@ -2,6 +2,7 @@
 *.userprefs
 *.DotSettings.user
 *.suo
+.nuget
 obj
 bin
 *ReSharper*
