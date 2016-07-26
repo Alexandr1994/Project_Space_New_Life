@@ -110,6 +110,7 @@
     <Compile Include="modules\Forms\RadarScreen.cs" />
     <Compile Include="modules\Forms\RectPanel.cs" />
     <Compile Include="modules\Forms\RectButton.cs" />
+    <Compile Include="modules\Forms\RedWindow.cs" />
     <Compile Include="modules\Forms\TextForm.cs" />
     <Compile Include="modules\GameObjects\ActiveObject.cs" />
     <Compile Include="modules\GameObjects\LocalMassCenter.cs" />

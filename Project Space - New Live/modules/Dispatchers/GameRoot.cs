@@ -22,6 +22,39 @@ using SFML.Window;
 namespace Project_Space___New_Live.modules.Dispatchers
 {
 
+
+    class TestZone
+    {
+
+        public void Main()
+        {
+            CircleButton test = new CircleButton();
+            test.Location = new Vector2f(100, 100);
+            test.Size = new Vector2f(100, 100);
+            test.Text = "Close";
+            RedWindow win = new RedWindow();
+            win.AddWidget(test, "testButton");
+            win.Start();
+            test = new CircleButton();
+            test.Location = new Vector2f(100, 100);
+            test.Size = new Vector2f(100, 100);
+            test.Text = "Close";
+            win = new RedWindow();
+            win.AddWidget(test, "testButton");
+            win.Start();
+            test = new CircleButton();
+            test.Location = new Vector2f(100, 100);
+            test.Size = new Vector2f(100, 100);
+            test.Text = "Close";
+            win = new RedWindow();
+            win.AddWidget(test, "testButton");
+            win.Start();
+        }
+
+    }
+
+
+
     class GameRoot
     {
 

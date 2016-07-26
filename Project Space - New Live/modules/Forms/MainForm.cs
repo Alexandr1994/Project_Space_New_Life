@@ -80,7 +80,7 @@ namespace Project_Space___New_Live.modules.Forms
         /// <returns>Коллекция отображений форм</returns>
         public List<RenderView> RenderForm()
         {
-            return this.GetChildFormView();
+            return this.GetFormView(null);
         }
     }
 }

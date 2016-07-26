@@ -50,7 +50,7 @@ namespace Project_Space___New_Live.modules.Forms
             this.view.Image.Texture = this.viewStates[0];
             this.SetLabel();
             this.ButtonViewEventReaction();
-            this.CatchEvents();
+          //  this.CatchEvents();
         }
 
     }

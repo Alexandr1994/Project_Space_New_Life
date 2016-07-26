@@ -131,7 +131,7 @@ namespace Project_Space___New_Live.modules.Forms
         /// Получить отображения текущией и дочерних форм
         /// </summary>
         /// <returns>Коллекция отображений форм</returns>
-        protected List<RenderView> GetChildFormView()
+        public List<RenderView> GetFormView(RedWindow window)
         {
             List<RenderView> retValue = new List<RenderView>();
             this.View.View.Position = this.GetGraphicPosition();//коррекция отображения;
@@ -142,17 +142,22 @@ namespace Project_Space___New_Live.modules.Forms
                 {
                     if (this.ChildFormFallTest(childForm)) //проверка если дочерняя форма не "падает" с текущей
                     {
-                        foreach (RenderView locView in childForm.GetChildFormView())//получаем отображение данной дочерней формы
+                        foreach (RenderView locView in childForm.GetFormView(window))//получаем отображение данной дочерней формы
                         {
                             retValue.Add(locView);
                         }
 
                     }
                 }
-                this.CatchEvents(); //обнаружение событий данной формы
+                if (window.Focused)
+                {
+                    this.CatchEvents(window); //обнаружение событий данной формы
+                }
             }
             return retValue;
         }
+
+
 
         /// <summary>
         /// Анализ формы на нахождение ей в области родительской формы
@@ -221,9 +226,9 @@ namespace Project_Space___New_Live.modules.Forms
         /// <summary>
         /// Анализ возникновения событий
         /// </summary>
-        internal void CatchEvents()
+        internal void CatchEvents(RedWindow window)
         {
-            if (this.MoveTest())//если курсор находится на форме
+            if (this.MoveTest(window))//если курсор находится на форме
             {
                 if (this.MouseMove != null)//в независимости от предыдущего нахождения курсора
                 {//при условии что есть обработчик события
@@ -290,9 +295,9 @@ namespace Project_Space___New_Live.modules.Forms
         /// Проверка на нахождение курсора в области формы
         /// </summary>
         /// <returns>true - если курсор находится в области данной формы, иначе - false</returns>
-        private bool MoveTest()
+        private bool MoveTest(RedWindow window)
         {
-            Vector2i mousePoint = Mouse.GetPosition(RenderModule.getInstance().MainWindow);//Получить позицию мыши в окне
+            Vector2i mousePoint = Mouse.GetPosition(window.GetWindow());//Получить позицию мыши в окне
             if(this.PointTest(new Vector2f(mousePoint.X, mousePoint.Y)))//если курсор находится в области данной формы
             {
                 if (ChildMoveTest(new Vector2f(mousePoint.X, mousePoint.Y))) //Проверить все дочерние формы данной формы
