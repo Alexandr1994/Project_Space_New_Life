@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules;
-using Project_Space___New_Live.modules.Forms;
+using RedToolkit;
 
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.GameObjects;
@@ -28,27 +28,29 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
         public void Main()
         {
-            CircleButton test = new CircleButton();
+            RectButton test = new RectButton();
             test.Location = new Vector2f(100, 100);
             test.Size = new Vector2f(100, 100);
             test.Text = "Close";
-            RedWindow win = new RedWindow();
+              RedWindow win = new RedWindow();
             win.AddWidget(test, "testButton");
+            //Image img = new Image("Resources/Shark.jpg");
+
             win.Start();
-            test = new CircleButton();
-            test.Location = new Vector2f(100, 100);
-            test.Size = new Vector2f(100, 100);
-            test.Text = "Close";
-            win = new RedWindow();
-            win.AddWidget(test, "testButton");
-            win.Start();
-            test = new CircleButton();
+           /* test = new RectButton();
             test.Location = new Vector2f(100, 100);
             test.Size = new Vector2f(100, 100);
             test.Text = "Close";
             win = new RedWindow();
             win.AddWidget(test, "testButton");
             win.Start();
+            test = new RectButton();
+            test.Location = new Vector2f(100, 100);
+            test.Size = new Vector2f(100, 100);
+            test.Text = "Close";
+            win = new RedWindow();
+            win.AddWidget(test, "testButton");
+            win.Start();*/
         }
 
     }

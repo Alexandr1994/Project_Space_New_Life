@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32;
+using Project_Space___New_Live.modules;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using Project_Space___New_Live.modules.Dispatchers;
 
-namespace Project_Space___New_Live.modules.Forms
+namespace RedToolkit
 {
     /// <summary>
     /// Круглая/эллиптическая кнопка

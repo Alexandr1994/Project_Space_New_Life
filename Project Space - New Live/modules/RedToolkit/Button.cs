@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Project_Space___New_Live.modules;
 using Project_Space___New_Live.modules.Dispatchers;
 using SFML.System;
 using SFML.Window;
 using SFML.Graphics;
 
-namespace Project_Space___New_Live.modules.Forms
+namespace RedToolkit
 {
     /// <summary>
     /// Абстрактная кнопка

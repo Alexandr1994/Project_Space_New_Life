@@ -5,12 +5,13 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using Project_Space___New_Live.modules;
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
 using Project_Space___New_Live.modules.Dispatchers;
 
-namespace Project_Space___New_Live.modules.Forms
+namespace RedToolkit
 {
     /// <summary>
     /// Абстрактная форма интерфейса
@@ -22,6 +23,7 @@ namespace Project_Space___New_Live.modules.Forms
         /// Отображение
         /// </summary>
         protected abstract RenderView View { get; }
+
 
         /// <summary>
         /// Позиция
@@ -134,7 +136,7 @@ namespace Project_Space___New_Live.modules.Forms
         public List<RenderView> GetFormView(RedWindow window)
         {
             List<RenderView> retValue = new List<RenderView>();
-            this.View.View.Position = this.GetGraphicPosition();//коррекция отображения;
+            this.View.View.Position = this.GetPosition();//коррекция отображения;
             if (this.Visible)//если форма видимая
             {
                 retValue.Add(this.View); //добавление отображени в массив
@@ -158,19 +160,14 @@ namespace Project_Space___New_Live.modules.Forms
         }
 
 
-
+        
         /// <summary>
         /// Анализ формы на нахождение ей в области родительской формы
         /// </summary>
         /// <returns>true - если хотя бы часть проверяемой формы находится в пределах родительской, иначе false</returns>
         private bool ChildFormFallTest(Form childForm)
         {
-            Vector2f centerOfForm = childForm.GetPhizicalPosition() + childForm.Size / 2;//Нахождение центра формы
-            if (this.PointTest(centerOfForm) || this.View.BorderContactAnalize(childForm.View))//если хотя бы часть проверяемой формы находится в пределах родительской
-            {
-                return true;//вернуть true
-            }
-            return false;//иначе вернуть false
+            return true;//вернуть true
         }
 
         /// <summary>
@@ -316,7 +313,7 @@ namespace Project_Space___New_Live.modules.Forms
         /// <returns>true если точка в области формы, иначе - false</returns>
         protected virtual bool PointTest(Vector2f testingPoint)
         {
-            Vector2f center = this.GetPhizicalPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра формы
+            Vector2f center = this.GetPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра формы
             return this.View.PointAnalize(testingPoint, center);
         }
 
@@ -324,26 +321,12 @@ namespace Project_Space___New_Live.modules.Forms
         /// Получение графической позиции формы
         /// </summary>
         /// <returns>Координаты графической позиции формы</returns>
-        protected Vector2f GetGraphicPosition()
+        protected Vector2f GetPosition()
         {
             Vector2f point = new Vector2f(0, 0);
             if (this.parentForm != null)//Если форма имеет родительскую форму
             {//получить позицию с учетом её положения
-                point = this.parentForm.GetGraphicPosition();
-            }
-            return point += this.Location;
-        }
-
-        /// <summary>
-        /// Получение физической позиции формы(отличается от графической на смещение камеры)
-        /// </summary>
-        /// <returns>Координаты реальной позиции формы</returns>
-        protected virtual Vector2f GetPhizicalPosition()
-        {
-            Vector2f point = new Vector2f(0, 0);
-            if (this.parentForm != null)//Если форма имеет родительскую форму
-            {//получить позицию с учетом её положения
-                point = this.parentForm.GetPhizicalPosition();
+                point = this.parentForm.GetPosition();
             }
             return point += this.Location;
         }

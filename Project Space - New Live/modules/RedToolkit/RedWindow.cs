@@ -5,11 +5,12 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Project_Space___New_Live.modules;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace Project_Space___New_Live.modules.Forms
+namespace RedToolkit
 {
 
     public class RedWindow
@@ -38,12 +39,12 @@ namespace Project_Space___New_Live.modules.Forms
         }
 
         /// <summary>
-        /// Window sizes
+        /// Red Window sizes
         /// </summary>
         private Vector2u size = new Vector2u(300, 300);
 
         /// <summary>
-        /// Window sizes
+        /// Red Window sizes
         /// </summary>
         public Vector2u Size
         {
@@ -55,6 +56,15 @@ namespace Project_Space___New_Live.modules.Forms
             }
         }
 
+        /// <summary>
+        /// Red Window location
+        /// </summary>
+        public Vector2i Location
+        {
+            get { return this.window.Position; }
+            set { this.window.Position = value; }
+        }
+       
         /// <summary>
         /// Window title
         /// </summary>
@@ -71,6 +81,26 @@ namespace Project_Space___New_Live.modules.Forms
                 this.title = value;
                 this.window.SetTitle(this.title);
             }
+        }
+
+        /// <summary>
+        /// Red Window icon
+        /// </summary>
+        private Image icon = new Image("Resources/RedTheme/RedIcon.png");
+
+
+        public Image Icon
+        {
+            get { return this.icon; }
+            set
+            {
+                this.icon = value;
+                if (this.window != null)
+                {
+                    this.window.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
+                }
+            }
+
         }
 
         /// <summary>
@@ -136,27 +166,72 @@ namespace Project_Space___New_Live.modules.Forms
         }
 
         /// <summary>
+        /// Creating custom window
+        /// </summary>
+        /// <returns>Render Window</returns>
+        protected virtual void CustomWindowcreate()
+        {
+            this.window = new RenderWindow(new VideoMode(300, 300), this.Title, Styles.Default);
+            this.window.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
+            //setting basic handlers
+            this.window.Closed += this.Closing;
+            this.window.Resized += this.Resizing;
+        }
+
+        /// <summary>
         /// Process function of Red Window
         /// </summary>
         private void Process()
         {
-            this.window = new RenderWindow(new VideoMode(300, 300), this.Title, Styles.Close);//creating window
+            this.CustomWindowcreate();//creating window
             while (this.window.IsOpen)
             {
                 Thread.Sleep(sleepTime);
-                this.window.Display();
-                foreach (KeyValuePair<string, Form> widget in this.widgetsCollection)
-                {
-                    foreach (RenderView view in widget.Value.GetFormView(this))
-                    {
-                        this.window.Draw(view.View as Drawable, view.State);
-                    }
-                }
+                this.RefreshWindow();
                 if (this.window.HasFocus())
                 {
                     this.window.DispatchEvents();
                 }
             }
+        }
+
+        /// <summary>
+        /// Refresh Red Window
+        /// </summary>
+        public void RefreshWindow()
+        {
+            this.window.Display();
+            this.window.Clear();   
+            foreach (KeyValuePair<string, Form> widget in this.widgetsCollection)
+            {
+                foreach (RenderView view in widget.Value.GetFormView(this))
+                {
+                    this.window.Draw(view.View as Drawable, view.State);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Close Red Window
+        /// </summary>
+        public void Close()
+        {
+            this.window.Close();
+        }
+
+       
+        private void Resizing(object sender, SizeEventArgs e)
+        {
+            View windowView = this.window.GetView();  
+            windowView.Size = new Vector2f(e.Width, e.Height);
+            windowView.Center = new Vector2f(e.Width, e.Height) / 2;
+            this.window.SetView(windowView);
+            this.RefreshWindow();
+        }
+
+        private void Closing(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
     }

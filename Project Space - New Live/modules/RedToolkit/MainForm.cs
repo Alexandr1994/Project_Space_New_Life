@@ -4,12 +4,13 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Project_Space___New_Live.modules;
 using Project_Space___New_Live.modules.Dispatchers;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace Project_Space___New_Live.modules.Forms
+namespace RedToolkit
 {
     /// <summary>
     /// Главная форма
@@ -69,7 +70,7 @@ namespace Project_Space___New_Live.modules.Forms
         /// Получить физическую позицию формы
         /// </summary>
         /// <returns></returns>
-        protected override Vector2f GetPhizicalPosition()
+        protected Vector2f GetPhizicalPosition()
         {
             return new Vector2f(0, 0);
         }

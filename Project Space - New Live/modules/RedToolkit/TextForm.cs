@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Project_Space___New_Live.modules;
 using Project_Space___New_Live.modules.Dispatchers;
 using Project_Space___New_Live.modules.Storages;
 using SFML.Graphics;
 using SFML.System;
 
-namespace Project_Space___New_Live.modules.Forms
+namespace RedToolkit
 {
     /// <summary>
     /// Текстовая форма

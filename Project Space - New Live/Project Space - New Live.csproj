@@ -65,6 +65,9 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="sfmlnet-audio-2">
       <HintPath>packages\Graphnode.SFML.Net.2.3\lib\sfmlnet-audio-2.dll</HintPath>
@@ -97,21 +100,21 @@
     <Compile Include="modules\Environment\BaseEnvironment.cs" />
     <Compile Include="modules\Environment\BattleField.cs" />
     <Compile Include="modules\Environment\StarSystem.cs" />
-    <Compile Include="modules\Forms\ActiveLabel.cs" />
-    <Compile Include="modules\Forms\ImageForm.cs" />
-    <Compile Include="modules\Forms\InvisiblePanel.cs" />
-    <Compile Include="modules\Forms\Label.cs" />
-    <Compile Include="modules\Forms\LinearBar.cs" />
-    <Compile Include="modules\Forms\Button.cs" />
-    <Compile Include="modules\Forms\CircleButton.cs" />
-    <Compile Include="modules\Forms\Form.cs" />
-    <Compile Include="modules\Forms\MainForm.cs" />
-    <Compile Include="modules\Forms\Panel.cs" />
-    <Compile Include="modules\Forms\RadarScreen.cs" />
-    <Compile Include="modules\Forms\RectPanel.cs" />
-    <Compile Include="modules\Forms\RectButton.cs" />
-    <Compile Include="modules\Forms\RedWindow.cs" />
-    <Compile Include="modules\Forms\TextForm.cs" />
+    <Compile Include="modules\RedToolkit\ActiveLabel.cs" />
+    <Compile Include="modules\RedToolkit\ImageForm.cs" />
+    <Compile Include="modules\RedToolkit\InvisiblePanel.cs" />
+    <Compile Include="modules\RedToolkit\Label.cs" />
+    <Compile Include="modules\RedToolkit\LinearBar.cs" />
+    <Compile Include="modules\RedToolkit\Button.cs" />
+    <Compile Include="modules\RedToolkit\CircleButton.cs" />
+    <Compile Include="modules\RedToolkit\Form.cs" />
+    <Compile Include="modules\RedToolkit\MainForm.cs" />
+    <Compile Include="modules\RedToolkit\Panel.cs" />
+    <Compile Include="modules\RedToolkit\RadarScreen.cs" />
+    <Compile Include="modules\RedToolkit\RectPanel.cs" />
+    <Compile Include="modules\RedToolkit\RectButton.cs" />
+    <Compile Include="modules\RedToolkit\RedWindow.cs" />
+    <Compile Include="modules\RedToolkit\TextForm.cs" />
     <Compile Include="modules\GameObjects\ActiveObject.cs" />
     <Compile Include="modules\GameObjects\LocalMassCenter.cs" />
     <Compile Include="modules\GameObjects\Planet.cs" />
