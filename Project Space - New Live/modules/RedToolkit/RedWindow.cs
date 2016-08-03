@@ -106,14 +106,14 @@ namespace RedToolkit
         /// <summary>
         /// Collection of widgets on window
         /// </summary>
-        private Dictionary<String, Form> widgetsCollection = new Dictionary<String, Form>();
+        private Dictionary<String, RedWidget> widgetsCollection = new Dictionary<String, RedWidget>();
 
         /// <summary>
         /// Adding widget on Red Window
         /// </summary>
         /// <param name="widget">Widget</param>
         /// <param name="name">Name of widget</param>
-        public void AddWidget(Form widget, String name)
+        public void AddWidget(RedWidget widget, String name)
         {
             this.widgetsCollection.Add(name, widget);
         }
@@ -138,7 +138,7 @@ namespace RedToolkit
         /// </summary>
         /// <param name="name">Name of Widget</param>
         /// <returns>Widget or null, if collection don't has widget with that name</returns>
-        public Form GetWidget(String name)
+        public RedWidget GetWidget(String name)
         {
             if (this.widgetsCollection.ContainsKey(name))
             {
@@ -202,7 +202,7 @@ namespace RedToolkit
         {
             this.window.Display();
             this.window.Clear();   
-            foreach (KeyValuePair<string, Form> widget in this.widgetsCollection)
+            foreach (KeyValuePair<string, RedWidget> widget in this.widgetsCollection)
             {
                 foreach (RenderView view in widget.Value.GetFormView(this))
                 {

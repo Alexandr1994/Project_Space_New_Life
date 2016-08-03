@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules;
+using Project_Space___New_Live.modules.DataTypes;
 using RedToolkit;
 
 using Project_Space___New_Live.modules.Dispatchers;
@@ -28,7 +29,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
         public void Main()
         {
-            RectButton test = new RectButton();
+         /*   RectButton test = new RectButton();
             test.Location = new Vector2f(100, 100);
             test.Size = new Vector2f(100, 100);
             test.Text = "Close";
@@ -37,7 +38,69 @@ namespace Project_Space___New_Live.modules.Dispatchers
             //Image img = new Image("Resources/Shark.jpg");
 
             win.Start();
-           /* test = new RectButton();
+           */
+            
+            ConvexShape shape = new ConvexShape();
+
+            shape.SetPointCount(5);
+
+            shape.SetPoint(0, new Vector2f(0, 0));
+            shape.SetPoint(1, new Vector2f(50, 0));
+            shape.SetPoint(2, new Vector2f(100, 50));
+            shape.SetPoint(3, new Vector2f(50, 120));
+            shape.SetPoint(4, new Vector2f(0, 100));
+            shape.FillColor = Color.Blue;
+            shape.OutlineThickness = 5;
+
+            shape.Position = new Vector2f(50,50);
+
+            RenderWindow win = new RenderWindow(new VideoMode(800, 600), "ы");
+
+            WidgetView test = new WidgetView(shape);
+
+            test.Location = shape.Position;
+
+            bool tuda = false;
+
+
+            while (true)
+            {
+
+                Vector2f point = new Vector2f(Mouse.GetPosition(win).X, Mouse.GetPosition(win).Y);
+                win.Display();
+                win.Clear();
+                if (!tuda)
+                {
+                    test.Location += new Vector2f((float)0.3, (float)0.1);
+                    if (test.Location.X > 600)
+                    {
+                        tuda = true;
+                    }
+                }
+                else
+                {
+                    test.Location -= new Vector2f((float)0.3, (float)0.1);
+                    if (test.Location.X < 100)
+                    {
+                        tuda = false;
+                    }
+                }
+                
+                test.Rotate(test.ViewCenter, (float)(0.5 * Math.PI / 180));
+                if (test.PointAnalize(point, test.ViewCenter))
+                {
+                    test.Image.FillColor = Color.Yellow;
+                }
+                else
+                {
+                    test.Image.FillColor = Color.Blue;
+                }
+                win.Draw(test.Image);
+            }
+
+            
+            
+            /* test = new RectButton();
             test.Location = new Vector2f(100, 100);
             test.Size = new Vector2f(100, 100);
             test.Text = "Close";
@@ -107,7 +170,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.GraphicModule = RenderModule.getInstance();//Полученить указатель на модуль отрисовки
             this.ConstructWorld();//Сконструировать игровой мир
             this.playerContainer = PlayerContainer.GetInstanse(this.SystemCollection);//Инициализация игрока            
-            this.GraphicInterfaceContainer = new PlayerInterfaceContainer(this.GraphicModule.Form, this.playerContainer);//Сконструировать контейнер игрового интерфейса
+            this.GraphicInterfaceContainer = new PlayerInterfaceContainer(this.GraphicModule.RedWidget, this.playerContainer);//Сконструировать контейнер игрового интерфейса
             this.ShipsCollection.Add(this.playerContainer.PlayerShip);//создание корабля игрока и установка контроллера
             this.ConstructFleets();//Инициализация кораблей
         }
@@ -247,7 +310,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             {
                 this._objectContainers[i] = new ObjectContainer(environment);//Инициализация игроков   
             }     
-            this.GraphicInterfaceContainer = new PlayerInterfaceContainer(this.GraphicModule.Form, this._objectContainers);//Сконструировать контейнер игрового интерфейса
+            this.GraphicInterfaceContainer = new PlayerInterfaceContainer(this.GraphicModule.RedWidget, this._objectContainers);//Сконструировать контейнер игрового интерфейса
             this.InitPlayerContainers();//Инициализацимя контейнеров игроков
         }
 

@@ -15,12 +15,12 @@ namespace RedToolkit
     /// <summary>
     /// Главная форма
     /// </summary>
-    class MainForm : ImageForm
+    class MainRedWidget : ImageRedWidget
     {
        /// <summary>
        /// Экземпляр формы
        /// </summary>
-        private static MainForm form = null;
+        private static MainRedWidget _redWidget = null;
 
         /// <summary>
         /// Конструктор главной формы
@@ -42,14 +42,14 @@ namespace RedToolkit
         /// </summary>
         /// <param name="gameView">Вид, в котором должена находиться главная форма</param>
         /// <returns>Экземпляр главной формы</returns>
-        public static MainForm GetInstance(View gameView)
+        public static MainRedWidget GetInstance(View gameView)
         {
-            if (form == null)
+            if (_redWidget == null)
             {
                 gameViewSize = gameView.Size;
-                form = new MainForm();
+                _redWidget = new MainRedWidget();
             }
-            return form;
+            return _redWidget;
         }
 
         /// <summary>

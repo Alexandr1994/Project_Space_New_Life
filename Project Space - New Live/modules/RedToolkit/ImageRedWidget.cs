@@ -13,7 +13,7 @@ namespace RedToolkit
     /// <summary>
     /// Фигурная форма
     /// </summary>
-    public abstract class ImageForm : Form
+    public abstract class ImageRedWidget : RedWidget
     {
         /// <summary>
         /// Отображение

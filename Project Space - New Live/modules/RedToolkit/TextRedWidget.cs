@@ -14,7 +14,7 @@ namespace RedToolkit
     /// <summary>
     /// Текстовая форма
     /// </summary>
-    public abstract class TextForm : Form
+    public abstract class TextRedWidget : RedWidget
     {
         /// <summary>
         /// Отображение

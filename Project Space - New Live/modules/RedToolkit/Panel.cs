@@ -10,7 +10,7 @@ namespace RedToolkit
     /// <summary>
     /// Абстрактная панель
     /// </summary>
-    abstract class Panel : ImageForm
+    abstract class Panel : ImageRedWidget
     {
         
         /// <summary>

@@ -10,7 +10,7 @@ using SFML.Window;
 
 namespace RedToolkit
 {
-    class ActiveLabel : TextForm
+    class ActiveLabel : TextRedWidget
     {
 
         /// <summary>

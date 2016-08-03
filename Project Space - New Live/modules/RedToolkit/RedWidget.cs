@@ -16,7 +16,7 @@ namespace RedToolkit
     /// <summary>
     /// Абстрактная форма интерфейса
     /// </summary>
-    public abstract class Form
+    public abstract class RedWidget
     {
 
         /// <summary>
@@ -86,26 +86,26 @@ namespace RedToolkit
         /// <summary>
         /// Указатель на родительскую форму, при её наличии
         /// </summary>
-        protected Form parentForm;
+        protected RedWidget ParentRedWidget;
 
         /// <summary>
         /// Установка родителской формы
         /// </summary>
-        /// <param name="parentForm">Родительская форма</param>
-        protected void SetPatentForm(Form parentForm)
+        /// <param name="ParentRedWidget">Родительская форма</param>
+        protected void SetPatentForm(RedWidget ParentRedWidget)
         {
-            this.parentForm = parentForm;
+            this.ParentRedWidget = ParentRedWidget;
         }
 
         /// <summary>
         /// Коллекция дочерних форм
         /// </summary>
-        private List<Form> childForms = new List<Form>();
+        private List<RedWidget> childForms = new List<RedWidget>();
 
         /// <summary>
         /// Коллекция дочерних форм
         /// </summary>
-        protected List<Form> ChildForms
+        protected List<RedWidget> ChildForms
         {
             get { return childForms; }
         }
@@ -113,20 +113,20 @@ namespace RedToolkit
         /// <summary>
         /// Добавить дочернюю форму
         /// </summary>
-        /// <param name="newForm">Новая дочерняя форма</param>
-        public void AddForm(Form newForm)
+        /// <param name="newRedWidget">Новая дочерняя форма</param>
+        public void AddForm(RedWidget newRedWidget)
         {
-            this.childForms.Add(newForm);
-            newForm.SetPatentForm(this);
+            this.childForms.Add(newRedWidget);
+            newRedWidget.SetPatentForm(this);
         }
 
         /// <summary>
         /// Удалить дочернюю форму
         /// </summary>
-        /// <param name="targetForm">Форма предназначенная к удалению</param>
-        public void RemoveForm(Form targetForm)
+        /// <param name="targetRedWidget">Форма предназначенная к удалению</param>
+        public void RemoveForm(RedWidget targetRedWidget)
         {
-            this.childForms.Remove(targetForm);
+            this.childForms.Remove(targetRedWidget);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace RedToolkit
             if (this.Visible)//если форма видимая
             {
                 retValue.Add(this.View); //добавление отображени в массив
-                foreach (Form childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
+                foreach (RedWidget childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
                 {
                     if (this.ChildFormFallTest(childForm)) //проверка если дочерняя форма не "падает" с текущей
                     {
@@ -165,7 +165,7 @@ namespace RedToolkit
         /// Анализ формы на нахождение ей в области родительской формы
         /// </summary>
         /// <returns>true - если хотя бы часть проверяемой формы находится в пределах родительской, иначе false</returns>
-        private bool ChildFormFallTest(Form childForm)
+        private bool ChildFormFallTest(RedWidget childRedWidget)
         {
             return true;//вернуть true
         }
@@ -274,7 +274,7 @@ namespace RedToolkit
         /// <returns>true если курсор находится в области одной из дочерних форм, иначе - false</returns>
         private bool ChildMoveTest(Vector2f point)
         {
-            foreach (Form currentForm in this.childForms)
+            foreach (RedWidget currentForm in this.childForms)
             {
                 if (currentForm.PointTest(point))//проверка данного уровня дочерних форм на нахождение курсора в их области
                 {
@@ -324,9 +324,9 @@ namespace RedToolkit
         protected Vector2f GetPosition()
         {
             Vector2f point = new Vector2f(0, 0);
-            if (this.parentForm != null)//Если форма имеет родительскую форму
+            if (this.ParentRedWidget != null)//Если форма имеет родительскую форму
             {//получить позицию с учетом её положения
-                point = this.parentForm.GetPosition();
+                point = this.ParentRedWidget.GetPosition();
             }
             return point += this.Location;
         }
@@ -400,7 +400,7 @@ namespace RedToolkit
         /// <summary>
         /// Абстрактный конструктор формы
         /// </summary>
-        public Form()
+        public RedWidget()
         {
             this.SetBasicReactions();//установка базовых слушателей формы
             this.CustomConstructor();//установка базовых характеристик формы 

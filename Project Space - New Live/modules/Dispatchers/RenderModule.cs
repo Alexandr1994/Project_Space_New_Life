@@ -34,15 +34,15 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Главная форма (Интерфейс)
         /// </summary>
-        private MainForm mainForm;
+        private MainRedWidget _mainRedWidget;
 
         /// <summary>
         /// Главная форма (Интерфейс)
         /// </summary>
-        public MainForm Form
+        public MainRedWidget RedWidget
         {
-            get { return this.mainForm; }
-            set { this.mainForm = value; }
+            get { return this._mainRedWidget; }
+            set { this._mainRedWidget = value; }
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.mainWindow = new RenderWindow(windowSize, windowTitle, currentStyle);//построение главного окна
             this.gameView.Size = (Vector2f)mainWindow.Size;//установка размера вида
             this.gameView.Center =  new Vector2f(gameView.Size.X / 2, gameView.Size.Y / 2);//установка центра вида
-            mainForm = MainForm.GetInstance(gameView);
+            _mainRedWidget = MainRedWidget.GetInstance(gameView);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         private void ViewControl()
         {
            this.mainWindow.SetView(this.gameView);//установка вида отрисовки
-           this.Form.Location = gameView.Center - gameView.Size / 2;
+           this.RedWidget.Location = gameView.Center - gameView.Size / 2;
         }
 
 
@@ -157,7 +157,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
         public void RenderProcess()
         {
             this.ViewControl();
-            foreach (RenderView view in this.Form.RenderForm())
+            foreach (RenderView view in this.RedWidget.RenderForm())
             {
                 mainWindow.Draw(view.View as Drawable, view.State);
             }
@@ -172,7 +172,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.ViewControl();
             List<RenderView> views = new List<RenderView>();
             views.AddRange(activeBaseEnvironment.GetView());
-            views.AddRange(this.Form.RenderForm());
+            views.AddRange(this.RedWidget.RenderForm());
 
             foreach (RenderView view in views)
             {

@@ -54,10 +54,10 @@ namespace Project_Space___New_Live.modules
             this.GameRenderer = RenderModule.getInstance();//Получение класса отрисовщика
             this.GameRenderer.MainWindow.KeyPressed += this.OnKey;
             this.GameRenderer.MainWindow.KeyReleased += this.FromKey;
-            this.GameRenderer.Form.MouseDown += this.OnButton;
-            this.GameRenderer.Form.MouseUp += this.FromButton;
-            this.GameRenderer.Form.MouseOut += this.OnMouseOut;
-            this.GameRenderer.Form.MouseMove += this.OnMouseMove;
+            this.GameRenderer.RedWidget.MouseDown += this.OnButton;
+            this.GameRenderer.RedWidget.MouseUp += this.FromButton;
+            this.GameRenderer.RedWidget.MouseOut += this.OnMouseOut;
+            this.GameRenderer.RedWidget.MouseMove += this.OnMouseMove;
         }
 
 

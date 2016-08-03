@@ -16,7 +16,7 @@ namespace RedToolkit
     /// <summary>
     /// Абстрактная кнопка
     /// </summary>
-    public abstract class Button : ImageForm
+    public abstract class Button : ImageRedWidget
     {
         /// <summary>
         /// Состояния кнопки
@@ -214,7 +214,7 @@ namespace RedToolkit
         /// <summary>
         /// Надписть на кнопке
         /// </summary>
-        private class ButtonLabel : TextForm
+        private class ButtonLabel : TextRedWidget
         {
             /// <summary>
             /// Состояния активной строки

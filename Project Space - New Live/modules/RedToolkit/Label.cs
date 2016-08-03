@@ -13,7 +13,7 @@ namespace RedToolkit
     /// <summary>
     /// Надпись
     /// </summary>
-    public class Label : TextForm
+    public class Label : TextRedWidget
     {
 
         /// <summary>

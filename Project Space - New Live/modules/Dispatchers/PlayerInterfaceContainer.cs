@@ -51,21 +51,21 @@ namespace Project_Space___New_Live.modules.Dispatchers
         /// <summary>
         /// Коллекция форм
         /// </summary>
-        Dictionary<String ,Form> formsCollection = new Dictionary<string, Form>();  
+        Dictionary<String ,RedWidget> formsCollection = new Dictionary<string, RedWidget>();  
 
         /// <summary>
         /// Указатель на главную форму
         /// </summary>
-        private MainForm mainForm;
+        private MainRedWidget _mainRedWidget;
 
         /// <summary>
         /// Конструктор интерфейса
         /// </summary>
-        /// <param name="mainForm">Главная форма</param>
+        /// <param name="_mainRedWidget">Главная форма</param>
         /// <param name="_objectContainers">Контейнер игрока</param>
-        public PlayerInterfaceContainer(MainForm mainForm, PlayerContainer playerContainer)
+        public PlayerInterfaceContainer(MainRedWidget _mainRedWidget, PlayerContainer playerContainer)
         {
-            this.mainForm = mainForm;
+            this._mainRedWidget = _mainRedWidget;
             this.playerContainer = playerContainer;
             this.InterfaceConstruct();
         }
@@ -122,9 +122,9 @@ namespace Project_Space___New_Live.modules.Dispatchers
             this.formsCollection.Add("ProtectBar", linearBar);
 
             
-            foreach (KeyValuePair<String, Form> form in this.formsCollection)//добавление форм интерфейса на главную форму
+            foreach (KeyValuePair<String, RedWidget> form in this.formsCollection)//добавление форм интерфейса на главную форму
             {
-                this.mainForm.AddForm(form.Value);
+                this._mainRedWidget.AddForm(form.Value);
             }
         }
 

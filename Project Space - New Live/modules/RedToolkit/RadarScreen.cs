@@ -19,7 +19,7 @@ namespace RedToolkit
     /// <summary>
     /// Экран радара
     /// </summary>
-    class RadarScreen : ImageForm
+    class RadarScreen : ImageRedWidget
     {
         /// <summary>
         /// Размер видимой области
@@ -168,7 +168,7 @@ namespace RedToolkit
         /// <summary>
         /// Cущность на радаре
         /// </summary>
-        private class RadarEntity : ImageForm
+        private class RadarEntity : ImageRedWidget
         {
             /// <summary>
             /// Переопределение свойства размера (временная реализация)
@@ -211,7 +211,7 @@ namespace RedToolkit
         /// <summary>
         /// Радарный шум
         /// </summary>
-        private class RadarNoise : ImageForm
+        private class RadarNoise : ImageRedWidget
         {
             /// <summary>
             /// Конструктор радарного шума
@@ -258,7 +258,7 @@ namespace RedToolkit
         /// <summary>
         /// Видимая заона на экране радара
         /// </summary>
-        private class VisibleRegion : ImageForm
+        private class VisibleRegion : ImageRedWidget
         {
             
             /// <summary>
@@ -287,7 +287,7 @@ namespace RedToolkit
         /// <summary>
         /// Кольцо радарной зоны
         /// </summary>
-        private class RadarRing : ImageForm
+        private class RadarRing : ImageRedWidget
         {
 
             /// <summary>
@@ -316,7 +316,7 @@ namespace RedToolkit
         /// <summary>
         /// Радарная линия
         /// </summary>
-        private class RadarLine : ImageForm
+        private class RadarLine : ImageRedWidget
         {
             /// <summary>
             /// Конструктор радарной линии

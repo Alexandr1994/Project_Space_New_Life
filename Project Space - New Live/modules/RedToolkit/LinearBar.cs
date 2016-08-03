@@ -14,7 +14,7 @@ namespace RedToolkit
     /// <summary>
     /// Линейный индикатор
     /// </summary>
-    class LinearBar : ImageForm
+    class LinearBar : ImageRedWidget
     {
 
         private bool visibleSubsrate = true;
@@ -101,7 +101,7 @@ namespace RedToolkit
         /// <summary>
         /// Линия индикатора
         /// </summary>
-        private class BarLine : ImageForm
+        private class BarLine : ImageRedWidget
         {
 
             /// <summary>
