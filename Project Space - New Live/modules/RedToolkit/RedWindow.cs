@@ -31,6 +31,30 @@ namespace RedToolkit
         private RenderWindow window;
 
         /// <summary>
+        /// Red Window background
+        /// </summary>
+        private ImageView background;
+
+        /// <summary>
+        /// Background color of Red Window
+        /// </summary>
+        public Color BackgroundColor
+        {
+            get { return this.background.Image.FillColor; }
+            set { this.background.Image.FillColor = value; }
+        }
+
+        /// <summary>
+        /// Background image of Red Window
+        /// </summary>
+        public Texture BagkgroundImage
+        {
+            get { return this.background.Image.Texture; }
+            set { this.background.Image.Texture = value;}
+        }
+
+
+        /// <summary>
         /// Check having focus of Red Window 
         /// </summary>
         public bool Focused
@@ -88,7 +112,9 @@ namespace RedToolkit
         /// </summary>
         private Image icon = new Image("Resources/RedTheme/RedIcon.png");
 
-
+        /// <summary>
+        /// Red Window Icon
+        /// </summary>
         public Image Icon
         {
             get { return this.icon; }
@@ -100,8 +126,12 @@ namespace RedToolkit
                     this.window.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
                 }
             }
-
         }
+
+        /// <summary>
+        /// Event of changing position of Red Window view
+        /// </summary>
+        public event EventHandler<EventArgs> ViewChanged = null;
 
         /// <summary>
         /// Collection of widgets on window
@@ -148,6 +178,11 @@ namespace RedToolkit
         }
 
         /// <summary>
+        /// Red Window start mutex
+        /// </summary>
+        private Mutex startMutex;
+
+        /// <summary>
         /// Getting basic window 
         /// </summary>
         /// <returns></returns>
@@ -161,8 +196,13 @@ namespace RedToolkit
         /// </summary>
         public void Start()
         {
+            this.startMutex = new Mutex();
             this.windowThread = new Thread(this.Process);//starting window process
             this.windowThread.Start();
+            Thread.Sleep(40);
+            this.startMutex.WaitOne();
+            this.window.RequestFocus();
+            this.startMutex.ReleaseMutex();
         }
 
         /// <summary>
@@ -172,6 +212,7 @@ namespace RedToolkit
         protected virtual void CustomWindowcreate()
         {
             this.window = new RenderWindow(new VideoMode(300, 300), this.Title, Styles.Default);
+            this.background = new ImageView(new RectangleShape(new Vector2f(300, 300)), BlendMode.Add);
             this.window.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
             //setting basic handlers
             this.window.Closed += this.Closing;
@@ -183,15 +224,14 @@ namespace RedToolkit
         /// </summary>
         private void Process()
         {
+            this.startMutex.WaitOne();
             this.CustomWindowcreate();//creating window
+            this.startMutex.ReleaseMutex();
             while (this.window.IsOpen)
             {
                 Thread.Sleep(sleepTime);
                 this.RefreshWindow();
-                if (this.window.HasFocus())
-                {
-                    this.window.DispatchEvents();
-                }
+                this.window.DispatchEvents();
             }
         }
 
@@ -201,7 +241,8 @@ namespace RedToolkit
         public void RefreshWindow()
         {
             this.window.Display();
-            this.window.Clear();   
+            this.window.Clear();  
+            this.window.Draw(this.background.Image);
             foreach (KeyValuePair<string, RedWidget> widget in this.widgetsCollection)
             {
                 foreach (RenderView view in widget.Value.GetFormView(this))
@@ -226,6 +267,7 @@ namespace RedToolkit
             windowView.Size = new Vector2f(e.Width, e.Height);
             windowView.Center = new Vector2f(e.Width, e.Height) / 2;
             this.window.SetView(windowView);
+            (this.background.Image as RectangleShape).Size = windowView.Size;
             this.RefreshWindow();
         }
 
@@ -233,6 +275,8 @@ namespace RedToolkit
         {
             this.Close();
         }
+
+       // private 
 
     }
 }

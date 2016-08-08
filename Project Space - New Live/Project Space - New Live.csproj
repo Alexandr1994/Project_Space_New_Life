@@ -96,7 +96,6 @@
   <ItemGroup>
     <Compile Include="modules\Controlers\AbstractController.cs" />
     <Compile Include="modules\Controlers\ComputerController.cs" />
-    <Compile Include="modules\DataTypes\WidgetView.cs" />
     <Compile Include="modules\Dispatchers\DataSaver.cs" />
     <Compile Include="modules\Environment\BaseEnvironment.cs" />
     <Compile Include="modules\Environment\BattleField.cs" />

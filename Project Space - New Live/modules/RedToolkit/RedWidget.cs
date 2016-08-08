@@ -57,9 +57,10 @@ namespace RedToolkit
             {
                 if (this.View != null)
                 {
+
                     float Xcoef = value.X / this.size.X;
                     float Ycoef = value.Y / this.size.Y;
-                    this.View.View.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
+                    (this.View.View as Shape).Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
                     this.size = value;//сохранение размеров
                 }
                 else
@@ -111,6 +112,11 @@ namespace RedToolkit
         }
 
         /// <summary>
+        /// Coordinates of View center of RedWindow on previous process iteration
+        /// </summary>
+        private Vector2f oldViewCenter; 
+
+        /// <summary>
         /// Добавить дочернюю форму
         /// </summary>
         /// <param name="newRedWidget">Новая дочерняя форма</param>
@@ -142,13 +148,10 @@ namespace RedToolkit
                 retValue.Add(this.View); //добавление отображени в массив
                 foreach (RedWidget childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
                 {
-                    if (this.ChildFormFallTest(childForm)) //проверка если дочерняя форма не "падает" с текущей
-                    {
-                        foreach (RenderView locView in childForm.GetFormView(window))//получаем отображение данной дочерней формы
-                        {
-                            retValue.Add(locView);
-                        }
 
+                    foreach (RenderView locView in childForm.GetFormView(window))//получаем отображение данной дочерней формы
+                    {
+                        retValue.Add(locView);
                     }
                 }
                 if (window.Focused)
@@ -160,65 +163,60 @@ namespace RedToolkit
         }
 
 
-        
         /// <summary>
-        /// Анализ формы на нахождение ей в области родительской формы
+        /// Count of press events
         /// </summary>
-        /// <returns>true - если хотя бы часть проверяемой формы находится в пределах родительской, иначе false</returns>
-        private bool ChildFormFallTest(RedWidget childRedWidget)
-        {
-            return true;//вернуть true
-        }
+        protected int pressCount = 0;
 
         /// <summary>
-        /// Количество нажатий на форму
+        /// Count of release events
         /// </summary>
-        private int clicks = 0;
+        protected int releaseCount = 0;
 
         /// <summary>
         /// Флаг клика
         /// </summary>
-        private bool click = false; 
+        protected bool click = false;
 
         /// <summary>
         /// Флаг нахождения курсора на форме
         /// </summary>
-        private bool cursorOnForm = false;
+        protected bool cursorOnForm = false;
 
         /// <summary>
         /// Флаг удержания левой кнопки мыши
         /// </summary>
-        private bool buttonPresed = false;
+        protected bool buttonPresed = false;
 
         /// <summary>
-        /// Возникает при вхождении курсора в область формы
+        /// Mouse in event
         /// </summary>
         public event EventHandler<MouseMoveEventArgs> MouseIn = null;
 
         /// <summary>
-        /// Возникает при покидании курсором области формы
+        /// Mouse out event
         /// </summary>
         public event EventHandler<MouseMoveEventArgs> MouseOut = null;
 
         /// <summary>
-        /// Возникает при нахождении курсора в области формы
+        /// Mouse move event
         /// </summary>
         public event EventHandler<MouseMoveEventArgs> MouseMove = null;
 
         /// <summary>
-        /// Возникает при отжатии левой кнопки мыши
+        /// Mouse button release event
         /// </summary>
         public event EventHandler<MouseButtonEventArgs> MouseUp = null;
 
         /// <summary>
-        /// Возникает при нажатии на левую кнопку мыши
+        /// Mouse button press event 
         /// </summary>
-        public event EventHandler<MouseButtonEventArgs> MouseDown = null;
+        public event EventHandler<MouseButtonEventArgs> MouseDown;
 
         /// <summary>
-        /// Событие клика кнопки
+        /// Mouse Click event
         /// </summary>
-        public event EventHandler<MouseButtonEventArgs> MouseClick = null;
+        public event EventHandler<MouseButtonEventArgs> MouseClick;
 
         /// <summary>
         /// Анализ возникновения событий
@@ -350,7 +348,8 @@ namespace RedToolkit
         private void InReaction(object sender, MouseMoveEventArgs e)
         {
             this.cursorOnForm = true;//флаг нахождения курсора на форме устанавливается в true
-            this.clicks = 0;//сброс счетчика кликов
+            this.pressCount = 0;//сброс счетчика кликов
+            this.releaseCount = 0;
         }
 
         /// <summary>
@@ -362,7 +361,8 @@ namespace RedToolkit
         {
             this.cursorOnForm = false;//флаг нахождения курсора на форме устанавливается в false
             this.buttonPresed = false;//флаг нажатия кнопки на форме устанавливается в false
-            this.clicks = 0;//сброс счетчика кликов
+            this.pressCount = 0;//сброс счетчика кликов
+            this.releaseCount = 0;
             this.click = false;
         }
 

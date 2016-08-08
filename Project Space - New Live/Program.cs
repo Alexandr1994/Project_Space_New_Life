@@ -19,11 +19,11 @@ namespace Project_Space___New_Live
 
         private static void Main(string[] args)
         {
-        //  GameRoot game = new GameRoot();
-          //  game.Main();
+//            GameRoot game = new GameRoot();
+//            game.Main();
 
-            TestZone test = new TestZone();
-            test.Main();
+              TestZone test = new TestZone();
+              test.Main();
 
         } 
     }

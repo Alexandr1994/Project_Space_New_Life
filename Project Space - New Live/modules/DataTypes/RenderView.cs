@@ -55,6 +55,7 @@ namespace Project_Space___New_Live.modules
                 {
                     imageParams = (this.View as Shape).GetGlobalBounds();
                 }
+
                 center.X = imageParams.Left + imageParams.Width / 2;
                 center.Y = imageParams.Top + imageParams.Height / 2;
                 return center;
@@ -169,10 +170,6 @@ namespace Project_Space___New_Live.modules
                 {
                     return this.RectanglePointTest(point, center);//круг/эллипс
                 }
-                /*case "ConvexShape":
-                {
-                       return this.ConvexPointTest(point, center);//произвольный многоугольник
-                }*/
             }
             return false;
         }

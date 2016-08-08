@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Project_Space___New_Live.modules;
-using Project_Space___New_Live.modules.DataTypes;
 using RedToolkit;
 
 using Project_Space___New_Live.modules.Dispatchers;
@@ -27,80 +26,55 @@ namespace Project_Space___New_Live.modules.Dispatchers
     class TestZone
     {
 
+        RedWindow win = new RedWindow();
+
         public void Main()
         {
-         /*   RectButton test = new RectButton();
+            RectButton test = new RectButton();
             test.Location = new Vector2f(100, 100);
             test.Size = new Vector2f(100, 100);
             test.Text = "Close";
-              RedWindow win = new RedWindow();
+            test.MouseClick += Close;
+              
+           
             win.AddWidget(test, "testButton");
             //Image img = new Image("Resources/Shark.jpg");
 
             win.Start();
-           */
-            
-            ConvexShape shape = new ConvexShape();
+           // win.GetWindow().MouseButtonPressed += this.Close;
+            win.BackgroundColor = Color.Black;
 
-            shape.SetPointCount(5);
+           // win.GetWindow().KeyPressed += OnKey;
+//            RenderWindow win = new RenderWindow(new VideoMode(800, 600), "Test");
+//            
+//            ImageView rect = new ImageView(new RectangleShape(new Vector2f(40, 100)), BlendMode.Add);
+//            TextView text = new TextView("SomeText", BlendMode.Add, FontsStorage.Arial);
+//
+//
+//            bool tuda = false;
+//
+//
+//            while (true)
+//            {
+//
+//                Vector2f point = new Vector2f(Mouse.GetPosition(win).X, Mouse.GetPosition(win).Y);
+//                win.Display();
+//                win.Clear();
+//
+//
+//
+//
+//                win.Draw(rect.Image);
+//                win.Draw(text.TextString);
+//
+//                Vector2f t1 = rect.ViewCenter;
+//                Vector2f t2 = text.ViewCenter;
+//
+//            }
 
-            shape.SetPoint(0, new Vector2f(0, 0));
-            shape.SetPoint(1, new Vector2f(50, 0));
-            shape.SetPoint(2, new Vector2f(100, 50));
-            shape.SetPoint(3, new Vector2f(50, 120));
-            shape.SetPoint(4, new Vector2f(0, 100));
-            shape.FillColor = Color.Blue;
-            shape.OutlineThickness = 5;
-
-            shape.Position = new Vector2f(50,50);
-
-            RenderWindow win = new RenderWindow(new VideoMode(800, 600), "ы");
-
-            WidgetView test = new WidgetView(shape);
-
-            test.Location = shape.Position;
-
-            bool tuda = false;
 
 
-            while (true)
-            {
-
-                Vector2f point = new Vector2f(Mouse.GetPosition(win).X, Mouse.GetPosition(win).Y);
-                win.Display();
-                win.Clear();
-                if (!tuda)
-                {
-                    test.Location += new Vector2f((float)0.3, (float)0.1);
-                    if (test.Location.X > 600)
-                    {
-                        tuda = true;
-                    }
-                }
-                else
-                {
-                    test.Location -= new Vector2f((float)0.3, (float)0.1);
-                    if (test.Location.X < 100)
-                    {
-                        tuda = false;
-                    }
-                }
-                
-                test.Rotate(test.ViewCenter, (float)(0.5 * Math.PI / 180));
-                if (test.PointAnalize(point, test.ViewCenter))
-                {
-                    test.Image.FillColor = Color.Yellow;
-                }
-                else
-                {
-                    test.Image.FillColor = Color.Blue;
-                }
-                win.Draw(test.Image);
-            }
-
-            
-            
-            /* test = new RectButton();
+            /*     test = new RectButton();
             test.Location = new Vector2f(100, 100);
             test.Size = new Vector2f(100, 100);
             test.Text = "Close";
@@ -115,6 +89,29 @@ namespace Project_Space___New_Live.modules.Dispatchers
             win.AddWidget(test, "testButton");
             win.Start();*/
         }
+
+
+        private void Close(object sender, MouseButtonEventArgs e)
+        {
+            win.Close();
+        }
+
+
+//        private void OnKey(object sender, KeyEventArgs e)
+//        {
+//            switch (e.Code)
+//            {
+//                case Keyboard.Key.Up : win.MoveView(0, -2); break;
+//                case Keyboard.Key.Down : win.MoveView(0, 2); break;
+//                case Keyboard.Key.Right : win.MoveView(2, 0); break;
+//                case Keyboard.Key.Left : win.MoveView(2, 0); break;
+//                 
+//
+//
+//            }
+//
+//        }
+
 
     }
 
