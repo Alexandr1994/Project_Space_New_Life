@@ -35,13 +35,14 @@ namespace Project_Space___New_Live.modules.Dispatchers
             test.Size = new Vector2f(100, 100);
             test.Text = "Close";
             test.MouseClick += Close;
-              
-           
+
+            
             win.AddWidget(test, "testButton");
             //Image img = new Image("Resources/Shark.jpg");
 
             win.Start();
            // win.GetWindow().MouseButtonPressed += this.Close;
+            win.GetWindow().KeyPressed += this.OnKey;
             win.BackgroundColor = Color.Black;
 
            // win.GetWindow().KeyPressed += OnKey;
@@ -97,20 +98,20 @@ namespace Project_Space___New_Live.modules.Dispatchers
         }
 
 
-//        private void OnKey(object sender, KeyEventArgs e)
-//        {
-//            switch (e.Code)
-//            {
-//                case Keyboard.Key.Up : win.MoveView(0, -2); break;
-//                case Keyboard.Key.Down : win.MoveView(0, 2); break;
-//                case Keyboard.Key.Right : win.MoveView(2, 0); break;
-//                case Keyboard.Key.Left : win.MoveView(2, 0); break;
-//                 
-//
-//
-//            }
-//
-//        }
+        private void OnKey(object sender, KeyEventArgs e)
+        {
+            switch (e.Code)
+            {
+                case Keyboard.Key.Up: win.MoveView(new Vector2f(0, 2)); break;
+                case Keyboard.Key.Down: win.MoveView(new Vector2f(0, -2)); break;
+                case Keyboard.Key.Right: win.MoveView(new Vector2f(2, 0)); break;
+                case Keyboard.Key.Left: win.MoveView(new Vector2f(2, 0)); break;
+
+                 
+
+            }
+
+        }
 
 
     }

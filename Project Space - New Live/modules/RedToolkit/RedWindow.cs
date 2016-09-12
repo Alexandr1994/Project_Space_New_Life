@@ -47,7 +47,7 @@ namespace RedToolkit
         /// <summary>
         /// Background image of Red Window
         /// </summary>
-        public Texture BagkgroundImage
+        public Texture BackgroundImage
         {
             get { return this.background.Image.Texture; }
             set { this.background.Image.Texture = value;}
@@ -134,6 +134,36 @@ namespace RedToolkit
         public event EventHandler<EventArgs> ViewChanged = null;
 
         /// <summary>
+        /// Mouse in event
+        /// </summary>
+        public event EventHandler<MouseMoveEventArgs> MouseIn = null;
+
+        /// <summary>
+        /// Mouse out event
+        /// </summary>
+        public event EventHandler<MouseMoveEventArgs> MouseOut = null;
+
+        /// <summary>
+        /// Mouse move event
+        /// </summary>
+        public event EventHandler<MouseMoveEventArgs> MouseMove = null;
+
+        /// <summary>
+        /// Mouse button release event
+        /// </summary>
+        public event EventHandler<MouseButtonEventArgs> MouseUp = null;
+
+        /// <summary>
+        /// Mouse button press event 
+        /// </summary>
+        public event EventHandler<MouseButtonEventArgs> MouseDown = null;
+
+        /// <summary>
+        /// Mouse Click event
+        /// </summary>
+        public event EventHandler<MouseButtonEventArgs> MouseClick = null;
+
+        /// <summary>
         /// Collection of widgets on window
         /// </summary>
         private Dictionary<String, RedWidget> widgetsCollection = new Dictionary<String, RedWidget>();
@@ -217,6 +247,10 @@ namespace RedToolkit
             //setting basic handlers
             this.window.Closed += this.Closing;
             this.window.Resized += this.Resizing;
+            this.window.MouseButtonPressed += this.MouseDownCatcher;
+            this.window.MouseButtonReleased += this.MouseUpCatcher;
+            
+
         }
 
         /// <summary>
@@ -276,7 +310,87 @@ namespace RedToolkit
             this.Close();
         }
 
-       // private 
+        private void MouseDownCatcher(object sender, MouseButtonEventArgs e)
+        {
+            if (this.MouseDown != null)
+            {
+                this.MouseDown(this, e);
+            }
+        }
+
+        private void MouseUpCatcher(object sender, MouseButtonEventArgs e)
+        {
+            if (this.MouseUp != null)
+            {
+                this.MouseUp(this, e);
+            }
+        }
+
+        private void MouseMoveCatcher(object sender, MouseMoveEventArgs e)
+        {
+            if (this.MouseDown != null)
+            {
+                this.MouseMove(this, e);
+            }
+        }
+
+        private void MouseInCather(object sender, MouseMoveEventArgs e)
+        {
+            if (this.MouseIn != null)
+            {
+                this.MouseIn(this, e);
+            }
+        }
+
+        private void MouseOutCather(object sender, MouseMoveEventArgs e)
+        {
+            if (this.MouseDown != null)
+            {
+                this.MouseOut(this, e);
+            }
+        }
+
+        /// <summary>
+        /// RedWindow view moving 
+        /// </summary>
+        /// <param name="offset">Moving offset</param>
+        public void MoveView(Vector2f offset)
+        {
+            if (this.ViewChanged != null)
+            {
+                this.ViewChanged(this, new ViewEventArgs(offset, 0));
+            }
+            View view = this.window.GetView();
+            view.Center += offset;
+            this.window.SetView(view);
+        }
+    }
+
+    /// <summary>
+    /// View-changig event args 
+    /// </summary>
+    public class ViewEventArgs : EventArgs
+    {
+        /// <summary>
+        /// View-moving offset
+        /// </summary>
+        public Vector2f Offset;
+
+        /// <summary>
+        /// View-rotation angle
+        /// </summary>
+        public float Angle;
+
+        /// <summary>
+        /// View changing event args
+        /// </summary>
+        /// <param name="offset">Moving offset</param>
+        /// <param name="angle">Rotation angle</param>
+        public ViewEventArgs(Vector2f offset, float angle)
+        {
+            this.Offset = offset;
+            this.Angle = angle;
+        }
 
     }
 }
