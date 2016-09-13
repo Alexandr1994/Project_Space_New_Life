@@ -197,7 +197,7 @@ namespace Project_Space___New_Live.modules
         {
             foreach (Vector3f line in poligonLines)
             {
-                if (this.LineFuncValue(point, line) < 0)//определение значениz функции в целевой точке
+                if (this.LineFuncValue(point, line) <= 0)//определение значениz функции в целевой точке
                 {//если значение функции в заданной точке меньше 0 то точка за пределами многоугольника
                     return false;
                 }

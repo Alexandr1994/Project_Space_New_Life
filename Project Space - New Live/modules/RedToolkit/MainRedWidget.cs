@@ -17,9 +17,26 @@ namespace RedToolkit
     /// </summary>
     class MainRedWidget : ImageRedWidget
     {
-       /// <summary>
-       /// Экземпляр формы
-       /// </summary>
+
+        /// <summary>
+        /// Размер
+        /// </summary>
+        public override Vector2f Size
+        {
+            get { return this.size; }
+            set
+            {
+                this.size = value;
+                if (this.View != null)
+                {
+                    (this.View.View as RectangleShape).Size = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Экземпляр формы
+        /// </summary>
         private static MainRedWidget _redWidget = null;
 
         /// <summary>

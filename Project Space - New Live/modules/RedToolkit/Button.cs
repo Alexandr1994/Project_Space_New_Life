@@ -42,22 +42,6 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// Размер
-        /// </summary>
-        public override Vector2f Size
-        {
-            get { return this.size; }
-            set
-            {
-                base.Size = value;
-                if (this.View != null)
-                {
-                    this.TextLocationCorrection();
-                }
-            }
-        }
-
-        /// <summary>
         /// Флаг нажатия левой кнопки мыши
         /// </summary>
         private bool leftPressed = false;
@@ -216,6 +200,21 @@ namespace RedToolkit
         /// </summary>
         private class ButtonLabel : TextRedWidget
         {
+
+            /// <summary>
+            /// Размер
+            /// </summary>
+            public override Vector2f Size
+            {
+                get { return this.size; }
+                set
+                {
+                    this.size = value;
+
+                }
+            }
+
+
             /// <summary>
             /// Состояния активной строки
             /// </summary>
@@ -223,7 +222,7 @@ namespace RedToolkit
             {
                 /// <summary>
                 /// Нормальное
-                /// </summary>
+                /// </summary>1
                 Normal = 0,
                 /// <summary>
                 /// Активное

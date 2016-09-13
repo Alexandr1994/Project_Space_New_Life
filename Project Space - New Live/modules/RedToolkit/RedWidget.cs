@@ -18,6 +18,7 @@ namespace RedToolkit
     /// </summary>
     public abstract class RedWidget
     {
+        //Red Widget parametrs
 
         /// <summary>
         /// Отображение
@@ -43,6 +44,11 @@ namespace RedToolkit
         }
 
         /// <summary>
+        /// Red Window view offset
+        /// </summary>
+        private Vector2f viewOffset = new Vector2f();
+
+        /// <summary>
         /// Размер
         /// </summary>
         protected Vector2f size;
@@ -50,25 +56,7 @@ namespace RedToolkit
         /// <summary>
         /// Размер
         /// </summary>
-        public virtual Vector2f Size
-        {
-            get { return this.size; }
-            set
-            {
-                if (this.View != null)
-                {
-
-                    float Xcoef = value.X / this.size.X;
-                    float Ycoef = value.Y / this.size.Y;
-                    (this.View.View as Shape).Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
-                    this.size = value;//сохранение размеров
-                }
-                else
-                {
-                    size = value;
-                }
-            }
-        }
+        public abstract Vector2f Size{ get; set; }
 
         /// <summary>
         /// Видимость формы и дочерних форм
@@ -326,7 +314,7 @@ namespace RedToolkit
             {//получить позицию с учетом её положения
                 point = this.ParentRedWidget.GetPosition();
             }
-            return point += this.Location;
+            return point += this.Location + this.viewOffset;
         }
 
         /// <summary>
@@ -411,6 +399,22 @@ namespace RedToolkit
         /// Конструктор конкретной формы
         /// </summary>
         protected abstract void CustomConstructor();
+
+        //Red Widget
+
+        /// <summary>
+        /// Widget view correction after Red Window's View changing 
+        /// </summary>
+        /// <param name="viewOffset"></param>
+        /// <param name="viewRotation"></param>
+        internal void WidgetCorrection(Vector2f viewOffset, float viewRotation)
+        {
+            /*foreach (RedWidget widget in this.childForms)
+            {
+                widget.View.Translate(- viewOffset);
+            }*/
+            this.viewOffset += viewOffset;
+        }
 
     }
 }

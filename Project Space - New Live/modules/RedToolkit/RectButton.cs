@@ -16,6 +16,24 @@ namespace RedToolkit
     /// </summary>
     class RectButton : Button
     {
+
+        /// <summary>
+        /// Размер
+        /// </summary>
+        public override Vector2f Size
+        {
+            get { return this.size; }
+            set
+            {
+                this.size = value;
+                if (this.View != null)
+                {
+                    this.TextLocationCorrection();
+                    (this.View.View as RectangleShape).Size = value;
+                }
+            }
+        }
+
         /// <summary>
         /// Прямоугольная кнопка кнопка
         /// </summary>

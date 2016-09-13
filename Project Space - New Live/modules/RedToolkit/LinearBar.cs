@@ -17,6 +17,23 @@ namespace RedToolkit
     class LinearBar : ImageRedWidget
     {
 
+
+        /// <summary>
+        /// Размер
+        /// </summary>
+        public override Vector2f Size
+        {
+            get { return this.size; }
+            set
+            {
+                this.size = value;
+                if (this.View != null)
+                {
+                    (this.View.View as RectangleShape).Size = value;
+                }
+            }
+        }
+
         private bool visibleSubsrate = true;
 
         public bool VisibleSubstrate

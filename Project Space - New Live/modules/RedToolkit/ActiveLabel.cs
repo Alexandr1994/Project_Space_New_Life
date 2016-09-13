@@ -6,12 +6,26 @@ using System.Threading.Tasks;
 using Project_Space___New_Live.modules;
 using Project_Space___New_Live.modules.Dispatchers;
 using SFML.Graphics;
+using SFML.System;
 using SFML.Window;
 
 namespace RedToolkit
 {
     class ActiveLabel : TextRedWidget
     {
+
+        /// <summary>
+        /// Размер
+        /// </summary>
+        public override Vector2f Size
+        {
+            get { return this.size; }
+            set
+            {
+                this.size = value;
+            }
+        }
+
 
         /// <summary>
         /// Состояния активной строки

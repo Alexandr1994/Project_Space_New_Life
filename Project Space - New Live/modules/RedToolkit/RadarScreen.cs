@@ -21,6 +21,27 @@ namespace RedToolkit
     /// </summary>
     class RadarScreen : ImageRedWidget
     {
+
+        public override Vector2f Size
+        {
+            get { return this.size; }
+            set
+            {
+                if (this.View != null)
+                {
+                    float radius = (this.View.View as CircleShape).Radius;
+                    float Xcoef = value.X / radius / 2;
+                    float Ycoef = value.Y / radius / 2;
+                    this.View.View.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
+                    this.size = value;//сохранение размеров
+                }
+                else
+                {
+                    size = value;
+                }
+            }
+        }
+
         /// <summary>
         /// Размер видимой области
         /// </summary>
@@ -175,6 +196,7 @@ namespace RedToolkit
             /// </summary>
             public override Vector2f Size
             {
+                get { return this.size; }
                 set
                 {
                     this.size = value;
@@ -213,6 +235,27 @@ namespace RedToolkit
         /// </summary>
         private class RadarNoise : ImageRedWidget
         {
+
+            public override Vector2f Size
+            {
+                get { return this.size; }
+                set
+                {
+                    if (this.View != null)
+                    {
+                        float radius = (this.View.View as CircleShape).Radius;
+                        float Xcoef = value.X / radius / 2;
+                        float Ycoef = value.Y / radius / 2;
+                        this.View.View.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
+                        this.size = value;//сохранение размеров
+                    }
+                    else
+                    {
+                        size = value;
+                    }
+                }
+            }
+
             /// <summary>
             /// Конструктор радарного шума
             /// </summary>
@@ -260,7 +303,23 @@ namespace RedToolkit
         /// </summary>
         private class VisibleRegion : ImageRedWidget
         {
-            
+
+            /// <summary>
+            /// Размер
+            /// </summary>
+            public override Vector2f Size
+            {
+                get { return this.size; }
+                set
+                {
+                    this.size = value;
+                    if (this.View != null)
+                    {
+                        (this.View.View as RectangleShape).Size = value;
+                    }
+                }
+            }
+
             /// <summary>
             /// Конструктор видимой области
             /// </summary>
@@ -290,6 +349,26 @@ namespace RedToolkit
         private class RadarRing : ImageRedWidget
         {
 
+            public override Vector2f Size
+            {
+                get { return this.size; }
+                set
+                {
+                    if (this.View != null)
+                    {
+                        float radius = (this.View.View as CircleShape).Radius;
+                        float Xcoef = value.X / radius / 2;
+                        float Ycoef = value.Y / radius / 2;
+                        this.View.View.Scale = new Vector2f(Xcoef, Ycoef);//Изменение размеров изображения
+                        this.size = value;//сохранение размеров
+                    }
+                    else
+                    {
+                        size = value;
+                    }
+                }
+            }
+
             /// <summary>
             /// Конструктор радарного кольца
             /// </summary>
@@ -318,6 +397,23 @@ namespace RedToolkit
         /// </summary>
         private class RadarLine : ImageRedWidget
         {
+
+            /// <summary>
+            /// Размер
+            /// </summary>
+            public override Vector2f Size
+            {
+                get { return this.size; }
+                set
+                {
+                    this.size = value;
+                    if (this.View != null)
+                    {
+                        (this.View.View as RectangleShape).Size = value;
+                    }
+                }
+            }
+
             /// <summary>
             /// Конструктор радарной линии
             /// </summary>

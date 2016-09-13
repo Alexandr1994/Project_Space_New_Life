@@ -17,6 +17,18 @@ namespace RedToolkit
     {
 
         /// <summary>
+        /// Размер
+        /// </summary>
+        public override Vector2f Size
+        {
+            get { return this.size; }
+            set
+            {
+                this.size = value;
+            }
+        }
+
+        /// <summary>
         /// Цвет текста
         /// </summary>
         public Color TextColor

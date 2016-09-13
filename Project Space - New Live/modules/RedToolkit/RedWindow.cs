@@ -131,17 +131,17 @@ namespace RedToolkit
         /// <summary>
         /// Event of changing position of Red Window view
         /// </summary>
-        public event EventHandler<EventArgs> ViewChanged = null;
+        public event EventHandler<ViewEventArgs> ViewChanged = null;
 
         /// <summary>
         /// Mouse in event
         /// </summary>
-        public event EventHandler<MouseMoveEventArgs> MouseIn = null;
+        public event EventHandler<EventArgs> MouseIn = null;
 
         /// <summary>
         /// Mouse out event
         /// </summary>
-        public event EventHandler<MouseMoveEventArgs> MouseOut = null;
+        public event EventHandler<EventArgs> MouseOut = null;
 
         /// <summary>
         /// Mouse move event
@@ -249,8 +249,10 @@ namespace RedToolkit
             this.window.Resized += this.Resizing;
             this.window.MouseButtonPressed += this.MouseDownCatcher;
             this.window.MouseButtonReleased += this.MouseUpCatcher;
-            
-
+            this.window.MouseMoved += this.MouseMoveCatcher;
+            this.window.MouseEntered += this.MouseInCather;
+            this.window.MouseLeft += this.MouseOutCather;
+            this.ViewChanged += this.ViewChanging;
         }
 
         /// <summary>
@@ -264,8 +266,8 @@ namespace RedToolkit
             while (this.window.IsOpen)
             {
                 Thread.Sleep(sleepTime);
-                this.RefreshWindow();
                 this.window.DispatchEvents();
+                this.RefreshWindow();
             }
         }
 
@@ -294,7 +296,11 @@ namespace RedToolkit
             this.window.Close();
         }
 
-       
+        /// <summary>
+        /// Resizing of Red Window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e">Event arguments</param>
         private void Resizing(object sender, SizeEventArgs e)
         {
             View windowView = this.window.GetView();  
@@ -302,13 +308,28 @@ namespace RedToolkit
             windowView.Center = new Vector2f(e.Width, e.Height) / 2;
             this.window.SetView(windowView);
             (this.background.Image as RectangleShape).Size = windowView.Size;
-            this.RefreshWindow();
         }
+
+        /// <summary>
+        /// Changing of Red Window's view
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ViewChanging(object sender, ViewEventArgs e)
+        {
+            foreach (KeyValuePair<string, RedWidget> widget in this.widgetsCollection)
+            {
+                widget.Value.WidgetCorrection(e.Offset, e.Angle);
+            }
+        }
+
 
         private void Closing(object sender, EventArgs e)
         {
             this.Close();
         }
+
+        //RED WINDOW EVENTS CATCHER
 
         private void MouseDownCatcher(object sender, MouseButtonEventArgs e)
         {
@@ -334,7 +355,7 @@ namespace RedToolkit
             }
         }
 
-        private void MouseInCather(object sender, MouseMoveEventArgs e)
+        private void MouseInCather(object sender, EventArgs e)
         {
             if (this.MouseIn != null)
             {
@@ -342,7 +363,7 @@ namespace RedToolkit
             }
         }
 
-        private void MouseOutCather(object sender, MouseMoveEventArgs e)
+        private void MouseOutCather(object sender, EventArgs e)
         {
             if (this.MouseDown != null)
             {
@@ -356,13 +377,13 @@ namespace RedToolkit
         /// <param name="offset">Moving offset</param>
         public void MoveView(Vector2f offset)
         {
+            View view = this.window.GetView();
+            view.Center += offset;
+            this.window.SetView(view);
             if (this.ViewChanged != null)
             {
                 this.ViewChanged(this, new ViewEventArgs(offset, 0));
             }
-            View view = this.window.GetView();
-            view.Center += offset;
-            this.window.SetView(view);
         }
     }
 
