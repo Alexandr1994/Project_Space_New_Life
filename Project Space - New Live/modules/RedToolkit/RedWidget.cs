@@ -407,12 +407,12 @@ namespace RedToolkit
         /// </summary>
         /// <param name="viewOffset"></param>
         /// <param name="viewRotation"></param>
-        internal void WidgetCorrection(Vector2f viewOffset, float viewRotation)
+        internal void WidgetCorrection(Vector2f viewOffset, float viewRotation, Vector2f center)
         {
-            /*foreach (RedWidget widget in this.childForms)
+            foreach (RedWidget widget in this.childForms)
             {
-                widget.View.Translate(- viewOffset);
-            }*/
+                widget.View.Rotate(center - widget.Location, (float)((viewRotation * Math.PI) / 180));
+            }
             this.viewOffset += viewOffset;
         }
 

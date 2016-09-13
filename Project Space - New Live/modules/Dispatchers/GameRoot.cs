@@ -100,14 +100,16 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
         private void OnKey(object sender, KeyEventArgs e)
         {
+            win.F
             switch (e.Code)
             {
                 case Keyboard.Key.Up: win.MoveView(new Vector2f(0, 2)); break;
                 case Keyboard.Key.Down: win.MoveView(new Vector2f(0, -2)); break;
-                case Keyboard.Key.Right: win.MoveView(new Vector2f(2, 0)); break;
+                case Keyboard.Key.Right: win.MoveView(new Vector2f(-2, 0)); break;
                 case Keyboard.Key.Left: win.MoveView(new Vector2f(2, 0)); break;
+                case Keyboard.Key.A: win.RotateView(2); break;
+                case Keyboard.Key.S: win.RotateView(-2); break;
 
-                 
 
             }
 
