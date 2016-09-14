@@ -14,25 +14,34 @@ using Project_Space___New_Live.modules.Dispatchers;
 namespace RedToolkit
 {
     /// <summary>
-    /// Абстрактная форма интерфейса
+    /// Basic RedToolkit widget
+    /// <para></para>
+    /// Базовый виджет RedToolkit
     /// </summary>
     public abstract class RedWidget
     {
-        //Red Widget parametrs
+
+        //RED WIDGET PARAMETRS AND PROPERTIES
+        //ПАРАМЕТРЫ И СВОЙСТВА RED WIDGET
 
         /// <summary>
-        /// Отображение
+        /// Image of widget
+        /// <para></para>
+        /// Отображение виджета
         /// </summary>
         protected abstract RenderView View { get; }
 
-
         /// <summary>
-        /// Позиция
+        /// Widget location
+        /// <para></para>
+        /// Положение виджета
         /// </summary>
         protected Vector2f location;
 
         /// <summary>
-        /// Позиция
+        /// Widget location
+        /// <para></para>
+        /// Положение виджета
         /// </summary>
         public virtual Vector2f Location
         {
@@ -45,26 +54,77 @@ namespace RedToolkit
 
         /// <summary>
         /// Red Window view offset
+        /// <para></para>
+        /// Сдвиг вида окна RedWindow
         /// </summary>
         private Vector2f viewOffset = new Vector2f();
 
         /// <summary>
-        /// Размер
+        /// Widget size
+        /// <para></para>
+        /// Размер виджета
         /// </summary>
         protected Vector2f size;
 
         /// <summary>
-        /// Размер
+        /// Widget size
+        /// <para></para>
+        /// Размер виджета
         /// </summary>
-        public abstract Vector2f Size{ get; set; }
+        public abstract Vector2f Size { get; set; }
 
         /// <summary>
-        /// Видимость формы и дочерних форм
+        /// Pointer on parent widget
+        /// <para></para>
+        /// Указатель на родительский виджет
+        /// </summary>
+        protected RedWidget ParentRedWidget;
+
+        /// <summary>
+        /// Collection of child widgets
+        /// <para></para>
+        /// Коллекция дочерних виджетов
+        /// </summary>
+        private List<RedWidget> childWidgetsCollections = new List<RedWidget>();
+
+        /// <summary>
+        /// Collection of child widgets
+        /// <para></para>
+        /// Коллекция дочерних виджетов
+        /// </summary>
+        protected List<RedWidget> ChildWidgetsCollections
+        {
+            get { return childWidgetsCollections; }
+        }
+
+        /// <summary>
+        /// Count of press events
+        /// <para></para>
+        /// Счетчик нажатий на левую кнопку мыши
+        /// </summary>
+        protected int leftMousePressCount = 0;
+
+        /// <summary>
+        /// Count of release events
+        /// <para></para>
+        /// Счетчик отжатий левой кнопки мыши
+        /// </summary>
+        protected int leftMouseReleaseCount = 0;
+
+        //Red Widget flags
+        //флаги Red Widget
+
+        /// <summary>
+        /// Flag of visibility of widget
+        /// <para></para>
+        /// Флаг видимости виджета 
         /// </summary>
         private bool visible;
 
         /// <summary>
-        /// Видимость формы и дочерних форм
+        /// Flag of visibility of widget
+        /// <para></para>
+        /// Флаг видимости виджета 
         /// </summary>
         public bool Visible
         {
@@ -73,60 +133,165 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// Указатель на родительскую форму, при её наличии
+        /// Flag of click
+        /// <para></para>
+        /// Флаг клика
         /// </summary>
-        protected RedWidget ParentRedWidget;
+        protected bool click = false;
 
         /// <summary>
-        /// Установка родителской формы
+        /// Flag of being cursor in region of widget
+        /// <para></para>
+        /// Флаг нахождения курсора в области виджета
         /// </summary>
-        /// <param name="ParentRedWidget">Родительская форма</param>
-        protected void SetPatentForm(RedWidget ParentRedWidget)
+        protected bool cursorOnForm = false;
+
+        /// <summary>
+        /// Flag of holding left button of mouse
+        /// Флаг удержания левой кнопки мыши
+        /// </summary>
+        protected bool buttonPresed = false;
+
+        //EVENTS OF RED WIDGET
+        //СОБЫТИЯ RED WIDGET
+
+        //Red Widget mouse events
+        //события мыши Red Widget
+
+        //Red Widget mouse move events
+        //События движения мыши Red Widget
+
+        /// <summary>
+        /// Event of cursor entering in widget region
+        /// <para></para> 
+        /// Событие входа курсора в область виджета
+        /// </summary>
+        public event EventHandler<MouseMoveEventArgs> MouseIn = null;
+
+        /// <summary>
+        /// Event of cursor leaving of widget region
+        /// <para></para> 
+        /// Событие выхода курсора из область виджета
+        /// </summary>
+        public event EventHandler<MouseMoveEventArgs> MouseOut = null;
+
+        /// <summary>
+        /// Event of cursor moving in widget region
+        /// <para></para> 
+        /// Событие движения курсора в области виджета
+        /// </summary>
+        public event EventHandler<MouseMoveEventArgs> MouseMove = null;
+
+        //Red Widget mouse button events
+        //События кнопок мыши Red Widget
+
+        /// <summary>
+        /// Event of mouse button release
+        /// <para></para>
+        /// Событие отжатия кнопки мыши
+        /// </summary>
+        public event EventHandler<MouseButtonEventArgs> MouseUp = null;
+
+        /// <summary>
+        /// Event of mouse button press
+        /// <para></para>
+        /// Событие нажатия кнопки мыши
+        /// </summary>
+        public event EventHandler<MouseButtonEventArgs> MouseDown = null;
+
+        /// <summary>
+        /// Event of click
+        /// <para></para> 
+        /// Событие клика
+        /// </summary>
+        public event EventHandler<MouseButtonEventArgs> MouseClick = null;
+
+        //Red Widget keyboard events
+        //События клавиатуры Red Widget
+
+        /// <summary>
+        /// Event of key press
+        /// <para></para>
+        /// Событие нажатия на клавишу
+        /// </summary>
+        public event EventHandler<KeyEventArgs> KeyDown = null;
+
+        /// <summary>
+        /// Event of key released
+        /// <para></para>
+        /// Событие отжатия клавиши
+        /// </summary>
+        public event EventHandler<KeyEventArgs> KeyUp = null;
+
+        //RED WIDGET METHODS
+        //МЕТОДЫ RED WIDGET
+
+        public RedWidget()
+        {
+            this.SetBasicReactions();//установка базовых слушателей формы
+            this.CustomConstructor();//установка базовых характеристик формы 
+            this.Visible = true;
+        }
+
+        protected abstract void CustomConstructor();
+
+        /// <summary>
+        /// Setting parent widget
+        /// <para></para>
+        /// Установка родителского виджета
+        /// </summary>
+        /// <param name="ParentRedWidget">Parent widget / Родительский виджет</param>
+        protected void SetPatentWidget(RedWidget ParentRedWidget)
         {
             this.ParentRedWidget = ParentRedWidget;
         }
 
         /// <summary>
-        /// Коллекция дочерних форм
+        /// Adding child widget
+        /// <para></para>
+        /// Добавление дочернего виджета
         /// </summary>
-        private List<RedWidget> childForms = new List<RedWidget>();
-
-        /// <summary>
-        /// Коллекция дочерних форм
-        /// </summary>
-        protected List<RedWidget> ChildForms
+        /// <param name="newRedWidget">New child widget / Новая дочерняя форма</param>
+        public void AddWidget(RedWidget newRedWidget)
         {
-            get { return childForms; }
+            this.childWidgetsCollections.Add(newRedWidget);
+            newRedWidget.SetPatentWidget(this);
         }
 
         /// <summary>
-        /// Coordinates of View center of RedWindow on previous process iteration
+        /// Removing child widget
+        /// <para></para>
+        /// Удаление дочернего виджета
         /// </summary>
-        private Vector2f oldViewCenter; 
-
-        /// <summary>
-        /// Добавить дочернюю форму
-        /// </summary>
-        /// <param name="newRedWidget">Новая дочерняя форма</param>
-        public void AddForm(RedWidget newRedWidget)
+        /// <param name="targetRedWidget">Widget to removing / Виджет к удалению</param>
+        public void RemoveWinget(RedWidget targetRedWidget)
         {
-            this.childForms.Add(newRedWidget);
-            newRedWidget.SetPatentForm(this);
+            if (this.childWidgetsCollections.IndexOf(targetRedWidget) > 0)
+            {
+                this.childWidgetsCollections.Remove(targetRedWidget);
+            }
         }
 
         /// <summary>
-        /// Удалить дочернюю форму
+        /// Removing child widget by id
+        /// <para></para>
+        /// Удаление дочернего виджета по Id
         /// </summary>
-        /// <param name="targetRedWidget">Форма предназначенная к удалению</param>
-        public void RemoveForm(RedWidget targetRedWidget)
+        /// <param name="targetRedWidgetid">Id of widget to removing / Id виджета к удалению</param>
+        public void RemoveWingetById(int targetRedWidgetId)
         {
-            this.childForms.Remove(targetRedWidget);
+            if (this.childWidgetsCollections.Count >= targetRedWidgetId - 1)
+            {
+                this.childWidgetsCollections.RemoveAt(targetRedWidgetId);
+            }
         }
 
         /// <summary>
-        /// Получить отображения текущией и дочерних форм
+        /// Getting view of current and all child widgets
+        /// <para></para>
+        /// Получить отображения текущего и всех дочерних виджетов
         /// </summary>
-        /// <returns>Коллекция отображений форм</returns>
+        /// <returns>Collection of widgets views / Коллекция отображений виджетов</returns>
         public List<RenderView> GetFormView(RedWindow window)
         {
             List<RenderView> retValue = new List<RenderView>();
@@ -134,7 +299,7 @@ namespace RedToolkit
             if (this.Visible)//если форма видимая
             {
                 retValue.Add(this.View); //добавление отображени в массив
-                foreach (RedWidget childForm in this.ChildForms)//добавление в массив возвращаемых значений дочерних отображений фолрм
+                foreach (RedWidget childForm in this.ChildWidgetsCollections)//добавление в массив возвращаемых значений дочерних отображений фолрм
                 {
 
                     foreach (RenderView locView in childForm.GetFormView(window))//получаем отображение данной дочерней формы
@@ -150,65 +315,12 @@ namespace RedToolkit
             return retValue;
         }
 
-
         /// <summary>
-        /// Count of press events
-        /// </summary>
-        protected int pressCount = 0;
-
-        /// <summary>
-        /// Count of release events
-        /// </summary>
-        protected int releaseCount = 0;
-
-        /// <summary>
-        /// Флаг клика
-        /// </summary>
-        protected bool click = false;
-
-        /// <summary>
-        /// Флаг нахождения курсора на форме
-        /// </summary>
-        protected bool cursorOnForm = false;
-
-        /// <summary>
-        /// Флаг удержания левой кнопки мыши
-        /// </summary>
-        protected bool buttonPresed = false;
-
-        /// <summary>
-        /// Mouse in event
-        /// </summary>
-        public event EventHandler<MouseMoveEventArgs> MouseIn = null;
-
-        /// <summary>
-        /// Mouse out event
-        /// </summary>
-        public event EventHandler<MouseMoveEventArgs> MouseOut = null;
-
-        /// <summary>
-        /// Mouse move event
-        /// </summary>
-        public event EventHandler<MouseMoveEventArgs> MouseMove = null;
-
-        /// <summary>
-        /// Mouse button release event
-        /// </summary>
-        public event EventHandler<MouseButtonEventArgs> MouseUp = null;
-
-        /// <summary>
-        /// Mouse button press event 
-        /// </summary>
-        public event EventHandler<MouseButtonEventArgs> MouseDown;
-
-        /// <summary>
-        /// Mouse Click event
-        /// </summary>
-        public event EventHandler<MouseButtonEventArgs> MouseClick;
-
-        /// <summary>
+        /// Cathcing events
+        /// <para></para>
         /// Анализ возникновения событий
         /// </summary>
+        /// <param name="window">Window / Окно</param>
         internal void CatchEvents(RedWindow window)
         {
             if (this.MoveTest(window))//если курсор находится на форме
@@ -255,12 +367,14 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// Проверка нахождения точки в областях дочерних форм
+        /// Analising of being points in region of child widgets
+        /// <para></para>
+        /// Проверка нахождения точки в области дочерних виджетов
         /// </summary>
-        /// <returns>true если курсор находится в области одной из дочерних форм, иначе - false</returns>
+        /// <param name="testingPoint">Analizing poing / Поверяемая точка</param>
         private bool ChildMoveTest(Vector2f point)
         {
-            foreach (RedWidget currentForm in this.childForms)
+            foreach (RedWidget currentForm in this.childWidgetsCollections)
             {
                 if (currentForm.PointTest(point))//проверка данного уровня дочерних форм на нахождение курсора в их области
                 {
@@ -275,9 +389,10 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// Проверка на нахождение курсора в области формы
+        /// Analising of being cursor in region of widget
+        /// <para></para>
+        /// Проверка нахождения курсора в области виджета
         /// </summary>
-        /// <returns>true - если курсор находится в области данной формы, иначе - false</returns>
         private bool MoveTest(RedWindow window)
         {
             Vector2i mousePoint = Mouse.GetPosition(window.GetWindow());//Получить позицию мыши в окне
@@ -293,10 +408,11 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// Проверка на нахождение точки в области формы
+        /// Analising of being points in region widget
+        /// <para></para>
+        /// Проверка нахождения точки в области виджета
         /// </summary>
-        /// <param name="testingPoint">Координаты проверяемой точки</param>
-        /// <returns>true если точка в области формы, иначе - false</returns>
+        /// <param name="testingPoint">Analizing poing / Поверяемая точка</param>
         protected virtual bool PointTest(Vector2f testingPoint)
         {
             Vector2f center = this.GetPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра формы
@@ -304,9 +420,11 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// Получение графической позиции формы
+        /// Getting widget global position
+        /// <para></para>
+        /// Получение глобального положения виджета
         /// </summary>
-        /// <returns>Координаты графической позиции формы</returns>
+        /// <returns>Global widget position / Глобальное положение виджета</returns>
         protected Vector2f GetPosition()
         {
             Vector2f point = new Vector2f(0, 0);
@@ -318,7 +436,9 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// Устванвка базовых реакций формы на события
+        /// Setting basic events handlers
+        /// <para></para>
+        /// Устванвка базовых слушателей событий
         /// </summary>
         protected void SetBasicReactions()
         {
@@ -329,36 +449,38 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// Элементарная реакция на вхождение курсора в область формы
+        /// Widget view correction after Red Window's View changing
+        /// <para></para>
+        /// Коррекция отображения виджета после изменения вида окна Red Window
         /// </summary>
-        /// <param name="sender">Форма, в которой возникло событие</param>
-        /// <param name="e">Аргументы события</param>
+        internal void WidgetCorrection(Vector2f viewOffset, float viewRotation, Vector2f center)
+        {
+            foreach (RedWidget widget in this.childWidgetsCollections)
+            {
+                //widget.View.View.Rotation -= viewRotation;
+            }
+            this.viewOffset += viewOffset;
+        }
+
+        //RED WIDGET BASIC REACTIONS
+        //БАЗОЫЙ РЕАКЦИИ RED WIDGET
+
         private void InReaction(object sender, MouseMoveEventArgs e)
         {
             this.cursorOnForm = true;//флаг нахождения курсора на форме устанавливается в true
-            this.pressCount = 0;//сброс счетчика кликов
-            this.releaseCount = 0;
+            this.leftMousePressCount = 0;//сброс счетчика кликов
+            this.leftMouseReleaseCount = 0;
         }
 
-        /// <summary>
-        /// Элементарная реакция на покидание курсора в области формы
-        /// </summary>
-        /// <param name="sender">Форма, в которой возникло событие</param>
-        /// <param name="e">Аргументы события</param>
         private void OutReaction(object sender, MouseMoveEventArgs e)
         {
             this.cursorOnForm = false;//флаг нахождения курсора на форме устанавливается в false
             this.buttonPresed = false;//флаг нажатия кнопки на форме устанавливается в false
-            this.pressCount = 0;//сброс счетчика кликов
-            this.releaseCount = 0;
+            this.leftMousePressCount = 0;//сброс счетчика кликов
+            this.leftMouseReleaseCount = 0;
             this.click = false;
         }
 
-        /// <summary>
-        /// Элементарная реакция на нажатие левой кнопки мыши
-        /// </summary>
-        /// <param name="sender">Форма, в которой возникло событие</param>
-        /// <param name="e">Аргументы события</param>
         private void DownReaction(object sender, MouseButtonEventArgs e)
         {
             this.buttonPresed = true;//флаг нажатия кнопки на форме устанавливается в true
@@ -368,11 +490,6 @@ namespace RedToolkit
             }
         }
 
-        /// <summary>
-        /// Элементарная реакция на отжатия левой кнопки мыши
-        /// </summary>
-        /// <param name="sender">Форма, в которой возникло событие</param>
-        /// <param name="e">Аргументы события</param>
         private void UpReaction(object sender, MouseButtonEventArgs e)
         {
             this.buttonPresed = false;//флаг нажатия кнопки на форме устанавливается в true
@@ -383,37 +500,6 @@ namespace RedToolkit
                     this.MouseClick(this, new MouseButtonEventArgs(new MouseButtonEvent()));
                 }      
             }
-        }
-
-        /// <summary>
-        /// Абстрактный конструктор формы
-        /// </summary>
-        public RedWidget()
-        {
-            this.SetBasicReactions();//установка базовых слушателей формы
-            this.CustomConstructor();//установка базовых характеристик формы 
-            this.Visible = true;
-        }
-
-        /// <summary>
-        /// Конструктор конкретной формы
-        /// </summary>
-        protected abstract void CustomConstructor();
-
-        //Red Widget
-
-        /// <summary>
-        /// Widget view correction after Red Window's View changing 
-        /// </summary>
-        /// <param name="viewOffset"></param>
-        /// <param name="viewRotation"></param>
-        internal void WidgetCorrection(Vector2f viewOffset, float viewRotation, Vector2f center)
-        {
-            foreach (RedWidget widget in this.childForms)
-            {
-                widget.View.Rotate(center - widget.Location, (float)((viewRotation * Math.PI) / 180));
-            }
-            this.viewOffset += viewOffset;
         }
 
     }

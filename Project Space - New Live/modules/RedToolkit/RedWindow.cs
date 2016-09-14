@@ -12,45 +12,63 @@ using SFML.Window;
 
 namespace RedToolkit
 {
-
+    /// <summary>
+    /// Basic window of RedRoolkit
+    /// <para></para>
+    /// Базовое окно RedToolkit
+    /// </summary> 
     public class RedWindow
     {
         //RED WINDOW PARAMETRS AND PROPERTIES
         //ПАРАМЕТРЫ И СВОЙСТВА RED WINDOW
 
         /// <summary>
-        /// <para>Sleep time of window thread
-        /// <para>Время ожидания нити(потока) окна
+        /// Sleep time of window thread
+		/// <para></para>
+        /// Время ожидания нити(потока) окна
         /// </summary>
         const int sleepTime = 30;
 
         /// <summary>
-        /// <para>Window thread
-        /// <para>Нить(поток) окна
+        /// Window thread
+		/// <para></para>
+        /// Нить(поток) окна
         /// </summary>
         private Thread windowThread;
 
         /// <summary>
-        /// <para>SFML Window
-        /// <para>Окно SFML
+        /// SFML Window
+		/// <para></para>
+        /// Окно SFML
         /// </summary>
         private RenderWindow window;
 
+
         /// <summary>
-        /// <para>Red Window start mutex
-        /// <para>Стартовый мьютекс Red Window
+        /// Collection of widgets on window
+        /// <para></para>
+        /// Коллекция виджетов окна
+        /// </summary>
+        private Dictionary<String, RedWidget> widgetsCollection = new Dictionary<String, RedWidget>();
+
+        /// <summary>
+        /// Red Window start mutex
+		/// <para></para>
+        /// Стартовый мьютекс Red Window
         /// </summary>
         private Mutex startMutex;
 
         /// <summary>
-        /// <para>Red Window background
-        /// <para>Фон окна Red Window
+        /// Red Window background
+		/// <para></para>
+        /// Фон окна Red Window
         /// </summary>
         private ImageView background;
 
         /// <summary>
-        /// <para>Background color of Red Window
-        /// <para>Фоновая заливка окна Red Window
+        /// Background color of Red Window
+		/// <para></para>
+        /// Фоновая заливка окна Red Window
         /// </summary>
         public Color BackgroundColor
         {
@@ -60,7 +78,8 @@ namespace RedToolkit
 
         /// <summary>
         /// Background image of Red Window
-        /// <para>Фоновый рисунок Red Window
+		/// <para></para>
+        /// Фоновый рисунок Red Window
         /// </summary>
         public Texture BackgroundImage
         {
@@ -70,8 +89,9 @@ namespace RedToolkit
 
 
         /// <summary>
-        /// <para>Check having focus of Red Window
-        /// <para>Флаг фокуса окна Red Window 
+        /// Check having focus of Red Window
+		/// <para></para>
+        /// Флаг фокуса окна Red Window
         /// </summary>
         public bool Focused
         {
@@ -79,14 +99,16 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Red Window sizes
-        /// <para>Размер окна<para>
+        /// Red Window sizes
+		/// <para></para>
+        /// Размер окна
         /// </summary>
         private Vector2u size = new Vector2u(300, 300);
 
         /// <summary>
-        /// <para>Red Window sizes
-        /// <para>Размер окна Red Window
+        /// Red Window sizes
+		/// <para></para>
+        /// Размер окна Red Window
         /// </summary>
         public Vector2u Size
         {
@@ -99,8 +121,9 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Red Window location
-        /// <para>Положение окна Red Window
+        /// Red Window location
+		/// <para></para>
+        /// Положение окна Red Window
         /// </summary>
         public Vector2i Location
         {
@@ -109,14 +132,16 @@ namespace RedToolkit
         }
        
         /// <summary>
-        /// <para>Window title
-        /// <para>Заголовок окна Red Window
+        /// Window title
+		/// <para></para>
+        /// Заголовок окна Red Window
         /// </summary>
         private String title = "Red Window";
 
         /// <summary>
-        /// <para>Window title
-        /// <para>Заголовок окна Red Window
+        /// Window title
+		/// <para></para>
+        /// Заголовок окна Red Window
         /// </summary>
         public String Title
         {
@@ -129,14 +154,16 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Red Window icon
-        /// <para> Иконка Red Window
+        /// Red Window icon
+		/// <para></para>
+        /// Иконка Red Window
         /// </summary>
         private Image icon = new Image("Resources/RedTheme/RedIcon.png");
 
         /// <summary>
-        /// <para>Red Window icon
-        /// <para>Иконка Red Window
+        /// Red Window icon
+		/// <para></para>
+        /// Иконка Red Window
         /// </summary>
         public Image Icon
         {
@@ -155,8 +182,9 @@ namespace RedToolkit
         //СОБЫТИЯ ОКНА RED WINDOW
 
         /// <summary>
-        /// <para>Event of changing position or rotation of Red Window View
-        /// <para>Событие изменения позиции или поворота вида окна Red Window
+        /// Event of changing position or rotation of Red Window View
+		/// <para></para>
+        /// Событие изменения позиции или поворота вида окна Red Window
         /// </summary>
         public event EventHandler<ViewEventArgs> ViewChanged = null;
 
@@ -167,20 +195,23 @@ namespace RedToolkit
         //События движения мыши окна Red Window
 
         /// <summary>
-        /// <para>Event of cursor entering in window region 
-        /// <para>Событие входа курсора в область окна
+        /// Event of cursor entering in window region
+		/// <para></para> 
+        /// Событие входа курсора в область окна
         /// </summary>
         public event EventHandler<EventArgs> MouseIn = null;
 
         /// <summary>
-        /// <para>Event of cursor leaving of window region 
-        /// <para>Событие выхода курсора из область окна
+        /// Event of cursor leaving of window region
+		/// <para></para> 
+        /// Событие выхода курсора из область окна
         /// </summary>
         public event EventHandler<EventArgs> MouseOut = null;
 
         /// <summary>
-        /// <para>Event of cursor moving in window region 
-        /// <para>Событие движения курсора в области окна
+        /// Event of cursor moving in window region
+		/// <para></para> 
+        /// Событие движения курсора в области окна
         /// </summary>
         public event EventHandler<MouseMoveEventArgs> MouseMove = null;
 
@@ -188,49 +219,65 @@ namespace RedToolkit
         //События кнопок мыши окна Red Window
 
         /// <summary>
-        /// <para>Event of mouse button release 
-        /// <para>Событие отжатия кнопки мыши
+        /// Event of mouse button release
+		/// <para></para>
+        /// Событие отжатия кнопки мыши
         /// </summary>
         public event EventHandler<MouseButtonEventArgs> MouseUp = null;
 
         /// <summary>
-        /// <para>Event of mouse button press
-        /// <para>Событие нажатия кнопки мыши
+        /// Event of mouse button press
+		/// <para></para>
+        /// Событие нажатия кнопки мыши
         /// </summary>
         public event EventHandler<MouseButtonEventArgs> MouseDown = null;
 
         /// <summary>
-        /// <para>Event of click 
-        /// <para>Событие клика
+        /// Event of click
+		/// <para></para> 
+        /// Событие клика
         /// </summary>
         public event EventHandler<MouseButtonEventArgs> MouseClick = null;
 
+        //Red Window keyboard events
+        //События клавиатуры Red Window
+
         /// <summary>
-        /// <para>Collection of widgets on window
-        /// <para>Коллекция виджетов окна
+        /// Event of key press
+        /// <para></para>
+        /// Событие нажатия на клавишу
         /// </summary>
-        private Dictionary<String, RedWidget> widgetsCollection = new Dictionary<String, RedWidget>();
+        public event EventHandler<KeyEventArgs> KeyDown = null;
+
+        /// <summary>
+        /// Event of key released
+        /// <para></para>
+        /// Событие отжатия клавиши
+        /// </summary>
+        public event EventHandler<KeyEventArgs> KeyUp = null;
 
         //RED WINDOW METHODS
         //МЕТОДЫ RED WINDOW
 
         /// <summary>
-        /// <para>Adding widget on Red Window
-        /// <para>Добавление виджета на окно Red Window
+        /// Adding widget on Red Window
+		/// <para></para>
+        /// Добавление виджета на окно Red Window
         /// </summary>
-        /// <param name="widget"><para>Widget<para>Виджет</param>
-        /// <param name="name"><para>Name of widget<para>Имя виджета</param>
+        /// <param name="widget">Widget / Виджет</param>
+        /// <param name="name">Name of widget / Имя виджета</param>
         public void AddWidget(RedWidget widget, String name)
         {
             this.widgetsCollection.Add(name, widget);
         }
         
         /// <summary>
-        /// <para>Removing widget from Red Window
-        /// <para>Удаление виджета с окна Red Window
+        /// Removing widget from Red Window
+		/// <para></para>
+        /// Удаление виджета с окна Red Window
         /// </summary>
-        /// <param name="name"><para>Name of widget<para>Имя виджета</param>
-        /// <returns><para>Result of action<para>Результат операции</returns>
+        /// <param name="name">Name of widget / Имя виджета</param>
+        /// <returns>Result of action / Результат операции</returns>
         public bool RemoveWidget(String name)
         {
             if (this.widgetsCollection.ContainsKey(name))
@@ -242,11 +289,12 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Getting widget on Red Window
-        /// <para>Получение виджета на окне Red Window
+        /// Getting widget on Red Window
+		/// <para></para>
+        /// Получение виджета на окне Red Window
         /// </summary>
-        /// <param name="name"><para>Name of Widget<para>Имя виджета</param>
-        /// <returns><para>Widget or null, if collection don't has widget with that name<para>Виджет или null, если вт колекции нет виджета с указанным именем</returns>
+        /// <param name="name">Name of Widget / Имя виджета</param>
+        /// <returns>Widget or null, if collection don't has widget with that name / Виджет или null, если вт колекции нет виджета с указанным именем</returns>
         public RedWidget GetWidget(String name)
         {
             if (this.widgetsCollection.ContainsKey(name))
@@ -259,8 +307,9 @@ namespace RedToolkit
 
 
         /// <summary>
-        /// <para>Getting basic window
-        /// <para>Получение базового окна
+        /// Getting basic window
+		/// <para></para>
+        /// Получение базового окна
         /// </summary>
         /// <returns>SFML-окно</returns>
         internal Window GetWindow()
@@ -269,8 +318,9 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Show Red Window
-        /// <para>Запустить Red Window
+        /// Show Red Window
+		/// <para></para>
+        /// Запустить Red Window
         /// </summary>
         public void Start()
         {
@@ -284,11 +334,12 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Creating custom window
-        /// <para>Создание окна
+        /// Creating custom window
+		/// <para></para>
+        /// Создание окна
         /// </summary>
-        /// <returns><para>Render Window<para>SFML-окно</returns>
-        protected virtual void CustomWindowcreate()
+        /// <returns>Render Window / SFML-окно</returns>
+        protected virtual void CustomWindowCreate()
         {
             this.window = new RenderWindow(new VideoMode(300, 300), this.Title, Styles.Default);
             this.background = new ImageView(new RectangleShape(new Vector2f(300, 300)), BlendMode.Add);
@@ -301,17 +352,20 @@ namespace RedToolkit
             this.window.MouseMoved += this.MouseMoveCatcher;
             this.window.MouseEntered += this.MouseInCather;
             this.window.MouseLeft += this.MouseOutCather;
+            this.window.KeyPressed += this.KeyDownCatcher;
+            this.window.KeyReleased += this.KeyUpCatcher;
             this.ViewChanged += this.ViewChanging;
         }
 
         /// <summary>
-        /// <para>Process function of Red Window
-        /// <para>Процессный метод Red Window
+        /// Process function of Red Window
+		/// <para></para>
+        /// Процессный метод Red Window
         /// </summary>
         private void Process()
         {
             this.startMutex.WaitOne();
-            this.CustomWindowcreate();//creating window
+            this.CustomWindowCreate();//creating window
             this.startMutex.ReleaseMutex();
             while (this.window.IsOpen)
             {
@@ -322,8 +376,9 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Refresh Red Window
-        /// <para>Перерисовка окна Red Window
+        /// Refresh Red Window
+		/// <para></para>
+        /// Перерисовка окна Red Window
         /// </summary>
         public void RefreshWindow()
         {
@@ -340,10 +395,11 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Red Window view moving <
-        /// <para>Перемещение вида окна Red Window
+        /// Red Window view moving
+		/// <para></para>
+        /// Перемещение вида окна Red Window
         /// </summary>
-        /// <param name="offset"><para>Moving offset<para>Сдвиг</param>
+        /// <param name="offset">Moving offset / Сдвиг</param>
         public void MoveView(Vector2f offset)
         {
             View view = this.window.GetView();
@@ -356,10 +412,11 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Red Window view rotation
-        /// <para>Поворот вида окна Red Window
+        /// Red Window view rotation
+		/// <para></para>
+        /// Поворот вида окна Red Window
         /// </summary>
-        /// <param name="angle"><para>Rotation angle (in deg)<para>Угол поворота (в градусах)</param>
+        /// <param name="angle">Rotation angle (in deg) / Угол поворота (в градусах)</param>
         public void RotateView(float angle)
         {
             View view = this.window.GetView();
@@ -372,8 +429,9 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Resizing of Red Window
-        /// <para>Изменение размеров окна Red Window
+        /// Resizing of Red Window
+		/// <para></para>
+        /// Изменение размеров окна Red Window
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -387,8 +445,9 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Changing of Red Window's view
-        /// <para>Изменение вида окна Red Window
+        /// Changing of Red Window's view
+		/// <para></para>
+        /// Изменение вида окна Red Window
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -401,8 +460,9 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Closing Red Window
-        /// <para>Закрытие окна Red Window
+        /// Closing Red Window
+		/// <para></para>
+        /// Закрытие окна Red Window
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -412,8 +472,9 @@ namespace RedToolkit
         }
 
         /// <summary>
-        /// <para>Close Red Window
-        /// <para>Закрытие окна Red Window
+        /// Close Red Window
+		/// <para></para>
+        /// Закрытие окна Red Window
         /// </summary>
         public void Close()
         {
@@ -462,25 +523,49 @@ namespace RedToolkit
                 this.MouseOut(this, e);
             }
         }
+
+        private void KeyDownCatcher(object sender, KeyEventArgs e)
+        {
+            if (this.KeyDown != null)
+            {
+                this.KeyDown(this, e);
+            }
+        }
+
+        private void KeyUpCatcher(object sender, KeyEventArgs e)
+        {
+            if (this.KeyUp != null)
+            {
+                this.KeyUp(this, e);
+            }
+        }
     }
 
     /// <summary>
-    /// View-changig event args 
+    /// View-changig event args
+    /// <para></para>
+    /// Аргументы события изменения вида
     /// </summary>
     public class ViewEventArgs : EventArgs
     {
         /// <summary>
         /// View-moving offset
+        /// <para></para>
+        /// Сдвиг
         /// </summary>
         public Vector2f Offset;
 
         /// <summary>
         /// View-rotation angle
+        /// <para></para>
+        /// Поворот
         /// </summary>
         public float Angle;
 
         /// <summary>
         /// View center
+        /// <para></para>
+        /// Координаты центра
         /// </summary>
         public Vector2f Center;
 

@@ -42,7 +42,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
             win.Start();
            // win.GetWindow().MouseButtonPressed += this.Close;
-            win.GetWindow().KeyPressed += this.OnKey;
+            win.KeyDown += this.OnKey;
             win.BackgroundColor = Color.Black;
 
            // win.GetWindow().KeyPressed += OnKey;
@@ -100,7 +100,6 @@ namespace Project_Space___New_Live.modules.Dispatchers
 
         private void OnKey(object sender, KeyEventArgs e)
         {
-            win.F
             switch (e.Code)
             {
                 case Keyboard.Key.Up: win.MoveView(new Vector2f(0, 2)); break;
