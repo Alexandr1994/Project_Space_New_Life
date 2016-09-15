@@ -35,8 +35,28 @@ namespace Project_Space___New_Live.modules.Dispatchers
             test.Size = new Vector2f(100, 100);
             test.Text = "Close";
             test.MouseClick += Close;
+            test.AlignUp = true;
+            test.AlignDown = true;
+            //test.AlignRight = true;
+            //test.AliginLeft = true;
 
-            
+            RectButton test2 = new RectButton();
+            test2.Location = new Vector2f(-30, 40);
+            test2.Size = new Vector2f(150, 20);
+            test2.Text = "Close";
+            test2.MouseClick += Close;
+            test2.AlignUp = true;
+            test2.AlignDown = true;
+            test.AddWidget(test2);
+
+            RectButton test3 = new RectButton();
+            test3.Location = new Vector2f(40, -30);
+            test3.Size = new Vector2f(20, 150);
+            test3.MouseClick += Close;
+            test3.AlignUp = true;
+            test3.AlignDown = true;
+            test.AddWidget(test3);
+
             win.AddWidget(test, "testButton");
             //Image img = new Image("Resources/Shark.jpg");
 

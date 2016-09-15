@@ -124,7 +124,7 @@ namespace Project_Space___New_Live.modules.Dispatchers
             
             foreach (KeyValuePair<String, RedWidget> form in this.formsCollection)//добавление форм интерфейса на главную форму
             {
-                this._mainRedWidget.AddForm(form.Value);
+                this._mainRedWidget.AddWidget(form.Value);
             }
         }
 

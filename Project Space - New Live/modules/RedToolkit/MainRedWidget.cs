@@ -98,7 +98,7 @@ namespace RedToolkit
         /// <returns>Коллекция отображений форм</returns>
         public List<RenderView> RenderForm()
         {
-            return this.GetFormView(null);
+            return this.GetWidgetView(null);
         }
     }
 }

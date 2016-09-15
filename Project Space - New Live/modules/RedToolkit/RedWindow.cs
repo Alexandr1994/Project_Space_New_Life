@@ -178,6 +178,46 @@ namespace RedToolkit
             }
         }
 
+        /// <summary>
+        /// X-coordinate of left border of window
+        /// <para></para>
+        /// Х-координата левой границы окна
+        /// </summary>
+        public float BorderLeft
+        {
+            get { return this.Location.X; }
+        }
+
+        /// <summary>
+        /// X-coordinate of right border of window
+        /// <para></para>
+        /// Х-координата правой границы окна
+        /// </summary>
+        public float BorderRight
+        {
+            get { return this.BorderLeft + this.Size.X; }
+        }
+
+        /// <summary>
+        /// Y-coordinate of top border of window
+        /// <para></para>
+        /// Y-координата вержней границы окна
+        /// </summary>
+        public float BorderTop
+        {
+            get { return this.Location.Y; }
+        }
+
+        /// <summary>
+        /// Y-coordinate of bottom border of window
+        /// <para></para>
+        /// Y-координата нижней границы окна
+        /// </summary>
+        public float BorderBottom
+        {
+            get { return this.BorderTop + this.Size.Y; }
+        }
+
         //RED WINDOW EVENTS
         //СОБЫТИЯ ОКНА RED WINDOW
 
@@ -370,8 +410,8 @@ namespace RedToolkit
             while (this.window.IsOpen)
             {
                 Thread.Sleep(sleepTime);
-                this.window.DispatchEvents();
                 this.RefreshWindow();
+                this.window.DispatchEvents();
             }
         }
 
@@ -387,7 +427,7 @@ namespace RedToolkit
             this.window.Draw(this.background.Image);
             foreach (KeyValuePair<string, RedWidget> widget in this.widgetsCollection)
             {
-                foreach (RenderView view in widget.Value.GetFormView(this))
+                foreach (RenderView view in widget.Value.GetWidgetView(this))
                 {
                     this.window.Draw(view.View as Drawable, view.State);
                 }
@@ -437,11 +477,17 @@ namespace RedToolkit
         /// <param name="e"></param>
         private void Resizing(object sender, SizeEventArgs e)
         {
-            View windowView = this.window.GetView();  
+            View windowView = this.window.GetView();
+            Vector2f oldSize = windowView.Size;
             windowView.Size = new Vector2f(e.Width, e.Height);
             windowView.Center = new Vector2f(e.Width, e.Height) / 2;
             this.window.SetView(windowView);
             (this.background.Image as RectangleShape).Size = windowView.Size;
+            foreach (KeyValuePair<string, RedWidget> widget in this.widgetsCollection)
+            {
+               widget.Value.WidgetResizeCorrection(new Borders(this.BorderLeft, this.BorderTop, this.BorderRight, this.BorderBottom), new Vector2f(e.Width - oldSize.X, e.Height - oldSize.Y));
+            }
+            this.RefreshWindow();
         }
 
         /// <summary>
@@ -455,7 +501,7 @@ namespace RedToolkit
         {
             foreach (KeyValuePair<string, RedWidget> widget in this.widgetsCollection)
             {
-                widget.Value.WidgetCorrection(e.Offset, e.Angle, e.Center);
+                widget.Value.WidgetViewChangeCorrection(e.Offset, e.Angle, e.Center);
             }
         }
 
@@ -583,4 +629,44 @@ namespace RedToolkit
         }
 
     }
+
+    public class Borders
+    {
+        private float left;
+
+        public float Left
+        {
+            get { return left; }
+        }
+
+        public float right;
+
+        public float Right
+        {
+            get { return right; }
+        }
+
+        public float top;
+
+        public float Top
+        {
+            get { return top; }
+        }
+
+        public float bottom;
+
+        public float Bottom
+        {
+            get { return bottom; }
+        }
+
+        public Borders(float left, float top, float right, float bottom)
+        {
+            this.left = left;
+            this.top = top;
+            this.right = right;
+            this.bottom = bottom;
+        }
+    }
+
 }

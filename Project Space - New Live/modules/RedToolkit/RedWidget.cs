@@ -112,7 +112,7 @@ namespace RedToolkit
         protected int leftMouseReleaseCount = 0;
 
         //Red Widget flags
-        //флаги Red Widget
+        //Флаги Red Widget
 
         /// <summary>
         /// Flag of visibility of widget
@@ -151,6 +151,118 @@ namespace RedToolkit
         /// Флаг удержания левой кнопки мыши
         /// </summary>
         protected bool buttonPresed = false;
+
+        /// <summary>
+        /// Flag of binding to right border of parent widget or window
+        /// <para></para>
+        /// Флаг привязки к правой границе родительского виджета или окна
+        /// </summary>
+        private bool alignRight = false;
+
+        /// <summary>
+        /// Flag of binding to right border of parent widget or window
+        /// <para></para>
+        /// Флаг привязки к правой границе родительского виджета или окна
+        /// </summary>
+        public bool AlignRight
+        {
+            get { return alignRight; }
+            set { alignRight = value; }
+        }
+
+        /// <summary>
+        /// Flag of binding to left border of parent widget or window
+        /// <para></para>
+        /// Флаг привязки к левой границе родительского виджета или окна
+        /// </summary>
+        private bool aliginLeft = false;
+
+        /// <summary>
+        /// Flag of binding to left border of parent widget or window
+        /// <para></para>
+        /// Флаг привязки к левой границе родительского виджета или окна
+        /// </summary>
+        public bool AliginLeft
+        {
+            get { return aliginLeft; }
+            set { aliginLeft = value; }
+        }
+
+        /// <summary>
+        /// Flag of binding to top border of parent widget or window
+        /// <para></para>
+        /// Флаг привязки к верхней границе родительского виджета или окна
+        /// </summary>
+        private bool alignUp = false;
+
+        /// <summary>
+        /// Flag of binding to top border of parent widget or window
+        /// <para></para>
+        /// Флаг привязки к верхней границе родительского виджета или окна
+        /// </summary>
+        public bool AlignUp
+        {
+            get { return alignUp; }
+            set { alignUp = value; }
+        }
+
+        /// <summary>
+        /// Flag of binding to bottom border of parent widget or window
+        /// <para></para>
+        /// Флаг привязки к нижней границе родительского виджета или окна
+        /// </summary>
+        private bool alignDown = false;
+
+        /// <summary>
+        /// Flag of binding to bottom border of parent widget or window
+        /// <para></para>
+        /// Флаг привязки к нижней границе родительского виджета или окна
+        /// </summary>
+        public bool AlignDown
+        {
+            get { return alignDown; }
+            set { alignDown = value; }
+        }
+
+        /// <summary>
+        /// X-coordinate of left border of widget
+        /// <para></para>
+        /// Х-координата левой границы виджета
+        /// </summary>
+        public float BorderLeft
+        {
+            get { return this.GetPosition().X; }
+        }
+
+        /// <summary>
+        /// X-coordinate of right border of widget
+        /// <para></para>
+        /// Х-координата правой границы виджета
+        /// </summary>
+        public float BorderRight
+        {
+            get { return this.BorderLeft + this.Size.X; }
+        }
+
+        /// <summary>
+        /// Y-coordinate of top border of widget
+        /// <para></para>
+        /// Y-координата вержней границы виджета
+        /// </summary>
+        public float BorderTop
+        {
+            get { return this.GetPosition().Y; }
+        }
+
+        /// <summary>
+        /// Y-coordinate of bottom border of widget
+        /// <para></para>
+        /// Y-координата нижней границы виджета
+        /// </summary>
+        public float BorderBottom
+        {
+            get { return this.BorderTop + this.Size.Y; }
+        }
 
         //EVENTS OF RED WIDGET
         //СОБЫТИЯ RED WIDGET
@@ -292,17 +404,18 @@ namespace RedToolkit
         /// Получить отображения текущего и всех дочерних виджетов
         /// </summary>
         /// <returns>Collection of widgets views / Коллекция отображений виджетов</returns>
-        public List<RenderView> GetFormView(RedWindow window)
+        public List<RenderView> GetWidgetView(RedWindow window)
         {
             List<RenderView> retValue = new List<RenderView>();
             this.View.View.Position = this.GetPosition();//коррекция отображения;
+            this.WidgetViewCorrection();
             if (this.Visible)//если форма видимая
             {
                 retValue.Add(this.View); //добавление отображени в массив
                 foreach (RedWidget childForm in this.ChildWidgetsCollections)//добавление в массив возвращаемых значений дочерних отображений фолрм
                 {
 
-                    foreach (RenderView locView in childForm.GetFormView(window))//получаем отображение данной дочерней формы
+                    foreach (RenderView locView in childForm.GetWidgetView(window))//получаем отображение данной дочерней формы
                     {
                         retValue.Add(locView);
                     }
@@ -395,16 +508,16 @@ namespace RedToolkit
         /// </summary>
         private bool MoveTest(RedWindow window)
         {
-            Vector2i mousePoint = Mouse.GetPosition(window.GetWindow());//Получить позицию мыши в окне
-            if(this.PointTest(new Vector2f(mousePoint.X, mousePoint.Y)))//если курсор находится в области данной формы
+            Vector2i mousePoint = Mouse.GetPosition(window.GetWindow());//Getting cursor position in window / Получить позицию мыши в окне
+            if(this.PointTest(new Vector2f(mousePoint.X, mousePoint.Y)))//If cursor in region of this widget / если курсор находится в области данного виджета
             {
-                if (ChildMoveTest(new Vector2f(mousePoint.X, mousePoint.Y))) //Проверить все дочерние формы данной формы
-                {//если задетектированно нахождение курсора на области формы на одном из уровней дочерних форм, 
-                    return false; //то курсор находится за пределами области данной формы   
+                if (ChildMoveTest(new Vector2f(mousePoint.X, mousePoint.Y))) //Check of child widgets / Проверить все дочерние виджетыы
+                {
+                    return false; 
                 }
-                return true;//если курсор находится вне областей дочерних форм разных уровней вложенности, то true
+                return true;
             }
-            return false;//иначе false
+            return false;
         }
 
         /// <summary>
@@ -415,7 +528,7 @@ namespace RedToolkit
         /// <param name="testingPoint">Analizing poing / Поверяемая точка</param>
         protected virtual bool PointTest(Vector2f testingPoint)
         {
-            Vector2f center = this.GetPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);//нахождение центра формы
+            Vector2f center = this.GetPosition() + new Vector2f(this.size.X / 2, this.size.Y / 2);
             return this.View.PointAnalize(testingPoint, center);
         }
 
@@ -428,8 +541,8 @@ namespace RedToolkit
         protected Vector2f GetPosition()
         {
             Vector2f point = new Vector2f(0, 0);
-            if (this.ParentRedWidget != null)//Если форма имеет родительскую форму
-            {//получить позицию с учетом её положения
+            if (this.ParentRedWidget != null)
+            {
                 point = this.ParentRedWidget.GetPosition();
             }
             return point += this.Location + this.viewOffset;
@@ -453,13 +566,64 @@ namespace RedToolkit
         /// <para></para>
         /// Коррекция отображения виджета после изменения вида окна Red Window
         /// </summary>
-        internal void WidgetCorrection(Vector2f viewOffset, float viewRotation, Vector2f center)
+        internal void WidgetViewChangeCorrection(Vector2f viewOffset, float viewRotation, Vector2f center)
         {
-            foreach (RedWidget widget in this.childWidgetsCollections)
-            {
-                //widget.View.View.Rotation -= viewRotation;
-            }
+            //TODO: ROTATION CORRECTION
             this.viewOffset += viewOffset;
+        }
+
+        internal void WidgetResizeCorrection(Borders borders ,Vector2f sizeChanging)
+        {
+            if (this.AlignUp && this.AlignDown)
+            {
+                this.Size = new Vector2f(this.Size.X, this.Size.Y + sizeChanging.Y);
+            }
+            if (this.AliginLeft && this.AlignRight)
+            {
+                this.Size = new Vector2f(this.Size.X + sizeChanging.X, this.Size.Y);
+            }
+            foreach (RedWidget childWidget in this.childWidgetsCollections)
+            {
+                childWidget.WidgetResizeCorrection(new Borders(this.BorderLeft, this.BorderTop, this.BorderRight, this.BorderBottom), sizeChanging);
+            }
+            //if (!this.AliginLeft || this.AlignDown)
+            //{
+            //    this.Location = new Vector2f(this.Location.X + sizeChanging.X, this.Location.Y);
+            //}
+            //if (!this.AlignUp || this.AlignRight)
+            //{
+            //    this.Location = new Vector2f(this.Location.X, this.Location.Y + sizeChanging.Y);
+            //}
+        }
+
+        /// <summary>
+        /// Checking and correcting widgets regions
+        /// <para></para>
+        /// Проверка и корректировка областей виджетов
+        /// </summary>
+        private void WidgetViewCorrection()
+        {
+            foreach (RedWidget childWidget in this.childWidgetsCollections)
+            {
+                if (this.BorderLeft > childWidget.BorderLeft)
+                {
+                    childWidget.Location = new Vector2f(0, childWidget.Location.Y);
+                }
+                if (this.BorderTop > childWidget.BorderTop)
+                {
+                    childWidget.Location = new Vector2f(childWidget.Location.X, 0);
+                }
+                float dx = childWidget.BorderRight - this.BorderRight;
+                if (dx > 0)
+                {
+                    this.Size = new Vector2f(this.Size.X + dx, this.Size.Y);
+                }
+                float dy = childWidget.BorderBottom - this.BorderBottom;
+                if (dy > 0)
+                {
+                    this.Size = new Vector2f(this.Size.X, this.Size.Y + dy);
+                }
+            }
         }
 
         //RED WIDGET BASIC REACTIONS

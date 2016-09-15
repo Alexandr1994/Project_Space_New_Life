@@ -108,7 +108,7 @@ namespace RedToolkit
         {
             float radarCoeffic = 0;
             Radar playerRadar = player.Equipment[(int) Transport.EquipmentNames.Radar] as Radar;
-            this.ChildForms.Clear();//Отчистить коллекцию объектов на радаре
+            this.ChildWidgetsCollections.Clear();//Отчистить коллекцию объектов на радаре
             if (playerRadar != null && playerRadar.State)//Если радар имеется и функционирует
             {//то начать посторение отображения
                 this.noise.Visible = false;//Спрятать радарный шум
@@ -123,7 +123,7 @@ namespace RedToolkit
                         RadarEntity newObject = new RadarEntity();
                         newObject.Size = size*radarCoeffic;
                         newObject.Location = this.radarCenter - newObject.Size + (currentObject.Coords - player.Coords) * radarCoeffic;
-                        this.AddForm(newObject);
+                        this.AddWidget(newObject);
                     }
                 }
                 this.rerenderBasicSymbols(radarCoeffic);
@@ -132,7 +132,7 @@ namespace RedToolkit
             {
                 this.noise.NoiseProcess();//иначе вывести радарный шум
                 this.noise.Visible = true;
-                this.AddForm(this.noise);
+                this.AddWidget(this.noise);
             }
         }
 
@@ -145,31 +145,31 @@ namespace RedToolkit
             VisibleRegion visibleRegion = new VisibleRegion();
             visibleRegion.Size = this.viewSize * radarCoeffic;
             visibleRegion.Location = radarCenter - visibleRegion.Size / 2;
-            this.AddForm(visibleRegion);//Вывести область видимости
+            this.AddWidget(visibleRegion);//Вывести область видимости
             RadarRing radarRing = new RadarRing();
             radarRing.Size = this.size / 4;
             radarRing.Location = this.radarCenter - radarRing.Size;
-            this.AddForm(radarRing);//Вывести радарное кольцо
+            this.AddWidget(radarRing);//Вывести радарное кольцо
             radarRing = new RadarRing();
             radarRing.Size = new Vector2f((float)(this.Size.X / 2.7), (float)(this.Size.Y / 2.7));
             radarRing.Location = this.radarCenter - radarRing.Size;
-            this.AddForm(radarRing);
+            this.AddWidget(radarRing);
             RadarLine radarLine = new RadarLine();
             radarLine.Location = new Vector2f(0, this.radarCenter.Y);
             radarLine.Size = new Vector2f(this.radarCenter.X - (visibleRegion.Size.X / 2), 2);
-            this.AddForm(radarLine);
+            this.AddWidget(radarLine);
             radarLine = new RadarLine();
             radarLine.Location = new Vector2f(this.radarCenter.X + (visibleRegion.Size.X / 2), this.radarCenter.Y);
             radarLine.Size = new Vector2f(this.radarCenter.X - (visibleRegion.Size.X / 2), 2);
-            this.AddForm(radarLine);
+            this.AddWidget(radarLine);
             radarLine = new RadarLine();
             radarLine.Location = new Vector2f(this.radarCenter.X, 0);
             radarLine.Size = new Vector2f(2, this.radarCenter.Y - (visibleRegion.Size.Y / 2));
-            this.AddForm(radarLine);
+            this.AddWidget(radarLine);
             radarLine = new RadarLine();
             radarLine.Location = new Vector2f(this.radarCenter.X, this.radarCenter.Y + (visibleRegion.Size.Y / 2));
             radarLine.Size = new Vector2f(2, this.radarCenter.Y - (visibleRegion.Size.Y / 2));
-            this.AddForm(radarLine);
+            this.AddWidget(radarLine);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace RedToolkit
             ObjectSignature playerSignature = player.GetSignature();
             ship.Size = playerSignature.Size * radarCoeffic;
             ship.Location = this.radarCenter - ship.Size/2;
-            this.AddForm(ship);
+            this.AddWidget(ship);
         }
 
         /// <summary>

@@ -108,7 +108,7 @@ namespace RedToolkit
         protected void SetLabel()
         {
             ButtonLabel temp = new ButtonLabel();
-            this.AddForm(temp);
+            this.AddWidget(temp);
             this.label = temp;
         }
 

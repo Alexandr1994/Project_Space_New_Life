@@ -76,7 +76,7 @@ namespace RedToolkit
         {
             this.Size = new Vector2f(200, 20);
             this.view = new ImageView(new RectangleShape(this.Size), BlendMode.Alpha);
-            this.AddForm(this.lineOfBar = new BarLine());
+            this.AddWidget(this.lineOfBar = new BarLine());
             this.PercentOfBar = 100;
             if (!this.visibleSubsrate)
             {
